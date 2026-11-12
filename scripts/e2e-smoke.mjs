@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 // 端到端冒烟聚合：依次跑 scripts/smoke-*.mjs（浏览器夹具，拦截模型与存档请求，不打真实模型），汇总通过/失败。
-// 用法：npm run e2e:smoke -- <站点URL…> [--only 名字,名字] [--list] [--with-real] [--json 输出文件]
+// 用法：npm run e2e:smoke -- <站点URL…> [--only 名字,名字] [--list] [--with-real] [--with-long] [--json 输出文件]
 //   站点 URL 原样转给每个脚本（需要已有可访问的构建产物，本脚本不构建、不起服务）；也可用环境变量 SMOKE_URL。
 //   --with-real：另跑 smoke-modular-turn-real（会调用真实模型、消耗额度，默认不跑，记为 skipped）。
+//   --with-long：另跑 smoke-full-chain（从开局沿主链走到大祭的长跑，十几到几十分钟，默认不跑，记为 skipped；不受 scriptTimeoutMs 限制）。
 // 退出码：0 全通过；1 有失败；2 用法错误。
 import { spawn } from 'node:child_process';
 import { appendFileSync, existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
@@ -13,6 +14,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /** 会调真实模型的脚本：默认跳过。 */
 export const REAL_MODEL_SCRIPTS = ['smoke-modular-turn-real'];
+/** 长跑脚本：默认跳过，--with-long 才跑。 */
+export const LONG_SCRIPTS = ['smoke-full-chain'];
+/** 长跑脚本的单脚本超时（整链约几十分钟；聚合的 scriptTimeoutMs 对它不适用）。 */
+export const LONG_TIMEOUT_MS = 90 * 60 * 1000;
 /** 脚本以此退出码表示「前置条件缺失，跳过」（不是通过）；跳过原因写在标准输出 `SMOKE-SKIP: 原因` 一行。 */
 export const SKIP_EXIT_CODE = 77;
 
@@ -132,11 +137,12 @@ export function loadTimeoutMs(numbersFile = path.join(ROOT, 'mod-kit/game-number
 }
 
 export function parseArgs(argv) {
-  const opts = { urls: [], only: null, list: false, withReal: false, json: null, error: null };
+  const opts = { urls: [], only: null, list: false, withReal: false, withLong: false, json: null, error: null };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--list') opts.list = true;
     else if (a === '--with-real') opts.withReal = true;
+    else if (a === '--with-long') opts.withLong = true;
     else if (a === '--only') opts.only = (argv[++i] ?? '').split(',').filter(Boolean);
     else if (a === '--json') opts.json = argv[++i] ?? null;
     else if (a.startsWith('--')) opts.error = `未知参数：${a}`;
@@ -152,14 +158,17 @@ export function selectScripts(all, opts) {
   if (unknown.length) return { error: `--only 里有不存在的脚本：${unknown.join('、')}` };
   const wanted = opts.only ?? all;
   const run = [], skipped = [];
-  for (const name of wanted) (REAL_MODEL_SCRIPTS.includes(name) && !opts.withReal && !opts.only ? skipped : run).push(name);
+  for (const name of wanted) {
+    const off = (REAL_MODEL_SCRIPTS.includes(name) && !opts.withReal) || (LONG_SCRIPTS.includes(name) && !opts.withLong);
+    (off && !opts.only ? skipped : run).push(name);
+  }
   return { run, skipped };
 }
 
 export function summarize(results, skipped = []) {
   const passed = results.filter(r => r.status === 'passed'), ranSkipped = results.filter(r => r.status === 'skipped');
   const failed = results.filter(r => r.status !== 'passed' && r.status !== 'skipped');
-  const skippedDetails = [...skipped.map(name => ({ name, reason: '真实模型，加 --with-real 才跑' })), ...ranSkipped.map(r => ({ name: r.name, reason: r.reason }))];
+  const skippedDetails = [...skipped.map(name => ({ name, reason: LONG_SCRIPTS.includes(name) ? '长跑，加 --with-long 才跑' : '真实模型，加 --with-real 才跑' })), ...ranSkipped.map(r => ({ name: r.name, reason: r.reason }))];
   return { total: results.length - ranSkipped.length, passed: passed.length, failed: failed.length, skipped: skippedDetails.length, failedNames: failed.map(r => r.name), skippedNames: skippedDetails.map(d => d.name), skippedDetails, ok: failed.length === 0, results };
 }
 
@@ -200,7 +209,7 @@ export function runScript(name, urls, timeoutMs, scriptDir = path.join(ROOT, 'sc
 
 export async function runAll(names, urls, { run = runScript, timeoutMs }) {
   const results = [];
-  for (const name of names) { console.log(`\n▶ ${name}`); results.push(await run(name, urls, timeoutMs)); }
+  for (const name of names) { console.log(`\n▶ ${name}`); results.push(await run(name, urls, LONG_SCRIPTS.includes(name) ? Math.max(timeoutMs, LONG_TIMEOUT_MS) : timeoutMs)); }
   return results;
 }
 
@@ -210,7 +219,7 @@ async function main() {
   if (opts.error) { console.error(opts.error); return 2; }
   const sel = selectScripts(all, opts);
   if (sel.error) { console.error(sel.error); return 2; }
-  if (opts.list) { for (const n of sel.run) console.log(n); for (const n of sel.skipped) console.log(`${n}  (跳过：真实模型)`); return 0; }
+  if (opts.list) { for (const n of sel.run) console.log(n); for (const n of sel.skipped) console.log(`${n}  (跳过：${LONG_SCRIPTS.includes(n) ? '长跑' : '真实模型'})`); return 0; }
   if (!opts.urls.length) { console.error('缺少站点 URL：npm run e2e:smoke -- http://127.0.0.1:端口/（或设环境变量 SMOKE_URL）'); return 2; }
   const netDir = mkdtempSync(path.join(tmpdir(), 'xiantu-smoke-net-'));
   process.env.SMOKE_NET_LOG = path.join(netDir, 'net.jsonl');

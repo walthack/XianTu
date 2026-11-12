@@ -137,3 +137,37 @@ export async function readPersisted(page, charId) {
     return { slot, data };
   }, { expr: PINIA, charId });
 }
+
+/** 在地图页拖动画布把地点拖到画布中央附近，再点它，等弹窗标题＝地名（同 smoke-map-festival-ending 的做法）。地图上没画出该地点返回 null。 */
+export async function openMapLocationPopup(page, locationId, { tries = 30 } = {}) {
+  await page.evaluate(() => document.querySelector('#app').__vue_app__.config.globalProperties.$router.push('/game/world-map'));
+  const canvas = page.locator('canvas').first();
+  await canvas.waitFor({ timeout: 15_000 });
+  const locate = () => page.evaluate(id => {
+    let el = document.querySelector('canvas'), comp = null;
+    while (el && !comp) { const c = el.__vueParentComponent; if (c?.setupState && 'mapManager' in c.setupState) comp = c; el = el.parentElement; }
+    const mm = comp?.setupState?.mapManager;
+    const loc = mm?.layers?.get(4)?.children.map(c => c.userData?.data || c.userData).find(d => d && d.id === id);
+    if (!mm || !loc) return null;
+    const rect = document.querySelector('canvas').getBoundingClientRect(), s = mm.worldContainer.scale.x;
+    const c = loc.coordinates || loc;
+    return { name: loc.name, x: rect.left + mm.worldContainer.x + c.x * s, y: rect.top + mm.worldContainer.y + c.y * s, cx: rect.left + rect.width / 2, cy: rect.top + rect.height / 2 };
+  }, locationId);
+  let at = null;
+  for (let i = 0; i < tries && !at; i++) { at = await locate(); if (!at) await page.waitForTimeout(300); }
+  if (!at) return null;
+  for (let n = 0; n < 6 && (Math.abs(at.x - at.cx) > 200 || Math.abs(at.y - at.cy) > 200); n++) {
+    const dx = Math.max(-500, Math.min(500, at.cx - at.x)), dy = Math.max(-350, Math.min(350, at.cy - at.y));
+    await page.mouse.move(at.cx, at.cy);
+    await page.mouse.down();
+    await page.mouse.move(at.cx + dx / 2, at.cy + dy / 2, { steps: 5 });
+    await page.mouse.move(at.cx + dx, at.cy + dy, { steps: 5 });
+    await page.mouse.up();
+    at = await locate();
+  }
+  await page.mouse.click(at.x, at.y);
+  const popup = page.locator('.location-popup');
+  await popup.waitFor({ timeout: 5_000 });
+  const title = (await popup.locator('h4').innerText()).trim();
+  return title === at.name ? { popup, name: at.name } : null;
+}
