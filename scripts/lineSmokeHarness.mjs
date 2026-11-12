@@ -58,12 +58,20 @@ const DEFAULT_NARRATION = JSON.stringify({ text: '你照着眼下的打算行事
  * respond(body, kind) 返回替身内容（undefined＝默认：正文回一段合规正文，其余回「什么也没认出」）；onRequest(kind, body) 记账。
  * 主叙事回合后的后台一致性整理（mod-kit/dual-model.json）共用分类器不认，这里单独识别：回空整理、原样抄回 turnId，kind 记 consistency。
  */
-export async function openSmokeContext(browser, { respond, onRequest, contextOptions } = {}) {
+/**
+ * real＝true（真实模型模式）：不写 fixture 模型配置，页面自己从测试服读 API 配置——save-storage 只放行
+ * GET …/save-storage/user_config_api_management_v1，其余照旧 501；chat/completions 与 embeddings 不替身，经护栏放行到 REAL_MODEL_HOSTS。
+ * onRequest(kind, body, request) 照旧记账（embeddings 记 kind＝embeddings）；返回的 storage 记 save-storage 的放行／替身／被拦写请求数。
+ */
+export const REAL_MODEL_HOSTS = ['api.minimaxi.com', 'api.siliconflow.cn'];
+const REAL_CONFIG_PATH = /\/api\/v1\/save-storage\/user_config_api_management_v1$/;
+export async function openSmokeContext(browser, { respond, onRequest, contextOptions, real = false } = {}) {
   const context = await browser.newContext(contextOptions);
   // 网络护栏先装：下面的路由处理不了的请求 route.fallback() 落到护栏（非本机一律替身或 abort+判失败）。
-  const guard = await installSmokeNetworkGuard(context);
-  await context.addInitScript(() => {
-    localStorage.setItem('ai_service_config', JSON.stringify({
+  const guard = real ? await installSmokeNetworkGuard(context, undefined, { allowHosts: REAL_MODEL_HOSTS }) : await installSmokeNetworkGuard(context);
+  const storage = { configGet: 0, stubbedRead: 0, blockedWrite: [] };
+  await context.addInitScript(real => {
+    if (!real) localStorage.setItem('ai_service_config', JSON.stringify({
       mode: 'custom', streaming: false, maxRetries: 0,
       customAPI: { provider: 'openai', url: 'https://fixture.invalid', apiKey: 'fixture-not-a-secret', model: 'fixture' },
     }));
@@ -75,11 +83,25 @@ export async function openSmokeContext(browser, { respond, onRequest, contextOpt
         for (const m of text.matchAll(/LCQ-[A-Z]+-\d{3}/g)) window.__lcqSeen.push(m[0]);
       }
     }).observe(document, { childList: true, subtree: true });
-  });
+  }, real);
   await context.route('**/*', async route => {
     const request = route.request();
     const url = new URL(request.url());
-    if (/\/api\/v1\/save-storage(?:\/|$)/.test(url.pathname)) return route.fulfill({ status: 501, contentType: 'application/json', body: '{}' });
+    if (/\/api\/v1\/save-storage(?:\/|$)/.test(url.pathname)) {
+      if (real) {
+        if (request.method() === 'GET' && REAL_CONFIG_PATH.test(url.pathname)) { storage.configGet++; return route.fallback(); }
+        if (['GET', 'HEAD'].includes(request.method())) storage.stubbedRead++; else storage.blockedWrite.push(`${request.method()} ${url.pathname}`);
+      }
+      return route.fulfill({ status: 501, contentType: 'application/json', body: '{}' });
+    }
+    if (real && request.method() === 'POST' && /embeddings/.test(url.pathname)) { onRequest?.('embeddings', null, request); return route.fallback(); }
+    if (real && request.method() === 'POST' && /completions/.test(url.pathname)) {
+      const body = request.postDataJSON();
+      let kind = classifyFixtureRequest(body);
+      if (kind === 'narration' && /后台一致性整理器/.test(String(body.messages?.[0]?.content || ''))) kind = 'consistency';
+      onRequest?.(kind, body, request);
+      return route.fallback();
+    }
     if (request.method() === 'POST' && /completions/.test(url.pathname)) {
       const body = request.postDataJSON();
       let kind = classifyFixtureRequest(body);
@@ -96,7 +118,7 @@ export async function openSmokeContext(browser, { respond, onRequest, contextOpt
     }
     return route.fallback();
   });
-  return { context, guard };
+  return { context, guard, storage };
 }
 
 /** 从星月湖试玩入口建一个单机隔离角色，返回角色 ID；之后各档都导入到它名下。 */

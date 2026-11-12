@@ -43,8 +43,10 @@ const STATIC_STUBS = [
  * - 非本机请求永不放行（route.continue），因此每个非本机请求不是被脚本替身 fulfill 就是被 abort。
  * finish() 断言零违规、打印统计；设了环境变量 SMOKE_NET_LOG 时把统计追加到该文件供聚合脚本汇总。
  */
-export async function installSmokeNetworkGuard(context, label = path.basename(process.argv[1] ?? '', '.mjs')) {
-  const stats = { label, external: 0, externalFailed: 0, stubbedStatic: 0, violations: [] };
+// allowHosts：额外放行（route.continue）的非本机主机名（真实模型模式用；默认空＝照旧全拦）。
+export async function installSmokeNetworkGuard(context, label = path.basename(process.argv[1] ?? '', '.mjs'), { allowHosts = [] } = {}) {
+  const stats = { label, external: 0, externalFailed: 0, stubbedStatic: 0, allowed: 0, violations: [] };
+  const allow = new Set(allowHosts);
   context.on('request', request => { try { if (!isLocalHost(new URL(request.url()).hostname) && /^https?:/.test(request.url())) stats.external++; } catch { /* data: 等 */ } });
   context.on('requestfailed', request => { try { if (!isLocalHost(new URL(request.url()).hostname) && /^https?:/.test(request.url())) stats.externalFailed++; } catch { /* ignore */ } });
   await context.route('**/*', async route => {
@@ -56,6 +58,7 @@ export async function installSmokeNetworkGuard(context, label = path.basename(pr
       stats.violations.push(`本机写请求未被替身：${request.method()} ${url.pathname}`);
       return route.abort();
     }
+    if (allow.has(url.hostname)) { stats.allowed++; return route.continue(); }
     const stub = STATIC_STUBS.find(([re]) => re.test(`${url.origin}${url.pathname}`));
     if (stub && request.method() === 'GET') {
       stats.stubbedStatic++;
@@ -68,7 +71,7 @@ export async function installSmokeNetworkGuard(context, label = path.basename(pr
   const report = finished => {
     if (reported) return;
     reported = true;
-    console.log(`[网络护栏] ${label}${finished ? '' : '（脚本未走到收尾）'}：非本机请求 ${stats.external}（替身 fulfill ${stats.external - stats.externalFailed}，其中静态库 ${stats.stubbedStatic}；abort/中止 ${stats.externalFailed}；放行 0），违规 ${stats.violations.length}`);
+    console.log(`[网络护栏] ${label}${finished ? '' : '（脚本未走到收尾）'}：非本机请求 ${stats.external}（替身 fulfill ${stats.external - stats.externalFailed - stats.allowed}，其中静态库 ${stats.stubbedStatic}；abort/中止 ${stats.externalFailed}；放行 ${stats.allowed}），违规 ${stats.violations.length}`);
     if (process.env.SMOKE_NET_LOG) appendFileSync(process.env.SMOKE_NET_LOG, `${JSON.stringify({ ...stats, finished, violations: stats.violations.slice(0, 20) })}\n`);
   };
   // 脚本中途失败没走到 finish() 时，退出前照样上报统计（聚合汇总才完整）。
