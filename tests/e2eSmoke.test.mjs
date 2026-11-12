@@ -11,17 +11,33 @@ import * as e2e from '../scripts/e2e-smoke.mjs';
 const script = fileURLToPath(new URL('../scripts/e2e-smoke.mjs', import.meta.url));
 const scriptsDir = fileURLToPath(new URL('../scripts/', import.meta.url));
 
-test('发现的冒烟脚本 = scripts/smoke-*.mjs 全部 15 个，真实模型脚本在其中且默认跳过', () => {
+test('发现的冒烟脚本 = scripts/smoke-*.mjs 全部 16 个，真实模型脚本与长跑脚本在其中且默认跳过', () => {
   const all = e2e.discoverSmokeScripts();
-  assert.equal(all.length, 15);
+  assert.equal(all.length, 16);
   assert.deepEqual(all, readdirSync(scriptsDir).filter(f => f.startsWith('smoke-') && f.endsWith('.mjs')).map(f => f.slice(0, -4)).sort());
   assert.ok(all.includes('smoke-modular-turn-real'));
+  assert.ok(all.includes('smoke-full-chain'), '整链长跑在聚合里（默认跳过）');
   assert.ok(all.includes('smoke-line-turns'), '八线中段档回合冒烟在聚合里');
   assert.ok(all.includes('smoke-stage-transitions') && all.includes('smoke-map-festival-ending'), '切关／地图入秦·大祭·结局冒烟在聚合里');
   const sel = e2e.selectScripts(all, e2e.parseArgs([]));
   assert.equal(sel.run.length, 14);
-  assert.deepEqual(sel.skipped, ['smoke-modular-turn-real']);
-  assert.equal(e2e.selectScripts(all, e2e.parseArgs(['--with-real'])).run.length, 15);
+  assert.deepEqual(sel.skipped, ['smoke-full-chain', 'smoke-modular-turn-real']);
+  const real = e2e.selectScripts(all, e2e.parseArgs(['--with-real']));
+  assert.equal(real.run.length, 15);
+  assert.deepEqual(real.skipped, ['smoke-full-chain']);
+  const long = e2e.selectScripts(all, e2e.parseArgs(['--with-long']));
+  assert.equal(long.run.length, 15);
+  assert.deepEqual(long.skipped, ['smoke-modular-turn-real']);
+  assert.equal(e2e.selectScripts(all, e2e.parseArgs(['--with-real', '--with-long'])).run.length, 16);
+  assert.deepEqual(e2e.selectScripts(all, e2e.parseArgs(['--only', 'smoke-full-chain'])).run, ['smoke-full-chain'], '--only 点名时照跑');
+});
+
+test('长跑脚本：跳过原因写明 --with-long；runAll 给它放宽超时', async () => {
+  const s = e2e.summarize([], ['smoke-full-chain', 'smoke-modular-turn-real']);
+  assert.deepEqual(s.skippedDetails.map(d => d.reason), ['长跑，加 --with-long 才跑', '真实模型，加 --with-real 才跑']);
+  const seen = {};
+  await e2e.runAll(['smoke-full-chain', 'x'], [], { run: async (name, urls, timeoutMs) => { seen[name] = timeoutMs; return { name, status: 'passed', reason: '', ms: 1 }; }, timeoutMs: 1000 });
+  assert.deepEqual(seen, { 'smoke-full-chain': e2e.LONG_TIMEOUT_MS, x: 1000 });
 });
 
 test('package.json 登记了 e2e:smoke', () => {
@@ -65,7 +81,8 @@ test('命令行：--list 退出 0；缺 URL 退出 2；未知参数退出 2', ()
   const run = args => spawnSync(process.execPath, [script, ...args], { encoding: 'utf8', env: { ...process.env, SMOKE_URL: '' } });
   const list = run(['--list']);
   assert.equal(list.status, 0);
-  assert.equal(list.stdout.trim().split('\n').length, 15);
+  assert.equal(list.stdout.trim().split('\n').length, 16);
+  assert.match(list.stdout, /smoke-full-chain {2}\(跳过：长跑\)/);
   assert.equal(run([]).status, 2);
   assert.equal(run(['--zzz']).status, 2);
 });
