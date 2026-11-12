@@ -24,6 +24,8 @@
   "preserve": "node scripts/sync-builtin-mods.mjs",
   "build": "webpack --mode production",
   "build:single": "webpack --mode production --env single",
+  "prebuild:beta": "node scripts/sync-builtin-mods.mjs && node scripts/validate-canon-decisions.mjs",
+  "build:beta": "webpack --mode production --env devDefaults",
   "watch": "webpack --mode development --watch",
   "serve": "webpack-dev-server --mode development",
   "test": "node --test --test-concurrency=1 tests/*.test.mjs",

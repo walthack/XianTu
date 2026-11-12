@@ -1,4 +1,4 @@
-import { reasoningPolicy, reasoningLimits, reasoningTimeout, observeReasoning, ReasoningExhaustedError, reasoningBudgetParam, mainNarrativeReasoningParam, backendReasoningParam, retryReasoningOnce } from './aiReasoningModelPolicy';
+import { reasoningPolicy, reasoningLimits, reasoningTimeout, observeReasoning, ReasoningExhaustedError, reasoningBudgetParam, mainNarrativeReasoningParam, openingReasoningParam, backendReasoningParam, retryReasoningOnce } from './aiReasoningModelPolicy';
 import type { BackendReasoningEffort } from './dualModelConfig';
 import moderationConfig from '../../mod-kit/ai-content-moderation.json';
 import { useAPIManagementStore } from '@/stores/apiManagementStore';
@@ -84,6 +84,8 @@ type QingyuTransportBudget = {
   mainNarrative?: boolean;
   /** 双模型后端请求的推理档（设定即为后端请求，与 mainNarrative 互斥）；只此类请求带 dual-model backend.reasoningEffort。 */
   backendReasoningEffort?: BackendReasoningEffort;
+  /** 开局生成请求（generation_id 以 initial_message 开头）；只此类请求带 aiRetry.reasoning.opening。 */
+  opening?: boolean;
   timeoutMode?: 'content_idle';
   onTransportStart?: () => void;
 };
@@ -965,6 +967,7 @@ class AIService {
       mainNarrative: (options.usageType || 'main') === 'main' && !options.background && !!qingyuTurnId
         && options.reasoningEffort === undefined && options.timeoutMode === undefined && options.backendReasoningEffort === undefined,
       backendReasoningEffort: options.backendReasoningEffort,
+      opening: /^initial_message/.test(options.generation_id || ''),
       maxTokens: options.maxTokens,
       timeoutMode: options.timeoutMode, onTransportStart: options.onTransportStart,
       qingyuTurnId,
@@ -976,6 +979,7 @@ class AIService {
     const bound = signal ? qingyuTransportBudgetBySignal.get(signal) : undefined;
     return bound?.backendReasoningEffort !== undefined
       ? backendReasoningParam(url, model, true, bound.backendReasoningEffort)
+      : bound?.opening ? openingReasoningParam(url, model, true)
       : mainNarrativeReasoningParam(url, model, !!bound?.mainNarrative);
   }
 
@@ -1927,6 +1931,13 @@ class AIService {
           url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
         }) || {}, reasoningBudgetParam(url),
           this.turnReasoningParam(url, model, signal));
+        // 拍子判定小请求配置 reasoningEffort=none 时（直接非流式，判拍实际走这条）：同流式路径，MiniMax-M3 关思考、M2.7 系只分离思考字段。
+        // 2026-11-12 真机发现此前只有流式与流式降级两条路径带，直接非流式漏了 → 配成 none 也没关掉思考。
+        if (usageType === 'beat_judge' && /^MiniMax-(?:M3|M2\.7(?:-highspeed)?)$/i.test(model) && /api\.minimax(?:i)?\.(?:com|io)/i.test(url)
+          && signal && qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort === 'none') {
+          if (/^MiniMax-M3$/i.test(model)) requestBody.thinking = { type: 'disabled' };
+          requestBody.reasoning_split = true;
+        }
 
         // 如果指定了 JSON 格式，添加 response_format
         // 🔥 注意：某些模型/API不支持 response_format
