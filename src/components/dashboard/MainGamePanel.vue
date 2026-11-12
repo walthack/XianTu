@@ -631,6 +631,7 @@ import {
   getStageEntryPresentation,
   getStageDepartureOffer,
   getTrackedStoryOpportunityActions,
+  migrateBatch6TextContracts,
   reconcileNaturalIntentMetadata,
   type ScenarioEventActionSelection,
   type ScenarioOpportunityActionSelection,
@@ -2162,6 +2163,13 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   // Migrate only the V03 question-classifier metadata on the live runtime before
   // taking a detached save snapshot; otherwise settlement still sees the old hash.
   reconcileNaturalIntentMetadata({ 世界: { 状态: gameStateStore.worldState } } as any);
+  // 靠合同迁移表升级合同的旧档：按钮取自推进后的副本（合同已升级），live 还是旧合同，第一次点会被拒（stale_contract）——回合照常叙事却不落账。
+  // 发送前在 live 上补跑同一步迁移（与读档对账 reconcileSaveWithRegistry 同一函数、同一份内置关事件）。
+  {
+    const liveRuntime = (gameStateStore.worldState as any)?.剧本模组;
+    const canonicalEvents = BUILTIN_SCENARIO_MODS.find(mod => mod.manifest?.id === liveRuntime?.modId)?.scenario.events;
+    if (liveRuntime && canonicalEvents) migrateBatch6TextContracts(liveRuntime, canonicalEvents);
+  }
   // 作者写明到点的拍：回合数以配置为准（story.beatProgress.deadlineTurns），旧档／库里的关卡快照每回合发送前对齐。
   applyBeatDeadlines((gameStateStore.worldState as any)?.剧本模组?.events);
   const saveData = gameStateStore.toSaveData();
