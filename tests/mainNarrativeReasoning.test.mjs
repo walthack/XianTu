@@ -116,3 +116,23 @@ test('回合总限时 150 秒取自 mod-kit，MainGamePanel 读配置传给 race
   assert.match(panel, /\), Number\(budget\?\.totalMs\) \|\| 0, \(\) => \{/);
   assert.doesNotMatch(panel, /raceTurnBudget\([^)]*\b(90000|150000)\b/);
 });
+
+// 2026-11-12 用户批准（work/ASK-USER.md Q11）：开局请求（generation_id 以 initial_message 开头）带 aiRetry.reasoning.opening.effort。
+const OPENING = { usageType: 'main', generation_id: 'initial_message_split_step1_1', requestMaxRetries: 0, maxTokens: 3072 };
+test('开局请求带配置的开局推理档（默认 medium），流式与非流式一致；改 off 不发；非法档位被拒', async () => {
+  const opening = () => numbers.GAME_NUMBERS.aiRetry.reasoning.opening;
+  assert.equal(opening().effort, 'medium');
+  assert.equal((await streamBodies(OPENING))[0].reasoning_effort, 'medium');
+  assert.equal((await plainBodies(OPENING))[0].reasoning_effort, 'medium');
+  assert.equal((await streamBodies({ ...OPENING, usageType: 'instruction_generation', generation_id: 'initial_message_split_step2_1' }))[0].reasoning_effort, 'medium', '第 2 步');
+  try {
+    numbers.applyGameNumbers({ aiRetry: { reasoning: { opening: { effort: 'off' } } } });
+    assert.ok(!('reasoning_effort' in (await streamBodies(OPENING))[0]));
+    assert.throws(() => numbers.applyGameNumbers({ aiRetry: { reasoning: { opening: { effort: 'none' } } } }), /opening\.effort/);
+  } finally { numbers.applyGameNumbers({ aiRetry: { reasoning: { opening: { effort: 'medium' } } } }); }
+});
+test('开局推理档只认名单内的模型与主机；非开局、无回合的请求仍不带', async () => {
+  assert.ok(!('reasoning_effort' in (await streamBodies({ ...OPENING, apiConfigOverride: { ...MINIMAX, model: 'MiniMax-M2.7-highspeed' } }))[0]));
+  assert.ok(!('reasoning_effort' in (await streamBodies({ ...OPENING, apiConfigOverride: { ...MINIMAX, url: 'https://openrouter.ai/api/v1' } }))[0]));
+  assert.ok(!('reasoning_effort' in (await streamBodies({ ...OPENING, generation_id: 'memory_summary_1' }))[0]));
+});

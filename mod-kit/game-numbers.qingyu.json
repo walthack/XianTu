@@ -1898,10 +1898,14 @@
       "retryMultiplier": 2,
       "budgetTokens": 0,
       "mainNarrative": {
-        "note": "主叙事（MainGamePanel→processPlayerAction 发出的 usageType=main 前台回合请求，含其截断补救与流式降级）的推理强度。只在 model 命中 modelPattern 且请求主机命中 hostPattern 时，请求体加 reasoning_effort=effort；其他请求（意图、模块演出、记忆、审计、后台、开局等）不带。MiniMax 官方：reasoning_effort 仅 MiniMax-M3.1-Flash 生效，可取 low/medium/high/xhigh/max，省略默认 max，不支持 none（400）；thinking 不可关闭。2026-11-03 用户批准压低主叙事推理强度（真机 s01 主叙事约 2 万字推理、55–90 秒，目标约 30 秒）。off＝不发送。",
+        "note": "主叙事（MainGamePanel→processPlayerAction 发出的 usageType=main 前台回合请求，含其截断补救与流式降级）的推理强度。只在 model 命中 modelPattern 且请求主机命中 hostPattern 时，请求体加 reasoning_effort=effort；其他请求（意图、模块演出、记忆、审计、后台等）不带；开局另见 aiRetry.reasoning.opening。MiniMax 官方：reasoning_effort 仅 MiniMax-M3.1-Flash 生效，可取 low/medium/high/xhigh/max，省略默认 max，不支持 none（400）；thinking 不可关闭。2026-11-03 用户批准压低主叙事推理强度（真机 s01 主叙事约 2 万字推理、55–90 秒，目标约 30 秒）。off＝不发送。",
         "effort": "low",
         "modelPattern": "^minimax-m3\\.1-flash",
         "hostPattern": "^api\\.minimaxi?\\.(com|io)$"
+      },
+      "opening": {
+        "note": "开局生成（generation_id 以 initial_message 开头的请求：开局第 1 步正文、第 2 步初始化指令及其重试）的推理强度。模型／主机名单沿用 mainNarrative.modelPattern／hostPattern，名单外不发。2026-11-12 用户批准设 medium（work/ASK-USER.md Q11：不带参数时 MiniMax 按 max 思考，开局两步合计 3 分 43 秒–6 分 49 秒；medium 实测 1 次约 2 分 4 秒）。off＝不发送（回到原行为）。",
+        "effort": "medium"
       }
     }
   },
@@ -2507,7 +2511,7 @@
       "missedText": "时机已过",
       "doneMax": 50,
       "intentSettle": {
-        "note": "任务模式拍子按意图结算（设计稿 2026-11-04「任务模式拍子按意图结算」方案 A＋第九节收窄；用户 2026-11-04 批准；代码 naturalIntentRouter.resolveBeatJudge、beatProgress.beatKeyTurn）。只在 story.quest 开时读。关键拍（有焦点拍、动作表不只剩前往、至少一个动作过 where/who 闸门；或原话含本拍人名／地名／短语）上按字链没对上，才发拍子判定小请求，与原 intent 请求并行。enabled：总开关。minCertainty：模型 c 须等于此值才结算（D2 只认 high）。excludeKinds：不走模型判定的拍（choice 关键选择／分支锁，fatal 致命选项，combat 战斗，D3）。logEvidenceLength：LCQ-SAV-053 detail 记 evidence 长度与 certainty（不记原话）。clarifyNotice：任务模式下「没听清」提示（取代『…或点按钮』）。beatJudge：小请求参数——model 拍子判定单独用的模型名（只换模型名，连接／地址／密钥仍继承主流程；空串＝跟主流程同模型；2026-11-04 用户定 MiniMax-M2.7-highspeed，主叙事与后端模型不变；M2.7 系思考关不掉、不认 reasoning_effort，名单外不发，故仍走 maxTokensWithReasoning 512）；maxTokens 推理关时输出上限；maxTokensWithReasoning 推理关不掉（reasoningEffort≠none）时的上限；reasoningEffort：none＝发关闭参数（仅传输层能关的模型生效），low＝显式发 low。MiniMax-M3.1-Flash 不支持 none、M2.7 思考不可关（aiRetry.reasoning.mainNarrative 注），故默认 low／512。timeoutMs 小请求单次超时；timeoutRetries 单次超时后再发几次（只对超时，0＝不重发；REPORT-8091-68fe9d20 定 6 秒＋重发 1 次；2026-11-11 用户批准改 10 秒：8092 实测 26 次小请求中位 4.1 秒、p90 5.8 秒、5 次撞 6 秒被中止，见 work/ASK-USER.md Q5）；maxActions 焦点拍候选最多几条；evidenceMaxChars ev 长度上限；sendPlace／sendPeople 是否送地点名／在场人物名；maxPeople 人物名最多几个。sendActionText／doMaxChars：候选动作带 do（作者 intentMatch.describe → actionText → label，截到 doMaxChars 字；2026-11-04 用户批准设计稿「拍子判定按意思与风险」问一，默认 60）；sendContext／ctxMaxChars：每个计划带一次 ctx（event.objective → axisBeat → description，截到 ctxMaxChars 字）。returnRisk：小请求同时报这句话动作本身的风险类别 r（只从 freeAction.riskFromModel.kinds 选或 none），用于没落到作者动作时出判定卡。",
+        "note": "任务模式拍子按意图结算（设计稿 2026-11-04「任务模式拍子按意图结算」方案 A＋第九节收窄；用户 2026-11-04 批准；代码 naturalIntentRouter.resolveBeatJudge、beatProgress.beatKeyTurn）。只在 story.quest 开时读。关键拍（有焦点拍、动作表不只剩前往、至少一个动作过 where/who 闸门；或原话含本拍人名／地名／短语）上按字链没对上，才发拍子判定小请求，与原 intent 请求并行。enabled：总开关。minCertainty：模型 c 须等于此值才结算（D2 只认 high）。excludeKinds：不走模型判定的拍（choice 关键选择／分支锁，fatal 致命选项，combat 战斗，D3）。logEvidenceLength：LCQ-SAV-053 detail 记 evidence 长度与 certainty（不记原话）。clarifyNotice：任务模式下「没听清」提示（取代『…或点按钮』）。beatJudge：小请求参数——model 拍子判定单独用的模型名（只换模型名，连接／地址／密钥仍继承主流程；空串＝跟主流程同模型；2026-11-04 用户定 MiniMax-M2.7-highspeed，主叙事与后端模型不变；M2.7 系思考关不掉、不认 reasoning_effort，名单外不发，故仍走 maxTokensWithReasoning 512）；maxTokens 推理关时输出上限；maxTokensWithReasoning 推理关不掉（reasoningEffort≠none）时的上限；reasoningEffort：none＝发关闭参数（仅传输层能关的模型生效），low＝显式发 low。MiniMax-M3.1-Flash 不支持 none、M2.7 思考不可关（aiRetry.reasoning.mainNarrative 注），故原默认 low／512。2026-11-12 用户批准换成 MiniMax-M3 关思考（model=MiniMax-M3、reasoningEffort=none，输出上限走 maxTokens 128；两轮共 116 题与 M2.7-highspeed 同为 113 对、中位耗时约一半，见 work/ASK-USER.md Q5 续 2／续 3），超时仍 10 秒。timeoutMs 小请求单次超时；timeoutRetries 单次超时后再发几次（只对超时，0＝不重发；REPORT-8091-68fe9d20 定 6 秒＋重发 1 次；2026-11-11 用户批准改 10 秒：8092 实测 26 次小请求中位 4.1 秒、p90 5.8 秒、5 次撞 6 秒被中止，见 work/ASK-USER.md Q5）；maxActions 焦点拍候选最多几条；evidenceMaxChars ev 长度上限；sendPlace／sendPeople 是否送地点名／在场人物名；maxPeople 人物名最多几个。sendActionText／doMaxChars：候选动作带 do（作者 intentMatch.describe → actionText → label，截到 doMaxChars 字；2026-11-04 用户批准设计稿「拍子判定按意思与风险」问一，默认 60）；sendContext／ctxMaxChars：每个计划带一次 ctx（event.objective → axisBeat → description，截到 ctxMaxChars 字）。returnRisk：小请求同时报这句话动作本身的风险类别 r（只从 freeAction.riskFromModel.kinds 选或 none），用于没落到作者动作时出判定卡。",
         "enabled": true,
         "minCertainty": "high",
         "excludeKinds": [
@@ -2519,10 +2523,10 @@
         "clarifyNotice": "这一步没听清你要做什么。请直接说眼前这一动，这一拍的目标见任务日志。",
         "beatJudge": {
           "enabled": true,
-          "model": "MiniMax-M2.7-highspeed",
+          "model": "MiniMax-M3",
           "maxTokens": 128,
           "maxTokensWithReasoning": 512,
-          "reasoningEffort": "low",
+          "reasoningEffort": "none",
           "timeoutMs": 10000,
           "timeoutRetries": 1,
           "maxActions": 4,

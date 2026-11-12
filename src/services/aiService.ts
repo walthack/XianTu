@@ -1,4 +1,4 @@
-import { reasoningPolicy, reasoningLimits, reasoningTimeout, observeReasoning, ReasoningExhaustedError, reasoningBudgetParam, mainNarrativeReasoningParam, backendReasoningParam, retryReasoningOnce } from './aiReasoningModelPolicy';
+import { reasoningPolicy, reasoningLimits, reasoningTimeout, observeReasoning, ReasoningExhaustedError, reasoningBudgetParam, mainNarrativeReasoningParam, openingReasoningParam, backendReasoningParam, retryReasoningOnce } from './aiReasoningModelPolicy';
 import type { BackendReasoningEffort } from './dualModelConfig';
 import moderationConfig from '../../mod-kit/ai-content-moderation.json';
 import { useAPIManagementStore } from '@/stores/apiManagementStore';
@@ -84,6 +84,8 @@ type QingyuTransportBudget = {
   mainNarrative?: boolean;
   /** 双模型后端请求的推理档（设定即为后端请求，与 mainNarrative 互斥）；只此类请求带 dual-model backend.reasoningEffort。 */
   backendReasoningEffort?: BackendReasoningEffort;
+  /** 开局生成请求（generation_id 以 initial_message 开头）；只此类请求带 aiRetry.reasoning.opening。 */
+  opening?: boolean;
   timeoutMode?: 'content_idle';
   onTransportStart?: () => void;
 };
@@ -965,6 +967,7 @@ class AIService {
       mainNarrative: (options.usageType || 'main') === 'main' && !options.background && !!qingyuTurnId
         && options.reasoningEffort === undefined && options.timeoutMode === undefined && options.backendReasoningEffort === undefined,
       backendReasoningEffort: options.backendReasoningEffort,
+      opening: /^initial_message/.test(options.generation_id || ''),
       maxTokens: options.maxTokens,
       timeoutMode: options.timeoutMode, onTransportStart: options.onTransportStart,
       qingyuTurnId,
@@ -976,6 +979,7 @@ class AIService {
     const bound = signal ? qingyuTransportBudgetBySignal.get(signal) : undefined;
     return bound?.backendReasoningEffort !== undefined
       ? backendReasoningParam(url, model, true, bound.backendReasoningEffort)
+      : bound?.opening ? openingReasoningParam(url, model, true)
       : mainNarrativeReasoningParam(url, model, !!bound?.mainNarrative);
   }
 

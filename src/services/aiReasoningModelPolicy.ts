@@ -56,6 +56,18 @@ export function mainNarrativeReasoningParam(url: string, model: string, mainNarr
   } catch { /* lcq-allow: 无效 URL/正则不发送可选参数，正则由 validator 拒绝，传输层负责 URL 报错。 */ }
   return {};
 }
+/** 开局生成推理档（aiRetry.reasoning.opening）：只对开局请求发送；模型/主机名单沿用 mainNarrative，名单外不发；off 不发送。 */
+export function openingReasoningParam(url: string, model: string, opening: boolean): Record<string, unknown> {
+  const effort = config().opening.effort;
+  if (!opening || effort === 'off') return {};
+  const main = config().mainNarrative;
+  try {
+    if (new RegExp(main.modelPattern, 'i').test(model) && new RegExp(main.hostPattern, 'i').test(new URL(url).hostname)) {
+      return { reasoning_effort: effort };
+    }
+  } catch { /* lcq-allow: 无效 URL/正则不发送可选参数，正则由 validator 拒绝，传输层负责 URL 报错。 */ }
+  return {};
+}
 /**
  * 双模型后端推理档：只对后端请求（backend=true）发送；模型/主机名单沿用 mainNarrative.modelPattern/hostPattern，名单外不发（N2-A）。
  * 档位取调用方传入值；'default'、缺省或非法值回落 mod-kit/dual-model.json backend.reasoningEffort。off 不发送；max 显式发送。
