@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,readFile} from 'node:fs/promises';
+import {mkdtemp,readFile,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {execFileSync} from 'node:child_process';
@@ -33,7 +33,7 @@ test('fresh opening replay exports all fourteen registered combat checkpoints',a
   const trace=JSON.parse(await readFile(join(dir,'replay.json'),'utf8'));
   assert.equal(trace.filter(row=>row.mode==='new-host-controlled-success-fixture').length,13);
   assert.ok(trace.some(row=>row.stage==='lcq.stage_04b_lingfei_baiyi_crisis'));
- }finally{delete globalThis.location;}
+ }finally{delete globalThis.location;await rm(dir,{recursive:true,force:true});}
 });
 
 test('loading a checkpoint forks isolated working data and never forks its working copy again',async()=>{

@@ -412,6 +412,38 @@ test('8 负例：judged／failEndsGame 形状（G4）、缺 dependsOn、地区�
     await assert.rejects(await variant(f => f['stage-meta.json'].push({ stageId: 'lyg.qin_xianyang', region: REGION })), /zztest\.line references lyg\.qin_xianyang owned by qingyu\.qin; add dependsOn/);
     // 补上依赖后：该关已在 overrides stageRegions（秦国），同值也报重复（单一真值）
     await assert.rejects(await variant(f => { f['stage-meta.json'].push({ stageId: 'lyg.qin_xianyang', region: '秦国' }); f['manifest.json'].dependsOn.push('qingyu.qin'); }), /stageMeta lyg\.qin_xianyang: region also set in mod-kit\/entity-ledger\/overrides\.json stageRegions/);
+    // 2026-11-12 编译期校验补充：mapEntries 字段白名单、规范地点 id、不共用地点、文案键存在
+    // 每个变体整份复制 packs：先删掉上面已用完的变体，下面的变体编完即删，临时盘峰值只占一份
+    for (let i = 0; i < n; i++) await rm(join(neg, String(i)), { recursive: true, force: true });
+    const once = async edit => { const i = n, run = await variant(edit); return async () => { try { return await run(); } finally { await rm(join(neg, String(i)), { recursive: true, force: true }); } }; };
+    const me = f => f['map-entries.json'][0];
+    await assert.rejects(await once(f => { me(f).previewTextID = 'mapEntry.zz_test.preview'; }), /map entry zz_test: unknown field previewTextID/);
+    await assert.rejects(await once(f => { me(f).locationId = 'liuchao.location.qilifang'; }), /map entry zz_test: locationId liuchao\.location\.qilifang is not a canonical location id/, '别名（locations.json aliases）不算');
+    await assert.rejects(await once(f => { me(f).locationId = 'liuchao.location.no_such'; }), /map entry zz_test: locationId liuchao\.location\.no_such is not a canonical location id/);
+    await assert.rejects(await once(f => { f['manifest.json'].locationAliases = ['location-aliases.json']; f['location-aliases.json'] = { canonical: { 'liuchao.location.shangjun': 'liuchao.location.lin_an' } }; me(f).locationId = 'liuchao.location.shangjun'; }),
+      /map entry zz_test: locationId liuchao\.location\.shangjun is not a canonical location id/, '包 locationAliases.canonical 的键不算');
+    await assert.rejects(await once(f => { f['map-entries.json'].push({ ...me(f), id: 'zz_test_2' }); }), /map entry zz_test_2: locationId liuchao\.location\.yong also used by map entry zz_test/);
+    await assert.rejects(await once(f => { f['map-entries.json'].push({ ...me(f), id: 'zz_test_2', locationId: 'liuchao.location.xianyang' }); }), /map entry zz_test_2: locationId liuchao\.location\.xianyang also used by map entry qin/, '与别的包的入口共用也报');
+    await assert.rejects(await once(f => { me(f).returnLabelTextId = 'mapEntry.zz_test.no_such'; }), /invalid map entry zz_test/);
+    // 世界事件：startedExtensionKey 不得占用运行时 系统.扩展 的键（beatActionIdle 原名单漏登；dualModelConsistency 来自 mod-kit/dual-model.json）
+    for (const key of ['beatActionIdle', 'dualModelConsistency', 'mapEntryResume'])
+      await assert.rejects(await once(f => { f['world-events.json'][0].startedExtensionKey = key; }), new RegExp(`world event zzTestWorld: startedExtensionKey ${key} must match .* and not be a reserved key`), key);
+    // 世界事件 closes[].stageId：须是该线的关（关→地区→线）或地图入口的关
+    await assert.rejects(await once(f => { f['world-events.json'][0].closes[0].stageId = 'lcq.stage_01'; }), /world event zzTestWorld: closes: stage lcq\.stage_01 is neither a stage of line zz_test .* nor a map entry stage/);
+    // 二级线 entryHintKeys：只在有 unlock 时读；locked 四键、variants 非空句列表、文本键非空、when 形状（正文键是否存在暂不查，见合同文档 2026-11-12 节）
+    const HINT = { 'zz.hint.title': '测试线 · 时机未到', 'zz.hint.realm': '境界不足。', 'zz.hint.lines': '还差 {X} 条线。', 'zz.hint.entry': '合成说法。', 'zz.hint.extra': '合成附句。' };
+    const hintKeys = () => ({ locked: { title: 'zz.hint.title', realm: 'zz.hint.realm', lines: 'zz.hint.lines', deadlinePrefix: 'zz.hint.deadline' },
+      variants: { default: ['zz.hint.entry', { key: 'zz.hint.extra', when: [{ path: `done.${EV('arrive')}`, operator: 'eq', value: true }] }] } });
+    const withHint = (edit, unlock = LINE) => f => { Object.assign(f['texts.json'], HINT); const l = f['secondary-lines.json'][0]; if (unlock) l.unlock = unlock; l.entryHintKeys = hintKeys(); edit(l.entryHintKeys, f); };
+    assert.ok(await (await once(withHint(() => {})))(), '形状正确、键都在：编译通过');
+    await assert.rejects(await once(withHint(() => {}, null)), /secondary line zz_test: entryHintKeys: only read for lines with unlock/);
+    await assert.rejects(await once(withHint(k => { delete k.variants; })), /secondary line zz_test: entryHintKeys: expected \{locked/);
+    await assert.rejects(await once(withHint(k => { k.locked.titel = k.locked.title; delete k.locked.title; })), /secondary line zz_test: entryHintKeys: locked must be \{title,realm,lines,deadlinePrefix\}/);
+    await assert.rejects(await once(withHint(k => { k.locked.title = ''; })), /secondary line zz_test: entryHintKeys: locked\.title must be a non-empty text key, got ""/);
+    await assert.rejects(await once(withHint(k => { k.variants.default[0] = 1; })), /secondary line zz_test: entryHintKeys: variants\.default\[0\] must be a text key or \{key,when/);
+    await assert.rejects(await once(withHint(k => { delete k.variants.default[1].key; })), /secondary line zz_test: entryHintKeys: variants\.default\[1\]\.key must be a non-empty text key, got undefined/);
+    await assert.rejects(await once(withHint(k => { k.variants.default = []; })), /secondary line zz_test: entryHintKeys: variants\.default must be a non-empty array/);
+    await assert.rejects(await once(withHint(k => { k.variants.default[1].when = [{ path: `done.${EV('arrive')}`, op: 'eq', value: true }]; })), /secondary line zz_test: entryHintKeys: variants\.default\[1\] must be a text key or \{key,when/);
   } finally { await rm(neg, { recursive: true, force: true }); }
 });
 
