@@ -14,19 +14,25 @@
 // 卡住：同一拍连续 --stall（默认 6）手，walker 认为会推进而浏览器没推进，记卡点（关、拍、任务日志、界面入口、判定候选、walker 该走的动作），
 //   然后用 Node 侧 walker 把这一拍推过去、重新导入接着跑（--stop-on-stuck 则停下），一次跑出全部卡点；有卡点即判失败。
 // 网络护栏、save-storage 替身、LCQ 报错码监听、模型替身同 scripts/lineSmokeHarness.mjs；不留 trace／视频／截图。
-// 用法：node scripts/smoke-full-chain.mjs <站点URL> [--from 关id] [--until 关id] [--stall N] [--stop-on-stuck] [--json 结果文件] [--verbose]
+// --qin：秦线模式（地图入口的独立内容包 packs/qin）。起点改为导入 tests/fixtures/qin-replay/qin-entry-ready（入秦条件已满足、口信已「先记下」），
+//   链＝地图上点咸阳 →「前往此地」→「确认前往」入秦（b）→ 秦关 rail 照上面的每手逻辑逐拍走完（直到返回报价出现）→ 点主面板返回按钮（b）→
+//   断言回到的关与位置＝mapEntryResume 记录、mapEntryResume 清掉、返回后的关／焦点／任务日志当前拍与 Node 侧 transitionFromMapEntryStage 一致；
+//   返回后再开地图咸阳弹窗，应不再有入秦行程（入口只开一次）。Node 侧每手对照：秦关内用秦线生成器 scripts/generate-qin-replay-fixtures.mjs step 的同一套选择
+//   （与 walker.step 唯一差别是秦关内不因 nextStageReadyId 切关；秦关的 nextStageId 为空，这一支实测不触发，触发即记差异）。--qin 不能与 --from／--until 同用。
+// 用法：node scripts/smoke-full-chain.mjs <站点URL> [--qin | --from 关id] [--until 关id] [--stall N] [--stop-on-stuck] [--json 结果文件] [--verbose]
 //   默认不进 e2e:smoke（耗时长），聚合里加 --with-long 才跑。
 import assert from 'node:assert/strict';
 import { writeFileSync } from 'node:fs';
 import { chromium } from 'playwright-core';
-import { MODS, PINIA, enterIsolatedCharacter, importAndLoad, loadTs, openMapLocationPopup, openSmokeContext, quiet } from './lineSmokeHarness.mjs';
+import { MODS, PINIA, enterIsolatedCharacter, importAndLoad, loadTs, openMapLocationPopup, openSmokeContext, quiet, readFixtureSlot } from './lineSmokeHarness.mjs';
 
 const { step, rt, formalNewSave, expectedMainline, unsettledRailBeats, withFixedHost } = await import('../tests/mainlineWalker.mjs');
-const [R, W, QL, BP, F, BD, BG, GN, MT, P] = await quiet(() => Promise.all([
+const [R, W, QL, BP, F, BD, BG, GN, MT, P, RET, I, NM] = await quiet(() => Promise.all([
   '../src/modules/scenarioMods/runtime.ts', '../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts', '../src/modules/scenarioMods/questLog.ts',
   '../src/modules/scenarioMods/beatProgress.ts', '../src/modules/scenarioMods/heimohaiFestival.ts', '../src/modules/scenarioMods/branchDecision.ts',
   '../src/modules/scenarioMods/baihuGambleRefusal.ts', '../src/modules/sceneModule/numbers.ts', '../src/modules/scenarioMods/travel/mapTravel.ts',
-  '../src/modules/contentPacks/index.ts',
+  '../src/modules/contentPacks/index.ts', '../src/modules/scenarioMods/mapEntryReturn.ts', '../src/modules/scenarioMods/strictInitializer.ts',
+  '../src/utils/narrativeMetaWords.ts',
 ].map(p => loadTs(p))));
 
 // ───────────── 参数 ─────────────
@@ -34,11 +40,12 @@ const args = process.argv.slice(2);
 const opt = (name, fallback = null) => { const i = args.indexOf(name); if (i < 0) return fallback; const v = args[i + 1]; args.splice(i, 2); return v; };
 const bool = name => { const i = args.indexOf(name); if (i < 0) return false; args.splice(i, 1); return true; };
 const FROM = opt('--from'), UNTIL = opt('--until'), STALL = Number(opt('--stall', '6')), JSON_OUT = opt('--json', process.env.SMOKE_FULL_CHAIN_JSON || null);
-const STOP_ON_STUCK = bool('--stop-on-stuck'), VERBOSE = bool('--verbose');
+const STOP_ON_STUCK = bool('--stop-on-stuck'), VERBOSE = bool('--verbose'), QIN = bool('--qin');
 const baseUrl = args[0];
 assert.ok(baseUrl, '缺少站点 URL：node scripts/smoke-full-chain.mjs http://127.0.0.1:端口/');
 assert.ok(Number.isInteger(STALL) && STALL > 0, '--stall 须为正整数');
 
+assert.ok(!(QIN && (FROM || UNTIL)), '--qin 不能与 --from／--until 同用');
 const START = 'lcq.stage_01';
 const FINAL = F.FESTIVAL.finalStageId;
 const CHAIN = expectedMainline(MODS, START).visited;
@@ -46,7 +53,12 @@ assert.equal(CHAIN.at(-1), FINAL, '默认主链末关应是大祭终关');
 for (const [name, id] of [['--from', FROM], ['--until', UNTIL]]) if (id) assert.ok(CHAIN.includes(id), `${name} ${id} 不在默认主链上（可选：${CHAIN.join(',')}）`);
 if (FROM && UNTIL) assert.ok(CHAIN.indexOf(FROM) <= CHAIN.indexOf(UNTIL), '--from 应不晚于 --until');
 const LAST = UNTIL || FINAL;
-const EXPECTED_STAGES = CHAIN.slice(CHAIN.indexOf(FROM || START), CHAIN.indexOf(LAST) + 1);
+// ───────────── 秦线模式的起点与期望 ─────────────
+const QIN_STAGE = 'lyg.qin_xianyang';
+const QIN_FIXTURE = 'qin-replay/qin-entry-ready.json';
+const QIN_SLOT = QIN ? readFixtureSlot(QIN_FIXTURE) : null;
+const QIN_DEP = QIN ? QIN_SLOT.存档数据.世界.状态.剧本模组.modId : null;
+let EXPECTED_STAGES = QIN ? [QIN_DEP, QIN_STAGE, QIN_DEP] : CHAIN.slice(CHAIN.indexOf(FROM || START), CHAIN.indexOf(LAST) + 1);
 const EVIDENCE_MAX = GN.GAME_NUMBERS.story.quest.intentSettle.beatJudge.evidenceMaxChars;
 const NEUTRAL = '我先等等看';
 const MAX_MOVES = 4000;
@@ -60,7 +72,7 @@ const clone = save => structuredClone(save);
 function planOf(save) {
   const state = rt(save), focus = R.getScenarioFocusEvent(state);
   if (state.gameOver) return { kind: 'over' };
-  if (state.nextStageReadyId) return { kind: 'stage', next: state.nextStageReadyId };
+  if (state.nextStageReadyId && !(QIN && state.modId === QIN_STAGE)) return { kind: 'stage', next: state.nextStageReadyId };
   if (focus?.id === 'lcq.event.s02_01') {
     const s = clone(save);
     R.trackStoryOpportunity(s, 'opportunity.lcq.s02_01.take_full_mandate');
@@ -109,6 +121,8 @@ function diffOf(a, b) {
 }
 /** walker 在这份状态上推一步的结果（失败返回 error）。 */
 function nodeStep(save, n) {
+  // 秦线生成器的 step 在秦关内不切关（其余与 walker.step 同序同选）；秦关签了 nextStageReadyId 就不再是同一套选择，报出来记差异。
+  if (QIN && rt(save).modId === QIN_STAGE && rt(save).nextStageReadyId) return { error: `秦关内出现 nextStageReadyId=${rt(save).nextStageReadyId}（秦线生成器不切关，walker 会切）` };
   try { return { save: quietSync(() => step(clone(save), MODS, n).save) }; } catch (error) { return { error: String(error?.message || error).slice(0, 300) }; }
 }
 function quietSync(fn) { const k = ['log', 'info', 'warn', 'error', 'debug'], o = k.map(x => console[x]); k.forEach(x => { console[x] = () => {}; }); try { return fn(); } finally { k.forEach((x, i) => { console[x] = o[i]; }); } }
@@ -471,6 +485,98 @@ async function resumeFrom(page, charId, base, name, until) {
   return { ok: true, how: `walker 推过后重新导入（${QL.questBeatKey(pushed) || rt(pushed).modId}）` };
 }
 
+// ───────────── 秦线模式：入秦与返回（b，界面真实入口） ─────────────
+const XIANYANG = ENTRY.locationId;
+const squash = text => String(text || '').replace(/\s+/g, '');
+const resumeOf = save => { const r = save?.系统?.扩展?.mapEntryResume; return r ? { modId: r.runtime?.modId ?? null, position: r.position ?? null } : null; };
+const qin = { entry: null, ret: null, reenter: null, checks: [], moves: [] };
+const qinCheck = (ok, what) => { qin.checks.push({ ok: !!ok, what }); return !!ok; };
+/** 返回按钮文字的固定前缀（包文案 {stage} 之前那段）：rail 未走完时主面板不应出现。 */
+const QIN_RETURN_PREFIX = squash(NM.stripNarrativeMetaWords(P.packText(ENTRY.returnLabelTextId))).split('{stage}')[0].slice(0, 6);
+const returnButtons = page => page.locator('.action-options button.action-option-btn').filter({ hasText: QIN_RETURN_PREFIX }).count();
+/** 地图点咸阳 →「前往此地」→「确认前往」；与 Node 侧 selectMapTravel + settleMapTravel 对照。 */
+async function qinEnter(page, ui) {
+  const preview = MT.mapTravelPreview(ui.save, XIANYANG);
+  const exp = clone(ui.save);
+  const selection = MT.selectMapTravel(exp, XIANYANG);
+  const nodeOk = !!selection && quietSync(() => MT.settleMapTravel(exp, selection));
+  qinCheck(preview && nodeOk, `Node 侧：${QIN_DEP} 上应有去咸阳的入口行程并能落账`);
+  const opened = await openMapLocationPopup(page, XIANYANG);
+  if (!qinCheck(opened, `地图上应画出并点中咸阳（${XIANYANG}）`)) return { failed: '地图上点不中咸阳' };
+  const text = squash(await opened.popup.innerText());
+  qinCheck(preview && text.includes(squash(preview.label)), `咸阳弹窗应显示入口行程「${preview?.label}」`);
+  const go = opened.popup.locator('button.enter-region-btn', { hasText: '前往此地' });
+  if (!qinCheck(await go.count() && !(await go.isDisabled()), '「前往此地」应可点')) return { failed: `「前往此地」不可点：${text.slice(0, 160)}` };
+  await go.click();
+  const confirm = opened.popup.locator('button.enter-region-btn', { hasText: '确认前往' });
+  if (!qinCheck(await confirm.count(), '应出「确认前往」')) return { failed: '无「确认前往」' };
+  await confirm.click();
+  await page.waitForFunction(({ expr, next }) => eval(expr)._s.get('gameState').toSaveData()?.世界?.状态?.剧本模组?.modId === next, { expr: PINIA, next: QIN_STAGE }, { timeout: 20_000 }).catch(() => null);
+  await page.waitForFunction(expr => !eval(expr)._s.get('ui').isAIProcessing, PINIA, { timeout: 60_000 });
+  await page.waitForTimeout(600);
+  await ensureGamePage(page);
+  const after = (await readUi(page)).save;
+  qinCheck(rt(after).modId === QIN_STAGE, `应进入秦关（实为 ${rt(after).modId}）`);
+  const d = nodeOk ? diffOf(progressOf(after), progressOf(exp)) : null;
+  qinCheck(!d, `入秦后与 Node 侧一致：${JSON.stringify(d)}`);
+  qinCheck(JSON.stringify(resumeOf(after)) === JSON.stringify(resumeOf(exp)) && resumeOf(after)?.modId === QIN_DEP
+    && JSON.stringify(resumeOf(after)?.position) === JSON.stringify(ui.save.角色.位置), `mapEntryResume 应记出发关 ${QIN_DEP} 与入秦前位置：${JSON.stringify(resumeOf(after))}`);
+  qinCheck(R.getScenarioFocusEvent(rt(after))?.id === R.getScenarioFocusEvent(rt(exp))?.id, `入秦后焦点与 Node 一致（${R.getScenarioFocusEvent(rt(after))?.id} / ${R.getScenarioFocusEvent(rt(exp))?.id}）`);
+  qin.entry = { preview: preview?.label, focus: R.getScenarioFocusEvent(rt(after))?.id ?? null, resume: resumeOf(after), diff: d };
+  return { via: 'b', how: `地图点咸阳（${preview?.label}）→「前往此地」→「确认前往」` };
+}
+/** rail 走完后点主面板返回按钮；与 Node 侧 transitionFromMapEntryStage 对照；返回后再开咸阳弹窗看入口是否已关。 */
+async function qinReturn(page) {
+  await ensureGamePage(page);
+  await page.waitForTimeout(500);
+  const ui = await readUi(page), save = ui.save;
+  const offer = RET.getMapEntryReturnOffer(save);
+  const resume = resumeOf(save);
+  qinCheck(unsettledRailBeats(rt(save))?.length === 0, `返回前秦关 rail 应全部结算：${JSON.stringify(unsettledRailBeats(rt(save)))}`);
+  if (!qinCheck(offer, 'Node 侧：rail 走完后应有返回报价')) return;
+  const label = squash(NM.stripNarrativeMetaWords(offer.label));
+  const nodeRes = await quiet(async () => I.transitionFromMapEntryStage(clone(save), [...MODS, ...P.CONTENT_PACKS.stages]));
+  qinCheck(nodeRes.ok && nodeRes.to === resume?.modId, `Node 侧返回应落在 mapEntryResume 的出发关：${nodeRes.reason || nodeRes.to}`);
+  const button = page.locator('.action-options button.action-option-btn').filter({ hasText: label.slice(0, 6) });
+  const n = await button.count();
+  qin.ret = { label, resume, buttons: n };
+  if (!qinCheck(n === 1, `主面板应有一个返回按钮「${label}」（实有 ${n}）`)) { qin.ret.ui = uiSummary(ui); return; }
+  qinCheck(squash(await button.innerText()) === label, `返回按钮文字＝「${label}」`);
+  await button.click();
+  await page.waitForFunction(({ expr, next }) => eval(expr)._s.get('gameState').toSaveData()?.世界?.状态?.剧本模组?.modId === next, { expr: PINIA, next: resume.modId }, { timeout: 20_000 }).catch(() => null);
+  await page.waitForFunction(expr => !eval(expr)._s.get('ui').isAIProcessing, PINIA, { timeout: 60_000 });
+  await page.waitForTimeout(600);
+  const ui2 = await readUi(page), after = ui2.save;
+  qinCheck(rt(after).modId === resume.modId, `回到的关＝mapEntryResume 记录 ${resume.modId}（实为 ${rt(after).modId}）`);
+  qinCheck(JSON.stringify(after.角色.位置) === JSON.stringify(resume.position), `回到的位置＝mapEntryResume 记录：${JSON.stringify(after.角色.位置)} / ${JSON.stringify(resume.position)}`);
+  qinCheck(resumeOf(after) === null, '返回后 mapEntryResume 应清掉');
+  if (nodeRes.ok) {
+    const exp = nodeRes.saveData, d = diffOf(progressOf(after), progressOf(exp));
+    qin.ret.diff = d;
+    qinCheck(!d, `返回后进度与 Node 一致：${JSON.stringify(d)}`);
+    const focus = R.getScenarioFocusEvent(rt(after))?.id ?? null, nodeFocus = R.getScenarioFocusEvent(rt(exp))?.id ?? null;
+    qinCheck(focus === nodeFocus, `返回后主链当前拍（焦点）与 Node 一致：${focus} / ${nodeFocus}`);
+    qinCheck(QL.questBeatKey(after) === QL.questBeatKey(exp), `返回后任务日志当前拍与 Node 一致：${QL.questBeatKey(after)} / ${QL.questBeatKey(exp)}`);
+    const main = questEntries(exp)[0], shown = main ? `${main.title}：${main.objective}` : null;
+    qinCheck(shown && ui2.quest.includes(shown), `返回后界面任务日志应显示「${shown}」：${JSON.stringify(ui2.quest)}`);
+    qinCheck(planLabel(planOf(after)) === planLabel(planOf(exp)), `返回后 walker 下一步一致：${planLabel(planOf(after))} / ${planLabel(planOf(exp))}`);
+    qin.ret.focus = focus; qin.ret.quest = shown;
+  }
+  qinCheck(await page.locator('.action-options button.action-option-btn').filter({ hasText: label.slice(0, 6) }).count() === 0, '返回后不应再有返回按钮');
+  qinCheck(ui2.lcq.length === 0, `返回后不应弹 LCQ 报错码：${JSON.stringify(ui2.lcq)}`);
+  // rail 以外的入口：返回后入口只开一次——地图咸阳弹窗不应再有入秦行程（Node 侧同：mapTravelPreview 为空）。
+  const nodePreview = MT.mapTravelPreview(after, XIANYANG) ?? null;
+  const opened = await openMapLocationPopup(page, XIANYANG);
+  const text = opened ? squash(await opened.popup.innerText()) : null;
+  qin.reenter = { nodePreview: nodePreview?.label ?? null, popupShown: !!opened, popupHasEntry: text ? text.includes(squash(qin.entry?.preview)) : null };
+  qinCheck(nodePreview === null, `Node 侧：返回后不应再有去咸阳的入口行程：${nodePreview?.label}`);
+  qinCheck(opened && !text.includes(squash(qin.entry?.preview)), `返回后咸阳弹窗不应再显示入口行程「${qin.entry?.preview}」：${text?.slice(0, 160)}`);
+  const st = (await readUi(page)).save;
+  qinCheck(rt(st).modId === resume.modId, '点开咸阳弹窗不应离开出发关');
+  await routerPush(page, '/game');
+  await ensureGamePage(page);
+}
+
 // ───────────── 主循环 ─────────────
 const t0 = Date.now();
 const stages = [];
@@ -503,7 +609,11 @@ try {
   try {
     let charId;
     current = { plan: null, requests: [] };
-    if (FROM) {
+    if (QIN) {
+      charId = await enterIsolatedCharacter(page, baseUrl);
+      await importAndLoad(page, charId, QIN_SLOT);
+      startHow = `--qin：导入 ${QIN_FIXTURE}（importSave → loadGame），出发关 ${QIN_DEP}`;
+    } else if (FROM) {
       charId = await enterIsolatedCharacter(page, baseUrl);
       const save = await nodeStartAt(FROM);
       await importAndLoad(page, charId, { 存档名: `长跑-${FROM}`, 存档数据: JSON.parse(JSON.stringify(save)) });
@@ -514,12 +624,18 @@ try {
     }
     assert.ok(charId, '应有激活角色');
     let ui = await readUi(page);
-    assert.equal(rt(ui.save).modId, FROM || START, '起点关');
+    assert.equal(rt(ui.save).modId, QIN ? QIN_DEP : FROM || START, '起点关');
     assert.deepEqual(ui.lcq, [], '开局后不应弹 LCQ 报错码');
     console.log(`[起点] ${startHow}；${rt(ui.save).modId}，焦点 ${R.getScenarioFocusEvent(rt(ui.save))?.id}`);
     let row = enterStage(rt(ui.save).modId, 'start');
+    if (QIN) {
+      const r = await qinEnter(page, ui);
+      moves++; row.moves++;
+      if (r.failed) { outcome = 'qinEntryFailed'; console.log(`[入秦] 失败：${r.failed}`); } else { row.via.b++; console.log(`[入秦] [b] ${r.how}；焦点 ${qin.entry.focus}；mapEntryResume→${qin.entry.resume?.modId}`); }
+      ui = await readUi(page);
+    }
     let beatKey = null, noProgress = 0, idle = 0, attempt = 0, stepNo = 0, sceneCtx = null, lastPre = null, stageEntry = ui.save;
-    for (; moves < MAX_MOVES; moves++) {
+    for (; outcome === 'running' && moves < MAX_MOVES; moves++) {
       const tm = Date.now();
       ui = await readUi(page);
       const save = ui.save, state = rt(save);
@@ -529,7 +645,9 @@ try {
         stageEntry = save;
         if (stages.length > 1 && stages.at(-2).id === UNTIL) { stages.pop(); outcome = 'until'; break; }
       }
-      if (state.modId === FINAL && unsettledRailBeats(state)?.length === 0) { outcome = 'done'; break; }
+      if (QIN && state.modId !== QIN_STAGE) { outcome = 'leftQin'; anomalies.push({ stage: state.modId, move: moves, what: '秦关 rail 未走完就离开了秦关' }); break; }
+      if (QIN && RET.getMapEntryReturnOffer(save)) { outcome = 'railDone'; break; }
+      if (!QIN && state.modId === FINAL && unsettledRailBeats(state)?.length === 0) { outcome = 'done'; break; }
       if (state.gameOver) { outcome = 'gameOver'; anomalies.push({ stage: state.modId, what: '走到结局（gameOver）', gameOver: state.gameOver }); break; }
       if (ui.lcq.length) { anomalies.push({ stage: state.modId, move: moves, what: 'LCQ 报错码', codes: [...new Set(ui.lcq)] }); await page.evaluate(() => { window.__lcqSeen.length = 0; }); }
       if (ui.judgement) { await confirmJudgement(page); row.moves++; row.via.b++; anomalies.push({ stage: state.modId, move: moves, what: '出现行动判定卡，已点「确认并掷骰」' }); continue; }
@@ -602,6 +720,12 @@ try {
         if (VERBOSE) console.log(`  · 手 ${moves} ${Date.now() - tm}ms [${res.via}] ${res.how} → ${moved ? '推进' : '未推进'}${current.beatCandidates ? ` 判定候选 ${JSON.stringify(current.beatCandidates)}` : ''}`);
       }
       const nodeMoved = expected.save ? keyOf(progressOf(expected.save)) !== keyOf(before) : null;
+      if (QIN && rt(after.save).modId === QIN_STAGE && !RET.getMapEntryReturnOffer(after.save)) {
+        const n = await returnButtons(page);
+        (qin.railMid ||= { moves: 0, early: [] }).moves++;
+        if (n) qin.railMid.early.push(QL.questBeatKey(after.save));
+      }
+      if (QIN) qin.moves.push({ move: moves, beat: QL.questBeatKey(save), plan: planLabel(plan), via: res.via ?? null, how: res.failed || res.how, moved, nodeMoved, requests: [...current.requests], judged: current.judged });
       if (after.scene && !res.failed) { if (VERBOSE) console.log(`  · 手 ${moves} 进入场面：${await sceneCardText(page)}`); continue; }
       if (!res.failed && !res.prep) {
         // 与 walker 对照（walker 也推了一步）。
@@ -633,7 +757,7 @@ try {
         const first = r.how;
         r = await resumeFrom(page, charId, stageEntry, `续-${stuck.length}`, s2 => rt(s2).modId !== state.modId || rt(s2).completedEventIds.includes(rec.focus) || (rt(s2).offscreenResolvedEventIds || []).includes(rec.focus));
         r.how = `${first}；改从本关入关存档：${r.how}`;
-        if (!r.ok) {
+        if (!r.ok && !QIN) {
           // 入关存档已带着前面场面的败局旗标等：改用 Node 侧 walker 从开局造到本关开头（同 --from），再推过这一拍。
           const second = r.how;
           r = await resumeFrom(page, charId, await nodeStartAt(state.modId), `续-${stuck.length}`, s2 => rt(s2).modId !== state.modId || rt(s2).completedEventIds.includes(rec.focus) || (rt(s2).offscreenResolvedEventIds || []).includes(rec.focus));
@@ -646,6 +770,18 @@ try {
     }
     if (outcome === 'running') outcome = 'limit';
     if (outcome !== 'until') printStage(row);
+
+    // 秦线：rail 走完 → 点返回。
+    if (QIN) qinCheck(qin.railMid?.moves > 0 && !qin.railMid.early.length, `rail 未走完的 ${qin.railMid?.moves ?? 0} 手里主面板均无返回按钮（出现于：${JSON.stringify(qin.railMid?.early ?? [])}）`);
+    if (QIN && outcome === 'railDone') {
+      const back = enterStage(QIN_DEP, 'return');
+      await qinReturn(page);
+      moves++; back.moves++; back.via.b++;
+      const st = (await readUi(page)).save;
+      if (rt(st).modId !== QIN_DEP) back.id = rt(st).modId;
+      printStage(back);
+      console.log(`[返回] [b] 点「${qin.ret?.label}」→ ${rt(st).modId}；焦点 ${qin.ret?.focus}；任务日志 ${qin.ret?.quest}；再开咸阳弹窗 ${JSON.stringify(qin.reenter)}`);
+    }
 
     // 终关：「开启大祭」。
     if (outcome === 'done') {
@@ -677,14 +813,16 @@ try {
 // ───────────── 汇总与断言 ─────────────
 const ms = Date.now() - t0;
 const total = stages.reduce((acc, s) => { for (const k of 'abcd') acc[k] += s.via[k]; acc.moves += s.moves; acc.prep += s.prep; return acc; }, { a: 0, b: 0, c: 0, d: 0, moves: 0, prep: 0 });
-const result = { baseUrl, from: FROM, until: UNTIL, startHow, outcome, ms, stall: STALL, expectedStages: EXPECTED_STAGES, visited: stages.map(s => s.id), stages, total, stuck, diffs, cOnly, scenes, overlays, anomalies, festival, pageErrors };
+const result = { baseUrl, qin: QIN ? qin : undefined, from: FROM, until: UNTIL, startHow, outcome, ms, stall: STALL, expectedStages: EXPECTED_STAGES, visited: stages.map(s => s.id), stages, total, stuck, diffs, cOnly, scenes, overlays, anomalies, festival, pageErrors };
 if (JSON_OUT) writeFileSync(JSON_OUT, JSON.stringify(result, null, 2));
 if (overlays.length) console.log(`[弹窗] ${JSON.stringify(overlays)}`);
 console.log(`[合计] ${stages.length} 关，${total.moves} 手（a ${total.a} / b ${total.b} / c ${total.c} / d ${total.d}；预备 ${total.prep}），卡点 ${stuck.length}，与 walker 差异 ${diffs.length}，用时 ${(ms / 60000).toFixed(1)} 分钟，结局 ${outcome}`);
 if (festival) console.log(`[大祭] ${JSON.stringify(festival)}`);
 const failures = [];
 const check = (ok, what) => { if (!ok) failures.push(what); };
-check(['done', 'until'].includes(outcome), `未走完：outcome=${outcome}`);
+check((QIN ? ['railDone'] : ['done', 'until']).includes(outcome), `未走完：outcome=${outcome}`);
+if (QIN) for (const c of qin.checks) { if (!c.ok) failures.push(`秦线：${c.what}`); }
+if (QIN) check(qin.ret && qin.reenter, '秦线：返回与返回后检查应已执行');
 check(JSON.stringify(stages.map(s => s.id)) === JSON.stringify(EXPECTED_STAGES), `途经关序列不等于默认主链：${JSON.stringify(stages.map(s => s.id))}`);
 check(stuck.length === 0, `有 ${stuck.length} 处卡点`);
 // 与 walker 的差异：落在卡点那一拍上的算卡点的表现；其余差异判失败。
@@ -692,10 +830,11 @@ const unexplained = diffs.filter(d => !stuck.some(x => x.stage === d.stage && x.
 check(unexplained.length === 0, `有 ${unexplained.length} 处与 walker 的差异不能用卡点解释：${JSON.stringify(unexplained.slice(0, 3))}`);
 check(pageErrors.length === 0, `控制台未捕获异常：${pageErrors.slice(0, 3).join(' / ')}`);
 check(!anomalies.some(a => a.what === 'LCQ 报错码'), `出现 LCQ 报错码：${JSON.stringify(anomalies.filter(a => a.what === 'LCQ 报错码').flatMap(a => a.codes))}`);
-if (LAST === FINAL) {
+if (!QIN && LAST === FINAL) {
   check(festival?.available && !festival.blocked && festival.button && !festival.button.disabled, `终关「${F.FESTIVAL.label}」应可点：${JSON.stringify(festival)}`);
   check(festival?.started === true && festival?.eventDone === true && festival?.buttonAfter === false, `「${F.FESTIVAL.label}」应生效：${JSON.stringify(festival)}`);
 }
 for (const f of failures) console.log(`FAIL ${f}`);
-console.log(`${failures.length ? 'FAIL' : 'PASS'} smoke-full-chain：${stages.length}/${EXPECTED_STAGES.length} 关，卡点 ${stuck.length}`);
+if (QIN) console.log(`[秦线检查] ${qin.checks.filter(c => c.ok).length}/${qin.checks.length} 通过`);
+console.log(`${failures.length ? 'FAIL' : 'PASS'} smoke-full-chain${QIN ? '（--qin）' : ''}：${stages.length}/${EXPECTED_STAGES.length} 关，卡点 ${stuck.length}`);
 process.exit(failures.length ? 1 : 0);
