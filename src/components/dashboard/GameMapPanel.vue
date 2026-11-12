@@ -457,6 +457,8 @@ const travelToSelectedLocation = async () => {
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 const mapContainerRef = ref<HTMLDivElement | null>(null);
 const mapManager = ref<GameMapManager | null>(null);
+// 冒烟脚本的入口（scripts/lineSmokeHarness.mjs openMapLocationPopup 靠它算地点的屏幕坐标）：正式构建里 script setup 的内部状态不外露，只能经 expose 读到。
+defineExpose({ mapManager });
 const selectedLocation = ref<WorldLocation | null>(null);
 const selectedTravelRestriction = computed(() => {
   const save = gameStateStore.toSaveData();

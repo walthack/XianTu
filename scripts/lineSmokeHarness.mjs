@@ -145,8 +145,11 @@ export async function openMapLocationPopup(page, locationId, { tries = 30 } = {}
   await canvas.waitFor({ timeout: 15_000 });
   const locate = () => page.evaluate(id => {
     let el = document.querySelector('canvas'), comp = null;
-    while (el && !comp) { const c = el.__vueParentComponent; if (c?.setupState && 'mapManager' in c.setupState) comp = c; el = el.parentElement; }
-    const mm = comp?.setupState?.mapManager;
+    // 内测构建读 setupState；正式构建里 script setup 状态不外露，读 GameMapPanel 的 defineExpose（exposed 里是 ref）。
+    const has = c => (c?.exposed && 'mapManager' in c.exposed) || (c?.setupState && 'mapManager' in c.setupState);
+    while (el && !comp) { const c = el.__vueParentComponent; if (has(c)) comp = c; el = el.parentElement; }
+    const exposed = comp?.exposed?.mapManager;
+    const mm = exposed ? ('value' in exposed ? exposed.value : exposed) : comp?.setupState?.mapManager;
     const loc = mm?.layers?.get(4)?.children.map(c => c.userData?.data || c.userData).find(d => d && d.id === id);
     if (!mm || !loc) return null;
     const rect = document.querySelector('canvas').getBoundingClientRect(), s = mm.worldContainer.scale.x;
