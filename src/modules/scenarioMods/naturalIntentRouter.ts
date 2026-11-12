@@ -27,7 +27,7 @@ import {
 } from './wuyuanOpenWorldSlice';
 import { isScopedNaturalIntentSave } from './playtestNarrativeScope';
 import { beatActionRejectIf, beatKeyTurn, intentSettleConfig, resolveBeatText, type BeatKeyPlan } from './beatProgress';
-import { locationName, nextStageModOf, questConfig, questActionGate, questGuideEnabled } from './questLog';
+import { locationName, nextStageModOf, fallbackDepartureObjective, questActionGate, questGuideEnabled } from './questLog';
 import { logEvent } from '../diagnostics/log';
 import { freeActionConfig } from './freeAction/config';
 import { JUDGEMENT_KINDS } from '@/utils/judgementEngine';
@@ -256,7 +256,7 @@ export function listNaturalIntentCandidates(saveData: SaveData, mods: readonly S
   const offer = getStageDepartureOffer(saveData);
   const place = offer ? locationName(nextStageModOf(saveData, mods)?.scenario.opening?.locationId) : '';
   const departure = offer ? [{ source: 'stage_departure', actionId: 'stage_departure',
-    label: `${offer.label} · ${questConfig().departureObjective.replace('{place}', place || offer.label)}`,
+    label: place ? `${offer.label} · ${fallbackDepartureObjective(place, offer.label)}` : offer.label,
     playerLine: offer.label, contractHash: offer.nextStageId }] : [];
   return [...events, ...refusal, ...opportunities, ...openWorld, ...held, ...departure];
 }

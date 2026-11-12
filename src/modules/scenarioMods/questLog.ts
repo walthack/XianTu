@@ -249,6 +249,19 @@ const styleOf = (line: QuestLine | undefined): MarkerStyle => questConfig().mark
 const releasedHints = (hints: QuestHint[] | undefined, level: number): string[] =>
   (hints || []).filter(hint => hint.level <= level).sort((a, b) => a.level - b.level).map(hint => hint.text);
 
+/** 兜底启程目标（作者没写 arrival.objective 时）：有下一关地名用 departureObjective 模板；取不到地名就是启程文字本身，不把它填进模板。 */
+export const fallbackDepartureObjective = (place: string, label: string): string =>
+  place ? questConfig().departureObjective.replace('{place}', place) : label;
+
+/** 待启程时任务日志显示的目标（departureEntry 同一来源）；任务引导关或没有启程返回 undefined。玩家照它打字＝启程（beatProgress.actionLines）。 */
+export function questDepartureObjective(save: SaveData | null | undefined, mods: readonly ScenarioMod[]): string | undefined {
+  const offer = save && questGuideEnabled(save) ? getStageDepartureOffer(save) : null;
+  if (!offer) return undefined;
+  const next = nextStageModOf(save!, mods);
+  const spec = questArrivalSpec(offer.nextStageId) || (next ? questArrivalSpec(next.manifest.id) : undefined);
+  return spec?.objective || fallbackDepartureObjective(locationName(next?.scenario.opening?.locationId), offer.label);
+}
+
 function departureEntry(save: SaveData, mods: readonly ScenarioMod[], beatKey: string, level: number): QuestEntry {
   const offer = getStageDepartureOffer(save)!;
   const next = nextStageModOf(save, mods);
@@ -260,7 +273,7 @@ function departureEntry(save: SaveData, mods: readonly ScenarioMod[], beatKey: s
     line: spec?.line || 'main',
     lineId: spec?.lineId || 'lcq.main',
     title: spec?.title || styleOf(spec?.line).label,
-    objective: spec?.objective || questConfig().departureObjective.replace('{place}', place || offer.label),
+    objective: spec?.objective || fallbackDepartureObjective(place, offer.label),
     detail: spec?.detail,
     place: place || undefined,
     hints: releasedHints(spec?.hints, level),
