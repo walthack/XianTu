@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright-core';
+import { installSmokeNetworkGuard } from './e2e-smoke.mjs';
 
 const baseUrls = process.argv.slice(2);
 if (baseUrls.length === 0) {
@@ -15,7 +16,10 @@ const browser = await chromium.launch({
 
 try {
   for (const baseUrl of baseUrls) {
-    const page = await browser.newPage();
+    // 本脚本原来不拦截任何请求（会真的去拉 CDN）；改为隔离上下文 + 网络护栏，非本机请求只走替身或 abort。
+    const context = await browser.newContext();
+    const guard = await installSmokeNetworkGuard(context);
+    const page = await context.newPage();
     const pageErrors = [];
     page.on('pageerror', error => pageErrors.push(error.message));
     try {
@@ -57,9 +61,10 @@ try {
       await page.getByText('雷光是紫色的。', { exact: false }).first()
         .waitFor({ state: 'visible', timeout: 20_000 });
       assert.deepEqual(pageErrors, [], `${baseUrl}: 游戏首屏浏览器运行时错误`);
+      guard.finish();
       console.log(`PASS ${baseUrl}/game (草原落地首屏)`);
     } finally {
-      await page.close();
+      await context.close();
     }
   }
 } finally {

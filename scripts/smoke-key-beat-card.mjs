@@ -4,6 +4,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { chromium } from 'playwright-core';
+import { FIXTURE_NONE, classifyFixtureRequest, fixtureCompletion, installSmokeNetworkGuard } from './e2e-smoke.mjs';
 import { loadTs } from '../tests/loadTs.mjs';
 
 const values = new Map();
@@ -18,6 +19,7 @@ const landing = await loadTs('../src/modules/scenarioMods/xingyuehuLandingPlayte
 const rtm = await loadTs('../src/modules/scenarioMods/runtime.ts');
 const init = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
 const wuyuan = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
+const { fixedEndingNarrative } = await loadTs('../src/modules/scenarioMods/fixedEndingNarratives.ts');
 const mods = await Promise.all(['lcq.stage_01', 'lcq.stage_02'].map(async id => parseScenarioMod(JSON.parse(
   await readFile(new URL(`../src/modules/scenarioMods/builtins/data/${id}.json`, import.meta.url), 'utf8'),
 ))));
@@ -45,19 +47,24 @@ for (let step = 0; step < 100; step++) {
       assert.equal(rtm.recordStoryOpportunityStructuredAction(fixture, action).progressed, true);
       advance();
     }
+    // 机会链走完后焦点已换拍：回到循环顶重新取焦点，不拿过期的 s02_01 去记动作（否则 stale_event）。
+    continue;
   }
   if (event?.id === 'lcq.event.s02_04') {
     s0204Fixture ||= JSON.parse(JSON.stringify(fixture));
-    const action = wuyuan.resolveWuyuanOpenWorldSelectionFromText(fixture, '我去五原城。')
-      || wuyuan.getWuyuanOpenWorldSelections(fixture).find(item => item.kind === 'travel')
-      || wuyuan.getWuyuanOpenWorldSelections(fixture).find(item => item.kind === 'problem_action');
+    // 现在点心铺有回市集的路线，「我去五原城」在铺里会解析成回市集、来回打转：人到铺里先结算地方应对。
+    const action = wuyuan.getWuyuanOpenWorldSelections(fixture).find(item => item.kind === 'problem_action')
+      || wuyuan.resolveWuyuanOpenWorldSelectionFromText(fixture, '我去五原城。')
+      || wuyuan.getWuyuanOpenWorldSelections(fixture).find(item => item.kind === 'travel');
     assert.ok(action, 's02_04 must offer a local action');
     assert.equal(wuyuan.settleWuyuanOpenWorldSelection(fixture, action).settled, true);
     advance();
     continue;
   }
+  // 带地点闸门的拍（如 s01_05 须先到指挥帐）先给「前往」动作：没有合同动作时走本拍的 travel: 动作。
   const action = rtm.getCurrentStoryEventActions(fixture).find(item =>
-    event?.playerCompletionContract?.actions.some(contract => contract.id === item.actionId));
+    event?.playerCompletionContract?.actions.some(contract => contract.id === item.actionId))
+    || rtm.getCurrentStoryEventActions(fixture).find(item => item.eventId === event?.id && item.actionId.startsWith('travel:'));
   assert.ok(action, `missing step ${step}: ${event?.id}`);
   assert.equal(rtm.recordStoryEventStructuredAction(fixture, action).attempted, true);
   advance();
@@ -89,6 +96,8 @@ const browser = await chromium.launch({ headless: true, channel: 'chrome' });
 try {
   for (const baseUrl of baseUrls) {
     const context = await browser.newContext();
+    // 网络护栏先装：脚本路由处理不了的请求 route.fallback() 落到护栏（非本机一律替身或 abort+判失败）。
+    const guard = await installSmokeNetworkGuard(context);
     await context.addInitScript(() => {
       localStorage.setItem('ai_service_config', JSON.stringify({
         mode: 'custom', streaming: false, maxRetries: 0,
@@ -105,13 +114,13 @@ try {
       if (/\/api\/v1\/save-storage(?:\/|$)/.test(url.pathname)) return route.fulfill({ status: 501, contentType: 'application/json', body: '{}' });
       if (request.method() === 'POST' && /completions/.test(url.pathname)) {
         const body = request.postDataJSON();
-        const isIntent = (body.messages || []).some(message => { try { return Array.isArray(JSON.parse(message.content).candidates); } catch { return false; } });
-        requests.push(isIntent ? 'intent' : 'narration');
-        const content = isIntent ? '{"actionId":"none","evidence":"x","certainty":"high"}' : narration;
-        return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ choices: [{ message: { content }, finish_reason: 'stop' }], usage: { completion_tokens: 80, total_tokens: 500 } }) });
+        // 按内容分种类（意图／拍子判定／后台记忆审计／正文），按是否流式回替身（正文链路现按流式发）。
+        const kind = classifyFixtureRequest(body);
+        requests.push(kind);
+        return route.fulfill(fixtureCompletion(body, kind === 'narration' ? narration : FIXTURE_NONE[kind]));
       }
-      if (url.origin !== new URL(baseUrl).origin && /^https?:/.test(url.protocol) && request.method() !== 'GET') return route.abort();
-      return route.continue();
+      // 其余请求交给网络护栏：本机 GET 放行；本机写请求与非本机请求一律 abort 并判失败。
+      return route.fallback();
     });
     const runtimeState = () => page.evaluate(() => {
       const save = document.querySelector('#app').__vue_app__.config.globalProperties.$pinia._s.get('gameState').toSaveData();
@@ -134,7 +143,10 @@ try {
       await page.locator('textarea.game-input').waitFor();
       assert.equal(await page.locator('[data-testid="key-beat-card"]').count(), 0, 'no advance card at the pact');
       assert.equal(await page.locator('[data-testid="branch-decision"]').count(), 0, 'the pact is not a locked decision');
-      assert.ok(await page.locator('.engine-action-btn').count() >= 1, 'pact actions are ordinary buttons');
+      // 任务模式（2026-11-03 起，内测构建默认开）撤了主线按钮，谈期限这一拍改在任务日志里列目标；任务模式关的构建仍是普通按钮。
+      const questEntry = page.locator('[data-testid="quest-log"] .quest-log-entry .quest-event').first();
+      if (await questEntry.isVisible().catch(() => false)) assert.ok((await questEntry.innerText()).trim(), 'pact objective is listed in the quest log');
+      else assert.ok(await page.locator('.engine-action-btn').count() >= 1, 'pact actions are ordinary buttons');
       await page.locator('textarea.game-input').fill('霓龙丝在南荒哪一带？');
       await page.locator('.send-button').click();
       await page.waitForFunction(() => !document.querySelector('#app').__vue_app__.config.globalProperties.$pinia._s.get('ui').isAIProcessing, undefined, { timeout: 30_000 });
@@ -164,12 +176,18 @@ try {
           document.querySelector('#app').__vue_app__.config.globalProperties.$pinia._s.get('gameState').loadFromSaveData(save);
         }, { save: JSON.parse(JSON.stringify(fixture)), ending });
         await page.locator('.game-over-card').waitFor();
-        for (const fact of ending.facts) assert.ok((await page.locator('.game-over-card').innerText()).includes(fact));
+        // 2026-10-05（0cfd3cd3）起结局卡优先展示作者定稿的结局正文，没有定稿才列 facts（MainGamePanel scenarioEndingParagraphs 同一取法）。
+        const card = await page.locator('.game-over-card').innerText();
+        const paragraphs = fixedEndingNarrative({ endingId: ending.id, sourceEventId: ending.sourceEventId })?.split(/\n\s*\n/).filter(Boolean) || ending.facts;
+        assert.ok(card.includes(ending.title), `${ending.id} card shows the ending title`);
+        const squash = text => String(text).replace(/\s+/g, '');
+        for (const paragraph of paragraphs) assert.ok(squash(card).includes(squash(paragraph)), `${ending.id} card misses「${paragraph.slice(0, 40)}」: ${card.slice(0, 300)}`);
         assert.equal(await page.locator('.engine-action-btn, .secondary-action-options, .stage-departure-offer').count(), 0);
         assert.equal(await page.getByText('↩ 斩线回轨', { exact: true }).count(), 0);
         assert.ok(!(await page.locator('.game-over-card').innerText()).includes('结局已写在上方正文里'));
       }
       assert.deepEqual(pageErrors, []);
+      guard.finish();
       console.log(`PASS ${baseUrl}: dev build defaults the module switch on; the pact has no card and no lock, input stays usable, conversation is not intercepted; requests=${JSON.stringify(requests)}`);
     } catch (error) {
       console.error({ requests, pageErrors, visible: (await page.locator('body').innerText()).slice(-1200) });

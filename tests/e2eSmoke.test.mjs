@@ -80,3 +80,75 @@ test('数值体检：e2eSmoke.scriptTimeoutMs 必须是正整数，已进 game-n
   assert.throws(() => numbers.applyGameNumbers({ e2eSmoke: { scriptTimeoutMs: -5 } }), /LCQ-NUM-006/);
   assert.equal(numbers.GAME_NUMBERS.e2eSmoke.scriptTimeoutMs, e2e.loadTimeoutMs());
 });
+
+test('跳过：脚本以 SKIP_EXIT_CODE 退出记为 skipped（带原因），不算通过也不算失败', async () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'smoke-'));
+  writeFileSync(path.join(dir, 'skip.mjs'), `console.log('SMOKE-SKIP: 缺私有夹具 x'); process.exit(${e2e.SKIP_EXIT_CODE})`);
+  const r = await e2e.runScript('skip', [], 5000, dir);
+  assert.equal(r.status, 'skipped');
+  assert.equal(r.reason, '缺私有夹具 x');
+  const s = e2e.summarize([r, { name: 'a', status: 'passed', reason: '', ms: 1 }], ['real']);
+  assert.deepEqual([s.total, s.passed, s.failed, s.skipped, s.ok], [1, 1, 0, 2, true], 'total counts only scripts that reached a verdict');
+  assert.deepEqual(s.skippedNames, ['real', 'skip']);
+  const text = e2e.formatSummary(s);
+  assert.match(text, /⏭ {2}skip {2}skipped（缺私有夹具 x）/);
+  assert.match(text, /1\/1 通过，0 失败，2 跳过；跳过：real、skip/);
+  assert.doesNotMatch(text, /✅ skip/);
+});
+
+test('网络统计汇总：逐上下文求和、列出违规与未上报的脚本', () => {
+  const lines = [
+    JSON.stringify({ label: 'a', external: 10, externalFailed: 1, stubbedStatic: 8, violations: [] }),
+    JSON.stringify({ label: 'a', external: 5, externalFailed: 0, stubbedStatic: 4, violations: ['非本机请求未被替身：GET https://x/y'] }),
+    '',
+  ];
+  const n = e2e.summarizeNetwork(lines, ['a', 'b']);
+  assert.deepEqual([n.contexts, n.external, n.externalFailed, n.stubbedStatic], [2, 15, 1, 12]);
+  assert.deepEqual(n.violations, ['a: 非本机请求未被替身：GET https://x/y']);
+  assert.deepEqual(n.unreported, ['b']);
+});
+
+test('模型请求替身：按内容分种类；按 stream 回 SSE 或 JSON', () => {
+  const msg = content => ({ messages: [{ role: 'system', content: 'x' }, { role: 'user', content }] });
+  assert.equal(e2e.classifyFixtureRequest(msg(JSON.stringify({ playerText: 'a', actions: [] }))), 'beat');
+  assert.equal(e2e.classifyFixtureRequest(msg(JSON.stringify({ playerText: 'a', candidates: [] }))), 'intent');
+  assert.equal(e2e.classifyFixtureRequest(msg('从编号原文句子中选出1至4句最重要的已发生事实作为记忆。只返回JSON {"sentenceIds":[0]}')), 'memory');
+  assert.equal(e2e.classifyFixtureRequest(msg('你是只读的连续性审计员。')), 'audit');
+  assert.equal(e2e.classifyFixtureRequest(msg('每轮输出JSON')), 'narration');
+  for (const kind of ['intent', 'beat', 'memory', 'audit']) assert.doesNotThrow(() => JSON.parse(e2e.FIXTURE_NONE[kind]));
+  const sse = e2e.fixtureCompletion({ stream: true }, 'hi', { finishReason: 'length' });
+  assert.equal(sse.contentType, 'text/event-stream');
+  const chunk = JSON.parse(sse.body.split('\n')[0].replace(/^data: /, ''));
+  assert.deepEqual([chunk.choices[0].delta.content, chunk.choices[0].finish_reason], ['hi', 'length']);
+  assert.match(sse.body, /data: \[DONE\]/);
+  const json = e2e.fixtureCompletion({ stream: false }, 'hi');
+  assert.equal(json.contentType, 'application/json');
+  assert.equal(JSON.parse(json.body).choices[0].message.content, 'hi');
+});
+
+test('网络护栏：本机 GET 放行；CDN 静态库本机替身；本机写请求与其余非本机请求 abort 并记违规，finish 抛错', async () => {
+  let handler;
+  const listeners = {};
+  const context = { on: (event, fn) => { listeners[event] = fn; }, route: async (_pattern, fn) => { handler = fn; } };
+  const guard = await e2e.installSmokeNetworkGuard(context, 'unit');
+  const call = async (url, method = 'GET') => {
+    const request = { url: () => url, method: () => method };
+    listeners.request(request);
+    const seen = {};
+    await handler({ request: () => request, continue: () => { seen.how = 'continue'; }, abort: () => { seen.how = 'abort'; listeners.requestfailed(request); }, fulfill: options => { seen.how = 'fulfill'; seen.options = options; } });
+    return seen;
+  };
+  assert.equal((await call('http://127.0.0.1:8092/assets/a.js')).how, 'continue');
+  const vue = await call('https://unpkg.com/vue@3/dist/vue.global.js');
+  assert.equal(vue.how, 'fulfill');
+  assert.ok(vue.options.body.length > 1000, 'served from local node_modules');
+  assert.equal((await call('https://www.ddct.top/backgroundvedio.mp4')).options.status, 404);
+  assert.deepEqual(guard.stats.violations, []);
+  assert.doesNotThrow(() => guard.finish());
+  assert.equal((await call('http://127.0.0.1:8092/api/v1/characters', 'POST')).how, 'abort');
+  assert.equal((await call('https://api.siliconflow.cn/v1/embeddings', 'POST')).how, 'abort');
+  assert.equal((await call('https://example.com/x.png')).how, 'abort');
+  assert.equal(guard.stats.violations.length, 3);
+  assert.deepEqual([guard.stats.external, guard.stats.externalFailed, guard.stats.stubbedStatic], [4, 2, 2]);
+  assert.throws(() => guard.finish(), /网络护栏违规/);
+});
