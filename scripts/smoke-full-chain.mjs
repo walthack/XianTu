@@ -795,7 +795,7 @@ function realHand(tm, save, after, label, res, moved, nodeMoved = null) {
   if (safe) real.safeReplaced++;
   if (unrec) real.unrecognized++;
   const row = { hand: moves, stage: rt(save).modId, beat: QL.questBeatKey(save), plan: label, via: res.via ?? null, how: res.failed || res.how, typed: current.typed ?? null,
-    moved, nodeMoved, loose: !!current.loose, judged: current.judged ?? null, ms: Date.now() - tm, safe, unrecognized: unrec, location: position(after.save).locationId, narrative200: after.narrative200, _cur: current };
+    moved, nodeMoved, loose: !!current.loose, judged: current.judged ?? null, ms: Date.now() - tm, safe, unrecognized: unrec, hold: after.hold || '', notice: after.notice || '', location: position(after.save).locationId, narrative200: after.narrative200, _cur: current };
   real.hands.push(row);
   const r = reqCount(current);
   console.log(`[手] ${String(moves).padStart(3)} ${row.stage} ${row.beat ?? '-'} [${row.via ?? '×'}] ${String(row.how).slice(0, 80)} → ${moved ? '推进' : '未推进'}${nodeMoved === false ? '（walker 也不推进）' : ''}｜${(row.ms / 1000).toFixed(1)}s 请求 ${r.chat}+${r.embeddings}e${row.loose ? '｜改写' : ''}${row.judged ? `｜判拍 ${row.judged}` : ''}${safe ? '｜安全替换' : ''}${unrec ? '｜行动没能识别' : ''}`);
