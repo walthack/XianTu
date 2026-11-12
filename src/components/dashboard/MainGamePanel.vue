@@ -2472,9 +2472,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     && beatOpenWorldOutcomeSettles(contractedJudgementResolution?.outcome, Boolean(contractedJudgementResolution));
   // 任务模式没有主线按钮：手打原文精确命中本拍动作＝点了它的按钮，同样不出关键词判定卡（按钮原句本来就不出，见 shouldSkipJudgementPreflight）。
   const typedExactBeat = resolveBeatText(saveData, inputText.value.trim());
-  if (!shouldSkipJudgementPreflight({
-    skipPreflight: execution?.skipPreflight || Boolean(contractedJudgementResolution) || freeActionHandled || ownedByFreeAction || skipKeywordPreflightFromIntent
-      || (typedExactBeat?.via === 'exact' && typedExactBeat.action.kind === 'event'),
+  if (!(typedExactBeat?.via === 'exact' && typedExactBeat.action.kind === 'event') && !shouldSkipJudgementPreflight({
+    skipPreflight: execution?.skipPreflight || Boolean(contractedJudgementResolution) || freeActionHandled || ownedByFreeAction || skipKeywordPreflightFromIntent,
     selectedSource: selectedScenarioEngineAction.value?.source || routedIntentAction?.source,
     selectedPlayerLine: selectedScenarioEngineAction.value && 'playerLine' in selectedScenarioEngineAction.value
       ? selectedScenarioEngineAction.value.playerLine
