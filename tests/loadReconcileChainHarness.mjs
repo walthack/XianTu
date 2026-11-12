@@ -65,6 +65,8 @@ export const load = rel => jiti.import(src(rel));
 export const R = await load('modules/scenarioMods/runtime.ts');
 export const W = await load('modules/scenarioMods/wuyuanOpenWorldSlice.ts');
 export const BP = await load('modules/scenarioMods/beatProgress.ts');
+// 对照组（不补 require.context）下内置关加载不了，clickButton 的合同迁移那一步按无内置关跳过。
+const BUILTINS = DISABLE_SHIM ? null : await load('modules/scenarioMods/builtins/index.ts');
 export const repairs = await load('modules/scenarioMods/loadRepairs.ts');
 export const fallback = await load('utils/saveLoadFallback.ts');
 export const { unwrapDadBundle } = await load('utils/dadBundle.ts');
@@ -146,14 +148,21 @@ export function pickButton(buttons) {
 }
 
 /**
- * 点按钮：MainGamePanel 发送前在 live 上 reconcileNaturalIntentMetadata + applyBeatDeadlines →
+ * 点按钮：MainGamePanel 发送前在 live 上 reconcileNaturalIntentMetadata + 合同迁移表（migrateBatch6TextContracts，2026-11-12 起）+ applyBeatDeadlines →
  * AIBS processGmResponse 在 live 上落账（事件按钮 recordStoryEventStructuredAction / 五原本地选择 settleWuyuanOpenWorldSelection）→
  * AIBS 回合尾 advanceScenarioRuntime(live)。live 读档后从没跑过 advance（与游戏相同）。
  */
+/** 发送前在 live 上做的三步（MainGamePanel sendMessage 开头）：V03 元数据、合同迁移表、到点拍回合数。手打路径的候选是在这之后从 live 取的。 */
+export function prepareSend(live) {
+  R.reconcileNaturalIntentMetadata(live);
+  const canonical = BUILTINS?.BUILTIN_SCENARIO_MODS.find(mod => mod.manifest?.id === rt(live)?.modId)?.scenario.events;
+  if (rt(live) && canonical) R.migrateBatch6TextContracts(rt(live), canonical);
+  BP.applyBeatDeadlines(rt(live)?.events);
+}
+
 export function clickButton(live, button) {
   return quiet(() => {
-    R.reconcileNaturalIntentMetadata(live);
-    BP.applyBeatDeadlines(rt(live)?.events);
+    prepareSend(live);
     const receipt = button.kind === 'open_world'
       ? W.settleWuyuanOpenWorldSelection(live, button.selection)
       : R.recordStoryEventStructuredAction(live, button.selection);
