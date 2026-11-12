@@ -27,7 +27,7 @@ const CASES = [
   { file: 'load-reconcile/ningyu-19003cbb-contract.json.gz', eventId: 'lcq.event.ningyu_regicide_offer', beatId: null,
     actionId: 'trace_ningyu_cold_qi_source', via: 'main', oldHash: '19003cbb', newHash: '9e66a2a6' },
   // 同一份 O2 档，玩家不点右栏、直接在输入框说（提示里写着「也可以直接说」）。手打走 resolveNaturalIntent，候选从 live 存档取（读码：MainGamePanel
-  // 发送时传的是 live saveData，不经副本 advance），带的是 live 的旧哈希，所以对得上；Node 侧照此从 live 取同一动作再点。
+  // 发送时传的是 live saveData，不经副本 advance）；Node 侧照此在发送前三步之后从 live 取同一动作再点。
   { file: 'load-reconcile/o2-ningyu-reply-f27676f0-contract.json.gz', control: 'say', say: '答应她，这件事我来办', eventId: 'lcq.event.ningyu_regicide_offer_ins_ningyu_reply', beatId: 'beat.ningyu.o2_regicide',
     actionId: 'act.ningyu.o2.agree', via: 'say', oldHash: 'f27676f0', newHash: '37ca6495' },
   // 同一份 O2 档，第一手的模型请求失败（替身回 500，回合没走到 AIBS 回合尾 advance）：看被拒是否顺延到下一手。
@@ -68,6 +68,8 @@ async function childMain() {
       // 模型请求失败的那一手：Node 侧不落账也不 advance（live 原样），只占一个序号。
       if (c.failFirst) rec.hands.push({ reason: 'turn_failed', done: false, failed: true, liveHash: contractHashOf(H, live, c.eventId) });
       for (let hand = rec.hands.length + 1; hand <= MAX_HANDS; hand++) {
+        // 手打：候选在发送前那三步（含合同迁移）之后从 live 取。
+        if (c.via === 'say') quiet(() => H.prepareSend(live));
         const view = c.via === 'say' ? live : quiet(() => R.advanceScenarioRuntime(live).saveData);
         const offered = c.via !== 'main' ? quiet(() => R.getCurrentStoryExplorationActions(view)) : quiet(() => R.getCurrentStoryEventActions(view));
         const selection = offered.find(a => a.eventId === c.eventId && a.actionId === c.actionId);
@@ -280,8 +282,8 @@ try {
             // 界面现象钉子（现状）：被拒那手没有任何报错码、输入框照常清空、历史+1（正文照常生成），之后弹一条「…在等你…」的 info 提示；落账那手不弹。
             assert.deepEqual(obs.lcq, [], `第${hand}手不应弹 LCQ 报错码`);
             if (nodeHand.failed) {
-              // 模型失败那手（现状）：不落账、live 合同不迁移（回合尾 advance 没跑）、历史不增。提示与输入框如实记录、不钉。
-              assert.equal(obs.stateHash, `${c.oldHash}→${c.oldHash}`, '模型失败那手 live 不应迁移');
+              // 模型失败那手：不落账、历史不增；发送前的合同迁移已写进 live（迁移与回合成败无关），所以下一手直接落账。提示与输入框如实记录、不钉。
+              assert.equal(obs.stateHash, `${c.oldHash}→${c.newHash}`, '模型失败那手：发送前迁移已写进 live');
               assert.equal(obs.historyDelta, 0, '模型失败那手历史不增');
               continue;
             }
@@ -311,5 +313,5 @@ try {
   await browser.close();
 }
 if (process.env.SMOKE_STALE_JSON) (await import('node:fs')).writeFileSync(process.env.SMOKE_STALE_JSON, JSON.stringify(results, null, 2));
-console.log(`${failed ? 'FAIL' : 'PASS'} smoke-old-contract-first-click：${results.length - failed}/${results.length} 份旧合同档符合现状钉子`);
+console.log(`${failed ? 'FAIL' : 'PASS'} smoke-old-contract-first-click：${results.length - failed}/${results.length} 份旧合同档第一手落账情形符合预期`);
 process.exit(failed ? 1 : 0);

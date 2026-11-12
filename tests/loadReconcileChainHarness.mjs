@@ -152,12 +152,17 @@ export function pickButton(buttons) {
  * AIBS processGmResponse 在 live 上落账（事件按钮 recordStoryEventStructuredAction / 五原本地选择 settleWuyuanOpenWorldSelection）→
  * AIBS 回合尾 advanceScenarioRuntime(live)。live 读档后从没跑过 advance（与游戏相同）。
  */
+/** 发送前在 live 上做的三步（MainGamePanel sendMessage 开头）：V03 元数据、合同迁移表、到点拍回合数。手打路径的候选是在这之后从 live 取的。 */
+export function prepareSend(live) {
+  R.reconcileNaturalIntentMetadata(live);
+  const canonical = BUILTINS?.BUILTIN_SCENARIO_MODS.find(mod => mod.manifest?.id === rt(live)?.modId)?.scenario.events;
+  if (rt(live) && canonical) R.migrateBatch6TextContracts(rt(live), canonical);
+  BP.applyBeatDeadlines(rt(live)?.events);
+}
+
 export function clickButton(live, button) {
   return quiet(() => {
-    R.reconcileNaturalIntentMetadata(live);
-    const canonical = BUILTINS?.BUILTIN_SCENARIO_MODS.find(mod => mod.manifest?.id === rt(live)?.modId)?.scenario.events;
-    if (rt(live) && canonical) R.migrateBatch6TextContracts(rt(live), canonical);
-    BP.applyBeatDeadlines(rt(live)?.events);
+    prepareSend(live);
     const receipt = button.kind === 'open_world'
       ? W.settleWuyuanOpenWorldSelection(live, button.selection)
       : R.recordStoryEventStructuredAction(live, button.selection);
