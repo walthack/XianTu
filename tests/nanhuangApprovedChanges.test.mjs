@@ -472,6 +472,20 @@ test('PR1-2: only arrive: moves after the last forced route count as an explicit
  assert.equal(drifted(undefined),BIYU,'legacy record without order keeps the old fail-closed behaviour');
 });
 
+test('an arrive: move to a place the travel ledger has no zone for (the Guiwang outer post) counts as an explicit move: the turn-end correction does not pull the player back',()=>{
+ const OFF='lcq.location.guiwang_outer_post';
+ const drift=structuredClone(stay.get('letter_held'));const before=drift.角色.位置.locationId;
+ drift.角色.位置={...drift.角色.位置,locationId:OFF};ledgerMod.reconcileNanhuangPositionFromLedger(drift,runtimeOf(drift));
+ assert.equal(drift.角色.位置.locationId,before,'control: an unexplained drift to the same place is still corrected');
+ const save=structuredClone(stay.get('letter_held'));const r=runtimeOf(save);const zone=r.travelLedger.state.currentZoneId;
+ save.角色.位置={...save.角色.位置,locationId:OFF};
+ ledgerMod.noteNanhuangArrival(r,OFF,'arrive:lcq.event.enter_dong_with_migu');
+ assert.equal(r.travelLedger.state.currentZoneId,zone,'the ledger zone itself does not move');
+ assert.equal(r.travelLedger.reprojections.at(-1).toZoneId,'');
+ ledgerMod.reconcileNanhuangPositionFromLedger(save,r);
+ assert.equal(save.角色.位置.locationId,OFF,'not pulled back to the forced-route destination');
+});
+
 test('PR1-3: the travel card reads the current stay: Ning Yu / Xiao Wei are not listed while held, and return after the rejoin',()=>{
  for(const {save} of stayEnterDong){
   const card=ledgerMod.getTravelCard(save);

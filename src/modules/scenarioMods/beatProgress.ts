@@ -90,7 +90,12 @@ const actionLines = (save: SaveData, action: BeatAction, mods: readonly Scenario
  * 设计稿 2026-11-04 第三节推测 1、D7：玩家照日志打出目标原文就该过。开关关时不加（与原来逐字同一行为）。致命选项不加目标。
  */
 function questLogLines(save: SaveData, selection: ScenarioEventActionSelection): unknown[] {
-  if (!questGuideEnabled(save) || selection.actionId.startsWith('travel:')) return [];
+  if (!questGuideEnabled(save)) return [];
+  // 「先去某地」的动作：日志只显示「地点：X」，照它打「去X」就该走（X 取日志同一个地名）。
+  if (selection.actionId.startsWith('travel:')) {
+    const place = locationName(selection.actionId.slice('travel:'.length));
+    return place ? [`去${place}`] : [];
+  }
   const event = (runtimeOf(save)?.events || []).find((item: any) => item?.id === selection.eventId);
   const authored = event?.playerCompletionContract?.actions?.find((item: any) => item?.id === selection.actionId);
   if (!authored) return [];

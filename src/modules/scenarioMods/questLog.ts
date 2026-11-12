@@ -281,12 +281,18 @@ function departureEntry(save: SaveData, mods: readonly ScenarioMod[], beatKey: s
   };
 }
 
+/** 本拍此刻引擎要人先去的地点（travel: 动作的目标）。多数拍它就是拍的 locationId；动作自带地点时不同（如进鬼王峒前先去外围哨位），日志与标记要跟着它，否则玩家无从得知要去哪。 */
+const travelTargetOf = (save: SaveData, eventId: string): string | undefined => {
+  const travel = getCurrentStoryEventActions(save).find(selection => selection.eventId === eventId && selection.actionId.startsWith('travel:'));
+  return travel ? travel.actionId.slice('travel:'.length) : undefined;
+};
+
 function beatEntry(save: SaveData, event: any, level: number, focus: boolean): QuestEntry | undefined {
   const spec = questBeatSpec(event.id);
   if (!spec && !focus) return undefined;
   if (!spec?.objective) logMissingObjective(save, event.id);
   const where = Object.values(spec?.actions || {}).map(action => action.completion?.where).find(Boolean);
-  const placeId = where && where !== 'any' ? stripPrefix(where, 'place:') : event.locationId;
+  const placeId = where && where !== 'any' ? stripPrefix(where, 'place:') : travelTargetOf(save, event.id) || event.locationId;
   const left = questDeadlineLeft(save, event.id);
   return {
     key: event.id,
@@ -356,7 +362,7 @@ export function questMarkers(save: SaveData | null | undefined, mods: readonly S
     const wheres = Object.values(spec?.actions || {}).map(action => action.completion?.where).filter(Boolean) as string[];
     if (wheres.includes('any')) continue;
     const refs = spec?.markers?.length ? spec.markers : wheres.length ? wheres.map(where => `place:${stripPrefix(where, 'place:')}`) : [];
-    if (!refs.length && event.locationId) push(id, spec?.line, event.locationId);
+    if (!refs.length && event.locationId) push(id, spec?.line, travelTargetOf(save, id) || event.locationId);
     for (const ref of refs) {
       if (ref.startsWith('npc:')) {
         // 人物位置以拍的 locationId 为准（模型叙事写的位置不算，设计稿风险 3）；approach 且 moveMarker 时跟到玩家所在地。

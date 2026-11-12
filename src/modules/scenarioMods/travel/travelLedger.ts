@@ -509,7 +509,19 @@ export function getNanhuangLocationStates(saveData: SaveData | null | undefined)
 export function noteNanhuangArrival(runtime: LedgerRuntime, locationId: string, cause: string): void {
   const ledger = runtime.travelLedger;
   const zoneId = zoneForLocation(locationId);
-  if (!ledger?.state || !zoneId || ledger.state.currentZoneId === zoneId) return;
+  if (!ledger?.state) return;
+  if (!zoneId) {
+    // 到的地点不在行旅账的 zone 表里（如鬼王峒外围哨位）：账上 zone 不动，但记一条显式移动（toZoneId 空），
+    // 否则回合收尾的 reconcileNanhuangPositionFromLedger 会把人拉回强制路途终点，这一拍永远到不了。
+    const here = canonicalLocationId(worldLocationIdOf(DEF, ledger.state.currentZoneId));
+    if (!isNanhuangTravelStage(runtime.modId) || !cause.startsWith('arrive:') || !canonicalLocationId(locationId) || canonicalLocationId(locationId) === here) return;
+    ledger.reprojections = [...(ledger.reprojections || []), {
+      atTurn: Math.max(0, Number(runtime.worldTurn) || 0), fromZoneId: ledger.state.currentZoneId, toZoneId: '', cause,
+      afterReceipts: (ledger.state.travelReceipts || []).length,
+    }].slice(-20);
+    return;
+  }
+  if (ledger.state.currentZoneId === zoneId) return;
   ledger.reprojections = [...(ledger.reprojections || []), {
     atTurn: Math.max(0, Number(runtime.worldTurn) || 0), fromZoneId: ledger.state.currentZoneId, toZoneId: zoneId, cause,
     afterReceipts: (ledger.state.travelReceipts || []).length,

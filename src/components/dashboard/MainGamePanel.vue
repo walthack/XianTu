@@ -2119,7 +2119,10 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   }
   const cultivationSelections = actionQueue.pendingActions.flatMap(a => a.cultivation ? [{ ...a.cultivation }] : []);
   if (selectedCultivationTime.value?.text === inputText.value) cultivationSelections.push({ ...selectedCultivationTime.value.selection });
-  if (!cultivationSelections.length && (/(?:修炼|闭关|练功|打坐)/.test(inputText.value) || actionQueue.pendingActions.some(a => a.type === 'cultivate' && !a.cultivation)) && !/(?:不|别|停止|取消)(?:修炼|闭关|练功|打坐)/.test(inputText.value)) {
+  // 输入就是本拍动作原文／任务日志目标（本地精确或短语命中，如「护送小紫到渭水水下闭关」）时是在走剧情，不当成自己修炼、不弹天数窗。
+  const typedBeat = resolveBeatText(gameStateStore.toSaveData(), inputText.value);
+  const typedStoryBeat = Boolean(typedBeat && typedBeat.via !== 'arrive');
+  if (!cultivationSelections.length && ((!typedStoryBeat && /(?:修炼|闭关|练功|打坐)/.test(inputText.value)) || actionQueue.pendingActions.some(a => a.type === 'cultivate' && !a.cultivation)) && !/(?:不|别|停止|取消)(?:修炼|闭关|练功|打坐)/.test(inputText.value)) {
     resumeAfterCultivationSelection = true;
     selectAction({ name: inputText.value, icon: '', type: 'cultivation', description: '请选择本次修炼天数', timeRequired: true });
     return;
@@ -2467,6 +2470,9 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   // 判定没过（或判了失败档）不结算；没出判定卡（原话不含风险）照常结算。结算在主叙事成功之后。
   const beatOpenWorldSettles = Boolean(beatOpenWorldAction)
     && beatOpenWorldOutcomeSettles(contractedJudgementResolution?.outcome, Boolean(contractedJudgementResolution));
+  // 任务模式没有主线按钮：手打原文精确命中本拍动作＝点了它的按钮，同样不出关键词判定卡（按钮原句本来就不出，见 shouldSkipJudgementPreflight）。
+  const typedExactBeat = resolveBeatText(saveData, inputText.value.trim());
+  const typedExactBeatEvent = typedExactBeat?.via === 'exact' && typedExactBeat.action.kind === 'event';
   if (!shouldSkipJudgementPreflight({
     skipPreflight: execution?.skipPreflight || Boolean(contractedJudgementResolution) || freeActionHandled || ownedByFreeAction || skipKeywordPreflightFromIntent,
     selectedSource: selectedScenarioEngineAction.value?.source || routedIntentAction?.source,
@@ -2474,7 +2480,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       ? selectedScenarioEngineAction.value.playerLine
       : undefined,
     userMessage: inputText.value.trim(),
-  }) && !preflightOpenWorldAction && !preflightGambleRefusalAction) {
+  }) && !preflightOpenWorldAction && !preflightGambleRefusalAction && !typedExactBeatEvent) {
     const proposal = buildLocalJudgementPreflight(judgementAction, saveData, getNarrativeTurn(saveData));
     if (proposal) {
       persistPendingJudgement(saveData, proposal);
