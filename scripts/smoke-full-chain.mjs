@@ -987,14 +987,7 @@ if (SIDE) {
   const prepOnly = new Set(side.results.filter(r => r.prep?.length && !r.receipt?.[0]).map(r => r.beat));
   for (const [beat, at] of side.seenDoable) check(done.has(beat) || prepOnly.has(beat) || side.results.some(r => r.beat !== beat && r.receipt?.[0] && r.stage === at.stage && SL.lineBeatOfEvent(SL.LINE_BEATS.find(x => x.beat.id === beat)?.beat.eventId)?.line.id === r.line),
     `线拍 ${beat}（${at.stage}／${at.focus}）界面上可做过但没做成`);
-  // 已知游戏问题（2026-11-12 DAILY 17:4x，未修）：靠时间推进的拍上，右栏「这一拍谁有戏」读的是没推进过的状态，人物行晚一手或不出。
-  // 目前只在下面两拍出现；这两拍没出行记异常不判失败，别处出现照旧判失败。游戏修好后它们会正常出行，这里不用改。
-  const KNOWN_SIDEBAR_LAG = new Set(['lyg.event.s01_06', 'lyg.event.s01_07']);
-  for (const c of side.charRows) {
-    const what = `人物任务 ${c.id} ${c.name}（${c.stage}／${c.focus}；store 焦点 ${c.storeFocus}）右栏「这一拍谁有戏」没出行：${JSON.stringify(c.rows)}`;
-    if (!c.shown && KNOWN_SIDEBAR_LAG.has(c.focus)) { anomalies.push({ stage: c.stage, beat: c.focus, what: `已知问题：${what}` }); console.log(`[已知问题] ${what}`); }
-    else check(c.shown, what);
-  }
+  for (const c of side.charRows) check(c.shown, `人物任务 ${c.id} ${c.name}（${c.stage}／${c.focus}；store 焦点 ${c.storeFocus}）右栏「这一拍谁有戏」没出行：${JSON.stringify(c.rows)}`);
   for (const c of side.compass) check(c.ok, `当前线卡 ${c.stage} 与 Node 不一致：Node ${JSON.stringify(c.node)}；界面「${c.card}」`);
   console.log(`[支线合计] 线拍手 ${side.results.length}（一致 ${side.results.filter(r => r.ok).length}），落回执 ${done.size} 拍，只到准备步 ${[...prepOnly].filter(b => !done.has(b)).length} 拍，可做过 ${side.seenDoable.size} 拍；人物任务／高光行 ${side.charRows.filter(c => c.shown).length}/${side.charRows.length}；当前线卡 ${side.compass.filter(c => c.ok).length}/${side.compass.length}`);
 }

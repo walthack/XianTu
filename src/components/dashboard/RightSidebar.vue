@@ -458,6 +458,7 @@ import type { StatusEffect } from '@/types/game.d.ts';
 import { formatRealmWithStage } from '@/utils/realmUtils';
 import { calculateAgeFromBirthdate } from '@/utils/lifespanCalculator';
 import {
+  advanceScenarioRuntime,
   getScenarioFocusEvent,
   getCurrentStoryEventActions,
   getStageDepartureOffer,
@@ -593,7 +594,10 @@ const lineCompass = computed(() => {
 // 人物任务：只问当前这一拍因为谁而不一样。事件 id 走 getScenarioFocusEvent，
 // 与主线 UI / 主叙事同一锚，避免从 activeEventIds 抽出资料事件。
 const characterBeats = computed((): CharacterBeatRow[] => {
-  const rt: any = epistemicRuntime.value;
+  // 当前拍以推进后的运行时为准（与主面板动作候选同一口径 advanceScenarioRuntime(live)）：靠时间推进的拍，存档里的运行时要到下一回合才推进，
+  // 直接读它人物行会晚一手或不出（汉线定陶一关郭解／董卓，2026-11-12 支线长跑实测）。
+  const live = gameStateStore.toSaveData();
+  const rt: any = (live ? (advanceScenarioRuntime(live).saveData as any)?.世界?.状态?.剧本模组 : undefined) || epistemicRuntime.value;
   if (!rt || typeof rt !== 'object') return [];
   const event = currentQuestEvent(rt);
   const objective = visibleQuestObjective(rt, event);
