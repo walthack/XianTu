@@ -772,7 +772,7 @@ function onRealRequest(kind, body, request) {
   // 请求画像：按「种类｜系统提示前 16 字」归组，记推理档／思考参数与耗时（不记请求头）。
   const sig = kind === 'embeddings' ? 'embeddings' : `${kind}｜${String(body?.messages?.[0]?.content || '').replace(/\s+/g, ' ').slice(0, 16)}`;
   const params = kind === 'embeddings' ? '' : `effort=${body?.reasoning_effort ?? '-'} thinking=${JSON.stringify(body?.thinking ?? null)} stream=${!!body?.stream}`;
-  if (request) inflight.set(request, { t0: Date.now(), cur: current, main, sig, params });
+  if (request) inflight.set(request, { t0: Date.now(), cur: current, main, sig, params, kind });
   if (VERBOSE) console.log(`    ↗ ${kind} ${request ? pathOf(request) : ''}`);
 }
 function onRealDone(request, failed) {
@@ -781,6 +781,8 @@ function onRealDone(request, failed) {
   inflight.delete(request);
   if (failed) { real.failedRequests++; if (x.cur) x.cur.failedRequests = (x.cur.failedRequests || 0) + 1; }
   if (x.main && x.cur) (x.cur.narrMs ||= []).push(Date.now() - x.t0);
+  // 判拍／意图请求的回包正文（模型输出，前 300 字）记到这一手，便于看没判中时模型回了什么。
+  if (!failed && x.cur && (x.kind === 'beat' || x.kind === 'intent')) request.response().then(r => r?.json()).then(j => { (x.cur.judgeReplies ||= []).push(String(j?.choices?.[0]?.message?.content ?? '').replace(/\s+/g, ' ').slice(0, 300)); }).catch(() => {});
   const g = real.profile[x.sig] ||= { count: 0, failed: 0, ms: [], params: {} };
   g.count++; if (failed) g.failed++; g.ms.push(Date.now() - x.t0); g.params[x.params] = (g.params[x.params] || 0) + 1;
 }
@@ -1039,7 +1041,7 @@ const total = stages.reduce((acc, s) => { for (const k of 'abcd') acc[k] += s.vi
 const sideOut = SIDE ? { results: side.results, seenDoable: Object.fromEntries(side.seenDoable), charRows: side.charRows, compass: side.compass } : undefined;
 let realOut;
 if (REAL) {
-  for (const h of real.hands) { const r = reqCount(h._cur); Object.assign(h, { requests: r, kinds: [...(h._cur?.requests || [])], narrMs: h._cur?.narrMs || [], failedRequests: h._cur?.failedRequests || 0 }); delete h._cur; }
+  for (const h of real.hands) { const r = reqCount(h._cur); Object.assign(h, { requests: r, kinds: [...(h._cur?.requests || [])], narrMs: h._cur?.narrMs || [], judgeReplies: h._cur?.judgeReplies || [], failedRequests: h._cur?.failedRequests || 0 }); delete h._cur; }
   const med = list => { const x = [...list].sort((a, b) => a - b); return x.length ? x[Math.floor(x.length / 2)] : null; };
   const handMs = real.hands.map(h => h.ms), narr = real.hands.flatMap(h => h.narrMs);
   realOut = { hosts: guardRef?.stats ? { allowed: guardRef.stats.allowed, violations: guardRef.stats.violations.length } : null, storage: storageRef,
@@ -1070,7 +1072,9 @@ const expectedSeen = outcome === 'maxHands' ? EXPECTED_STAGES.slice(0, stages.le
 check(JSON.stringify(stages.map(s => s.id)) === JSON.stringify(expectedSeen), `途经关序列不等于默认主链：${JSON.stringify(stages.map(s => s.id))}`);
 check(stuck.length === 0, `有 ${stuck.length} 处卡点`);
 // 与 walker 的差异：落在卡点那一拍上的算卡点的表现；其余差异判失败。
-const unexplained = diffs.filter(d => !stuck.some(x => x.stage === d.stage && x.beat === d.beat));
+// --real-loose：改写句没判中的那一手必然与 walker 有差异（下一手照原句再打），算改写手的统计，不算失败。
+const looseMiss = new Set(REAL && LOOSE ? real.hands.filter(h => h.loose && !h.moved).map(h => h.hand) : []);
+const unexplained = diffs.filter(d => !stuck.some(x => x.stage === d.stage && x.beat === d.beat) && !looseMiss.has(d.move));
 check(unexplained.length === 0, `有 ${unexplained.length} 处与 walker 的差异不能用卡点解释：${JSON.stringify(unexplained.slice(0, 3))}`);
 check(pageErrors.length === 0, `控制台未捕获异常：${pageErrors.slice(0, 3).join(' / ')}`);
 check(!anomalies.some(a => a.what === 'LCQ 报错码'), `出现 LCQ 报错码：${JSON.stringify(anomalies.filter(a => a.what === 'LCQ 报错码').flatMap(a => a.codes))}`);
