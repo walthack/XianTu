@@ -2,6 +2,7 @@
 // Every save-storage request uses a virtual server; never touch user saves.
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright-core';
+import { installSmokeNetworkGuard } from './e2e-smoke.mjs';
 
 const urls = process.argv.slice(2);
 assert.ok(urls.length, 'Provide running dev server URLs');
@@ -11,6 +12,8 @@ try {
     { baseUrl, seeded: false }, { baseUrl, seeded: true },
   ])) {
     const context = await browser.newContext();
+    // 网络护栏先装：脚本路由处理不了的请求 route.fallback() 落到护栏（非本机一律替身或 abort+判失败）。
+    const guard = await installSmokeNetworkGuard(context);
     const records = new Map();
     if (seeded) {
       records.set('characters', { official_fixture: {
@@ -42,9 +45,9 @@ try {
       }
       if (request.method() !== 'GET' && request.method() !== 'HEAD') {
         blocked.push(`${request.method()} ${url.origin}${url.pathname}`);
-        return route.abort();
+        return route.fallback();
       }
-      return route.continue();
+      return route.fallback();
     });
     const page = await context.newPage();
     page.on('pageerror', error => errors.push(error.message));
@@ -110,6 +113,7 @@ try {
       assert.equal(JSON.stringify([...records]), originalRemote, 'official remote root and pointer unchanged');
       assert.deepEqual(blocked, [], 'no model or external mutation requests');
       assert.deepEqual(errors, [], 'no browser errors');
+      guard.finish();
       console.log(`PASS ${baseUrl} seeded=${seeded}: checkpoint preserved, working slot updated, reload/continue latest, zero remote writes`);
     } catch (error) {
       console.error({ baseUrl, seeded, errors, writes, blocked });

@@ -1,16 +1,24 @@
 // SUPERSEDED 2026-10-01: quality 已并入后台审计、失败策略改为重试后回落；新验收见 scripts/smoke-module-framework.mjs。
 // Controlled integration acceptance. Disposable browser; all model/storage traffic intercepted.
 import assert from 'node:assert/strict';
+import { existsSync } from 'node:fs';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { chromium } from 'playwright-core';
+import { installSmokeNetworkGuard, skipSmoke } from './e2e-smoke.mjs';
 const urls = process.argv.slice(2);
-const fixture = JSON.parse(await readFile('.xiantu-server/module-probe-20261001/fixture.private.json', 'utf8')).save;
+// 私有夹具取自真实试玩 profile 副本（scripts/capture-module-probe.mjs，git 忽略、不入库）；缺失时明确跳过，不算通过。
+// 本脚本已被 smoke-module-framework 取代（见文件头），且其「两稿失败回落旧链路」断言与 2026-10-03 试玩无旧链路规则冲突。
+const PRIVATE_FIXTURE = '.xiantu-server/module-probe-20261001/fixture.private.json';
+if (!existsSync(PRIVATE_FIXTURE)) skipSmoke(`缺私有夹具 ${PRIVATE_FIXTURE}（不入库）；本脚本已被 smoke-module-framework 取代`);
+const fixture = JSON.parse(await readFile(PRIVATE_FIXTURE, 'utf8')).save;
 const prose = '你把霓龙丝产地线索作为交换，向苏妲己提出三个月期限。苏妲己抬眼望着你，指尖在桌沿轻轻一停。商馆里灯火安静，她仍等你把条件说明白，没有立即接受你的提议。你站在桌前，凝羽留在近旁，眼下只是在谈期限，没有新的物品交付。';
 const browser = await chromium.launch({ headless: true, channel: 'chrome' });
 const results = [];
 try {
  for (const url of urls) {
   const ctx = await browser.newContext();
+  // 网络护栏先装：脚本路由处理不了的请求 route.fallback() 落到护栏（非本机一律替身或 abort+判失败）。
+  const guard = await installSmokeNetworkGuard(ctx);
   const requests = [], errors = [];
   const gates = [];
   let summaryMode = 'valid', mainContent = prose;
@@ -37,8 +45,8 @@ try {
     }
     try {return await route.fulfill({status,contentType:'application/json',body:JSON.stringify({choices:[{message:{content},finish_reason:'stop'}],usage:{completion_tokens:120,total_tokens:1000}})});} catch {return;}
    }
-   if (!['GET','HEAD'].includes(r.method())) return route.abort();
-   return route.continue();
+   // 其余请求交给网络护栏：本机 GET 放行；本机写请求与非本机请求一律 abort 并判失败。
+   return route.fallback();
   });
   const page=await ctx.newPage();page.on('pageerror',e=>errors.push(e.message));
   const state=async()=>page.evaluate(()=>{
@@ -124,6 +132,7 @@ try {
    await new Promise(resolve=>setTimeout(resolve,250));
    assert.equal((await state()).receipt,undefined,'late sidecar cannot contaminate loaded save');
    assert.deepEqual(errors,[]);
+   guard.finish();
    results.push({url,passed:true,requests,foregroundIndependent:true,reload:true,rejectedEvidence:true,lateIsolated:true,invalidMainUncommitted:true,disabledRouteRespected:true,backgroundFailureIsolated:true,modelSwapSameContract:true});
   } finally {gates.splice(0).forEach(resolve=>resolve());await ctx.close();}
  }

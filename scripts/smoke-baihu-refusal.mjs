@@ -4,6 +4,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { chromium } from 'playwright-core';
+import { FIXTURE_NONE, classifyFixtureRequest, fixtureCompletion, installSmokeNetworkGuard } from './e2e-smoke.mjs';
 import { loadTs } from '../tests/loadTs.mjs';
 
 const values = new Map();
@@ -43,18 +44,23 @@ for (let step = 0; step < 100; step++) {
       assert.equal(rtm.recordStoryOpportunityStructuredAction(fixture, action).progressed, true);
       advance();
     }
+    // 机会链走完后焦点已换拍：回到循环顶重新取焦点，不拿过期的 s02_01 去记动作（否则 stale_event）。
+    continue;
   }
   if (event?.id === 'lcq.event.s02_04') {
-    const action = wuyuan.resolveWuyuanOpenWorldSelectionFromText(fixture, '我去五原城。')
-      || wuyuan.getWuyuanOpenWorldSelections(fixture).find(item => item.kind === 'travel')
-      || wuyuan.getWuyuanOpenWorldSelections(fixture).find(item => item.kind === 'problem_action');
+    // 现在点心铺有回市集的路线，「我去五原城」在铺里会解析成回市集、来回打转：人到铺里先结算地方应对。
+    const action = wuyuan.getWuyuanOpenWorldSelections(fixture).find(item => item.kind === 'problem_action')
+      || wuyuan.resolveWuyuanOpenWorldSelectionFromText(fixture, '我去五原城。')
+      || wuyuan.getWuyuanOpenWorldSelections(fixture).find(item => item.kind === 'travel');
     assert.ok(action, 's02_04 must offer a local action');
     assert.equal(wuyuan.settleWuyuanOpenWorldSelection(fixture, action).settled, true);
     advance();
     continue;
   }
+  // 带地点闸门的拍（如 s01_05 须先到指挥帐）先给「前往」动作：没有合同动作时走本拍的 travel: 动作。
   const action = rtm.getCurrentStoryEventActions(fixture).find(item =>
-    event?.playerCompletionContract?.actions.some(contract => contract.id === item.actionId));
+    event?.playerCompletionContract?.actions.some(contract => contract.id === item.actionId))
+    || rtm.getCurrentStoryEventActions(fixture).find(item => item.eventId === event?.id && item.actionId.startsWith('travel:'));
   assert.ok(action, `missing step ${step}: ${event?.id}`);
   assert.equal(rtm.recordStoryEventStructuredAction(fixture, action).attempted, true);
   advance();
@@ -72,6 +78,8 @@ const browser = await chromium.launch({ headless: true, channel: 'chrome' });
 try {
   for (const baseUrl of baseUrls) {
     const context = await browser.newContext();
+    // 网络护栏先装：脚本路由处理不了的请求 route.fallback() 落到护栏（非本机一律替身或 abort+判失败）。
+    const guard = await installSmokeNetworkGuard(context);
     // Satisfy the existing app availability check without any real credential.
     // This lives only in this ephemeral context; every attempted model POST fails the test.
     await context.addInitScript(() => {
@@ -99,14 +107,17 @@ try {
       }
       if (request.method() === 'POST' && /completions/.test(url.pathname)) {
         // Model requests are answered by a fixture (never a real provider) and counted.
-        modelRequests.push(url.pathname);
-        return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ choices: [{ message: { content: narration }, finish_reason: 'stop' }], usage: { completion_tokens: 80, total_tokens: 500 } }) });
+        const body = request.postDataJSON();
+        const kind = classifyFixtureRequest(body);
+        modelRequests.push(kind);
+        // 按请求种类与是否流式回替身（正文链路现按流式发）。
+        return route.fulfill(fixtureCompletion(body, kind === 'narration' ? narration : FIXTURE_NONE[kind]));
       }
       if (url.origin !== new URL(baseUrl).origin && /^https?:/.test(url.protocol) && request.method() !== 'GET') {
         blocked.push(`${request.method()} ${url.origin}${url.pathname}`);
-        return route.abort();
+        return route.fallback();
       }
-      return route.continue();
+      return route.fallback();
     });
     const runtimeState = () => page.evaluate(() => {
       const pinia = document.querySelector('#app').__vue_app__.config.globalProperties.$pinia;
@@ -124,24 +135,27 @@ try {
       await page.locator('textarea.game-input').waitFor({ timeout: 20_000 });
       await loadFixture();
 
-      // 2026-10-02 硬编码选项锁：答复凝羽这一步只给「接赌 / 不赌」，隐藏输入框，不显示步骤进度。
+      // 2026-10-02 硬编码选项锁：答复凝羽这一步只给「接赌 / 不赌」，输入框禁用（11-02 起不再隐藏），不显示步骤进度。
       const lock = page.locator('[data-testid="branch-decision"]');
       await lock.waitFor();
       assert.deepEqual(await page.locator('[data-testid="branch-decision-option"]').allInnerTexts(), ['接赌', '不赌']);
       assert.equal(/第\s*\d+\s*\/\s*\d+\s*步/.test(await lock.innerText()), false, 'no step progress in the lock');
-      assert.equal(await page.locator('textarea.game-input').count(), 0, 'input hidden while locked');
-      assert.equal(await page.locator('.engine-action-btn').count(), 0, 'no other buttons while locked');
+      // 2026-11-02（d2d0cc1e，REPORT-8091-75ea P2-1 改向）：分支锁期间输入框灰色禁用＋占位说明，不再隐藏。
+      assert.equal(await page.locator('textarea.game-input').isDisabled(), true, 'input disabled while locked');
+      // 2026-11-02（8b815159）起锁定时建议区也显示同一组固定选项；除这两项外不得有别的按钮。
+      const suggested = await page.locator('.engine-action-btn').allInnerTexts();
+      assert.deepEqual(suggested.map(text => (text.match(/接赌|不赌/g) || []).join('')), ['接赌', '不赌'], `no other buttons while locked: ${JSON.stringify(suggested)}`);
       assert.equal(await page.getByRole('button', { name: /拒绝这场赌局/ }).count(), 0, 'old capture-branch refusal not offered');
 
-      // 不赌：复用致命选项机制，本局以炮烙结束；不进扣押分支。
+      // 不赌：复用致命选项机制，本局结束；不进扣押分支。裁定簿 #201（2026-10-06）：E01 拒赌结局改为「第六个」（baihu_beheading），不再复用炮烙 id。
       await page.locator('[data-testid="branch-decision-option"]', { hasText: '不赌' }).click();
       await idle();
       const declined = await runtimeState();
-      assert.equal(declined.gameOver?.endingId, 'lcq.ending.death.paolao', JSON.stringify(declined.gameOver));
+      assert.equal(declined.gameOver?.endingId, 'lcq.ending.death.baihu_beheading', JSON.stringify(declined.gameOver));
       assert.match(declined.gameOver.facts.join('；'), /回绝白湖商馆的赌局/);
       assert.equal(declined.ledger, null, 'no capture-branch ledger');
       await page.locator('.game-over-card').waitFor();
-      assert.match(await page.locator('.game-over-card').innerText(), /炮烙/);
+      assert.match(await page.locator('.game-over-card').innerText(), /第六个/);
 
       // 接赌：答复凝羽这一步结算，事件推进到谈期限；之后解锁，谈期限是普通交谈（没有推进卡片）。
       await loadFixture();
@@ -153,11 +167,12 @@ try {
       assert.ok(accepted.active.includes('lcq.event.sudaji_south_pact'), JSON.stringify(accepted.active));
       assert.equal(accepted.gameOver, null);
       assert.equal(await lock.count(), 0, 'lock released after the decision');
-      assert.equal(await page.locator('textarea.game-input').count(), 1, 'input back after the decision');
+      assert.equal(await page.locator('textarea.game-input').isEnabled(), true, 'input usable again after the decision');
       assert.equal(await page.locator('[data-testid="key-beat-card"]').count(), 0, 'south pact has no advance card');
       assert.deepEqual(blocked, [], 'no external writes');
       assert.deepEqual(pageErrors, [], 'browser runtime errors');
-      console.log(`PASS ${baseUrl}: lock shows only 接赌/不赌 with input hidden; 不赌 → paolao game over; 接赌 → settles, unlocks, pact is ordinary conversation; modelRequests=${modelRequests.length}`);
+      guard.finish();
+      console.log(`PASS ${baseUrl}: lock shows only 接赌/不赌 with input disabled; 不赌 → baihu_beheading game over; 接赌 → settles, unlocks, pact is ordinary conversation; modelRequests=${JSON.stringify(modelRequests)}`);
     } catch (error) {
       console.error({ pageErrors, blocked, modelRequests, visible: (await page.locator('body').innerText()).slice(-1800) });
       throw error;

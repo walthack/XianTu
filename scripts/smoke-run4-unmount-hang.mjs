@@ -2,31 +2,22 @@
 // Intercepts model and server storage. Not real-LLM / official-save evidence.
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright-core';
+import { FIXTURE_NONE, classifyFixtureRequest, fixtureCompletion, installSmokeNetworkGuard } from './e2e-smoke.mjs';
 
 const urls = process.argv.slice(2);
 assert.ok(urls.length, 'Provide dev server URL(s)');
 
-function okBody(text) {
-  return JSON.stringify({
-    choices: [{
-      message: {
-        content: JSON.stringify({
-          text,
-          mid_term_memory: '当下行动已处理。',
-          tavern_commands: [],
-          action_options: [],
-        }),
-      },
-      finish_reason: 'stop',
-    }],
-    usage: { completion_tokens: 80, total_tokens: 500 },
-  });
+// 正文替身：请求带 stream:true（现行正文链路）回 SSE，否则回 JSON。
+function okBody(body, text) {
+  return fixtureCompletion(body, JSON.stringify({ text, mid_term_memory: '当下行动已处理。', tavern_commands: [], action_options: [] }));
 }
 
 const browser = await chromium.launch({ headless: true, channel: 'chrome' });
 try {
   for (const url of urls) {
     const context = await browser.newContext();
+    // 网络护栏先装：脚本路由处理不了的请求 route.fallback() 落到护栏（非本机一律替身或 abort+判失败）。
+    const guard = await installSmokeNetworkGuard(context);
     let hangArmed = false;
     let releaseHang = () => {};
     const hang = new Promise(resolve => { releaseHang = resolve; });
@@ -48,30 +39,40 @@ try {
       if (request.method() === 'POST' && /\/chat\/completions\/?$/.test(target.pathname)) {
         longCalls += 1;
         const body = request.postDataJSON();
+        // 意图／拍子判定／后台记忆审计不是正文：直接回「没认出」替身，悬挂只作用于正文请求（A 的演出）。
+        const kind = classifyFixtureRequest(body);
+        if (kind !== 'narration') {
+          requests.push({ kind, budget: Number(body.max_tokens) });
+          return route.fulfill(fixtureCompletion(body, FIXTURE_NONE[kind]));
+        }
         const budget = Number(body.max_tokens);
-        requests.push({ budget, hang: hangArmed });
+        requests.push({ kind, budget, hang: hangArmed });
         if (hangArmed) {
           hangArmed = false;
           await hang;
           try {
-            return await route.fulfill({
-              status: 200, contentType: 'application/json',
-              body: okBody('迟到的星河剑不该出现在新回合。'),
-            });
+            return await route.fulfill(okBody(body, '迟到的星河剑不该出现在新回合。'));
           } catch {
             return;
           }
         }
-        return route.fulfill({
-          status: 200, contentType: 'application/json',
-          body: okBody('你先看清眼前的草原，没有贸然作出新的决定。'),
-        });
+        return route.fulfill(okBody(body, '你先看清眼前的草原，没有贸然作出新的决定。'));
       }
-      if (!['GET', 'HEAD'].includes(request.method())) return route.abort();
-      return route.continue();
+      // 其余请求交给网络护栏：本机 GET 放行；本机写请求与非本机请求一律 abort 并判失败。
+      return route.fallback();
     });
     const page = await context.newPage();
     page.on('pageerror', error => errors.push(error.message));
+    // 2026-11-03 起任务模式（story.quest；内测构建 enabledDev 默认开）撤了主线按钮，玩家照任务日志打出目标原文＝选中这一拍的动作
+    // （beatProgress.resolveBeatText 按字命中，本地结算、不经分类模型）。任务模式关的构建仍点主线按钮。两条都是真实界面路径。
+    const fillMainLine = async () => {
+      const questEntry = page.locator('[data-testid="quest-log"] .quest-log-entry .quest-event').first();
+      if (await questEntry.isVisible().catch(() => false)) {
+        const objective = (await questEntry.innerText()).replace(/^[^：]*：/, '').trim();
+        assert.ok(objective, 'quest log shows the current objective');
+        await page.locator('textarea.game-input').fill(objective);
+      } else await page.locator('.engine-action-btn').first().click();
+    };
     const piniaUi = () => page.evaluate(() => {
       const app = document.querySelector('#app')?.__vue_app__;
       const ui = app?.config?.globalProperties?.$pinia?._s?.get('ui');
@@ -118,10 +119,11 @@ try {
       await page.locator('textarea.game-input').fill('我只是看了看远处的云');
       await clickSendAndWaitStart();
       const hangDeadline = Date.now() + 20000;
-      while (Date.now() < hangDeadline && longCalls < 1) {
+      // A 回合现在先发意图／拍子判定小请求，再发正文；要等 A 的正文真的悬挂在途再离开（否则悬挂会落到 B 头上）。
+      while (Date.now() < hangDeadline && !requests.some(item => item.hang)) {
         await new Promise(resolve => setTimeout(resolve, 20));
       }
-      assert.ok(longCalls >= 1, 'A must have started a model request');
+      assert.ok(requests.some(item => item.kind === 'narration' && item.hang), 'A must have started its (hung) narration request');
       assert.equal((await piniaUi()).processing, true);
       await page.evaluate(() => {
         const app = document.querySelector('#app').__vue_app__;
@@ -131,11 +133,12 @@ try {
       assert.equal((await piniaUi()).processing, false, 'leaving /game must clear persistent busy');
       const afterLeave = longCalls;
       await startPlaytest();
-      await page.locator('.engine-action-btn').first().click();
+      await fillMainLine();
       const beforeB = longCalls;
       await clickSendAndWaitStart();
       await waitIdle();
-      const bCalls = requests.slice(beforeB).filter(item => Number(item.budget) > 1024);
+      const bCalls = requests.slice(beforeB).filter(item => item.kind === 'narration');
+      assert.ok(bCalls.length >= 1, `B must issue its own narration while A is still hung: ${JSON.stringify(requests.slice(beforeB))}`);
       assert.ok(bCalls.length <= 2, `B long calls=${JSON.stringify(requests.slice(beforeB))}`);
       const beforeLate = {
         processing: (await piniaUi()).processing,
@@ -152,6 +155,7 @@ try {
       assert.equal(narrative.includes('星河剑'), false);
       assert.ok(longCalls - afterLeave >= 1, 'B must have issued its own request');
       assert.deepEqual(errors, []);
+      guard.finish();
       console.log(`PASS ${url}: unmount hang A / return B / late A isolated; intercepted model/storage`);
     } finally { await context.close(); }
   }
