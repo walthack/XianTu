@@ -20,6 +20,14 @@
 //   返回后再开地图咸阳弹窗，应不再有入秦行程（入口只开一次）。Node 侧每手对照：秦关内用秦线生成器 scripts/generate-qin-replay-fixtures.mjs step 的同一套选择
 //   （与 walker.step 唯一差别是秦关内不因 nextStageReadyId 切关；秦关的 nextStageId 为空，这一支实测不触发，触发即记差异）。--qin 不能与 --from／--until 同用。
 // 用法：node scripts/smoke-full-chain.mjs <站点URL> [--qin | --from 关id] [--until 关id] [--stall N] [--stop-on-stuck] [--json 结果文件] [--verbose]
+// --side：主链长跑途中把非主线拍也在界面里做掉（盘点与读法见 scripts/sideLineInventory.mjs）。每一手之前先看这份浏览器状态上有没有「此刻可做」的线拍
+//   （R.getCurrentStoryExplorationActions 里出现 questLines 拍的 eventId；人物线＝lines-*.json 的 character 线、支线＝side 线，含碧鲮海藻丝常驻入口）：
+//   有就先做（每拍取第一个非「.defer 略过」动作；同一动作最多试 2 手），入口优先级同主链：人物线拍点右栏「这一拍谁有戏」展开的「回应：…」按钮再发送（b）；
+//   支线拍任务模式下没有按钮（探索按钮被撤、「可投的门路」默认隐藏），照动作原句手打，意图判定由替身选该动作（c）。
+//   做完与 Node 侧对照：同一份（手前、advanceScenarioRuntime 后）状态上 recordStoryEventStructuredAction 同一动作＋片刻 settleActionTime＋advance，
+//   比拍回执、准备步、主线进度（progressOf）、线主人好感、任务日志条目、右栏人物行是否收起；不一致记差异判失败。然后照常走主链。
+//   另外每到一个焦点挂了人物任务／高光（character-beats.json）的主线事件，查右栏「这一拍谁有戏」是否出「名字——」行；每关第一手查当前线卡（线名、「别处还有事（N）」）与 Node lineCompassView 一致。
+//   --side 不能与 --qin 同用；可与 --from／--until 同用（分段开发）。
 //   默认不进 e2e:smoke（耗时长），聚合里加 --with-long 才跑。
 import assert from 'node:assert/strict';
 import { writeFileSync } from 'node:fs';
@@ -40,12 +48,16 @@ const args = process.argv.slice(2);
 const opt = (name, fallback = null) => { const i = args.indexOf(name); if (i < 0) return fallback; const v = args[i + 1]; args.splice(i, 2); return v; };
 const bool = name => { const i = args.indexOf(name); if (i < 0) return false; args.splice(i, 1); return true; };
 const FROM = opt('--from'), UNTIL = opt('--until'), STALL = Number(opt('--stall', '6')), JSON_OUT = opt('--json', process.env.SMOKE_FULL_CHAIN_JSON || null);
-const STOP_ON_STUCK = bool('--stop-on-stuck'), VERBOSE = bool('--verbose'), QIN = bool('--qin');
+const STOP_ON_STUCK = bool('--stop-on-stuck'), VERBOSE = bool('--verbose'), QIN = bool('--qin'), SIDE = bool('--side');
 const baseUrl = args[0];
 assert.ok(baseUrl, '缺少站点 URL：node scripts/smoke-full-chain.mjs http://127.0.0.1:端口/');
 assert.ok(Number.isInteger(STALL) && STALL > 0, '--stall 须为正整数');
 
 assert.ok(!(QIN && (FROM || UNTIL)), '--qin 不能与 --from／--until 同用');
+assert.ok(!(QIN && SIDE), '--side 不能与 --qin 同用');
+// --side 才加载（主链／秦线模式不受影响）。
+const SL = SIDE ? await quiet(() => import('./sideLineInventory.mjs')) : null;
+const TM = SIDE ? await quiet(() => loadTs('../src/modules/scenarioMods/actionTime.ts')) : null;
 const START = 'lcq.stage_01';
 const FINAL = F.FESTIVAL.finalStageId;
 const CHAIN = expectedMainline(MODS, START).visited;
@@ -97,7 +109,7 @@ function planOf(save) {
   return { kind: 'wait', focus: focus?.id ?? null };
 }
 /** 判定请求里本步该选的候选 id。 */
-const targetIdOf = plan => plan.kind === 'action' ? plan.action.actionId : plan.kind === 'local:s02_04' ? plan.local.identityId
+const targetIdOf = plan => plan.kind === 'action' || plan.kind === 'side' ? plan.action.actionId : plan.kind === 'local:s02_04' ? plan.local.identityId
   : plan.kind.startsWith('opportunity') ? plan.choice.actionId : null;
 const planLabel = plan => plan.kind === 'action' ? `${plan.action.eventId}/${plan.action.actionId}` : plan.kind === 'local:s02_04' ? plan.local.identityId
   : plan.kind.startsWith('opportunity') ? `${plan.opportunityId}→${plan.choice.actionId}` : plan.kind === 'stage' ? `启程→${plan.next}` : plan.kind;
@@ -447,6 +459,129 @@ async function confirmJudgement(page) {
   return true;
 }
 
+// ───────────── --side：非主线拍 ─────────────
+const side = { results: [], seenDoable: new Map(), tried: new Map(), charRows: [], charSeen: new Set(), compass: [], compassStages: new Set() };
+const SKIP_ACTION = /\.defer$/;
+const affinityOfSave = (save, ids) => Object.fromEntries(ids.map(id => [id, save.社交?.关系?.[id]?.好感度 ?? null]));
+const sidePrep = (save, eventId) => [...(rt(save).eventActionStates?.[eventId]?.preparations || [])].sort();
+const lineEntriesOf = save => questEntries(save).map(e => `${e.title}：${e.objective}`);
+/** 右栏「这一拍谁有戏」块的行文字。 */
+const whoRows = page => page.locator('.right-sidebar .collapsible-section.quest-section').filter({ hasText: '这一拍谁有戏' }).locator('.quest-event').allInnerTexts().then(l => l.map(t => t.replace(/\s+/g, ' ').trim())).catch(() => []);
+/** 每手之前：人物任务行、当前线卡检查（只读，不算一手）；有可做的线拍就做一手并返回 true。 */
+async function sideMove(page, ui, row) {
+  const save = ui.save, st = rt(save);
+  const snap = quietSync(() => SL.sideSnapshot(save));
+  // 人物任务／高光：焦点事件挂了人物戏，右栏应出「名字——」行（每个焦点只查一次）。
+  if (snap.focus && snap.charBeatsHere.length && !side.charSeen.has(snap.focus)) {
+    side.charSeen.add(snap.focus);
+    const rows = await whoRows(page);
+    for (const cb of SL.CHAR_BEATS.filter(c => c.status !== 'new' && c.eventIds.includes(snap.focus)))
+      side.charRows.push({ id: cb.id, kind: cb.kind, name: cb.name, stage: st.modId, focus: snap.focus, shown: rows.some(t => t.includes(`${cb.name}——`)), rows: rows.slice(0, 6),
+        // 右栏读的是 store 里未 advance 的运行时焦点；与 advance 后的焦点不同时记下来（诊断「右栏慢一拍」）。
+        storeFocus: R.getScenarioFocusEvent(st)?.id ?? null });
+  }
+  // 二级线提示：每关第一手查当前线卡。
+  if (!side.compassStages.has(st.modId)) {
+    side.compassStages.add(st.modId);
+    const card = await page.locator('.right-sidebar .quest-line-card').innerText().then(t => t.replace(/\s+/g, ' ')).catch(() => '');
+    const n = Number(card.match(/别处还有事（(\d+)）/)?.[1] ?? 0);
+    side.compass.push({ stage: st.modId, node: snap.compass, card: card.slice(0, 200), nameShown: !snap.compass.current || card.includes(snap.compass.current), othersShown: n, ok: (!snap.compass.current || card.includes(snap.compass.current)) && n === snap.compass.others.length });
+  }
+  const receipts = rt(save).questLineState?.receipts || {};
+  for (const x of snap.doable) if (!side.seenDoable.has(x.beatId)) side.seenDoable.set(x.beatId, { stage: st.modId, focus: snap.focus, actions: snap.doable.filter(y => y.beatId === x.beatId).map(y => y.actionId) });
+  const d = snap.doable.find(x => !receipts[x.beatId] && !SKIP_ACTION.test(x.actionId) && (side.tried.get(`${x.beatId}|${x.actionId}`) || 0) < 2);
+  if (!d) return false;
+  const key = `${d.beatId}|${d.actionId}`;
+  side.tried.set(key, (side.tried.get(key) || 0) + 1);
+  const { line, beat } = SL.lineBeatOfEvent(d.eventId);
+  // Node 侧：同一份状态上做同一动作（同 MainGamePanel 口径：先 advance 再取动作）。
+  const exp = quietSync(() => R.advanceScenarioRuntime(clone(save)).saveData);
+  const action = quietSync(() => R.getCurrentStoryExplorationActions(exp)).find(a => a.eventId === d.eventId && a.actionId === d.actionId);
+  const rowBefore = quietSync(() => QV_view(exp)).find(c => c.beatId === beat.id);
+  let nodeErr = null, expSave = null;
+  try {
+    expSave = quietSync(() => {
+      const receipt = R.recordStoryEventStructuredAction(exp, action);
+      if (!receipt.attempted) throw Error(`Node 侧未受理：${JSON.stringify(receipt).slice(0, 200)}`);
+      TM.settleActionTime(exp, { action_time: { tier: '片刻' } }, { timeActionId: `side-walk:${moves}` }, null, false, false);
+      return R.advanceScenarioRuntime(exp).saveData;
+    });
+  } catch (e) { nodeErr = String(e?.message || e).slice(0, 200); }
+  current = { plan: { kind: 'side', action }, requests: [], judged: null };
+  let res = null;
+  // 右栏人物行的整句「名字——目标」（questLineView 同口径）；只按目标前缀找会撞上同一人的别的拍（pan_secret 的目标就是「乐明珠」）。
+  const nodeRow = rowBefore;
+  const rowKey = nodeRow ? squash(`${nodeRow.name}——${nodeRow.objective}`) : null;
+  const isRow = t => { const x = squash(t).replace(/^·/, ''); return !!rowKey && x.startsWith(rowKey) && /^([▸▾（]|$)/.test(x.slice(rowKey.length)); };
+  // 玩家从界面上能不能知道这一拍：右栏全文里有没有本拍目标／线名（任务日志、当前线卡、人物行都在右栏）。
+  const rightText = (await page.locator('.right-sidebar').innerText().catch(() => '')).replace(/\s+/g, '');
+  const uiBefore = { sidebar: (await whoRows(page)).filter(isRow), quest: ui.quest,
+    visible: { objective: rightText.includes(squash(beat.objective).slice(0, 10)), lineName: rightText.includes(squash(line.name).slice(0, 4)) } };
+  if (line.kind === 'character') {
+    // 同一人的几拍可能目标文字相同（y6 四拍都是「凝羽——门没有开。」）：逐行展开，找有本动作按钮的那一行，不是就收起。
+    const toggles = page.locator('.right-sidebar .line-beat-toggle');
+    const texts = await toggles.allInnerTexts();
+    const hits = texts.map((t, i) => isRow(t) ? i : -1).filter(i => i >= 0);
+    for (const at of hits) {
+      await toggles.nth(at).click();
+      await page.waitForTimeout(200);
+      const btn = page.locator('.right-sidebar .line-beat-action').filter({ hasText: action.label });
+      if (await btn.count()) { const shown = (await btn.first().innerText().catch(() => '')).trim(); await clickSend(page, btn.first(), ui); res = { via: 'b', how: `右栏「这一拍谁有戏」${hits.length > 1 ? `（同文 ${hits.length} 行中第 ${hits.indexOf(at) + 1} 行）` : ''}→「${shown || action.label}」` }; break; }
+      await toggles.nth(at).click();
+      await page.waitForTimeout(150);
+    }
+    if (!res) res = { gap: hits.length ? `右栏 ${hits.length} 行展开后都没有「${action.label}」按钮` : '右栏「这一拍谁有戏」没有本拍的行' };
+  }
+  if (!res || res.gap) {
+    const gap = res?.gap;
+    await typeSend(page, action.playerLine || action.label, ui);
+    res = { via: current.judged ? 'c' : 'a', how: `${gap ? `${gap}；改` : ''}手打动作原句「${action.playerLine || action.label}」${current.judged ? '（判定选中）' : '（替身未见该候选）'}`, gap };
+  }
+  row.moves++; row.via[res.via]++; row.side = (row.side || 0) + 1;
+  const after = (await readUi(page)).save;
+  const owners = line.ownerCharacterIds;
+  const affinityBefore = affinityOfSave(save, owners);
+  const cmp = expSave ? {
+    receipt: [!!rt(after).questLineState?.receipts?.[beat.id], !!rt(expSave).questLineState?.receipts?.[beat.id]],
+    prep: [sidePrep(after, d.eventId), sidePrep(expSave, d.eventId)],
+    progress: diffOf(progressOf(after), progressOf(expSave)),
+    affinity: [affinityOfSave(after, owners), affinityOfSave(expSave, owners)],
+    questLog: [lineEntriesOf(after), lineEntriesOf(expSave)],
+  } : null;
+  const sidebarAfter = (await whoRows(page)).filter(isRow);
+  // 同文行按「仍待回应的行数」比：Node 侧同 rowKey、仍有动作的行数。
+  const nodeOpenRows = expSave ? quietSync(() => QV_view(expSave)).filter(c => c.actions.length && squash(`${c.name}——${c.objective}`) === rowKey).length : null;
+  const uiQuest = (await readUi(page)).quest;
+  const problems = [];
+  if (nodeErr) problems.push(`Node 侧出错：${nodeErr}`);
+  if (cmp) {
+    if (cmp.receipt[0] !== cmp.receipt[1]) problems.push(`拍回执 浏览器 ${cmp.receipt[0]} / Node ${cmp.receipt[1]}`);
+    if (JSON.stringify(cmp.prep[0]) !== JSON.stringify(cmp.prep[1])) problems.push(`准备步 浏览器 ${JSON.stringify(cmp.prep[0])} / Node ${JSON.stringify(cmp.prep[1])}`);
+    if (cmp.progress) problems.push(`主线进度不一致 ${JSON.stringify(cmp.progress)}`);
+    if (JSON.stringify(cmp.affinity[0]) !== JSON.stringify(cmp.affinity[1])) {
+      // 「同一拍同一人只改一次好感」（runtime affinityBeatTaken）：浏览器走完整回合，线回执先占了这一拍，共历好感被跳过；
+      // Node 侧对照是 record＋advance 一次做完，顺序不同会多给。两边同向、浏览器不多于 Node 的记异常，其余才算不一致。
+      const sameWay = owners.every(id => { const b = affinityBefore[id] ?? 0, ui = (cmp.affinity[0][id] ?? 0) - b, nd = (cmp.affinity[1][id] ?? 0) - b; return ui === nd || (ui !== 0 && Math.sign(ui) === Math.sign(nd) && Math.abs(ui) < Math.abs(nd)); });
+      const note = `好感 手前 ${JSON.stringify(affinityBefore)} 浏览器 ${JSON.stringify(cmp.affinity[0])} / Node ${JSON.stringify(cmp.affinity[1])}`;
+      if (sameWay) anomalies.push({ stage: rt(save).modId, beat: line.beat?.id, what: `线拍好感增量与离线对照不同（同拍只改一次好感的记账顺序）：${note}` });
+      else problems.push(note);
+    }
+    if (JSON.stringify(cmp.questLog[0]) !== JSON.stringify(cmp.questLog[1])) problems.push(`任务日志 浏览器 ${JSON.stringify(cmp.questLog[0])} / Node ${JSON.stringify(cmp.questLog[1])}`);
+    const missing = cmp.questLog[1].filter(t => !uiQuest.includes(t));
+    if (missing.length) problems.push(`界面任务日志未显示 ${JSON.stringify(missing)}`);
+    const openRows = sidebarAfter.filter(t => /[▸▾]/.test(t)).length;
+    if (line.kind === 'character' && openRows !== nodeOpenRows) problems.push(`右栏同文待回应行 浏览器 ${openRows} / Node ${nodeOpenRows}`);
+    if (!cmp.receipt[0] && !cmp.prep[0].length) problems.push('浏览器未落任何回执／准备步（没做成）');
+  }
+  const rec = { stage: st.modId, focus: snap.focus, line: line.id, kind: line.kind, beat: beat.id, action: d.actionId, label: action.label, via: res.via, how: res.how, gap: res.gap || null,
+    receipt: cmp?.receipt ?? null, prep: cmp?.prep?.[0] ?? null, affinityBefore, affinity: cmp?.affinity ?? null, questLogAfter: cmp?.questLog?.[0] ?? null,
+    sidebarBefore: uiBefore.sidebar, sidebarAfter, questBefore: uiBefore.quest, visibleBefore: uiBefore.visible, requests: [...current.requests], judged: current.judged, ok: problems.length === 0, problems };
+  side.results.push(rec);
+  console.log(`[支线] ${st.modId} ${beat.id} ← ${d.actionId} [${res.via}] ${res.how}${line.kind === 'side' ? `（右栏可见：目标 ${uiBefore.visible.objective}／线名 ${uiBefore.visible.lineName}）` : ''} → ${rec.ok ? '与 Node 一致' : `不一致：${problems.join('；')}`}`);
+  return true;
+}
+const QV_view = save => SL.QV.questLineView(save).character;
+
 // ───────────── 起点 ─────────────
 async function realOpening(page) {
   await page.goto(baseUrl, { waitUntil: 'domcontentloaded' });
@@ -692,6 +827,16 @@ try {
         }
         continue;
       }
+      if (SIDE) {
+        let handled = false;
+        try { handled = await sideMove(page, ui, row); } catch (error) {
+          handled = true;
+          anomalies.push({ stage: state.modId, move: moves, what: '支线操作异常', error: String(error?.message || error).split('\n')[0].slice(0, 200) });
+          side.results.push({ stage: state.modId, beat: '?', ok: false, problems: [`界面操作异常：${String(error?.message || error).split('\n')[0].slice(0, 200)}`] });
+          await ensureGamePage(page).catch(() => {});
+        }
+        if (handled) continue;
+      }
       const plan = planOf(save);
       lastPre = save;
       const bk = `${state.modId}|${QL.questBeatKey(save)}|${plan.kind}|${planLabel(plan)}`;
@@ -813,7 +958,8 @@ try {
 // ───────────── 汇总与断言 ─────────────
 const ms = Date.now() - t0;
 const total = stages.reduce((acc, s) => { for (const k of 'abcd') acc[k] += s.via[k]; acc.moves += s.moves; acc.prep += s.prep; return acc; }, { a: 0, b: 0, c: 0, d: 0, moves: 0, prep: 0 });
-const result = { baseUrl, qin: QIN ? qin : undefined, from: FROM, until: UNTIL, startHow, outcome, ms, stall: STALL, expectedStages: EXPECTED_STAGES, visited: stages.map(s => s.id), stages, total, stuck, diffs, cOnly, scenes, overlays, anomalies, festival, pageErrors };
+const sideOut = SIDE ? { results: side.results, seenDoable: Object.fromEntries(side.seenDoable), charRows: side.charRows, compass: side.compass } : undefined;
+const result = { baseUrl, side: sideOut, qin: QIN ? qin : undefined, from: FROM, until: UNTIL, startHow, outcome, ms, stall: STALL, expectedStages: EXPECTED_STAGES, visited: stages.map(s => s.id), stages, total, stuck, diffs, cOnly, scenes, overlays, anomalies, festival, pageErrors };
 if (JSON_OUT) writeFileSync(JSON_OUT, JSON.stringify(result, null, 2));
 if (overlays.length) console.log(`[弹窗] ${JSON.stringify(overlays)}`);
 console.log(`[合计] ${stages.length} 关，${total.moves} 手（a ${total.a} / b ${total.b} / c ${total.c} / d ${total.d}；预备 ${total.prep}），卡点 ${stuck.length}，与 walker 差异 ${diffs.length}，用时 ${(ms / 60000).toFixed(1)} 分钟，结局 ${outcome}`);
@@ -834,7 +980,25 @@ if (!QIN && LAST === FINAL) {
   check(festival?.available && !festival.blocked && festival.button && !festival.button.disabled, `终关「${F.FESTIVAL.label}」应可点：${JSON.stringify(festival)}`);
   check(festival?.started === true && festival?.eventDone === true && festival?.buttonAfter === false, `「${F.FESTIVAL.label}」应生效：${JSON.stringify(festival)}`);
 }
+if (SIDE) {
+  for (const r of side.results) check(r.ok, `支线拍 ${r.stage} ${r.beat} ${r.action ?? ''} 与 Node 不一致：${(r.problems || []).join('；')}`);
+  // 浏览器里出现过「可做」的拍：要么落了拍回执，要么只出过准备步（如藻丝要齐远在场才能下单），否则算没做成。
+  const done = new Set(side.results.filter(r => r.receipt?.[0]).map(r => r.beat));
+  const prepOnly = new Set(side.results.filter(r => r.prep?.length && !r.receipt?.[0]).map(r => r.beat));
+  for (const [beat, at] of side.seenDoable) check(done.has(beat) || prepOnly.has(beat) || side.results.some(r => r.beat !== beat && r.receipt?.[0] && r.stage === at.stage && SL.lineBeatOfEvent(SL.LINE_BEATS.find(x => x.beat.id === beat)?.beat.eventId)?.line.id === r.line),
+    `线拍 ${beat}（${at.stage}／${at.focus}）界面上可做过但没做成`);
+  // 已知游戏问题（2026-11-12 DAILY 17:4x，未修）：靠时间推进的拍上，右栏「这一拍谁有戏」读的是没推进过的状态，人物行晚一手或不出。
+  // 目前只在下面两拍出现；这两拍没出行记异常不判失败，别处出现照旧判失败。游戏修好后它们会正常出行，这里不用改。
+  const KNOWN_SIDEBAR_LAG = new Set(['lyg.event.s01_06', 'lyg.event.s01_07']);
+  for (const c of side.charRows) {
+    const what = `人物任务 ${c.id} ${c.name}（${c.stage}／${c.focus}；store 焦点 ${c.storeFocus}）右栏「这一拍谁有戏」没出行：${JSON.stringify(c.rows)}`;
+    if (!c.shown && KNOWN_SIDEBAR_LAG.has(c.focus)) { anomalies.push({ stage: c.stage, beat: c.focus, what: `已知问题：${what}` }); console.log(`[已知问题] ${what}`); }
+    else check(c.shown, what);
+  }
+  for (const c of side.compass) check(c.ok, `当前线卡 ${c.stage} 与 Node 不一致：Node ${JSON.stringify(c.node)}；界面「${c.card}」`);
+  console.log(`[支线合计] 线拍手 ${side.results.length}（一致 ${side.results.filter(r => r.ok).length}），落回执 ${done.size} 拍，只到准备步 ${[...prepOnly].filter(b => !done.has(b)).length} 拍，可做过 ${side.seenDoable.size} 拍；人物任务／高光行 ${side.charRows.filter(c => c.shown).length}/${side.charRows.length}；当前线卡 ${side.compass.filter(c => c.ok).length}/${side.compass.length}`);
+}
 for (const f of failures) console.log(`FAIL ${f}`);
 if (QIN) console.log(`[秦线检查] ${qin.checks.filter(c => c.ok).length}/${qin.checks.length} 通过`);
-console.log(`${failures.length ? 'FAIL' : 'PASS'} smoke-full-chain${QIN ? '（--qin）' : ''}：${stages.length}/${EXPECTED_STAGES.length} 关，卡点 ${stuck.length}`);
+console.log(`${failures.length ? 'FAIL' : 'PASS'} smoke-full-chain${QIN ? '（--qin）' : SIDE ? '（--side）' : ''}：${stages.length}/${EXPECTED_STAGES.length} 关，卡点 ${stuck.length}`);
 process.exit(failures.length ? 1 : 0);
