@@ -2119,7 +2119,10 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   }
   const cultivationSelections = actionQueue.pendingActions.flatMap(a => a.cultivation ? [{ ...a.cultivation }] : []);
   if (selectedCultivationTime.value?.text === inputText.value) cultivationSelections.push({ ...selectedCultivationTime.value.selection });
-  if (!cultivationSelections.length && (/(?:修炼|闭关|练功|打坐)/.test(inputText.value) || actionQueue.pendingActions.some(a => a.type === 'cultivate' && !a.cultivation)) && !/(?:不|别|停止|取消)(?:修炼|闭关|练功|打坐)/.test(inputText.value)) {
+  // 输入就是本拍动作原文／任务日志目标（本地精确或短语命中，如「护送小紫到渭水水下闭关」）时是在走剧情，不当成自己修炼、不弹天数窗。
+  const typedBeat = resolveBeatText(gameStateStore.toSaveData(), inputText.value);
+  const typedStoryBeat = Boolean(typedBeat && typedBeat.via !== 'arrive');
+  if (!cultivationSelections.length && ((!typedStoryBeat && /(?:修炼|闭关|练功|打坐)/.test(inputText.value)) || actionQueue.pendingActions.some(a => a.type === 'cultivate' && !a.cultivation)) && !/(?:不|别|停止|取消)(?:修炼|闭关|练功|打坐)/.test(inputText.value)) {
     resumeAfterCultivationSelection = true;
     selectAction({ name: inputText.value, icon: '', type: 'cultivation', description: '请选择本次修炼天数', timeRequired: true });
     return;
