@@ -11,15 +11,16 @@ import * as e2e from '../scripts/e2e-smoke.mjs';
 const script = fileURLToPath(new URL('../scripts/e2e-smoke.mjs', import.meta.url));
 const scriptsDir = fileURLToPath(new URL('../scripts/', import.meta.url));
 
-test('发现的冒烟脚本 = scripts/smoke-*.mjs 全部 12 个，真实模型脚本在其中且默认跳过', () => {
+test('发现的冒烟脚本 = scripts/smoke-*.mjs 全部 13 个，真实模型脚本在其中且默认跳过', () => {
   const all = e2e.discoverSmokeScripts();
-  assert.equal(all.length, 12);
+  assert.equal(all.length, 13);
   assert.deepEqual(all, readdirSync(scriptsDir).filter(f => f.startsWith('smoke-') && f.endsWith('.mjs')).map(f => f.slice(0, -4)).sort());
   assert.ok(all.includes('smoke-modular-turn-real'));
+  assert.ok(all.includes('smoke-line-turns'), '八线中段档回合冒烟在聚合里');
   const sel = e2e.selectScripts(all, e2e.parseArgs([]));
-  assert.equal(sel.run.length, 11);
+  assert.equal(sel.run.length, 12);
   assert.deepEqual(sel.skipped, ['smoke-modular-turn-real']);
-  assert.equal(e2e.selectScripts(all, e2e.parseArgs(['--with-real'])).run.length, 12);
+  assert.equal(e2e.selectScripts(all, e2e.parseArgs(['--with-real'])).run.length, 13);
 });
 
 test('package.json 登记了 e2e:smoke', () => {
@@ -63,7 +64,7 @@ test('命令行：--list 退出 0；缺 URL 退出 2；未知参数退出 2', ()
   const run = args => spawnSync(process.execPath, [script, ...args], { encoding: 'utf8', env: { ...process.env, SMOKE_URL: '' } });
   const list = run(['--list']);
   assert.equal(list.status, 0);
-  assert.equal(list.stdout.trim().split('\n').length, 12);
+  assert.equal(list.stdout.trim().split('\n').length, 13);
   assert.equal(run([]).status, 2);
   assert.equal(run(['--zzz']).status, 2);
 });
