@@ -29,6 +29,13 @@
 //   另外每到一个焦点挂了人物任务／高光（character-beats.json）的主线事件，查右栏「这一拍谁有戏」是否出「名字——」行；每关第一手查当前线卡（线名、「别处还有事（N）」）与 Node lineCompassView 一致。
 //   --side 不能与 --qin 同用；可与 --from／--until 同用（分段开发）。
 //   默认不进 e2e:smoke（耗时长），聚合里加 --with-long 才跑。
+// --real：真实模型模式（默认关；不加时行为不变）。chat/completions 与 embeddings 不替身，网络护栏只额外放行 api.minimaxi.com、api.siliconflow.cn；
+//   API 配置由页面自己从测试服读（save-storage 只放行 GET …/user_config_api_management_v1，其余照旧 501；脚本不读、不打印任何密钥，日志 URL 不带查询串）。
+//   每手照旧由 walker 定；原先「手打后由替身判定」的手改打该动作的玩家原句（playerLine／actionText，能本地对上就不靠模型判），对不上才交给真实判拍请求。
+//   每手只比进度字段（关、已完成拍、激活拍、切关就绪、结局）；位置变化只在预备手（去任务地点）上算推进。卡点记录加本手打字、正文前 200 字、位置、任务日志目标与地点、本手模型请求数。
+//   统计每手耗时、每手模型请求数（chat／embeddings）、主叙事请求耗时、「已替换为安全叙述」与「行动没能识别」次数，写进 --json 的 real 段与汇总。
+//   --real 不能与 --qin／--side 同用。
+// --max-hands N：到 N 手即停，照常收尾出报告（outcome=maxHands，不算未走完）。
 import assert from 'node:assert/strict';
 import { writeFileSync } from 'node:fs';
 import { chromium } from 'playwright-core';
@@ -49,12 +56,17 @@ const opt = (name, fallback = null) => { const i = args.indexOf(name); if (i < 0
 const bool = name => { const i = args.indexOf(name); if (i < 0) return false; args.splice(i, 1); return true; };
 const FROM = opt('--from'), UNTIL = opt('--until'), STALL = Number(opt('--stall', '6')), JSON_OUT = opt('--json', process.env.SMOKE_FULL_CHAIN_JSON || null);
 const STOP_ON_STUCK = bool('--stop-on-stuck'), VERBOSE = bool('--verbose'), QIN = bool('--qin'), SIDE = bool('--side');
+const REAL = bool('--real'), MAX_HANDS_ARG = opt('--max-hands'), MAX_HANDS = MAX_HANDS_ARG === null ? null : Number(MAX_HANDS_ARG);
 const baseUrl = args[0];
 assert.ok(baseUrl, '缺少站点 URL：node scripts/smoke-full-chain.mjs http://127.0.0.1:端口/');
 assert.ok(Number.isInteger(STALL) && STALL > 0, '--stall 须为正整数');
 
 assert.ok(!(QIN && (FROM || UNTIL)), '--qin 不能与 --from／--until 同用');
 assert.ok(!(QIN && SIDE), '--side 不能与 --qin 同用');
+assert.ok(!(REAL && (QIN || SIDE)), '--real 不能与 --qin／--side 同用');
+assert.ok(MAX_HANDS === null || (Number.isInteger(MAX_HANDS) && MAX_HANDS > 0), '--max-hands 须为正整数');
+// 真实模型一手可能要几十秒到几分钟（主叙事＋判拍＋后台整理）：等待上限放宽。
+const WAIT_MS = REAL ? 300_000 : 60_000;
 // --side 才加载（主链／秦线模式不受影响）。
 const SL = SIDE ? await quiet(() => import('./sideLineInventory.mjs')) : null;
 const TM = SIDE ? await quiet(() => loadTs('../src/modules/scenarioMods/actionTime.ts')) : null;
@@ -122,10 +134,14 @@ const progressOf = save => {
     attempts: Object.values(s.eventActionStates || {}).reduce((n, x) => n + (Number(x?.attemptCount) || 0), 0) };
 };
 const keyOf = p => JSON.stringify(p);
+/** 真实模式下手打的句子：动作有玩家原句（playerLine／actionText）就打原句（游戏能本地对上，不靠模型判），否则照旧打任务日志目标。 */
+const lineOf = (selection, fallback) => REAL ? (selection?.playerLine || selection?.actionText || fallback) : fallback;
+/** 真实模式的推进口径：只看进度字段（关、已完成拍、激活拍、切关就绪、结局）。 */
+const realKeyOf = p => JSON.stringify([p.modId, p.completed, p.active, p.ready, p.gameOver]);
 function diffOf(a, b) {
   const out = {};
   for (const k of Object.keys(a)) {
-    if (k === 'location' || k === 'attempts' || JSON.stringify(a[k]) === JSON.stringify(b[k])) continue;
+    if (k === 'location' || k === 'attempts' || (REAL && k === 'offscreen') || JSON.stringify(a[k]) === JSON.stringify(b[k])) continue;
     if (Array.isArray(a[k])) out[k] = { browserOnly: a[k].filter(x => !b[k].includes(x)), nodeOnly: b[k].filter(x => !a[k].includes(x)) };
     else out[k] = { browser: a[k], node: b[k] };
   }
@@ -213,6 +229,7 @@ const readUi = page => page.evaluate(expr => {
     hold: document.querySelector('[data-testid="intent-hold-message"]')?.innerText.trim() || '',
     notice: [...document.querySelectorAll('.narrative-text p[role="status"]')].map(e => e.innerText.trim()).join(' / '),
     lastNarrative: (document.querySelector('.narrative-text')?.innerText || '').replace(/\s+/g, ' ').slice(0, 160),
+    narrative200: (document.querySelector('.narrative-text')?.innerText || '').replace(/\s+/g, ' ').slice(0, 200),
     judgement: !!document.querySelector('.judgement-preflight-card'), scene: !!document.querySelector('.scene-encounter'), gameOverCard: !!document.querySelector('.game-over-card'),
     inputDisabled: document.querySelector('textarea.game-input')?.disabled ?? null, festival, lcq: [...window.__lcqSeen],
   };
@@ -229,7 +246,7 @@ async function ensureGamePage(page) {
   }
 }
 /** 等这一手落定：回合序号变了或进度变了，且不在 AI 处理中。 */
-async function settle(page, before, timeout = 60_000) {
+async function settle(page, before, timeout = WAIT_MS) {
   await page.waitForFunction(({ expr, seq, key }) => {
     const stores = eval(expr)._s;
     if (stores.get('ui').isAIProcessing) return false;
@@ -238,7 +255,7 @@ async function settle(page, before, timeout = 60_000) {
     const seqNow = Number(document.querySelector('[data-testid="turn-status"]')?.dataset.turnSeq || 0);
     return seqNow !== seq || `${rt.modId}|${(rt.completedEventIds || []).length}|${rt.nextStageReadyId || ''}|${(rt.activeEventIds || []).join(',')}|${save?.系统?.历史?.叙事?.length ?? 0}|${a ? `${a.state?.beat}/${!!a.pending}/${!!a.choice}/${a.state?.status}/${a.notice || ''}` : ''}` !== key;
   }, { expr: PINIA, seq: before.seq, key: shortKey(before.save) }, { timeout, polling: 200 }).catch(() => null);
-  await page.waitForFunction(expr => !eval(expr)._s.get('ui').isAIProcessing, PINIA, { timeout: 60_000 });
+  await page.waitForFunction(expr => !eval(expr)._s.get('ui').isAIProcessing, PINIA, { timeout: WAIT_MS });
   await page.waitForTimeout(250);
 }
 const shortKey = save => { const s = rt(save), a = save?.系统?.扩展?.场面模块?.active; return `${s.modId}|${(s.completedEventIds || []).length}|${s.nextStageReadyId || ''}|${(s.activeEventIds || []).join(',')}|${save?.系统?.历史?.叙事?.length ?? 0}|${a ? `${a.state?.beat}/${!!a.pending}/${!!a.choice}/${a.state?.status}/${a.notice || ''}` : ''}`; };
@@ -249,6 +266,7 @@ async function typeSend(page, text, before) {
   await input.fill(text);
   const send = page.locator('.send-button');
   if (await send.isDisabled()) return false;
+  if (current) current.typed = text;
   await page.waitForTimeout(150);
   await handleOverlay(page, text);
   await send.click();
@@ -368,14 +386,14 @@ async function executeMove(page, ui, plan, attempt) {
     }
     // 没有可点的卡：照任务日志手打，看理想模型能否判中。
     const main = questEntries(save)[0];
-    if (main && attempt < 2) { await typeSend(page, main.objective, ui); return { via: current.judged ? 'c' : 'a', how: `无机会卡／按钮，手打任务目标「${main.objective}」` }; }
+    if (main && attempt < 2) { const t = lineOf(plan.choice, main.objective); await typeSend(page, t, ui); return { via: current.judged ? 'c' : 'a', how: `无机会卡／按钮，手打${t === main.objective ? '任务目标' : '动作原句'}「${t}」` }; }
     return { failed: `没有机会卡「${opp?.title ?? plan.opportunityId}」也没有机会按钮「${label}」` };
   }
   if (plan.kind === 'local:s02_04') {
     const btn = page.locator('.engine-action-options button.engine-action-btn').filter({ hasText: plan.local.label });
     if (await btn.count()) { await clickSend(page, btn.first(), ui); return { via: 'b', how: `地方按钮「${plan.local.label}」` }; }
     const main = questEntries(save)[0];
-    if (main && attempt < 2) { await typeSend(page, main.objective, ui); return { via: current.judged ? 'c' : 'a', how: `无地方按钮，手打任务目标「${main.objective}」` }; }
+    if (main && attempt < 2) { const t = lineOf(plan.local, main.objective); await typeSend(page, t, ui); return { via: current.judged ? 'c' : 'a', how: `无地方按钮，手打${t === main.objective ? '任务目标' : '动作原句'}「${t}」` }; }
     return { failed: `主面板没有地方按钮「${plan.local.label}」` };
   }
   if (plan.kind === 'action') {
@@ -421,8 +439,9 @@ async function executeMove(page, ui, plan, attempt) {
     if (!entry) return { failed: '任务日志没有当前目标' };
     const shown = `${entry.title}：${entry.objective}`;
     if (!ui.quest.includes(shown)) return { failed: `界面任务日志未显示「${shown}」：${JSON.stringify(ui.quest)}` };
-    await typeSend(page, entry.objective, ui);
-    return { via: current.judged ? 'c' : 'a', how: `手打任务目标「${entry.objective}」${gate.ok ? '' : `（闸门 where=${gate.where} who=${gate.who}）`}` };
+    const typed = lineOf(action, entry.objective);
+    await typeSend(page, typed, ui);
+    return { via: current.judged ? 'c' : 'a', how: `手打${typed === entry.objective ? '任务目标' : '动作原句'}「${typed}」${gate.ok ? '' : `（闸门 where=${gate.where} who=${gate.who}）`}` };
   }
   return { failed: `未知计划 ${plan.kind}` };
 }
@@ -445,7 +464,7 @@ async function sceneMove(page, ui, ctx) {
   await typeSend(page, line, ui);
   const a = (await readUi(page)).save.系统?.扩展?.场面模块?.active;
   if (a && !a.pending && !a.choice) ctx.combo++; // 被退回：下一手理想识别器换一种合法理解
-  return { via: current.judged ? 'c' : 'a', how: `场面打法「${line}」${current.judged ? `（识别：${current.judged}）` : '（未发识别请求）'}`, scene: true };
+  return { via: current.judged ? 'c' : 'a', how: `场面打法「${line}」${REAL ? '（真实识别）' : current.judged ? `（识别：${current.judged}）` : '（未发识别请求）'}`, scene: true };
 }
 const sceneCardText = page => page.locator('section.scene-encounter').innerText().then(t => t.replace(/\s+/g, ' ').slice(0, 300)).catch(() => '');
 
@@ -588,8 +607,8 @@ async function realOpening(page) {
   await page.getByText('入六朝', { exact: true }).first().click();
   await page.getByText('开启仙途', { exact: true }).first().waitFor({ timeout: 20_000 });
   await page.getByText('开启仙途', { exact: true }).first().click();
-  await page.locator('textarea.game-input').waitFor({ timeout: 90_000 });
-  await page.waitForFunction(expr => { const s = eval(expr)._s; return !s.get('ui').isAIProcessing && s.get('gameState').toSaveData()?.世界?.状态?.剧本模组?.modId; }, PINIA, { timeout: 60_000 });
+  await page.locator('textarea.game-input').waitFor({ timeout: REAL ? 600_000 : 90_000 });
+  await page.waitForFunction(expr => { const s = eval(expr)._s; return !s.get('ui').isAIProcessing && s.get('gameState').toSaveData()?.世界?.状态?.剧本模组?.modId; }, PINIA, { timeout: WAIT_MS });
   await page.waitForTimeout(800);
   return page.evaluate(expr => eval(expr)._s.get('characterV3').rootState.当前激活存档.角色ID, PINIA);
 }
@@ -730,15 +749,51 @@ const enterStage = (id, how) => {
 const sceneTally = id => { const list = scenes.filter(x => x.stage === id); return list.length ? ` 场面 ${list.map(x => `${x.contract ?? '?'}:${x.outcome ?? '?'}`).join(',')}` : ''; };
 const printStage = row => console.log(`[关] ${String(stages.indexOf(row) + 1).padStart(2)} ${row.id.padEnd(36)} 手 ${String(row.moves).padStart(3)}（a ${row.via.a}［其中去地点 ${row.aPlace}］ / b ${row.via.b} / c ${row.via.c} / d ${row.via.d}；预备 ${row.prep}；场面 ${row.scene}）卡点 ${row.stuck} 差异 ${row.diffs}${sceneTally(row.id)}  ${((Date.now() - row.t) / 1000).toFixed(0)}s`);
 
+// ───────────── --real：统计 ─────────────
+const real = { hands: [], chat: 0, embeddings: 0, byKind: {}, failedRequests: 0, safeReplaced: 0, unrecognized: 0 };
+const inflight = new Map(); // Playwright Request → { t0, cur, main }
+const pathOf = request => { try { const u = new URL(request.url()); return `${u.host}${u.pathname}`; } catch { return '?'; } }; // 不带查询串
+function onRealRequest(kind, body, request) {
+  if (kind === 'embeddings') real.embeddings++; else real.chat++;
+  real.byKind[kind] = (real.byKind[kind] || 0) + 1;
+  // 判拍／意图分类发了真实请求：这一手算 c（交给模型判）。
+  if (current && (kind === 'beat' || kind === 'intent')) current.judged = kind;
+  const main = kind === 'narration' && /tavern_commands/.test(String(body?.messages?.[0]?.content || ''));
+  if (request) inflight.set(request, { t0: Date.now(), cur: current, main });
+  if (VERBOSE) console.log(`    ↗ ${kind} ${request ? pathOf(request) : ''}`);
+}
+function onRealDone(request, failed) {
+  const x = inflight.get(request);
+  if (!x) return;
+  inflight.delete(request);
+  if (failed) { real.failedRequests++; if (x.cur) x.cur.failedRequests = (x.cur.failedRequests || 0) + 1; }
+  if (x.main && x.cur) (x.cur.narrMs ||= []).push(Date.now() - x.t0);
+}
+const position = save => ({ 描述: save.角色.位置?.描述 ?? null, locationId: save.角色.位置?.locationId ?? null });
+const questTarget = save => { const e = questEntries(save)[0]; return e ? { title: e.title, objective: e.objective, place: e.place ?? null } : null; };
+const reqCount = cur => { const list = cur?.requests || []; return { total: list.length, chat: list.filter(k => k !== 'embeddings').length, embeddings: list.filter(k => k === 'embeddings').length }; };
+/** 每手一行（真实模式）；请求数与主叙事耗时在收尾时从 cur 取（后台请求可能晚于本手落定）。 */
+function realHand(tm, save, after, label, res, moved, nodeMoved = null) {
+  const safe = /已替换为安全叙述/.test(`${after.notice} ${after.narrative200}`), unrec = /行动没能识别/.test(after.hold);
+  if (safe) real.safeReplaced++;
+  if (unrec) real.unrecognized++;
+  const row = { hand: moves, stage: rt(save).modId, beat: QL.questBeatKey(save), plan: label, via: res.via ?? null, how: res.failed || res.how, typed: current.typed ?? null,
+    moved, nodeMoved, ms: Date.now() - tm, safe, unrecognized: unrec, location: position(after.save).locationId, narrative200: after.narrative200, _cur: current };
+  real.hands.push(row);
+  const r = reqCount(current);
+  console.log(`[手] ${String(moves).padStart(3)} ${row.stage} ${row.beat ?? '-'} [${row.via ?? '×'}] ${String(row.how).slice(0, 80)} → ${moved ? '推进' : '未推进'}${nodeMoved === false ? '（walker 也不推进）' : ''}｜${(row.ms / 1000).toFixed(1)}s 请求 ${r.chat}+${r.embeddings}e${safe ? '｜安全替换' : ''}${unrec ? '｜行动没能识别' : ''}`);
+}
+
 const browser = await chromium.launch({ headless: true, channel: 'chrome' });
-let guardRef = null;
+let guardRef = null, storageRef = null;
 const pageErrors = [];
 try {
-  const { context, guard } = await openSmokeContext(browser, {
-    respond, contextOptions: { viewport: { width: 1600, height: 1000 } },
-    onRequest: kind => current?.requests.push(kind),
+  const { context, guard, storage } = await openSmokeContext(browser, {
+    respond, contextOptions: { viewport: { width: 1600, height: 1000 } }, real: REAL,
+    onRequest: (kind, body, request) => { current?.requests.push(kind); if (REAL) onRealRequest(kind, body, request); },
   });
-  guardRef = guard;
+  guardRef = guard; storageRef = storage;
+  if (REAL) { context.on('requestfinished', r => onRealDone(r, false)); context.on('requestfailed', r => onRealDone(r, true)); }
   const page = await context.newPage();
   page.on('pageerror', error => pageErrors.push(`${error.message}`.slice(0, 300)));
   try {
@@ -755,7 +810,8 @@ try {
       startHow = `--from ${FROM}：Node 侧 formalNewSave + walker.step 推到该关开头，importSave → loadGame 导入`;
     } else {
       charId = await realOpening(page);
-      startHow = '首页「入六朝」默认设置 →「开启仙途」（开局两步模型请求用替身）';
+      startHow = REAL ? '首页「入六朝」默认设置 →「开启仙途」（--real：开局两步为真实模型请求）' : '首页「入六朝」默认设置 →「开启仙途」（开局两步模型请求用替身）';
+      if (REAL) console.log(`[起点] 开局请求 ${JSON.stringify(reqCount(current))}`);
     }
     assert.ok(charId, '应有激活角色');
     let ui = await readUi(page);
@@ -770,7 +826,8 @@ try {
       ui = await readUi(page);
     }
     let beatKey = null, noProgress = 0, idle = 0, attempt = 0, stepNo = 0, sceneCtx = null, lastPre = null, stageEntry = ui.save;
-    for (; outcome === 'running' && moves < MAX_MOVES; moves++) {
+    const HAND_LIMIT = MAX_HANDS ?? MAX_MOVES;
+    for (; outcome === 'running' && moves < HAND_LIMIT; moves++) {
       const tm = Date.now();
       ui = await readUi(page);
       const save = ui.save, state = rt(save);
@@ -795,6 +852,7 @@ try {
         row.moves++; row.via[res.via]++; row.scene++; sceneCtx.moves++;
         if (VERBOSE) console.log(`  · 手 ${moves} ${Date.now() - tm}ms [${res.via}] ${res.how}`);
         const after = await readUi(page);
+        if (REAL) realHand(tm, save, after, `场面 ${sceneCtx.beat ?? ''}`, res, !after.scene);
         if (!after.scene) {
           const over = rt(after.save).gameOver;
           const last = after.save.系统?.扩展?.场面模块?.history?.at(-1);
@@ -855,7 +913,7 @@ try {
       row.moves++;
       const after = await readUi(page);
       const got = progressOf(after.save);
-      const moved = keyOf(got) !== keyOf(before);
+      const moved = REAL ? realKeyOf(got) !== realKeyOf(before) || (!!res.prep && got.location !== before.location) : keyOf(got) !== keyOf(before);
       if (res.failed) {
         if (VERBOSE) console.log(`  · 手 ${moves} ${planLabel(plan)}：入口失败 ${res.failed}`);
       } else {
@@ -864,7 +922,8 @@ try {
         if (res.place && res.via === 'a') row.aPlace++;
         if (VERBOSE) console.log(`  · 手 ${moves} ${Date.now() - tm}ms [${res.via}] ${res.how} → ${moved ? '推进' : '未推进'}${current.beatCandidates ? ` 判定候选 ${JSON.stringify(current.beatCandidates)}` : ''}`);
       }
-      const nodeMoved = expected.save ? keyOf(progressOf(expected.save)) !== keyOf(before) : null;
+      const nodeMoved = expected.save ? (REAL ? realKeyOf(progressOf(expected.save)) !== realKeyOf(before) : keyOf(progressOf(expected.save)) !== keyOf(before)) : null;
+      if (REAL) realHand(tm, save, after, planLabel(plan), res, moved, nodeMoved);
       if (QIN && rt(after.save).modId === QIN_STAGE && !RET.getMapEntryReturnOffer(after.save)) {
         const n = await returnButtons(page);
         (qin.railMid ||= { moves: 0, early: [] }).moves++;
@@ -890,11 +949,14 @@ try {
         questLog: questEntries(save).map(e => `${e.title}：${e.objective}${e.place ? `（地点：${e.place}）` : ''}`), location: save.角色.位置?.locationId,
         gate: plan.kind === 'action' ? QL.questActionGate(save, plan.action) : null, ui: uiSummary(after), lastEntry: res.failed || res.how,
         beatCandidates: current.beatCandidates, intentCandidates: current.intentCandidates, requests: current.requests };
+      if (REAL) Object.assign(rec, { hand: moves, typed: current.typed ?? null, narrative200: after.narrative200, position: position(after.save), questTarget: questTarget(after.save),
+        requestCount: reqCount(current), hold: after.hold, notice: after.notice });
       stuck.push(rec);
       row.stuck++;
       // 调试：SMOKE_FULL_CHAIN_DUMP＝目录时把卡点前的浏览器存档写出来（默认不写盘）。
       if (process.env.SMOKE_FULL_CHAIN_DUMP) writeFileSync(`${process.env.SMOKE_FULL_CHAIN_DUMP}/stuck-${stuck.length}.json`, JSON.stringify(save));
       console.log(`[卡点] ${rec.stage} 拍 ${rec.beat}：walker 要走 ${rec.walker.action}；最后一手 ${rec.lastEntry}`);
+      if (REAL) console.log(`  打字「${rec.typed}」；位置 ${JSON.stringify(rec.position)}；目标 ${JSON.stringify(rec.questTarget)}；请求 ${JSON.stringify(rec.requestCount)}\n  正文：${rec.narrative200}`);
       if (STOP_ON_STUCK) { outcome = 'stuck'; break; }
       let r = await resumeFrom(page, charId, save, `续-${stuck.length}`);
       if (!r.ok) {
@@ -913,7 +975,7 @@ try {
       if (!r.ok) { outcome = 'stuck'; break; }
       beatKey = null; idle = 0; noProgress = 0;
     }
-    if (outcome === 'running') outcome = 'limit';
+    if (outcome === 'running') outcome = MAX_HANDS !== null && moves >= MAX_HANDS ? 'maxHands' : 'limit';
     if (outcome !== 'until') printStage(row);
 
     // 秦线：rail 走完 → 点返回。
@@ -959,24 +1021,40 @@ try {
 const ms = Date.now() - t0;
 const total = stages.reduce((acc, s) => { for (const k of 'abcd') acc[k] += s.via[k]; acc.moves += s.moves; acc.prep += s.prep; return acc; }, { a: 0, b: 0, c: 0, d: 0, moves: 0, prep: 0 });
 const sideOut = SIDE ? { results: side.results, seenDoable: Object.fromEntries(side.seenDoable), charRows: side.charRows, compass: side.compass } : undefined;
-const result = { baseUrl, side: sideOut, qin: QIN ? qin : undefined, from: FROM, until: UNTIL, startHow, outcome, ms, stall: STALL, expectedStages: EXPECTED_STAGES, visited: stages.map(s => s.id), stages, total, stuck, diffs, cOnly, scenes, overlays, anomalies, festival, pageErrors };
+let realOut;
+if (REAL) {
+  for (const h of real.hands) { const r = reqCount(h._cur); Object.assign(h, { requests: r, kinds: [...(h._cur?.requests || [])], narrMs: h._cur?.narrMs || [], failedRequests: h._cur?.failedRequests || 0 }); delete h._cur; }
+  const med = list => { const x = [...list].sort((a, b) => a - b); return x.length ? x[Math.floor(x.length / 2)] : null; };
+  const handMs = real.hands.map(h => h.ms), narr = real.hands.flatMap(h => h.narrMs);
+  realOut = { hosts: guardRef?.stats ? { allowed: guardRef.stats.allowed, violations: guardRef.stats.violations.length } : null, storage: storageRef,
+    requests: { chat: real.chat, embeddings: real.embeddings, byKind: real.byKind, failed: real.failedRequests },
+    handMs: { median: med(handMs), max: Math.max(0, ...handMs) }, narrationMs: { count: narr.length, median: med(narr), max: Math.max(0, ...narr) },
+    safeReplaced: real.safeReplaced, unrecognized: real.unrecognized, hands: real.hands };
+}
+const result = { baseUrl, real: realOut, maxHands: MAX_HANDS ?? undefined, side: sideOut, qin: QIN ? qin : undefined, from: FROM, until: UNTIL, startHow, outcome, ms, stall: STALL, expectedStages: EXPECTED_STAGES, visited: stages.map(s => s.id), stages, total, stuck, diffs, cOnly, scenes, overlays, anomalies, festival, pageErrors };
 if (JSON_OUT) writeFileSync(JSON_OUT, JSON.stringify(result, null, 2));
 if (overlays.length) console.log(`[弹窗] ${JSON.stringify(overlays)}`);
 console.log(`[合计] ${stages.length} 关，${total.moves} 手（a ${total.a} / b ${total.b} / c ${total.c} / d ${total.d}；预备 ${total.prep}），卡点 ${stuck.length}，与 walker 差异 ${diffs.length}，用时 ${(ms / 60000).toFixed(1)} 分钟，结局 ${outcome}`);
 if (festival) console.log(`[大祭] ${JSON.stringify(festival)}`);
+if (REAL) {
+  console.log(`[真实模型] 请求 chat ${realOut.requests.chat}／embeddings ${realOut.requests.embeddings}（按种类 ${JSON.stringify(realOut.requests.byKind)}；失败 ${realOut.requests.failed}）`);
+  console.log(`[真实模型] 每手耗时 中位 ${(realOut.handMs.median / 1000 || 0).toFixed(1)}s／最长 ${(realOut.handMs.max / 1000).toFixed(1)}s；主叙事 ${realOut.narrationMs.count} 次，中位 ${(realOut.narrationMs.median / 1000 || 0).toFixed(1)}s／最长 ${(realOut.narrationMs.max / 1000).toFixed(1)}s`);
+  console.log(`[真实模型] 「已替换为安全叙述」${realOut.safeReplaced} 手，「行动没能识别」${realOut.unrecognized} 手；存档接口：读配置 ${storageRef.configGet}，替身读 ${storageRef.stubbedRead}，拦下写 ${storageRef.blockedWrite.length}${storageRef.blockedWrite.length ? ` ${JSON.stringify([...new Set(storageRef.blockedWrite)])}` : ''}`);
+}
 const failures = [];
 const check = (ok, what) => { if (!ok) failures.push(what); };
-check((QIN ? ['railDone'] : ['done', 'until']).includes(outcome), `未走完：outcome=${outcome}`);
+check((QIN ? ['railDone'] : ['done', 'until', 'maxHands']).includes(outcome), `未走完：outcome=${outcome}`);
 if (QIN) for (const c of qin.checks) { if (!c.ok) failures.push(`秦线：${c.what}`); }
 if (QIN) check(qin.ret && qin.reenter, '秦线：返回与返回后检查应已执行');
-check(JSON.stringify(stages.map(s => s.id)) === JSON.stringify(EXPECTED_STAGES), `途经关序列不等于默认主链：${JSON.stringify(stages.map(s => s.id))}`);
+const expectedSeen = outcome === 'maxHands' ? EXPECTED_STAGES.slice(0, stages.length) : EXPECTED_STAGES;
+check(JSON.stringify(stages.map(s => s.id)) === JSON.stringify(expectedSeen), `途经关序列不等于默认主链：${JSON.stringify(stages.map(s => s.id))}`);
 check(stuck.length === 0, `有 ${stuck.length} 处卡点`);
 // 与 walker 的差异：落在卡点那一拍上的算卡点的表现；其余差异判失败。
 const unexplained = diffs.filter(d => !stuck.some(x => x.stage === d.stage && x.beat === d.beat));
 check(unexplained.length === 0, `有 ${unexplained.length} 处与 walker 的差异不能用卡点解释：${JSON.stringify(unexplained.slice(0, 3))}`);
 check(pageErrors.length === 0, `控制台未捕获异常：${pageErrors.slice(0, 3).join(' / ')}`);
 check(!anomalies.some(a => a.what === 'LCQ 报错码'), `出现 LCQ 报错码：${JSON.stringify(anomalies.filter(a => a.what === 'LCQ 报错码').flatMap(a => a.codes))}`);
-if (!QIN && LAST === FINAL) {
+if (!QIN && LAST === FINAL && outcome !== 'maxHands') {
   check(festival?.available && !festival.blocked && festival.button && !festival.button.disabled, `终关「${F.FESTIVAL.label}」应可点：${JSON.stringify(festival)}`);
   check(festival?.started === true && festival?.eventDone === true && festival?.buttonAfter === false, `「${F.FESTIVAL.label}」应生效：${JSON.stringify(festival)}`);
 }
