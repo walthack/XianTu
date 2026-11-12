@@ -11,24 +11,25 @@ import * as e2e from '../scripts/e2e-smoke.mjs';
 const script = fileURLToPath(new URL('../scripts/e2e-smoke.mjs', import.meta.url));
 const scriptsDir = fileURLToPath(new URL('../scripts/', import.meta.url));
 
-test('发现的冒烟脚本 = scripts/smoke-*.mjs 全部 16 个，真实模型脚本与长跑脚本在其中且默认跳过', () => {
+test('发现的冒烟脚本 = scripts/smoke-*.mjs 全部 17 个，真实模型脚本与长跑脚本在其中且默认跳过', () => {
   const all = e2e.discoverSmokeScripts();
-  assert.equal(all.length, 16);
+  assert.equal(all.length, 17);
   assert.deepEqual(all, readdirSync(scriptsDir).filter(f => f.startsWith('smoke-') && f.endsWith('.mjs')).map(f => f.slice(0, -4)).sort());
   assert.ok(all.includes('smoke-modular-turn-real'));
   assert.ok(all.includes('smoke-full-chain'), '整链长跑在聚合里（默认跳过）');
   assert.ok(all.includes('smoke-line-turns'), '八线中段档回合冒烟在聚合里');
   assert.ok(all.includes('smoke-stage-transitions') && all.includes('smoke-map-festival-ending'), '切关／地图入秦·大祭·结局冒烟在聚合里');
   const sel = e2e.selectScripts(all, e2e.parseArgs([]));
-  assert.equal(sel.run.length, 14);
+  assert.equal(sel.run.length, 15);
+  assert.ok(all.includes('smoke-endings') && sel.run.includes('smoke-endings'), '结局与 y5 留下分支冒烟在默认聚合里');
   assert.deepEqual(sel.skipped, ['smoke-full-chain', 'smoke-modular-turn-real']);
   const real = e2e.selectScripts(all, e2e.parseArgs(['--with-real']));
-  assert.equal(real.run.length, 15);
+  assert.equal(real.run.length, 16);
   assert.deepEqual(real.skipped, ['smoke-full-chain']);
   const long = e2e.selectScripts(all, e2e.parseArgs(['--with-long']));
-  assert.equal(long.run.length, 15);
+  assert.equal(long.run.length, 16);
   assert.deepEqual(long.skipped, ['smoke-modular-turn-real']);
-  assert.equal(e2e.selectScripts(all, e2e.parseArgs(['--with-real', '--with-long'])).run.length, 16);
+  assert.equal(e2e.selectScripts(all, e2e.parseArgs(['--with-real', '--with-long'])).run.length, 17);
   assert.deepEqual(e2e.selectScripts(all, e2e.parseArgs(['--only', 'smoke-full-chain'])).run, ['smoke-full-chain'], '--only 点名时照跑');
 });
 
@@ -81,7 +82,7 @@ test('命令行：--list 退出 0；缺 URL 退出 2；未知参数退出 2', ()
   const run = args => spawnSync(process.execPath, [script, ...args], { encoding: 'utf8', env: { ...process.env, SMOKE_URL: '' } });
   const list = run(['--list']);
   assert.equal(list.status, 0);
-  assert.equal(list.stdout.trim().split('\n').length, 16);
+  assert.equal(list.stdout.trim().split('\n').length, 17);
   assert.match(list.stdout, /smoke-full-chain {2}\(跳过：长跑\)/);
   assert.equal(run([]).status, 2);
   assert.equal(run(['--zzz']).status, 2);
