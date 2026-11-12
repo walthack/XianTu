@@ -2,8 +2,8 @@
 // 档取仓库已入库夹具：tests/fixtures/lines-replay 六线 end、song-replay/song-line-end（宋线最后一关收束）；唐 end 是整链终关，只断言没有启程入口。
 // 期望值在 Node 里用源码现场算（导入链与读档修补链同 tests/linesReplayFixtures.test.mjs）：下一关＝transitionToNextScenarioStage（跳过隔离关），
 //   新关焦点拍／章节名／当前线／任务日志／编年史转场记录／开场展示都取切关结果。
-// 入口按当前界面实际提供的算：内测构建是任务模式，撤掉了「▶ 启程」按钮；这几关的下一关都没有作者写的启程短语，任务日志文字「收拾行装，前往X」手打不认，
-//   唯一能用的入口是在输入框手打启程按钮文字（getStageDepartureOffer.label，本拍动作表精确匹配＝点启程）。任务标记在别处、地图却走不到的记为界面缺口。
+// 入口按当前界面实际提供的算：内测构建是任务模式，撤掉了「▶ 启程」按钮；这几关的下一关都没有作者写的启程短语，
+//   入口是在输入框照任务日志里显示的启程目标原文手打（本拍动作表精确匹配＝点启程）。任务标记在别处、地图却走不到的记为界面缺口。
 // 浏览器里走真实存储接口 importSave → loadGame（一次性上下文 IndexedDB；save-storage 一律替身 501）；模型请求全部替身（启程本身不应发模型请求，脚本断言为零）。
 // 用法：node scripts/smoke-stage-transitions.mjs <站点URL…> [--only 线key,线key]；SMOKE_TRANSITIONS_JSON＝结果写成 JSON。
 import assert from 'node:assert/strict';
@@ -66,8 +66,8 @@ async function expectationOf(line) {
   assert.ok(departure, `${line.key} 任务日志应有启程条目`);
   const marker = QL.questMarkers(save, MODS).find(m => m.key === departure.key);
   const here = save.角色.位置?.locationId;
-  // 内测构建（任务模式）撤掉了启程按钮；六条线的下一关都没有作者写的启程短语（quests.json stages），任务日志里的「收拾行装，前往X」手打也不认，
-  // 能用的入口只有手打启程按钮文字（getStageDepartureOffer.label，本拍动作表精确匹配）。标记在别处、地图却走不到的记为界面缺口（汉：留仙坪）。
+  // 内测构建（任务模式）撤掉了启程按钮；六条线的下一关都没有作者写的启程短语（quests.json stages），
+  // 入口是照任务日志里显示的启程目标原文手打（本拍动作表精确匹配）。标记在别处、地图却走不到的记为界面缺口（汉：留仙坪）。
   const away = marker && !QL.atLocation(here, marker.locationId) ? marker : null;
   const gap = away && !MT.mapTravelPreview(save, away.locationId) ? `任务标记「${away.name}」不在脚下，地图上却没有可走的路线（mapTravelPreview 为空）` : null;
   assert.ok(!away || gap, `${line.key} 任务标记在别处且地图走得到：本脚本只覆盖手打启程，须补地图启程路径`);
@@ -82,6 +82,7 @@ async function expectationOf(line) {
   return {
     slot, ...before, gap, offer,
     departureText: `${departure.title}：${departure.objective}`,
+    typed: departure.objective,
     next: art.modId, nextName: result.toName, ...progressOf(after), ...sidebarView(after),
     chronicle: art.chronicle.at(-1), presentationHead: squash(NM.stripNarrativeMetaWords(presentation.text)).slice(0, 16),
   };
@@ -140,7 +141,7 @@ try {
             assert.ok(ui0.quest.includes(exp.departureText), `任务日志应列启程条目「${exp.departureText}」，实际 ${JSON.stringify(ui0.quest)}`);
             requests = [];
             // 手打启程按钮文字（本拍动作表精确匹配＝点启程）。
-            await page.locator('textarea.game-input').fill(exp.offer.label);
+            await page.locator('textarea.game-input').fill(exp.typed);
             await page.locator('.send-button').click();
             await page.waitForFunction(({ expr, next }) => eval(expr)._s.get('gameState').toSaveData()?.世界?.状态?.剧本模组?.modId === next,
               { expr: PINIA, next: exp.next }, { timeout: 20_000 });
@@ -164,7 +165,7 @@ try {
             assert.deepEqual(ui.lcq, [], '启程后不应弹 LCQ 报错码');
             const persisted = await readPersisted(page, charId);
             assert.equal(persisted.data?.世界?.状态?.剧本模组?.modId, exp.next, '持久化的工作槽应已在新关');
-            record.result = `手打「${exp.offer.label}」 → ${exp.next}（${exp.nextName}）；${exp.chapter ?? '无章节行'}；当前线「${exp.lineName ?? '无'}」；焦点 ${exp.focus}；编年史 ${exp.chronicle.id}；工作槽 ${persisted.slot} 已落账${exp.gap ? `；界面缺口：${exp.gap}` : ''}`;
+            record.result = `手打任务日志目标「${exp.typed}」 → ${exp.next}（${exp.nextName}）；${exp.chapter ?? '无章节行'}；当前线「${exp.lineName ?? '无'}」；焦点 ${exp.focus}；编年史 ${exp.chronicle.id}；工作槽 ${persisted.slot} 已落账${exp.gap ? `；界面缺口：${exp.gap}` : ''}`;
           }
           assert.deepEqual(pageErrors, [], '控制台不应有未捕获异常');
           record.status = 'passed';

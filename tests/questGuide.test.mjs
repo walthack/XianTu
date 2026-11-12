@@ -147,6 +147,22 @@ test('开关开：s01 末任务日志写下一关目标、地图标落点；落�
   assert.equal(BP.resolveBeatText(s, '我收拾行装，准备上路')?.action.kind, 'departure');
   assert.equal(BP.resolveBeatText(s, '收拾行装，继续旅程')?.action.kind, 'departure', '原启程文字照旧');
   assert.equal(BP.resolveBeatText(s, '我先不走，再歇一会'), undefined, '否定优先');
+  // 照任务日志里显示的启程目标打字＝启程（与主线拍认日志目标同一规矩）；开关关时不认。
+  assert.equal(BP.resolveBeatText(s, view.current[0].objective, MODS)?.action.kind, 'departure', '作者写的启程目标');
+  assert.equal(withQuest(false, () => BP.resolveBeatText(s, view.current[0].objective, MODS)), undefined, '开关关不认日志目标');
+  // 作者没写启程目标的关：日志显示兜底目标「收拾行装，前往X」，照打也启程；取不到下一关地名时目标就是启程文字本身，不拼成「前往收拾行装…」。
+  const bare = structuredClone(s);
+  rt(bare).nextStageId = rt(bare).nextStageReadyId = 'lcq.stage_03';
+  const offer = R.getStageDepartureOffer(bare);
+  if (offer && !Q.questArrivalSpec('lcq.stage_03')?.objective) {
+    const shown = Q.questLogView(bare, MODS).current.find(e => e.key.startsWith('departure:')).objective;
+    const place = Q.locationName(Q.nextStageModOf(bare, MODS).scenario.opening?.locationId);
+    assert.ok(place, '这一关取得到下一关地名');
+    assert.equal(shown, place ? QC.departureObjective.replace('{place}', place) : offer.label);
+    assert.equal(BP.resolveBeatText(bare, shown, MODS)?.action.kind, 'departure', '兜底启程目标照打也启程');
+  }
+  assert.equal(Q.fallbackDepartureObjective('', '收拾行装，继续旅程'), '收拾行装，继续旅程');
+  assert.equal(Q.fallbackDepartureObjective('蛇彝村', '收拾行装，继续旅程'), QC.departureObjective.replace('{place}', '蛇彝村'));
   // 到达即切：从别处来到下一关开场落点（同国）
   const away = structuredClone(s);
   moveTo(away, 'lcq.location.grassland', '中立边陲·草原');

@@ -32,7 +32,7 @@ import { isKeyBeatCardAction } from './keyBeatCards';
 import { detectBranchDecision } from './branchDecision';
 import { scenarioPlayerId } from './playerIdentity';
 import { getWuyuanOpenWorldSelections, type WuyuanOpenWorldSelection } from './wuyuanOpenWorldSlice';
-import { locationName, nextStageModOf, questActionGate, questBeatSpec, questAliasSelection, questArriveSelection, questConfig, questDepartureAliasHit, questGuideEnabled } from './questLog';
+import { locationName, nextStageModOf, questActionGate, questBeatSpec, questAliasSelection, questArriveSelection, questConfig, questDepartureAliasHit, questDepartureObjective, questGuideEnabled } from './questLog';
 import { heldActions, heldDepartureObjective } from './stayRejoin';
 import {
   getCurrentStoryEventActions,
@@ -81,9 +81,9 @@ export function beatActionTable(save: SaveData | null | undefined): { beatId?: s
   return { beatId: getScenarioFocusEvent(runtime)?.id, actions };
 }
 
-// 启程另认暂扣提示里系统已显示的启程目标（stayRejoin.heldDepartureObjective，同一模板），与主线拍认任务日志文字同一规矩。
-const actionLines = (save: SaveData, action: BeatAction): unknown[] => action.kind === 'departure'
-  ? [action.offer.label, ...heldActions(save).map(held => heldDepartureObjective(held, save))]
+// 启程另认暂扣提示里系统已显示的启程目标（stayRejoin.heldDepartureObjective，同一模板）与任务日志里显示的启程目标，与主线拍认任务日志文字同一规矩。
+const actionLines = (save: SaveData, action: BeatAction, mods: readonly ScenarioMod[]): unknown[] => action.kind === 'departure'
+  ? [action.offer.label, ...heldActions(save).map(held => heldDepartureObjective(held, save)), questDepartureObjective(save, mods)]
   : [action.selection.playerLine, action.selection.actionText, action.selection.label, ...questLogLines(save, action.selection)];
 /**
  * 任务引导开时比对表另加：作者原始 label（不带「行动 · 对象 ·」装饰）与任务日志里的目标（questLog.beatEntry 同一来源）。
@@ -101,16 +101,16 @@ function questLogLines(save: SaveData, selection: ScenarioEventActionSelection):
  * 手打文本 → 本拍动作（2.2 第 2、3 条）：与某个动作的原句／按钮标签／启程文字去标点空白后相等且唯一＝点了它；
  * 否则按作者短语（aliases，否定优先、歧义不认）匹配主线拍。都不中返回 undefined（不推进）。不改入参。
  */
-export function resolveBeatText(save: SaveData | null | undefined, text: string): BeatResolution | undefined {
-  const hit = resolveBeatTextUngated(save, text);
+export function resolveBeatText(save: SaveData | null | undefined, text: string, mods: readonly ScenarioMod[] = builtinMods()): BeatResolution | undefined {
+  const hit = resolveBeatTextUngated(save, text, mods);
   return hit && gateOk(save, hit) ? hit : questGuideEnabled(save) ? questExtraResolution(save!) : undefined;
 }
 
-function resolveBeatTextUngated(save: SaveData | null | undefined, text: string): BeatResolution | undefined {
+function resolveBeatTextUngated(save: SaveData | null | undefined, text: string, mods: readonly ScenarioMod[]): BeatResolution | undefined {
   if (!save) return undefined;
   const key = beatLineKey(text);
   if (key) {
-    const hits = beatActionTable(save).actions.filter(action => actionLines(save, action).some(line => beatLineKey(line) === key));
+    const hits = beatActionTable(save).actions.filter(action => actionLines(save, action, mods).some(line => beatLineKey(line) === key));
     if (hits.length === 1) return { via: 'exact', action: hits[0] };
   }
   const alias = resolveStoryEventActionFromPlayerText(save, text) || inquiryAlias(save, text);
@@ -134,7 +134,7 @@ function questExtraResolution(save: SaveData): BeatResolution | undefined {
 /** 任务引导开时：这句话命中了本拍动作，但人不在 where／who 不同场（记 notThere，不结算、不算 miss）。开关关恒为 false。 */
 export function beatTextNotThere(save: SaveData | null | undefined, text: string): boolean {
   if (!questGuideEnabled(save)) return false;
-  const hit = resolveBeatTextUngated(save, text);
+  const hit = resolveBeatTextUngated(save, text, builtinMods());
   return Boolean(hit && !gateOk(save, hit) && !questExtraResolution(save!));
 }
 
@@ -271,7 +271,7 @@ export function noteBeatActionIdleTurn(save: SaveData | null | undefined): strin
 function builtinMods(): ScenarioMod[] {
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports -- builtins use require.context and are unavailable to the Node harness.
-    return (require('./builtins') as { BUILTIN_SCENARIO_MODS: ScenarioMod[] }).BUILTIN_SCENARIO_MODS;
+    return (require('./builtins') as { BUILTIN_SCENARIO_MODS?: ScenarioMod[] }).BUILTIN_SCENARIO_MODS || [];
   } catch {
     return []; // lcq-allow: Node 测试环境没有 require.context，按无内置关处理（不判跨国、照常启程）
   }
