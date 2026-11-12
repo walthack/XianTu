@@ -35,6 +35,8 @@
 //   每手只比进度字段（关、已完成拍、激活拍、切关就绪、结局）；位置变化只在预备手（去任务地点）上算推进。卡点记录加本手打字、正文前 200 字、位置、任务日志目标与地点、本手模型请求数。
 //   统计每手耗时、每手模型请求数（chat／embeddings）、主叙事请求耗时、「已替换为安全叙述」与「行动没能识别」次数，写进 --json 的 real 段与汇总。
 //   --real 不能与 --qin／--side 同用。
+// --real-loose（须与 --real 同用）：每拍第一次手打时在玩家原句前加「这一步，」，让它不再与原句逐字相等——游戏本地对不上就会发真实判拍请求；
+//   第一次没推进，同一拍之后的手改回原句。汇总里报「改写手」的推进数与其中发了判拍请求的手数。
 // --max-hands N：到 N 手即停，照常收尾出报告（outcome=maxHands，不算未走完）。
 import assert from 'node:assert/strict';
 import { writeFileSync } from 'node:fs';
@@ -56,7 +58,7 @@ const opt = (name, fallback = null) => { const i = args.indexOf(name); if (i < 0
 const bool = name => { const i = args.indexOf(name); if (i < 0) return false; args.splice(i, 1); return true; };
 const FROM = opt('--from'), UNTIL = opt('--until'), STALL = Number(opt('--stall', '6')), JSON_OUT = opt('--json', process.env.SMOKE_FULL_CHAIN_JSON || null);
 const STOP_ON_STUCK = bool('--stop-on-stuck'), VERBOSE = bool('--verbose'), QIN = bool('--qin'), SIDE = bool('--side');
-const REAL = bool('--real'), MAX_HANDS_ARG = opt('--max-hands'), MAX_HANDS = MAX_HANDS_ARG === null ? null : Number(MAX_HANDS_ARG);
+const REAL = bool('--real'), LOOSE = bool('--real-loose'), MAX_HANDS_ARG = opt('--max-hands'), MAX_HANDS = MAX_HANDS_ARG === null ? null : Number(MAX_HANDS_ARG);
 const baseUrl = args[0];
 assert.ok(baseUrl, '缺少站点 URL：node scripts/smoke-full-chain.mjs http://127.0.0.1:端口/');
 assert.ok(Number.isInteger(STALL) && STALL > 0, '--stall 须为正整数');
@@ -64,6 +66,7 @@ assert.ok(Number.isInteger(STALL) && STALL > 0, '--stall 须为正整数');
 assert.ok(!(QIN && (FROM || UNTIL)), '--qin 不能与 --from／--until 同用');
 assert.ok(!(QIN && SIDE), '--side 不能与 --qin 同用');
 assert.ok(!(REAL && (QIN || SIDE)), '--real 不能与 --qin／--side 同用');
+assert.ok(!LOOSE || REAL, '--real-loose 须与 --real 同用');
 assert.ok(MAX_HANDS === null || (Number.isInteger(MAX_HANDS) && MAX_HANDS > 0), '--max-hands 须为正整数');
 // 真实模型一手可能要几十秒到几分钟（主叙事＋判拍＋后台整理）：等待上限放宽。
 const WAIT_MS = REAL ? 300_000 : 60_000;
@@ -135,7 +138,14 @@ const progressOf = save => {
 };
 const keyOf = p => JSON.stringify(p);
 /** 真实模式下手打的句子：动作有玩家原句（playerLine／actionText）就打原句（游戏能本地对上，不靠模型判），否则照旧打任务日志目标。 */
-const lineOf = (selection, fallback) => REAL ? (selection?.playerLine || selection?.actionText || fallback) : fallback;
+let looseAttempt = 0;
+const lineOf = (selection, fallback) => {
+  if (!REAL) return fallback;
+  const line = selection?.playerLine || selection?.actionText || fallback;
+  if (!LOOSE || looseAttempt > 0) return line;
+  if (current) current.loose = true;
+  return `这一步，${line}`;
+};
 /** 真实模式的推进口径：只看进度字段（关、已完成拍、激活拍、切关就绪、结局）。 */
 const realKeyOf = p => JSON.stringify([p.modId, p.completed, p.active, p.ready, p.gameOver]);
 function diffOf(a, b) {
@@ -750,7 +760,7 @@ const sceneTally = id => { const list = scenes.filter(x => x.stage === id); retu
 const printStage = row => console.log(`[关] ${String(stages.indexOf(row) + 1).padStart(2)} ${row.id.padEnd(36)} 手 ${String(row.moves).padStart(3)}（a ${row.via.a}［其中去地点 ${row.aPlace}］ / b ${row.via.b} / c ${row.via.c} / d ${row.via.d}；预备 ${row.prep}；场面 ${row.scene}）卡点 ${row.stuck} 差异 ${row.diffs}${sceneTally(row.id)}  ${((Date.now() - row.t) / 1000).toFixed(0)}s`);
 
 // ───────────── --real：统计 ─────────────
-const real = { hands: [], chat: 0, embeddings: 0, byKind: {}, failedRequests: 0, safeReplaced: 0, unrecognized: 0 };
+const real = { profile: {}, hands: [], chat: 0, embeddings: 0, byKind: {}, failedRequests: 0, safeReplaced: 0, unrecognized: 0 };
 const inflight = new Map(); // Playwright Request → { t0, cur, main }
 const pathOf = request => { try { const u = new URL(request.url()); return `${u.host}${u.pathname}`; } catch { return '?'; } }; // 不带查询串
 function onRealRequest(kind, body, request) {
@@ -759,7 +769,10 @@ function onRealRequest(kind, body, request) {
   // 判拍／意图分类发了真实请求：这一手算 c（交给模型判）。
   if (current && (kind === 'beat' || kind === 'intent')) current.judged = kind;
   const main = kind === 'narration' && /tavern_commands/.test(String(body?.messages?.[0]?.content || ''));
-  if (request) inflight.set(request, { t0: Date.now(), cur: current, main });
+  // 请求画像：按「种类｜系统提示前 16 字」归组，记推理档／思考参数与耗时（不记请求头）。
+  const sig = kind === 'embeddings' ? 'embeddings' : `${kind}｜${String(body?.messages?.[0]?.content || '').replace(/\s+/g, ' ').slice(0, 16)}`;
+  const params = kind === 'embeddings' ? '' : `effort=${body?.reasoning_effort ?? '-'} thinking=${JSON.stringify(body?.thinking ?? null)} stream=${!!body?.stream}`;
+  if (request) inflight.set(request, { t0: Date.now(), cur: current, main, sig, params });
   if (VERBOSE) console.log(`    ↗ ${kind} ${request ? pathOf(request) : ''}`);
 }
 function onRealDone(request, failed) {
@@ -768,6 +781,8 @@ function onRealDone(request, failed) {
   inflight.delete(request);
   if (failed) { real.failedRequests++; if (x.cur) x.cur.failedRequests = (x.cur.failedRequests || 0) + 1; }
   if (x.main && x.cur) (x.cur.narrMs ||= []).push(Date.now() - x.t0);
+  const g = real.profile[x.sig] ||= { count: 0, failed: 0, ms: [], params: {} };
+  g.count++; if (failed) g.failed++; g.ms.push(Date.now() - x.t0); g.params[x.params] = (g.params[x.params] || 0) + 1;
 }
 const position = save => ({ 描述: save.角色.位置?.描述 ?? null, locationId: save.角色.位置?.locationId ?? null });
 const questTarget = save => { const e = questEntries(save)[0]; return e ? { title: e.title, objective: e.objective, place: e.place ?? null } : null; };
@@ -778,10 +793,10 @@ function realHand(tm, save, after, label, res, moved, nodeMoved = null) {
   if (safe) real.safeReplaced++;
   if (unrec) real.unrecognized++;
   const row = { hand: moves, stage: rt(save).modId, beat: QL.questBeatKey(save), plan: label, via: res.via ?? null, how: res.failed || res.how, typed: current.typed ?? null,
-    moved, nodeMoved, ms: Date.now() - tm, safe, unrecognized: unrec, location: position(after.save).locationId, narrative200: after.narrative200, _cur: current };
+    moved, nodeMoved, loose: !!current.loose, judged: current.judged ?? null, ms: Date.now() - tm, safe, unrecognized: unrec, location: position(after.save).locationId, narrative200: after.narrative200, _cur: current };
   real.hands.push(row);
   const r = reqCount(current);
-  console.log(`[手] ${String(moves).padStart(3)} ${row.stage} ${row.beat ?? '-'} [${row.via ?? '×'}] ${String(row.how).slice(0, 80)} → ${moved ? '推进' : '未推进'}${nodeMoved === false ? '（walker 也不推进）' : ''}｜${(row.ms / 1000).toFixed(1)}s 请求 ${r.chat}+${r.embeddings}e${safe ? '｜安全替换' : ''}${unrec ? '｜行动没能识别' : ''}`);
+  console.log(`[手] ${String(moves).padStart(3)} ${row.stage} ${row.beat ?? '-'} [${row.via ?? '×'}] ${String(row.how).slice(0, 80)} → ${moved ? '推进' : '未推进'}${nodeMoved === false ? '（walker 也不推进）' : ''}｜${(row.ms / 1000).toFixed(1)}s 请求 ${r.chat}+${r.embeddings}e${row.loose ? '｜改写' : ''}${row.judged ? `｜判拍 ${row.judged}` : ''}${safe ? '｜安全替换' : ''}${unrec ? '｜行动没能识别' : ''}`);
 }
 
 const browser = await chromium.launch({ headless: true, channel: 'chrome' });
@@ -903,6 +918,7 @@ try {
       const expected = nodeStep(save, stepNo);
       const before = progressOf(save);
       let res;
+      looseAttempt = attempt;
       try { res = await executeMove(page, ui, plan, attempt); } catch (error) {
         res = { failed: `界面操作异常：${String(error?.message || error).split('\n')[0].slice(0, 200)}` };
         anomalies.push({ stage: state.modId, move: moves, what: '界面操作异常', error: res.failed });
@@ -1029,7 +1045,9 @@ if (REAL) {
   realOut = { hosts: guardRef?.stats ? { allowed: guardRef.stats.allowed, violations: guardRef.stats.violations.length } : null, storage: storageRef,
     requests: { chat: real.chat, embeddings: real.embeddings, byKind: real.byKind, failed: real.failedRequests },
     handMs: { median: med(handMs), max: Math.max(0, ...handMs) }, narrationMs: { count: narr.length, median: med(narr), max: Math.max(0, ...narr) },
-    safeReplaced: real.safeReplaced, unrecognized: real.unrecognized, hands: real.hands };
+    safeReplaced: real.safeReplaced, unrecognized: real.unrecognized, hands: real.hands,
+    profile: Object.fromEntries(Object.entries(real.profile).map(([k, g]) => [k, { count: g.count, failed: g.failed, medianMs: med(g.ms), maxMs: Math.max(0, ...g.ms), params: g.params }])) };
+  if (LOOSE) { const l = real.hands.filter(h => h.loose); realOut.loose = { hands: l.length, moved: l.filter(h => h.moved).length, judged: l.filter(h => h.judged).length, judgedMoved: l.filter(h => h.judged && h.moved).length, notMoved: l.filter(h => !h.moved).map(h => ({ hand: h.hand, beat: h.beat, typed: h.typed, judged: h.judged, nodeMoved: h.nodeMoved })) }; }
 }
 const result = { baseUrl, real: realOut, maxHands: MAX_HANDS ?? undefined, side: sideOut, qin: QIN ? qin : undefined, from: FROM, until: UNTIL, startHow, outcome, ms, stall: STALL, expectedStages: EXPECTED_STAGES, visited: stages.map(s => s.id), stages, total, stuck, diffs, cOnly, scenes, overlays, anomalies, festival, pageErrors };
 if (JSON_OUT) writeFileSync(JSON_OUT, JSON.stringify(result, null, 2));
@@ -1041,6 +1059,8 @@ if (REAL) {
   console.log(`[真实模型] 每手耗时 中位 ${(realOut.handMs.median / 1000 || 0).toFixed(1)}s／最长 ${(realOut.handMs.max / 1000).toFixed(1)}s；主叙事 ${realOut.narrationMs.count} 次，中位 ${(realOut.narrationMs.median / 1000 || 0).toFixed(1)}s／最长 ${(realOut.narrationMs.max / 1000).toFixed(1)}s`);
   console.log(`[真实模型] 「已替换为安全叙述」${realOut.safeReplaced} 手，「行动没能识别」${realOut.unrecognized} 手；存档接口：读配置 ${storageRef.configGet}，替身读 ${storageRef.stubbedRead}，拦下写 ${storageRef.blockedWrite.length}${storageRef.blockedWrite.length ? ` ${JSON.stringify([...new Set(storageRef.blockedWrite)])}` : ''}`);
 }
+if (REAL) for (const [k, g] of Object.entries(realOut.profile)) console.log(`[请求画像] ${k}：${g.count} 次，失败 ${g.failed}，中位 ${(g.medianMs / 1000).toFixed(1)}s／最长 ${(g.maxMs / 1000).toFixed(1)}s；${JSON.stringify(g.params)}`);
+if (REAL && LOOSE) console.log(`[真实模型] 改写手 ${realOut.loose.hands}：推进 ${realOut.loose.moved}；发了判拍／意图请求 ${realOut.loose.judged}（其中推进 ${realOut.loose.judgedMoved}）；没推进 ${realOut.loose.notMoved.length}`);
 const failures = [];
 const check = (ok, what) => { if (!ok) failures.push(what); };
 check((QIN ? ['railDone'] : ['done', 'until', 'maxHands']).includes(outcome), `未走完：outcome=${outcome}`);
