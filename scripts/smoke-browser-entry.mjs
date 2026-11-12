@@ -19,6 +19,8 @@ try {
     // 本脚本原来不拦截任何请求（会真的去拉 CDN）；改为隔离上下文 + 网络护栏，非本机请求只走替身或 abort。
     const context = await browser.newContext();
     const guard = await installSmokeNetworkGuard(context);
+    // save-storage 一律替身 501（同其它冒烟脚本）：不读、不写被测服务器上的真实存档；否则「从飞机落地开始」会向测试服写 characters／active_save。
+    await context.route(url => /\/api\/v1\/save-storage(?:\/|$)/.test(url.pathname), route => route.fulfill({ status: 501, contentType: 'application/json', body: '{}' }));
     const page = await context.newPage();
     const pageErrors = [];
     page.on('pageerror', error => pageErrors.push(error.message));
