@@ -116,7 +116,7 @@ test('自然说法：小请求判 high、证据出自原话 → 按本拍动作�
   assert.deepEqual(result.beatIntent, { certainty: 'high', evidenceLength: 11 });
   assert.equal(result.freeActionTickets, undefined);
   const req = calls.prompts[0];
-  assert.equal(req.maxTokens, QC.intentSettle.beatJudge.maxTokensWithReasoning);
+  assert.equal(req.maxTokens, QC.intentSettle.beatJudge.maxTokens, '2026-11-12 起判拍关思考（reasoningEffort=none），走 maxTokens');
   const payload = JSON.parse(req.userPrompt);
   assert.equal(payload.playerText, text);
   assert.deepEqual(payload.actions.map(a => a.id), ['advance_declared_objective']);
@@ -248,8 +248,37 @@ test('s02_04 人还不在点心铺（只剩前往）：不发小请求', () => w
   assert.equal(BP.beatKeyTurn(save, '我在点心铺里要了一笼包子，边慢慢吃边留意门外的动静'), undefined);
 }));
 
-// REPORT-8091-a4a451cf P2：小请求实发 max_tokens 16384（推理模型最低预算覆盖了配置）。现按配置原值发、不翻倍重试；M3.1-Flash 推理档发配置的 low（该模型不支持 none）。
-test('小请求预算：beat_judge 按配置 maxTokensWithReasoning 发、带 reasoning_effort=low、思考耗尽不重试', async () => {
+// 2026-11-12 用户批准判拍换 MiniMax-M3 关思考（work/ASK-USER.md Q5）。判拍是直接非流式请求：请求体必须带 thinking.disabled。
+// 真机（beta 包 d5df4aa0）发现这条路径漏带：配置成 none、请求体里却没有 thinking，M3 照常思考。
+test('小请求按现配置发：MiniMax-M3、非流式、max_tokens=maxTokens、thinking.disabled；M2.7 只分离思考字段；别的用途不带', async () => {
+  const { default: axios } = await import('axios');
+  const { aiService } = await loadTs('../src/services/aiService.ts');
+  const judge = QC.intentSettle.beatJudge;
+  assert.equal(judge.model, 'MiniMax-M3');
+  assert.equal(judge.reasoningEffort, 'none');
+  const original = axios.post; const bodies = [];
+  axios.post = async (_url, body) => { bodies.push(body); return { data: { choices: [{ message: { content: '{"id":"none","c":"low","ev":"","neg":false}' }, finish_reason: 'stop' }] } }; };
+  const send = (model, usageType = 'beat_judge') => aiService.generate({
+    user_input: 'fixture', should_stream: false, usageType, background: true, requestMaxRetries: 0,
+    apiConfigOverride: { provider: 'custom', url: 'https://api.minimaxi.com/v1', apiKey: '', model },
+    maxTokens: judge.maxTokens, reasoningEffort: judge.reasoningEffort,
+  });
+  try {
+    await send(judge.model); await send('MiniMax-M2.7-highspeed'); await send(judge.model, 'memory_summary');
+  } finally { axios.post = original; }
+  assert.equal(bodies.length, 3);
+  assert.equal(bodies[0].max_tokens, judge.maxTokens);
+  assert.deepEqual(bodies[0].thinking, { type: 'disabled' });
+  assert.equal(bodies[0].reasoning_split, true);
+  assert.ok(!('reasoning_effort' in bodies[0]));
+  assert.equal(bodies[1].thinking, undefined, 'M2.7 系思考关不掉，不发 thinking');
+  assert.equal(bodies[1].reasoning_split, true);
+  assert.equal(bodies[2].thinking, undefined, '只限判拍小请求');
+});
+
+// REPORT-8091-a4a451cf P2：小请求实发 max_tokens 16384（推理模型最低预算覆盖了配置）。现按配置原值发、不翻倍重试；M3.1-Flash 推理档发 low（该模型不支持 none）。
+// 2026-11-12 起默认配置改为 MiniMax-M3 关思考；这条仍钉住「推理关不掉的模型」那条路径，所以档位写明 low、不再读配置。
+test('小请求预算：推理关不掉的模型按 maxTokensWithReasoning 发、带 reasoning_effort=low、思考耗尽不重试', async () => {
   const { default: axios } = await import('axios');
   const { aiService } = await loadTs('../src/services/aiService.ts');
   const judge = QC.intentSettle.beatJudge;
@@ -259,7 +288,7 @@ test('小请求预算：beat_judge 按配置 maxTokensWithReasoning 发、带 re
     const raw = await aiService.generate({
       user_input: 'fixture', should_stream: false, usageType: 'beat_judge', background: true, requestMaxRetries: 0,
       apiConfigOverride: { provider: 'custom', url: 'https://api.minimaxi.com/v1', apiKey: '', model: 'MiniMax-M3.1-Flash' },
-      maxTokens: judge.maxTokensWithReasoning, backendReasoningEffort: judge.reasoningEffort,
+      maxTokens: judge.maxTokensWithReasoning, backendReasoningEffort: 'low',
     });
     assert.match(raw, /"id":"none"/);
     assert.equal(bodies.length, 1);
@@ -272,7 +301,7 @@ test('小请求预算：beat_judge 按配置 maxTokensWithReasoning 发、带 re
     await assert.rejects(aiService.generate({
       user_input: 'fixture', should_stream: false, usageType: 'beat_judge', background: true, requestMaxRetries: 0,
       apiConfigOverride: { provider: 'custom', url: 'https://api.minimaxi.com/v1', apiKey: '', model: 'MiniMax-M3.1-Flash' },
-      maxTokens: judge.maxTokensWithReasoning, backendReasoningEffort: judge.reasoningEffort,
+      maxTokens: judge.maxTokensWithReasoning, backendReasoningEffort: 'low',
     }));
     assert.deepEqual(bodies.map(b => b.max_tokens), [judge.maxTokensWithReasoning]);
   } finally { axios.post = original; }
