@@ -6,7 +6,9 @@ import { goalsOf } from '../plan';
 import { displayName } from './refs';
 import { GAME_NUMBERS, registerNumbersValidator } from '../numbers';
 
-export interface ModelRequest { system: string; user: string }
+export interface ModelRequest { system: string; user: string; /** 请求 generationId 前缀；缺省＝scene_<模块名>。战斗描写用它让传输层认出这一类请求（aiRetry.reasoning.sceneNarration）。 */ generationPrefix?: string }
+/** 场面请求的 generationId（MainGamePanel 的 ask 用）。 */
+export function sceneGenerationId(moduleId: string, request: ModelRequest): string { return `${request.generationPrefix || `scene_${moduleId}`}_${Date.now()}`; }
 
 const ATTACK = /砍|劈|刺|戳|射|打|踢|撞|扑|冲|拔|扔|掷|推|拽|抓|按|压|杀|攻|击|斩|割|砸|捅|擒|制住|制服|擂|轰|逼|拦|截|追|围|夹击|牵制|缠住|拖住/;
 const PROTECT = /防守|招架|格挡|护|挡|掩护|保护|守住|拦在|躲在.*前|替.*挡/;

@@ -1,4 +1,4 @@
-import { reasoningPolicy, reasoningLimits, reasoningTimeout, observeReasoning, ReasoningExhaustedError, reasoningBudgetParam, mainNarrativeReasoningParam, openingReasoningParam, backendReasoningParam, retryReasoningOnce } from './aiReasoningModelPolicy';
+import { reasoningPolicy, reasoningLimits, reasoningTimeout, observeReasoning, ReasoningExhaustedError, reasoningBudgetParam, mainNarrativeReasoningParam, openingReasoningParam, sceneNarrationReasoningParam, backendReasoningParam, retryReasoningOnce } from './aiReasoningModelPolicy';
 import type { BackendReasoningEffort } from './dualModelConfig';
 import moderationConfig from '../../mod-kit/ai-content-moderation.json';
 import { useAPIManagementStore } from '@/stores/apiManagementStore';
@@ -86,6 +86,8 @@ type QingyuTransportBudget = {
   backendReasoningEffort?: BackendReasoningEffort;
   /** 开局生成请求（generation_id 以 initial_message 开头）；只此类请求带 aiRetry.reasoning.opening。 */
   opening?: boolean;
+  /** 战斗掷骰后的描写请求（generation_id 以 scene_beat_narration_ 开头）；只此类请求带 aiRetry.reasoning.sceneNarration。 */
+  sceneNarration?: boolean;
   timeoutMode?: 'content_idle';
   onTransportStart?: () => void;
 };
@@ -968,6 +970,7 @@ class AIService {
         && options.reasoningEffort === undefined && options.timeoutMode === undefined && options.backendReasoningEffort === undefined,
       backendReasoningEffort: options.backendReasoningEffort,
       opening: /^initial_message/.test(options.generation_id || ''),
+      sceneNarration: /^scene_beat_narration_/.test(options.generation_id || ''),
       maxTokens: options.maxTokens,
       timeoutMode: options.timeoutMode, onTransportStart: options.onTransportStart,
       qingyuTurnId,
@@ -980,6 +983,7 @@ class AIService {
     return bound?.backendReasoningEffort !== undefined
       ? backendReasoningParam(url, model, true, bound.backendReasoningEffort)
       : bound?.opening ? openingReasoningParam(url, model, true)
+      : bound?.sceneNarration ? sceneNarrationReasoningParam(url, model, true)
       : mainNarrativeReasoningParam(url, model, !!bound?.mainNarrative);
   }
 
