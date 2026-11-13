@@ -64,6 +64,8 @@ const DEFAULT_NARRATION = JSON.stringify({ text: '你照着眼下的打算行事
  * onRequest(kind, body, request) 照旧记账（embeddings 记 kind＝embeddings）；返回的 storage 记 save-storage 的放行／替身／被拦写请求数。
  */
 export const REAL_MODEL_HOSTS = ['api.minimaxi.com', 'api.siliconflow.cn'];
+const INJECT_529_EVERY = Number(process.env.SMOKE_INJECT_MAIN_529 || 0);
+let mainNarrationSeen = 0;
 const REAL_CONFIG_PATH = /\/api\/v1\/save-storage\/user_config_api_management_v1$/;
 export async function openSmokeContext(browser, { respond, onRequest, contextOptions, real = false } = {}) {
   const context = await browser.newContext(contextOptions);
@@ -100,6 +102,11 @@ export async function openSmokeContext(browser, { respond, onRequest, contextOpt
       let kind = classifyFixtureRequest(body);
       if (kind === 'narration' && /后台一致性整理器/.test(String(body.messages?.[0]?.content || ''))) kind = 'consistency';
       onRequest?.(kind, body, request);
+      // 验证用：SMOKE_INJECT_MAIN_529=N 时，每第 N 个主叙事请求不发给上游，直接回一个 529（模拟模型服务过载），用来走到游戏的格式重试路径。
+      if (INJECT_529_EVERY > 0 && kind === 'narration' && /tavern_commands/.test(String(body.messages?.[0]?.content || '')) && ++mainNarrationSeen % INJECT_529_EVERY === 0) {
+        onRequest?.('inject529', null, null);
+        return route.fulfill({ status: 529, contentType: 'application/json', body: JSON.stringify({ type: 'error', error: { type: 'overloaded_error', message: 'smoke injected 529', http_code: '529' } }) });
+      }
       return route.fallback();
     }
     if (request.method() === 'POST' && /completions/.test(url.pathname)) {
