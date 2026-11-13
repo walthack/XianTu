@@ -141,6 +141,8 @@ export const ERROR_CODES = {
   'LCQ-SAV-062': spec('info', 'beatProgress', '任务模式拍子判定小请求（beat.judge）：关键拍、结果、实际输入／输出 token 与耗时'),
   'LCQ-SAV-063': spec('info', 'timelineInserts', '读档或逐回合对账时静默补拨已过了的时间线插入事件年数（不重播过场）'),
   'LCQ-SAV-064': spec('info', 'loadRepairs', '读档修回旧版切关时往后挪了的主角出生年（一次性）'),
+  // 只观察（work/ASK-USER.md Q20 用户 2026-11-13 08:35：先补日志）：beatStallLog.ts；detail.reason 枚举见 BEAT_STALL_REASONS；玩家输入按 story.quest.beatStall.textChars 截。
+  'LCQ-SAV-065': spec('info', 'beatProgress', '主线拍没推进（beat.stall）：玩家发了一手、有焦点主线拍，这一手结束后该拍没推进；记原因分类、闸门、位置前后与玩家输入'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),

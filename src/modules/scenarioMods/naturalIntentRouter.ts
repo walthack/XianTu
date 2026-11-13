@@ -800,6 +800,10 @@ export function parseBeatJudgeJson(raw: string): { id?: string; c?: string; ev?:
   }
 }
 
+/** 最近一次拍子判定的结果（只给 LCQ-SAV-065「主线拍没推进」日志读；不参与任何结算）。 */
+let lastBeatJudge: { at: number; beatId: string; outcome: string; attempt: number } | null = null;
+export const lastBeatJudgeOutcome = (): typeof lastBeatJudge => lastBeatJudge;
+
 const rejectHit = (playerText: string, rejectIf: readonly string[]): boolean =>
   rejectIf.map(compact).filter(Boolean).some(word => compact(playerText).includes(word));
 
@@ -836,12 +840,25 @@ async function resolveBeatJudgeOnce(input: NaturalIntentInput, plan: BeatKeyPlan
   }, judge.timeoutMs) : undefined;
   const started = Date.now();
   let usage: { inputTokens?: number; outputTokens?: number } = {};
+  // 只给 LCQ-SAV-062 看（work/ASK-USER.md Q20 用户答复：先补日志）：模型回了什么，不记引用内容本身。
+  let judged: ReturnType<typeof parseBeatJudgeJson> = null;
+  const judgedDetail = () => {
+    if (!judged) return {};
+    const ev = typeof judged.ev === 'string' ? judged.ev : '';
+    return {
+      pickedId: judged.id ?? null, c: judged.c ?? null, neg: judged.neg === true,
+      evLength: ev.length, ...(ev.length > judge.evidenceMaxChars ? { evClippedLength: judge.evidenceMaxChars } : {}),
+      evMaxChars: judge.evidenceMaxChars, evVerbatim: ev ? evidenceBelongsToPlayer(playerText, ev) : false,
+    };
+  };
   const finish = (verdict: BeatVerdict): BeatVerdict => {
+    lastBeatJudge = { at: Date.now(), beatId: plan.beatId, outcome: verdict.kind === 'settled' ? 'settled' : verdict.reason, attempt };
     logEvent({ code: 'LCQ-SAV-062', echo: false, detail: {
       beatId: plan.beatId, key: plan.key, attempt, outcome: verdict.kind === 'settled' ? 'settled' : verdict.reason,
       ...(verdict.kind === 'none' && verdict.risk ? { risk: verdict.risk } : {}),
       actionId: verdict.kind === 'settled' ? ('identityId' in verdict.selection ? verdict.selection.identityId : verdict.selection.actionId) : null, actions: plan.actions.length,
       inputTokens: usage.inputTokens ?? null, outputTokens: usage.outputTokens ?? null, elapsedMs: Date.now() - started,
+      ...judgedDetail(), candidateIds: plan.actions.map(item => item.id),
     } });
     return verdict;
   };
@@ -858,6 +875,7 @@ async function resolveBeatJudgeOnce(input: NaturalIntentInput, plan: BeatKeyPlan
     if (controller.signal.aborted || latestBeatRequestId !== requestId) return finish({ kind: 'none', reason: 'stale' });
     if (intentSaveFingerprint(input.saveData) !== fingerprint) return finish({ kind: 'none', reason: 'state_changed' });
     const parsed = parseBeatJudgeJson(raw);
+    judged = parsed;
     if (!parsed) return finish({ kind: 'failed', reason: 'malformed' });
     if (!parsed.id || parsed.id === 'none') {
       const risk = riskKinds ? verifyModelRisk(playerText, parsed.r, parsed.ev) : undefined;
