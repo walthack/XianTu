@@ -37,6 +37,8 @@
 //   --real 可与 --qin／--side 同用（2026-11-13 各在 8092 上实跑过一次）。
 // --real-loose（须与 --real 同用）：每拍第一次手打时在玩家原句前加「这一步，」，让它不再与原句逐字相等——游戏本地对不上就会发真实判拍请求；
 //   第一次没推进，同一拍之后的手改回原句。汇总里报「改写手」的推进数与其中发了判拍请求的手数。
+// --real-naive（须与 --real 同用）：Q20 探测。walker 这一手要先去某地（travel:）时，第一次不去，改为照任务日志目标原文打字——
+//   模拟「人还没到本拍地点就照日志打字」；没推进则同一拍之后照常先去地点。汇总里报探测手数与其中正文请求数、手后位置是否变了。
 // --max-hands N：到 N 手即停，照常收尾出报告（outcome=maxHands，不算未走完）。
 import assert from 'node:assert/strict';
 import { writeFileSync } from 'node:fs';
@@ -58,7 +60,7 @@ const opt = (name, fallback = null) => { const i = args.indexOf(name); if (i < 0
 const bool = name => { const i = args.indexOf(name); if (i < 0) return false; args.splice(i, 1); return true; };
 const FROM = opt('--from'), UNTIL = opt('--until'), STALL = Number(opt('--stall', '6')), JSON_OUT = opt('--json', process.env.SMOKE_FULL_CHAIN_JSON || null);
 const STOP_ON_STUCK = bool('--stop-on-stuck'), VERBOSE = bool('--verbose'), QIN = bool('--qin'), SIDE = bool('--side');
-const REAL = bool('--real'), LOOSE = bool('--real-loose'), MAX_HANDS_ARG = opt('--max-hands'), MAX_HANDS = MAX_HANDS_ARG === null ? null : Number(MAX_HANDS_ARG);
+const REAL = bool('--real'), LOOSE = bool('--real-loose'), NAIVE = bool('--real-naive'), MAX_HANDS_ARG = opt('--max-hands'), MAX_HANDS = MAX_HANDS_ARG === null ? null : Number(MAX_HANDS_ARG);
 const baseUrl = args[0];
 assert.ok(baseUrl, '缺少站点 URL：node scripts/smoke-full-chain.mjs http://127.0.0.1:端口/');
 assert.ok(Number.isInteger(STALL) && STALL > 0, '--stall 须为正整数');
@@ -66,6 +68,7 @@ assert.ok(Number.isInteger(STALL) && STALL > 0, '--stall 须为正整数');
 assert.ok(!(QIN && (FROM || UNTIL)), '--qin 不能与 --from／--until 同用');
 assert.ok(!(QIN && SIDE), '--side 不能与 --qin 同用');
 assert.ok(!LOOSE || REAL, '--real-loose 须与 --real 同用');
+assert.ok(!NAIVE || REAL, '--real-naive 须与 --real 同用');
 assert.ok(MAX_HANDS === null || (Number.isInteger(MAX_HANDS) && MAX_HANDS > 0), '--max-hands 须为正整数');
 // 真实模型一手可能要几十秒到几分钟（主叙事＋判拍＋后台整理）：等待上限放宽。
 const WAIT_MS = REAL ? 300_000 : 60_000;
@@ -428,6 +431,8 @@ async function executeMove(page, ui, plan, attempt) {
       return { failed: `界面在分支选择（${JSON.stringify(ui.branch)}），walker 要走的 ${action.actionId} 不在其中` };
     }
     if (action.actionId.startsWith('travel:')) {
+      const naiveMain = NAIVE && attempt === 0 ? questEntries(save)[0] : null;
+      if (naiveMain) { current.naive = true; await typeSend(page, naiveMain.objective, ui); return { via: current.judged ? 'c' : 'a', how: `【人不在场探测】手打任务目标「${naiveMain.objective}」（walker：${action.actionId}）` }; }
       const marker = markerOf(save, plan.focus);
       const r = await goTo(page, ui, marker, attempt, plan.focus);
       if (r) return { ...r, how: `${r.how}（walker：${action.actionId}）` };
@@ -802,7 +807,7 @@ async function readDiag(page, sinceMs) {
           const db = open.result;
           if (!db.objectStoreNames.contains('logs')) { db.close(); resolve(null); return; }
           const req = db.transaction('logs', 'readonly').objectStore('logs').getAll(IDBKeyRange.lowerBound(since * 1000));
-          req.onsuccess = () => { db.close(); resolve(req.result.filter(e => codes.includes(e.code)).sort((a, b) => a.seq - b.seq).map(e => ({ code: e.code, detail: e.detail ?? null }))); };
+          req.onsuccess = () => { db.close(); resolve(req.result.filter(e => codes.includes(e.code) || e.level === 'warn' || e.level === 'error').sort((a, b) => a.seq - b.seq).map(e => codes.includes(e.code) ? { code: e.code, detail: e.detail ?? null } : { code: e.code, level: e.level, msg: String(e.msg ?? '').slice(0, 200) })); };
           req.onerror = () => { db.close(); resolve(null); };
         } catch { resolve(null); }
       };
@@ -815,7 +820,7 @@ function realHand(tm, save, after, label, res, moved, nodeMoved = null, diag = n
   if (safe) real.safeReplaced++;
   if (unrec) real.unrecognized++;
   const row = { hand: moves, stage: rt(save).modId, beat: QL.questBeatKey(save), plan: label, via: res.via ?? null, how: res.failed || res.how, typed: current.typed ?? null,
-    moved, nodeMoved, loose: !!current.loose, judged: current.judged ?? null, ms: Date.now() - tm, safe, unrecognized: unrec, hold: after.hold || '', notice: after.notice || '', location: position(after.save).locationId, narrative200: after.narrative200, diag, _cur: current };
+    moved, nodeMoved, loose: !!current.loose, naive: !!current.naive, locationBefore: position(save).locationId, judged: current.judged ?? null, ms: Date.now() - tm, safe, unrecognized: unrec, hold: after.hold || '', notice: after.notice || '', location: position(after.save).locationId, narrative200: after.narrative200, diag, _cur: current };
   real.hands.push(row);
   const r = reqCount(current);
   console.log(`[手] ${String(moves).padStart(3)} ${row.stage} ${row.beat ?? '-'} [${row.via ?? '×'}] ${String(row.how).slice(0, 80)} → ${moved ? '推进' : '未推进'}${nodeMoved === false ? '（walker 也不推进）' : ''}｜${(row.ms / 1000).toFixed(1)}s 请求 ${r.chat}+${r.embeddings}e${row.loose ? '｜改写' : ''}${row.judged ? `｜判拍 ${row.judged}` : ''}${safe ? '｜安全替换' : ''}${unrec ? '｜行动没能识别' : ''}`);
@@ -1086,6 +1091,7 @@ if (REAL) {
 }
 if (REAL) console.log(`[没推进原因] LCQ-SAV-065 共 ${realOut.stall.entries} 条：${Object.entries(realOut.stall.reasons).map(([k, n]) => `${k} ${n}`).join('、') || '无'}；取不到诊断日志 ${realOut.stall.handsWithoutDiag} 手`);
 if (REAL) for (const [k, g] of Object.entries(realOut.profile)) console.log(`[请求画像] ${k}：${g.count} 次，失败 ${g.failed}，中位 ${(g.medianMs / 1000).toFixed(1)}s／最长 ${(g.maxMs / 1000).toFixed(1)}s；${JSON.stringify(g.params)}`);
+if (REAL && NAIVE) { const nv = realOut.hands.filter(h => h.naive); console.log(`[真实模型] 人不在场探测 ${nv.length} 手：发了主叙事 ${nv.filter(h => h.narrMs.length).length}；手后位置变了 ${nv.filter(h => h.location !== h.locationBefore).length}；本手就推进 ${nv.filter(h => h.moved).length}`); }
 if (REAL && LOOSE) console.log(`[真实模型] 改写手 ${realOut.loose.hands}：推进 ${realOut.loose.moved}；发了判拍／意图请求 ${realOut.loose.judged}（其中推进 ${realOut.loose.judgedMoved}）；没推进 ${realOut.loose.notMoved.length}`);
 const failures = [];
 const check = (ok, what) => { if (!ok) failures.push(what); };
