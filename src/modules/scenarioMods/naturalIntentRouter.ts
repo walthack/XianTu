@@ -869,8 +869,10 @@ async function resolveBeatJudgeOnce(input: NaturalIntentInput, plan: BeatKeyPlan
     if (parsed.neg) return finish({ kind: 'none', reason: 'negated' });
     if (rejectHit(playerText, [...action.rejectIf, ...beatActionRejectIf(input.saveData, action.selection)])) return finish({ kind: 'none', reason: 'rejected_intent' });
     if (parsed.c !== config.minCertainty) return finish({ kind: 'none', reason: 'low_certainty' });
-    const ev = String(parsed.ev || '');
-    if (!ev || ev.length > judge.evidenceMaxChars || !evidenceBelongsToPlayer(playerText, ev)) return finish({ kind: 'none', reason: 'bad_evidence' });
+    const rawEv = String(parsed.ev || '');
+    if (!rawEv || !evidenceBelongsToPlayer(playerText, rawEv)) return finish({ kind: 'none', reason: 'bad_evidence' });
+    // work/ASK-USER.md Q22 方案 B：逐字一致但超长时不作废，取前 evidenceMaxChars 字作证据，继续后面的全部检查。
+    const ev = rawEv.length > judge.evidenceMaxChars ? rawEv.slice(0, judge.evidenceMaxChars) : rawEv;
     if (!evidenceClauseIsAffirmative(playerText, ev)) return finish({ kind: 'none', reason: 'non_affirmative_evidence' });
     if (!questActionGate(input.saveData, action.selection).ok) return finish({ kind: 'none', reason: 'gate' });
     const settle = action.settle;
