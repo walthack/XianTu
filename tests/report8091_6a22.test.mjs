@@ -75,8 +75,8 @@ function engineOptions(store) {
       fn => ({ value: fn() }), {value:false}, {value:null}, store, R.advanceScenarioRuntime, {value:false}, ()=>[], ()=>[], R.getCurrentStoryEventActions, R.getCurrentStoryExplorationActions, R.getTrackedStoryOpportunityActions, V.storyActionPresentation, ()=>false, ()=>({ ok: true }));
 }
 function narrative(store, actions) {
-  return cut(main, 'const currentNarrative = computed', '// 绘图相关逻辑', ['computed','gameStateStore','formatCurrentTime','getStageEntryPresentation','scenarioEngineActionOptions','engineOptionLine','stripActionOptionMetaWords','stripNarrativeMetaWords','questHidesButton'], '\nreturn currentNarrative.value;')(
-    fn => ({ value: fn() }), store, ()=>'time', R.getStageEntryPresentation, {value:actions}, a=>a.playerLine, x=>x, x=>x, ()=>false);
+  return cut(main, 'const currentNarrative = computed', '// 绘图相关逻辑', ['computed','gameStateStore','formatCurrentTime','getStageEntryPresentation','scenarioEngineActionOptions','engineOptionLine','stripActionOptionMetaWords','stripNarrativeMetaWords'], '\nreturn currentNarrative.value;')(
+    fn => ({ value: fn() }), store, ()=>'time', R.getStageEntryPresentation, {value:actions}, a=>a.playerLine, x=>x, x=>x);
 }
 function qinReady() {
   let s = fixture('checkpoints/current-tang-entry.json');

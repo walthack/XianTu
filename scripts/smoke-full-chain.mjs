@@ -41,7 +41,7 @@
 //   模拟「人还没到本拍地点就照日志打字」；没推进则同一拍之后照常先去地点。汇总里报探测手数与其中正文请求数、手后位置是否变了。
 // --max-hands N：到 N 手即停，照常收尾出报告（outcome=maxHands，不算未走完）。
 // 真实模式每手另记页面存档里三层记忆的条数（--json 的 real.hands[].mem，日志「[记忆]」行），用来看记忆总结有没有真的把中期记忆压成长期记忆。
-// 环境变量：SMOKE_HAND_PAUSE_MS=毫秒（每手收尾后停这么久再打下一手，模拟真人读完正文的间隔）；SMOKE_CONSOLE_GREP=正则（把匹配的页面控制台行打到日志；非调试模式下页面只放行 console.error）。
+// 环境变量：SMOKE_PREFER_BUTTONS=1（主线合同动作有按钮就点按钮，不手打；默认关）；SMOKE_HAND_PAUSE_MS=毫秒（每手收尾后停这么久再打下一手，模拟真人读完正文的间隔）；SMOKE_CONSOLE_GREP=正则（把匹配的页面控制台行打到日志；非调试模式下页面只放行 console.error）。
 import assert from 'node:assert/strict';
 import { writeFileSync } from 'node:fs';
 import { chromium } from 'playwright-core';
@@ -75,6 +75,9 @@ assert.ok(MAX_HANDS === null || (Number.isInteger(MAX_HANDS) && MAX_HANDS > 0), 
 // 真实模型一手可能要几十秒到几分钟（主叙事＋判拍＋后台整理）：等待上限放宽。
 const WAIT_MS = REAL ? 300_000 : 60_000;
 const HAND_PAUSE_MS = Number(process.env.SMOKE_HAND_PAUSE_MS || 0);
+// SMOKE_PREFER_BUTTONS=1：按钮化方案 B（用户 2026-11-14 暂定）后主线动作按钮在任务模式下也显示；开时本拍合同动作有按钮就点按钮（记 b），没有再照旧手打。默认关＝原行为。
+const PREFER_BUTTONS = process.env.SMOKE_PREFER_BUTTONS === '1';
+const ENV = await quiet(() => loadTs('../src/modules/scenarioMods/eventNarrativeView.ts'));
 // --side 才加载（主链／秦线模式不受影响）。
 const SL = SIDE ? await quiet(() => import('./sideLineInventory.mjs')) : null;
 const TM = SIDE ? await quiet(() => loadTs('../src/modules/scenarioMods/actionTime.ts')) : null;
@@ -432,6 +435,11 @@ async function executeMove(page, ui, plan, attempt) {
         return { via: 'b', how: `分支选项「${label}」` };
       }
       return { failed: `界面在分支选择（${JSON.stringify(ui.branch)}），walker 要走的 ${action.actionId} 不在其中` };
+    }
+    if (PREFER_BUTTONS && !action.actionId.startsWith('travel:')) {
+      const label = ENV.storyActionPresentation(action, save).label;
+      const btn = page.locator('.engine-action-options button.engine-action-btn').filter({ hasText: label });
+      if (await btn.count()) { await clickSend(page, btn.first(), ui); return { via: 'b', how: `主线按钮「${label}」` }; }
     }
     if (action.actionId.startsWith('travel:')) {
       const naiveMain = NAIVE && attempt === 0 ? questEntries(save)[0] : null;

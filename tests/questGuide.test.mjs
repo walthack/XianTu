@@ -307,12 +307,13 @@ test('开关开：自由输入路由（naturalIntentRouter）与发送前判定�
   assert.equal(NI.resolveStoryEventActionFromText(away, '我向王哲请教他要交代的事'), undefined);
 }));
 
-test('UI 接线：开关开撤主线／探索／启程按钮（主面板与侧栏）、关键选择到点才弹；notThere 不算 miss；任务日志、地图标记、到达即切、approach 注入；开关关原路径不动', () => {
+test('UI 接线：开关开主面板照常出主线／探索／启程按钮（按钮化方案 B，用户 2026-11-14 暂定；行为用例见 questButtonsPlanB.test），侧栏启程仍撤；动作到点才出；notThere 不算 miss；任务日志、地图标记、到达即切、approach 注入；开关关原路径不动', () => {
   const panel = read('src/components/dashboard/MainGamePanel.vue');
-  assert.match(panel, /const questHidesButton = \(option: \{ source\?: string \}\) => questGuideOn\.value && \(option\.source === 'event_engine' \|\| option\.source === 'exploration_engine'\)/);
-  assert.match(panel, /scenarioEngineActionOptions\.value\.filter\(option => !questHidesButton\(option\) && !isKeyBeatCardAction/);
-  assert.match(panel, /\.filter\(action => !questGuideEnabled\(save\) \|\| questActionGate\(save, action\)\.ok\)/, '关键选择拍：人到了才弹选项');
-  assert.match(panel, /v-if="stageDepartureOffer && !questGuideOn"/);
+  // 按钮化方案 B（用户 2026-11-14 暂定）：原「开关开撤主线／探索／启程按钮」改为不撤。
+  assert.doesNotMatch(panel, /questHidesButton/);
+  assert.match(panel, /scenarioEngineActionOptions\.value\.filter\(option => !isKeyBeatCardAction/);
+  assert.match(panel, /\.filter\(action => !questGuideEnabled\(save\) \|\| questActionGate\(save, action\)\.ok\)/, '人到了才出动作按钮');
+  assert.match(panel, /v-if="stageDepartureOffer" class="action-options opportunity-action-options"/);
   assert.match(panel, /beatTextNotThere\(scenarioSaveAtSend, userMessage\) \? 'notThere'/);
   assert.match(panel, /via === 'miss' \|\| via === 'notThere' \? beatMissNotice/);
   assert.match(panel, /takeQuestApproachLead\(liveSave\)/);

@@ -66,8 +66,7 @@ async function expectationOf(line) {
   assert.ok(departure, `${line.key} 任务日志应有启程条目`);
   const marker = QL.questMarkers(save, MODS).find(m => m.key === departure.key);
   const here = save.角色.位置?.locationId;
-  // 内测构建（任务模式）撤掉了启程按钮；六条线的下一关都没有作者写的启程短语（quests.json stages），
-  // 入口是照任务日志里显示的启程目标原文手打（本拍动作表精确匹配）。标记在别处、地图却走不到的记为界面缺口（汉：留仙坪）。
+  // 按钮化方案 B 后任务模式下主面板有启程按钮，本脚本点它（照任务日志启程目标原文手打的入口由 smoke-full-chain 覆盖）。标记在别处、地图却走不到的记为界面缺口（汉：留仙坪）。
   const away = marker && !QL.atLocation(here, marker.locationId) ? marker : null;
   const gap = away && !MT.mapTravelPreview(save, away.locationId) ? `任务标记「${away.name}」不在脚下，地图上却没有可走的路线（mapTravelPreview 为空）` : null;
   assert.ok(!away || gap, `${line.key} 任务标记在别处且地图走得到：本脚本只覆盖手打启程，须补地图启程路径`);
@@ -130,8 +129,8 @@ try {
           const ui0 = await readUi(page);
           assert.equal(ui0.modId, exp.stage, '读档后所在关');
           assert.deepEqual(ui0.lcq, [], '读档后不应弹 LCQ 报错码');
-          // 任务模式撤掉了「▶ 启程」按钮（主面板与右栏都不应有）。
-          assert.deepEqual(ui0.departButtons, [], '任务模式下不应有启程按钮');
+          // 按钮化方案 B（用户 2026-11-14 暂定）：任务模式下主面板照常出启程按钮（右栏的「▶ 启程」仍不出），终关没有。
+          assert.equal(ui0.departButtons.length, exp.final ? 0 : 1, `启程按钮应${exp.final ? '没有' : '恰有主面板一个'}，实际 ${JSON.stringify(ui0.departButtons)}`);
           if (exp.final) {
             // 整链终关：没有下一关，任务日志不出启程条目。
             assert.equal(ui0.nextStageId, null, '终关不应有下一关');
@@ -140,9 +139,8 @@ try {
           } else {
             assert.ok(ui0.quest.includes(exp.departureText), `任务日志应列启程条目「${exp.departureText}」，实际 ${JSON.stringify(ui0.quest)}`);
             requests = [];
-            // 手打启程按钮文字（本拍动作表精确匹配＝点启程）。
-            await page.locator('textarea.game-input').fill(exp.typed);
-            await page.locator('.send-button').click();
+            // 点主面板启程按钮（手打启程目标的路径由 smoke-full-chain 覆盖）。
+            await page.locator('.opportunity-action-options button.opportunity-action-btn').click();
             await page.waitForFunction(({ expr, next }) => eval(expr)._s.get('gameState').toSaveData()?.世界?.状态?.剧本模组?.modId === next,
               { expr: PINIA, next: exp.next }, { timeout: 20_000 });
             await page.locator('textarea.game-input').waitFor({ timeout: 15_000 });
@@ -165,7 +163,7 @@ try {
             assert.deepEqual(ui.lcq, [], '启程后不应弹 LCQ 报错码');
             const persisted = await readPersisted(page, charId);
             assert.equal(persisted.data?.世界?.状态?.剧本模组?.modId, exp.next, '持久化的工作槽应已在新关');
-            record.result = `手打任务日志目标「${exp.typed}」 → ${exp.next}（${exp.nextName}）；${exp.chapter ?? '无章节行'}；当前线「${exp.lineName ?? '无'}」；焦点 ${exp.focus}；编年史 ${exp.chronicle.id}；工作槽 ${persisted.slot} 已落账${exp.gap ? `；界面缺口：${exp.gap}` : ''}`;
+            record.result = `点启程按钮「${ui0.departButtons[0]}」 → ${exp.next}（${exp.nextName}）；${exp.chapter ?? '无章节行'}；当前线「${exp.lineName ?? '无'}」；焦点 ${exp.focus}；编年史 ${exp.chronicle.id}；工作槽 ${persisted.slot} 已落账${exp.gap ? `；界面缺口：${exp.gap}` : ''}`;
           }
           assert.deepEqual(pageErrors, [], '控制台不应有未捕获异常');
           record.status = 'passed';

@@ -143,10 +143,10 @@ try {
       await page.locator('textarea.game-input').waitFor();
       assert.equal(await page.locator('[data-testid="key-beat-card"]').count(), 0, 'no advance card at the pact');
       assert.equal(await page.locator('[data-testid="branch-decision"]').count(), 0, 'the pact is not a locked decision');
-      // 任务模式（2026-11-03 起，内测构建默认开）撤了主线按钮，谈期限这一拍改在任务日志里列目标；任务模式关的构建仍是普通按钮。
+      // 按钮化方案 B（用户 2026-11-14 暂定）：任务模式开关开或关，两步动作都是普通按钮；任务模式开时任务日志另列目标。
       const questEntry = page.locator('[data-testid="quest-log"] .quest-log-entry .quest-event').first();
       if (await questEntry.isVisible().catch(() => false)) assert.ok((await questEntry.innerText()).trim(), 'pact objective is listed in the quest log');
-      else assert.ok(await page.locator('.engine-action-btn').count() >= 1, 'pact actions are ordinary buttons');
+      assert.ok(await page.locator('.engine-action-btn').count() >= 1, 'pact actions are ordinary buttons');
       await page.locator('textarea.game-input').fill('霓龙丝在南荒哪一带？');
       await page.locator('.send-button').click();
       await page.waitForFunction(() => !document.querySelector('#app').__vue_app__.config.globalProperties.$pinia._s.get('ui').isAIProcessing, undefined, { timeout: 30_000 });
