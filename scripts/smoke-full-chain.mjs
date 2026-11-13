@@ -23,7 +23,7 @@
 // --side：主链长跑途中把非主线拍也在界面里做掉（盘点与读法见 scripts/sideLineInventory.mjs）。每一手之前先看这份浏览器状态上有没有「此刻可做」的线拍
 //   （R.getCurrentStoryExplorationActions 里出现 questLines 拍的 eventId；人物线＝lines-*.json 的 character 线、支线＝side 线，含碧鲮海藻丝常驻入口）：
 //   有就先做（每拍取第一个非「.defer 略过」动作；同一动作最多试 2 手），入口优先级同主链：人物线拍点右栏「这一拍谁有戏」展开的「回应：…」按钮再发送（b）；
-//   支线拍任务模式下没有按钮（探索按钮被撤、「可投的门路」默认隐藏），照动作原句手打，意图判定由替身选该动作（c）。
+//   支线拍照动作原句手打，意图判定由替身选该动作（c）（按钮化方案 B 后探索按钮在任务模式下也显示，本脚本对支线拍仍走手打；「可投的门路」默认隐藏）。
 //   做完与 Node 侧对照：同一份（手前、advanceScenarioRuntime 后）状态上 recordStoryEventStructuredAction 同一动作＋片刻 settleActionTime＋advance，
 //   比拍回执、准备步、主线进度（progressOf）、线主人好感、任务日志条目、右栏人物行是否收起；不一致记差异判失败。然后照常走主链。
 //   另外每到一个焦点挂了人物任务／高光（character-beats.json）的主线事件，查右栏「这一拍谁有戏」是否出「名字——」行；每关第一手查当前线卡（线名、「别处还有事（N）」）与 Node lineCompassView 一致。
@@ -41,7 +41,7 @@
 //   模拟「人还没到本拍地点就照日志打字」；没推进则同一拍之后照常先去地点。汇总里报探测手数与其中正文请求数、手后位置是否变了。
 // --max-hands N：到 N 手即停，照常收尾出报告（outcome=maxHands，不算未走完）。
 // 真实模式每手另记页面存档里三层记忆的条数（--json 的 real.hands[].mem，日志「[记忆]」行），用来看记忆总结有没有真的把中期记忆压成长期记忆。
-// 环境变量：SMOKE_PREFER_BUTTONS=1（主线合同动作有按钮就点按钮，不手打；默认关）；SMOKE_HAND_PAUSE_MS=毫秒（每手收尾后停这么久再打下一手，模拟真人读完正文的间隔）；SMOKE_CONSOLE_GREP=正则（把匹配的页面控制台行打到日志；非调试模式下页面只放行 console.error）。
+// 环境变量：SMOKE_PREFER_BUTTONS=1（主线合同动作、同国「前往」、关末启程有按钮就点按钮，不手打；默认关）；SMOKE_HAND_PAUSE_MS=毫秒（每手收尾后停这么久再打下一手，模拟真人读完正文的间隔）；SMOKE_CONSOLE_GREP=正则（把匹配的页面控制台行打到日志；非调试模式下页面只放行 console.error）。
 import assert from 'node:assert/strict';
 import { writeFileSync } from 'node:fs';
 import { chromium } from 'playwright-core';
@@ -378,11 +378,15 @@ async function executeMove(page, ui, plan, attempt) {
       const r = await mapTravel(page, pending.mapTargetId, ui);
       return r.ok ? { via: 'b', how: `跨国启程：地图点选 ${r.name}` } : { failed: `跨国启程地图点选失败：${r.why}` };
     }
-    await typeSend(page, entry.objective, ui);
+    // SMOKE_PREFER_BUTTONS：主面板有启程按钮就点它（同国直接切关；跨国按钮会记下待启程目标并打开地图，下一手在地图点选）。
+    const departBtn = page.locator('.opportunity-action-options button.opportunity-action-btn');
+    const clicked = PREFER_BUTTONS && await departBtn.count() ? (await departBtn.first().innerText()).trim() : '';
+    if (clicked) { await departBtn.first().click(); await settle(page, ui, 8_000); }
+    else await typeSend(page, entry.objective, ui);
     const after = await readUi(page);
-    // 跨国启程：手打后只记下待启程目标（stageDepartureMap），下一手在地图点选；这一手是预备手，不与 walker（一步切关）对照。
+    // 跨国启程：这一手只记下待启程目标（stageDepartureMap），下一手在地图点选；这一手是预备手，不与 walker（一步切关）对照。
     const cross = rt(after.save).modId === rt(save).modId && after.save.系统?.扩展?.stageDepartureMap?.mapTargetId;
-    return { via: current.judged ? 'c' : 'a', how: `手打启程目标「${entry.objective}」${cross ? '（跨国：转地图点选）' : ''}`, prep: Boolean(cross) };
+    return { via: clicked ? 'b' : current.judged ? 'c' : 'a', how: `${clicked ? `启程按钮「${clicked}」` : `手打启程目标「${entry.objective}」`}${cross ? '（跨国：转地图点选）' : ''}`, prep: Boolean(cross) };
   }
   if (plan.kind === 'wait') {
     await typeSend(page, NEUTRAL, ui);
@@ -443,6 +447,12 @@ async function executeMove(page, ui, plan, attempt) {
     }
     if (action.actionId.startsWith('travel:')) {
       const naiveMain = NAIVE && attempt === 0 ? questEntries(save)[0] : null;
+      // SMOKE_PREFER_BUTTONS：同国的「前往」按钮直接点（跨国的前往按钮不送人，仍走下面的地图流程）。
+      if (PREFER_BUTTONS && !naiveMain && attempt === 0 && !MT.crossCountryStoryTravel(save, { source: 'event_engine', eventId: action.eventId, actionId: action.actionId })) {
+        const label = ENV.storyActionPresentation(action, save).label;
+        const btn = page.locator('.engine-action-options button.engine-action-btn').filter({ hasText: label });
+        if (await btn.count()) { await clickSend(page, btn.first(), ui); return { via: 'b', place: true, how: `前往按钮「${label}」（walker：${action.actionId}）` }; }
+      }
       if (naiveMain) { current.naive = true; await typeSend(page, naiveMain.objective, ui); return { via: current.judged ? 'c' : 'a', how: `【人不在场探测】手打任务目标「${naiveMain.objective}」（walker：${action.actionId}）` }; }
       const marker = markerOf(save, plan.focus);
       const r = await goTo(page, ui, marker, attempt, plan.focus);

@@ -59,7 +59,7 @@ try {
     });
     const page = await context.newPage();
     page.on('pageerror', error => errors.push(error.message));
-    // 2026-11-03 起任务模式（story.quest；内测构建 enabledDev 默认开）撤了主线按钮，玩家照任务日志打出目标原文＝选中这一拍的动作
+    // 本脚本照任务日志打出目标原文＝选中这一拍的动作（2026-11-14 按钮化方案 B 起任务模式下主线按钮也显示，手打路径照旧有效）
     // （beatProgress.resolveBeatText 按字命中，本地结算、不经分类模型）。任务模式关的构建仍点主线按钮。两条都是真实界面路径。
     const fillMainLine = async () => {
       const questEntry = page.locator('[data-testid="quest-log"] .quest-log-entry .quest-event').first();
