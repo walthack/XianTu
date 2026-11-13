@@ -171,6 +171,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'aiRetry.reasoning.mainNarrative.modelPattern', kind: 'string', required: true, section: 'runtime' },
   { path: 'aiRetry.reasoning.mainNarrative.hostPattern', kind: 'string', required: true, section: 'runtime' },
   { path: 'aiRetry.reasoning.opening.effort', kind: 'string', required: true, oneOf: REASONING_EFFORT_LEVELS, section: 'runtime' },
+  { path: 'aiRetry.reasoning.sceneNarration.effort', kind: 'string', required: true, oneOf: REASONING_EFFORT_LEVELS, section: 'runtime' },
   { path: 'story.trades', kind: 'array', required: true, section: 'progress' },
   { path: 'shop.sites', kind: 'object', required: true, section: 'progress' },
   // 搜刮回刷与战后搜尸（用户 2026-10-28 13:48 第5条）；categories 取值白名单在 locationLoot.ts 校验。

@@ -540,6 +540,7 @@ import { canUseNicheCrystal, useNicheCrystal } from '@/modules/sceneModule/host/
 import SceneEncounterCard from './SceneEncounterCard.vue';
 import { activeScene } from '@/modules/sceneModule/host/ext';
 import { writePreBattleSave } from '@/modules/sceneModule/host/preBattleSlot';
+import { sceneGenerationId, type ModelRequest } from '@/modules/sceneModule/host/recognize';
 import { phaseContinueBlocked } from '@/modules/scenarioMods/phaseContinue';
 import { hostNeeded, sceneBrief, submitSceneInput, confirmSceneAction, confirmSceneChoice, editSceneAction, finishScene, setSceneTestDice, type HostDeps } from '@/modules/sceneModule/host/controller';
 import { fixedEndingNarrative, flushTimeSkipInterlude } from '@/modules/scenarioMods/fixedEndingNarratives';
@@ -2061,9 +2062,9 @@ async function runSceneOperationInner(operation: (save: any, deps: HostDeps) => 
   const aborted = () => aiResetToken !== reset || !uiStore.isAIProcessing || characterStore.rootState.当前激活存档?.角色ID !== character;
   try {
     const { runGameModelModule } = await import('@/services/gameModelModules');
-    const ask = (moduleId: string) => async (request: {system:string;user:string}, signal?: AbortSignal) => {
+    const ask = (moduleId: string) => async (request: ModelRequest, signal?: AbortSignal) => {
       if (aborted()) throw new Error('scene_host_aborted');
-      const result = await runGameModelModule(moduleId, { system: request.system, input: request.user, generationId: `scene_${moduleId}_${Date.now()}`, signal });
+      const result = await runGameModelModule(moduleId, { system: request.system, input: request.user, generationId: sceneGenerationId(moduleId, request), signal });
       if (aborted()) throw new Error('scene_host_aborted');
       return result.raw;
     };

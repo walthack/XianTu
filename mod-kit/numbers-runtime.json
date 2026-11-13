@@ -210,7 +210,7 @@
       "retryMultiplier": 2,
       "budgetTokens": 0,
       "mainNarrative": {
-        "note": "主叙事（MainGamePanel→processPlayerAction 发出的 usageType=main 前台回合请求，含其截断补救与流式降级）的推理强度。只在 model 命中 modelPattern 且请求主机命中 hostPattern 时，请求体加 reasoning_effort=effort；其他请求（意图、模块演出、记忆、审计、后台等）不带；开局另见 aiRetry.reasoning.opening。MiniMax 官方：reasoning_effort 仅 MiniMax-M3.1-Flash 生效，可取 low/medium/high/xhigh/max，省略默认 max，不支持 none（400）；thinking 不可关闭。2026-11-03 用户批准压低主叙事推理强度（真机 s01 主叙事约 2 万字推理、55–90 秒，目标约 30 秒）。off＝不发送。",
+        "note": "主叙事（MainGamePanel→processPlayerAction 发出的 usageType=main 前台回合请求，含其截断补救与流式降级）的推理强度。只在 model 命中 modelPattern 且请求主机命中 hostPattern 时，请求体加 reasoning_effort=effort；其他请求（意图、模块演出、记忆、审计、后台等）不带；开局另见 aiRetry.reasoning.opening，战斗掷骰后的描写另见 aiRetry.reasoning.sceneNarration。MiniMax 官方：reasoning_effort 仅 MiniMax-M3.1-Flash 生效，可取 low/medium/high/xhigh/max，省略默认 max，不支持 none（400）；thinking 不可关闭。2026-11-03 用户批准压低主叙事推理强度（真机 s01 主叙事约 2 万字推理、55–90 秒，目标约 30 秒）。off＝不发送。",
         "effort": "low",
         "modelPattern": "^minimax-m3\\.1-flash",
         "hostPattern": "^api\\.minimaxi?\\.(com|io)$"
@@ -218,6 +218,10 @@
       "opening": {
         "note": "开局生成（generation_id 以 initial_message 开头的请求：开局第 1 步正文、第 2 步初始化指令及其重试）的推理强度。模型／主机名单沿用 mainNarrative.modelPattern／hostPattern，名单外不发。2026-11-12 用户批准设 medium（work/ASK-USER.md Q11：不带参数时 MiniMax 按 max 思考，开局两步合计 3 分 43 秒–6 分 49 秒；medium 实测 1 次约 2 分 4 秒）。off＝不发送（回到原行为）。",
         "effort": "medium"
+      },
+      "sceneNarration": {
+        "note": "战斗掷骰后的描写（sceneModule narrateBeat 发出、generation_id 以 scene_beat_narration_ 开头的请求，含其重写）的推理强度。只对这一类请求生效；战斗里的行动识别、场内闲聊请求不带。模型／主机名单沿用 mainNarrative.modelPattern／hostPattern，名单外不发。work/ASK-USER.md Q21 选 A：不带参数时 MiniMax 按 max 思考，32 手里 4 手等满 combat.narrationBudget.totalMs 改模板；测试脚本注入 low 的对照实验中位 16.5 秒→4.8 秒。off＝不发送（回到原行为）。",
+        "effort": "low"
       }
     }
   },

@@ -41,7 +41,7 @@ export function buildNarrationPrompt(contract: Contract, state: SceneState, resu
     '',
     `【玩家原话】${playerText}`,
   ].join('\n');
-  return { system, user };
+  return { system, user, generationPrefix: 'scene_beat_narration' };
 }
 
 /** 没有模型 / 模型被守卫拒了：按结果拼一段朴素的描写。 */
