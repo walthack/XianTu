@@ -125,6 +125,7 @@ import { composeLegacyNarrativeFromPlan } from '@/modules/scenarioMods/legacyRen
 import {
   beginForegroundAiTurn,
   endForegroundAiTurn,
+  isForegroundAiTurnActive,
   scheduleBackgroundMemoryWork,
   commitMemorySummaryIndex,
 } from '@/utils/backgroundMemoryWork';
@@ -173,6 +174,7 @@ import {
   queueIsolatedMemorySummary,
   remainingMemoriesAfterSummary,
   shouldQueueAutomaticMemorySummary,
+  waitForForegroundTurnToSettle,
 } from '@/utils/backgroundMemorySummary';
 import { mergeDeferredReconcileResult } from '@/modules/scenarioMods/deferredReconcileMerge';
 import {
@@ -3728,7 +3730,11 @@ ${step1Text}
 
       // 4. 使用用户自定义的记忆总结提示词
       const memorySummaryPrompt = await getPrompt('memorySummary');
-      const userPrompt = memorySummaryPrompt.replace('{{记忆内容}}', memoriesText);
+      // Q23（用户 2026-11-14 选 A2）：默认提示词没有 {{记忆内容}} 占位符时，把要总结的那几条接在提示词后面；
+      // 否则模型只能从附带存档里自己找，看到的还是全部中期记忆（含本该保留的那几条）。
+      const userPrompt = memorySummaryPrompt.includes('{{记忆内容}}')
+        ? memorySummaryPrompt.replace('{{记忆内容}}', memoriesText)
+        : `${memorySummaryPrompt}\n\n【需要总结的记忆】\n${memoriesText}`;
 
       // 5. 调用 AI
       const tavernHelper = getTavernHelper();
@@ -3858,6 +3864,27 @@ ${saveDataJson}`;
       }
 
       console.log('[AI双向系统] 总结文本长度:', summaryText.length, '预览:', summaryText.substring(0, 100));
+
+      // Q23：总结回来时若下一回合已在途，回合开头取的存档里没有这次总结，回合末整份写回会盖掉它。
+      // 先等回合结束再落账（回合只往中期记忆后追加，下面的前缀核对仍成立）；等待期间锁不放，不会并发第二次总结。
+      // 存档或关卡在等待期间切换、或等满 3 分钟仍未结束：放弃提交，中期记忆不动，下次照常触发。没有回合在途时不进这里。
+      if (isForegroundAiTurnActive()) {
+        const activeAtStart = characterStore.rootState.当前激活存档;
+        const slotAtStart = activeAtStart ? `${activeAtStart.角色ID}_${activeAtStart.存档槽位}` : '';
+        const modIdAtStart = String((saveData as any)?.世界?.状态?.剧本模组?.modId || '');
+        const targetChanged = () => {
+          const activeNow = characterStore.rootState.当前激活存档;
+          const slotNow = activeNow ? `${activeNow.角色ID}_${activeNow.存档槽位}` : '';
+          const modIdNow = String((gameStateStore.worldState as any)?.剧本模组?.modId || '');
+          return slotNow !== slotAtStart || (Boolean(modIdAtStart) && Boolean(modIdNow) && modIdNow !== modIdAtStart);
+        };
+        const waited = await waitForForegroundTurnToSettle(isForegroundAiTurnActive, { timeoutMs: 180_000, shouldCancel: targetChanged });
+        if (waited !== 'settled') {
+          throw new Error(waited === 'timeout'
+            ? '等待回合结束超时，已放弃本次总结提交'
+            : '等待回合期间存档或关卡已切换，已放弃本次总结提交');
+        }
+      }
 
       // 6. 更新游戏状态
       // 长期记忆不需要时间前缀和【记忆总结】标签，直接存储总结内容
@@ -5168,23 +5195,17 @@ ${saveDataJson}`;
 
   /**
    * 提取记忆总结所需的精简存档数据
-   * 与正式游戏交互保持一致：移除叙事历史、短期记忆、隐式中期记忆
+   * Q23（用户 2026-11-14 选 A2）：只带 元数据、角色。
+   * 整份存档（世界里的剧本模组正典资料、社交关系、系统历史）随游戏涨到百万字级，超出模型上下文被拒（HTTP 400）；
+   * 总结任务用不到这些。要总结的记忆由 triggerMemorySummary 写进用户消息，这里不再带中期记忆。
    */
   private _extractEssentialDataForSummary(saveData: SaveData): SaveData {
-    const simplified = cloneDeep(saveData);
-
-    // 🔥 修复：移除叙事历史（正确路径是 系统.历史.叙事）
-    if ((simplified as any).系统?.历史?.叙事) {
-      delete (simplified as any).系统.历史.叙事;
-    }
-
-    // 🔥 修复：移除短期和隐式中期记忆（正确路径是 社交.记忆）
-    if ((simplified as any).社交?.记忆) {
-      delete (simplified as any).社交.记忆.短期记忆;
-      delete (simplified as any).社交.记忆.隐式中期记忆;
-    }
-
-    return simplified;
+    const source = saveData as any;
+    const simplified: any = {
+      元数据: cloneDeep(source.元数据),
+      角色: cloneDeep(source.角色),
+    };
+    return simplified as SaveData;
   }
 
   /**

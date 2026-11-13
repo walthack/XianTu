@@ -44,3 +44,17 @@ test('summary commit preserves memories appended by a later successful narrative
     'a changed prefix must abort instead of deleting or overwriting current memory',
   );
 });
+
+test('Q23：等回合结束的等待——没有回合立即返回、回合结束返回 settled、可取消、有上限', async () => {
+  const { waitForForegroundTurnToSettle } = await loadTs('../src/utils/backgroundMemorySummary.ts');
+  assert.equal(await waitForForegroundTurnToSettle(() => false, { timeoutMs: 0 }), 'settled');
+  let active = true;
+  setTimeout(() => { active = false; }, 30);
+  assert.equal(await waitForForegroundTurnToSettle(() => active, { timeoutMs: 1000, pollMs: 5 }), 'settled');
+  let switched = false;
+  setTimeout(() => { switched = true; }, 20);
+  assert.equal(await waitForForegroundTurnToSettle(() => true, { timeoutMs: 1000, pollMs: 5, shouldCancel: () => switched }), 'cancelled');
+  const started = Date.now();
+  assert.equal(await waitForForegroundTurnToSettle(() => true, { timeoutMs: 40, pollMs: 5 }), 'timeout');
+  assert.ok(Date.now() - started < 500);
+});
