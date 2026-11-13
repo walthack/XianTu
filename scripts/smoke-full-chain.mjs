@@ -34,7 +34,7 @@
 //   每手照旧由 walker 定；原先「手打后由替身判定」的手改打该动作的玩家原句（playerLine／actionText，能本地对上就不靠模型判），对不上才交给真实判拍请求。
 //   每手只比进度字段（关、已完成拍、激活拍、切关就绪、结局）；位置变化只在预备手（去任务地点）上算推进。卡点记录加本手打字、正文前 200 字、位置、任务日志目标与地点、本手模型请求数。
 //   统计每手耗时、每手模型请求数（chat／embeddings）、主叙事请求耗时、「已替换为安全叙述」与「行动没能识别」次数，写进 --json 的 real 段与汇总。
-//   --real 不能与 --qin／--side 同用。
+//   --real 可与 --qin／--side 同用（2026-11-13 各在 8092 上实跑过一次）。
 // --real-loose（须与 --real 同用）：每拍第一次手打时在玩家原句前加「这一步，」，让它不再与原句逐字相等——游戏本地对不上就会发真实判拍请求；
 //   第一次没推进，同一拍之后的手改回原句。汇总里报「改写手」的推进数与其中发了判拍请求的手数。
 // --max-hands N：到 N 手即停，照常收尾出报告（outcome=maxHands，不算未走完）。
@@ -65,7 +65,6 @@ assert.ok(Number.isInteger(STALL) && STALL > 0, '--stall 须为正整数');
 
 assert.ok(!(QIN && (FROM || UNTIL)), '--qin 不能与 --from／--until 同用');
 assert.ok(!(QIN && SIDE), '--side 不能与 --qin 同用');
-assert.ok(!(REAL && (QIN || SIDE)), '--real 不能与 --qin／--side 同用');
 assert.ok(!LOOSE || REAL, '--real-loose 须与 --real 同用');
 assert.ok(MAX_HANDS === null || (Number.isInteger(MAX_HANDS) && MAX_HANDS > 0), '--max-hands 须为正整数');
 // 真实模型一手可能要几十秒到几分钟（主叙事＋判拍＋后台整理）：等待上限放宽。
