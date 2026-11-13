@@ -80,3 +80,12 @@ test('24 字以内行为不变：逐字一致结算；对不上、为空不结�
   assert.ok(!settled(await judge(SIDE74.typed, reply('我问苏荔这趟送嫁的安排'))));
   assert.ok(!settled(await judge(SIDE74.typed, reply(''))));
 });
+
+test('超长引用的后半段是假设句：肯定句检查按整段引用做，不因截取而放过', async () => {
+  // 前 24 字是肯定句，第 24 字之后的分句带「要是」；只查截取后的前 24 字会误结算。
+  const typed = '这一步，我问苏荔这趟送亲的安排，把各族与鬼王峒的关系问清楚，要是她肯说的话。';
+  const ev = '我问苏荔这趟送亲的安排，把各族与鬼王峒的关系问清楚，要是她肯说的话';
+  assert.ok(ev.length > MAX && !/要是/.test(ev.slice(0, MAX)));
+  const result = await judge(typed, reply(ev));
+  assert.ok(!settled(result), JSON.stringify({ kind: result.kind, reason: result.reason }));
+});

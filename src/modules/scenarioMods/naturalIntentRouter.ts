@@ -873,7 +873,8 @@ async function resolveBeatJudgeOnce(input: NaturalIntentInput, plan: BeatKeyPlan
     if (!rawEv || !evidenceBelongsToPlayer(playerText, rawEv)) return finish({ kind: 'none', reason: 'bad_evidence' });
     // work/ASK-USER.md Q22 方案 B：逐字一致但超长时不作废，取前 evidenceMaxChars 字作证据，继续后面的全部检查。
     const ev = rawEv.length > judge.evidenceMaxChars ? rawEv.slice(0, judge.evidenceMaxChars) : rawEv;
-    if (!evidenceClauseIsAffirmative(playerText, ev)) return finish({ kind: 'none', reason: 'non_affirmative_evidence' });
+    // 肯定句检查仍按模型引用的整段做：截取只为满足长度上限，不能因此少查后半段分句里的否定／假设。
+    if (!evidenceClauseIsAffirmative(playerText, rawEv)) return finish({ kind: 'none', reason: 'non_affirmative_evidence' });
     if (!questActionGate(input.saveData, action.selection).ok) return finish({ kind: 'none', reason: 'gate' });
     const settle = action.settle;
     const fresh = settle
