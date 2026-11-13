@@ -787,7 +787,9 @@ function onRealDone(request, failed) {
   if (x.main && x.cur) (x.cur.narrMs ||= []).push(Date.now() - x.t0);
   // 判拍／意图请求的回包正文（模型输出，前 300 字）记到这一手，便于看没判中时模型回了什么。
   if (!failed && x.cur && (x.kind === 'beat' || x.kind === 'intent')) request.response().then(r => r?.json()).then(j => { (x.cur.judgeReplies ||= []).push(String(j?.choices?.[0]?.message?.content ?? '').replace(/\s+/g, ' ').slice(0, 300)); }).catch(() => {});
-  const g = real.profile[x.sig] ||= { count: 0, failed: 0, ms: [], params: {} };
+  const g = real.profile[x.sig] ||= { count: 0, failed: 0, ms: [], params: {}, status: {}, errorBodies: [] };
+  // HTTP 状态码；非 2xx 时留回包正文前 200 字（上游的报错信息，不含请求头）。
+  if (!failed) request.response().then(async r => { if (!r) return; const st = r.status(); g.status[st] = (g.status[st] || 0) + 1; if (st >= 400 && g.errorBodies.length < 5) g.errorBodies.push(String(await r.text().catch(() => '')).replace(/\s+/g, ' ').slice(0, 200)); }).catch(() => {});
   g.count++; if (failed) g.failed++; g.ms.push(Date.now() - x.t0); g.params[x.params] = (g.params[x.params] || 0) + 1;
 }
 const position = save => ({ 描述: save.角色.位置?.描述 ?? null, locationId: save.角色.位置?.locationId ?? null });
@@ -807,7 +809,7 @@ async function readDiag(page, sinceMs) {
           const db = open.result;
           if (!db.objectStoreNames.contains('logs')) { db.close(); resolve(null); return; }
           const req = db.transaction('logs', 'readonly').objectStore('logs').getAll(IDBKeyRange.lowerBound(since * 1000));
-          req.onsuccess = () => { db.close(); resolve(req.result.filter(e => codes.includes(e.code) || e.level === 'warn' || e.level === 'error').sort((a, b) => a.seq - b.seq).map(e => codes.includes(e.code) ? { code: e.code, detail: e.detail ?? null } : { code: e.code, level: e.level, msg: String(e.msg ?? '').slice(0, 200) })); };
+          req.onsuccess = () => { db.close(); resolve(req.result.filter(e => codes.includes(e.code) || e.level === 'warn' || e.level === 'error').sort((a, b) => a.seq - b.seq).map(e => codes.includes(e.code) ? { code: e.code, detail: e.detail ?? null } : { code: e.code, level: e.level, msg: String(e.msg ?? '').slice(0, 200), detail: e.detail === undefined ? undefined : JSON.stringify(e.detail).slice(0, 500) })); };
           req.onerror = () => { db.close(); resolve(null); };
         } catch { resolve(null); }
       };
@@ -816,7 +818,7 @@ async function readDiag(page, sinceMs) {
 }
 /** 每手一行（真实模式）；请求数与主叙事耗时在收尾时从 cur 取（后台请求可能晚于本手落定）。 */
 function realHand(tm, save, after, label, res, moved, nodeMoved = null, diag = null) {
-  const safe = /已替换为安全叙述/.test(`${after.notice} ${after.narrative200}`), unrec = /行动没能识别/.test(after.hold);
+  const safe = /已替换为安全叙述|本轮只呈现已经确认的公开动静/.test(`${after.notice} ${after.narrative200}`), unrec = /行动没能识别/.test(after.hold);
   if (safe) real.safeReplaced++;
   if (unrec) real.unrecognized++;
   const row = { hand: moves, stage: rt(save).modId, beat: QL.questBeatKey(save), plan: label, via: res.via ?? null, how: res.failed || res.how, typed: current.typed ?? null,
@@ -1073,7 +1075,7 @@ if (REAL) {
     requests: { chat: real.chat, embeddings: real.embeddings, byKind: real.byKind, failed: real.failedRequests },
     handMs: { median: med(handMs), max: Math.max(0, ...handMs) }, narrationMs: { count: narr.length, median: med(narr), max: Math.max(0, ...narr) },
     safeReplaced: real.safeReplaced, unrecognized: real.unrecognized, hands: real.hands,
-    profile: Object.fromEntries(Object.entries(real.profile).map(([k, g]) => [k, { count: g.count, failed: g.failed, medianMs: med(g.ms), maxMs: Math.max(0, ...g.ms), params: g.params }])) };
+    profile: Object.fromEntries(Object.entries(real.profile).map(([k, g]) => [k, { count: g.count, failed: g.failed, medianMs: med(g.ms), maxMs: Math.max(0, ...g.ms), params: g.params, status: g.status, errorBodies: g.errorBodies }])) };
   // LCQ-SAV-065 按 detail.reason 计数；取不到诊断日志的手（旧包／库打不开）单独计。
   realOut.stall = { reasons: {}, entries: 0, handsWithoutDiag: real.hands.filter(h => !Array.isArray(h.diag)).length };
   for (const h of real.hands) for (const e of h.diag || []) if (e.code === 'LCQ-SAV-065') { realOut.stall.entries++; const k = e.detail?.reason ?? '?'; realOut.stall.reasons[k] = (realOut.stall.reasons[k] || 0) + 1; }
@@ -1090,7 +1092,7 @@ if (REAL) {
   console.log(`[真实模型] 「已替换为安全叙述」${realOut.safeReplaced} 手，「行动没能识别」${realOut.unrecognized} 手；存档接口：读配置 ${storageRef.configGet}，替身读 ${storageRef.stubbedRead}，拦下写 ${storageRef.blockedWrite.length}${storageRef.blockedWrite.length ? ` ${JSON.stringify([...new Set(storageRef.blockedWrite)])}` : ''}`);
 }
 if (REAL) console.log(`[没推进原因] LCQ-SAV-065 共 ${realOut.stall.entries} 条：${Object.entries(realOut.stall.reasons).map(([k, n]) => `${k} ${n}`).join('、') || '无'}；取不到诊断日志 ${realOut.stall.handsWithoutDiag} 手`);
-if (REAL) for (const [k, g] of Object.entries(realOut.profile)) console.log(`[请求画像] ${k}：${g.count} 次，失败 ${g.failed}，中位 ${(g.medianMs / 1000).toFixed(1)}s／最长 ${(g.maxMs / 1000).toFixed(1)}s；${JSON.stringify(g.params)}`);
+if (REAL) for (const [k, g] of Object.entries(realOut.profile)) console.log(`[请求画像] ${k}：${g.count} 次，失败 ${g.failed}，中位 ${(g.medianMs / 1000).toFixed(1)}s／最长 ${(g.maxMs / 1000).toFixed(1)}s；${JSON.stringify(g.params)}；HTTP ${JSON.stringify(g.status)}`);
 if (REAL && NAIVE) { const nv = realOut.hands.filter(h => h.naive); console.log(`[真实模型] 人不在场探测 ${nv.length} 手：发了主叙事 ${nv.filter(h => h.narrMs.length).length}；手后位置变了 ${nv.filter(h => h.location !== h.locationBefore).length}；本手就推进 ${nv.filter(h => h.moved).length}`); }
 if (REAL && LOOSE) console.log(`[真实模型] 改写手 ${realOut.loose.hands}：推进 ${realOut.loose.moved}；发了判拍／意图请求 ${realOut.loose.judged}（其中推进 ${realOut.loose.judgedMoved}）；没推进 ${realOut.loose.notMoved.length}`);
 const failures = [];
