@@ -768,6 +768,7 @@ const real = { profile: {}, hands: [], chat: 0, embeddings: 0, byKind: {}, faile
 const inflight = new Map(); // Playwright Request → { t0, cur, main }
 const pathOf = request => { try { const u = new URL(request.url()); return `${u.host}${u.pathname}`; } catch { return '?'; } }; // 不带查询串
 function onRealRequest(kind, body, request) {
+  if (kind === 'inject529') { if (current) current.injected529 = (current.injected529 || 0) + 1; return; }
   if (kind === 'embeddings') real.embeddings++; else real.chat++;
   real.byKind[kind] = (real.byKind[kind] || 0) + 1;
   // 判拍／意图分类发了真实请求：这一手算 c（交给模型判）。
@@ -794,7 +795,7 @@ function onRealDone(request, failed) {
 }
 const position = save => ({ 描述: save.角色.位置?.描述 ?? null, locationId: save.角色.位置?.locationId ?? null });
 const questTarget = save => { const e = questEntries(save)[0]; return e ? { title: e.title, objective: e.objective, place: e.place ?? null } : null; };
-const reqCount = cur => { const list = cur?.requests || []; return { total: list.length, chat: list.filter(k => k !== 'embeddings').length, embeddings: list.filter(k => k === 'embeddings').length }; };
+const reqCount = cur => { const list = (cur?.requests || []).filter(k => k !== 'inject529'); return { total: list.length, chat: list.filter(k => k !== 'embeddings').length, embeddings: list.filter(k => k === 'embeddings').length }; };
 // 每手的诊断日志（--real）：从页面诊断日志自己的 IndexedDB（lcq-log／logs，不是存档接口）取本手开始后新增的这几种码，只取 code 与 detail。
 // LCQ-SAV-065 在 sendMessage 收尾（终存档之后）才写，比 isAIProcessing 撤下晚：先等输入区 data-turn-state 离开 processing（回合账结清），
 // 再按 diagnostics.flushMs 批量落库多等一会，之后隔 600ms 读一次、条数不再变就收（最多读 5 次）。旧包没有 LCQ-SAV-065、或库打不开，都按取不到处理（diag 为空数组或 null）。
@@ -849,7 +850,7 @@ function realHand(tm, save, after, label, res, moved, nodeMoved = null, diag = n
   if (safe) real.safeReplaced++;
   if (unrec) real.unrecognized++;
   const row = { hand: moves, stage: rt(save).modId, beat: QL.questBeatKey(save), plan: label, via: res.via ?? null, how: res.failed || res.how, typed: current.typed ?? null,
-    moved, nodeMoved, loose: !!current.loose, naive: !!current.naive, locationBefore: position(save).locationId, judged: current.judged ?? null, ms: Date.now() - tm, safe, unrecognized: unrec, hold: after.hold || '', notice: after.notice || '', location: position(after.save).locationId, narrative200: after.narrative200, diag, toasts, _cur: current };
+    moved, nodeMoved, loose: !!current.loose, naive: !!current.naive, injected529: current.injected529 || 0, locationBefore: position(save).locationId, judged: current.judged ?? null, ms: Date.now() - tm, safe, unrecognized: unrec, hold: after.hold || '', notice: after.notice || '', location: position(after.save).locationId, narrative200: after.narrative200, diag, toasts, _cur: current };
   real.hands.push(row);
   const r = reqCount(current);
   console.log(`[手] ${String(moves).padStart(3)} ${row.stage} ${row.beat ?? '-'} [${row.via ?? '×'}] ${String(row.how).slice(0, 80)} → ${moved ? '推进' : '未推进'}${nodeMoved === false ? '（walker 也不推进）' : ''}｜${(row.ms / 1000).toFixed(1)}s 请求 ${r.chat}+${r.embeddings}e${row.loose ? '｜改写' : ''}${row.judged ? `｜判拍 ${row.judged}` : ''}${safe ? '｜安全替换' : ''}${unrec ? '｜行动没能识别' : ''}`);

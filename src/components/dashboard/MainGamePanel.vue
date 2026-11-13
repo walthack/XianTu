@@ -572,6 +572,7 @@ import { calculateAgeFromBirthdate } from '@/utils/lifespanCalculator';
 import { aiService } from '@/services/aiService';
 import { extractTextFromJsonResponse, extractStreamingNarrativeText } from '@/utils/textSanitizer';
 import { validateProcessedAIResponse } from '@/utils/processedAIResponseValidation';
+import { carryNarrativeRetryOptions } from '@/utils/narrativeRetryOptions';
 import { usesFixedScenarioInventory } from '@/modules/scenarioMods/fixedInventoryContracts';
 import {
   beginQingyuTurnLongRequests,
@@ -1829,6 +1830,7 @@ const retryAIResponse = async (
   userMessage: string,
   character: CharacterProfile,
   previousErrors: string[],
+  turnOptions?: Record<string, unknown>,
   maxRetries: number = 2
 ): Promise<GM_Response | null> => {
   const saveForRetryBudget = gameStateStore.toSaveData();
@@ -1841,6 +1843,8 @@ const retryAIResponse = async (
   }
   console.log('[AI响应重试] 开始重试，之前的错误:', previousErrors);
   const resetSnapshot = aiResetToken;
+  // 同一手再发一次：带上第一次请求里这一手的结算输入（本拍动作、判定结果等）；某次重试已提交（落账过）就不再带，免得结算两次。
+  let carried = carryNarrativeRetryOptions(turnOptions);
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -1890,6 +1894,7 @@ const retryAIResponse = async (
 请修正这些问题并确保结构正确。`;
 
       const options: Record<string, unknown> = {
+        ...carried,
         onProgressUpdate: (progress: string) => {
           console.log('[AI重试进度]', progress);
         },
@@ -1932,6 +1937,7 @@ const retryAIResponse = async (
         } else {
           console.warn(`[AI响应重试] 第${attempt}次尝试验证失败:`, validation.errors);
           previousErrors = validation.errors;
+          if (aiResponse.transactionCommitted) carried = {};
           // 继续下一次重试
         }
       }
@@ -2850,7 +2856,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
           const retryResponse = await retryAIResponse(
             finalUserMessage,
             character,
-            validation.errors
+            validation.errors,
+            options
           );
 
           if (!uiStore.isAIProcessing || aiResetToken !== resetSnapshot) {

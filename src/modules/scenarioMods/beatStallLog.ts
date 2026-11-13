@@ -20,8 +20,8 @@ export const BEAT_STALL_REASONS = [
   'judgeUnsettled', // 发了判拍但没结算（detail.judgeOutcome＝LCQ-SAV-062 的 outcome）
   'judgeTimeout', // 判拍超时（含重发后仍超时）
   'travel', // 这一手命中的是罗盘移动动作（travel:…），本拍本身未结算
-  'upstreamError', // 命中了本拍动作，这一手的主叙事请求被上游报错（HTTP 错误／传输失败；detail.upstream 带 httpStatus）——不论之后格式重试有没有提交
-  'turnFailed', // 命中了本拍动作，但这一手没提交（叙事失败／超时／撤回），或走了格式重试（重试不带本拍动作，提交了也不结算；detail.upstream.retried）
+  'upstreamError', // 命中了本拍动作、本拍没结算，这一手的主叙事请求被上游报错（HTTP 错误／传输失败；detail.upstream 带 httpStatus）
+  'turnFailed', // 命中了本拍动作，但这一手没提交（叙事失败／超时／撤回），或走了格式重试、本拍仍没结算（detail.upstream.retried）
   'scene', // 被场面（战斗等 sceneModule）接走
   'judgementPending', // 停在判定卡（待确认的行动判定）
   'intentHold', // 行动识别停下保留输入（没听清／识别失败）
@@ -59,8 +59,10 @@ export interface BeatStallProbe {
   clues: string[];
   narrativeSent: boolean;
   committed: boolean;
-  /** 这一手走了 MainGamePanel.retryAIResponse（格式重试；重试请求不带 eventAction，提交了本拍也不结算）。 */
+  /** 这一手走了 MainGamePanel.retryAIResponse（格式重试；重试带着本拍动作，是否结算按 beatAttempts 前后判）。 */
   narrativeRetried?: boolean;
+  /** 回合开头本拍的结算尝试计数（eventActionStates[beatId].attemptCount）：走了格式重试时据此判本拍到底结算了没有。 */
+  beatAttempts?: number;
   exit?: 'scene';
 }
 
@@ -78,6 +80,7 @@ function upstreamTrace(probe: Pick<BeatStallProbe, 'startedAt' | 'narrativeRetri
 }
 
 const runtimeOf = (save: SaveData | null | undefined): any => (save as any)?.世界?.状态?.剧本模组;
+const beatAttemptCount = (runtime: any, beatId: string): number => Math.max(0, Number(runtime?.eventActionStates?.[beatId]?.attemptCount) || 0);
 const stallTextChars = (): number => {
   const value = (GAME_NUMBERS.story as unknown as { quest?: { beatStall?: { textChars?: number } } }).quest?.beatStall?.textChars;
   return Number.isInteger(value) && (value as number) >= 0 ? value as number : 0;
@@ -102,7 +105,7 @@ export function beginBeatStallProbe(save: SaveData | null | undefined, text: str
       objective: String(entry?.objective || ''), place: String(entry?.place || ''),
       text: input, required: requirements(save, beatId), textHitActionId: hit?.action.kind === 'event' ? hit.action.selection.actionId : null,
       travelOnly: travelOnlyActions(save, beatId).length > 0,
-      clues: [], narrativeSent: false, committed: false,
+      clues: [], narrativeSent: false, committed: false, beatAttempts: beatAttemptCount(runtime, beatId),
     };
   } catch {
     return undefined; // lcq-allow: 只观察的日志，取快照失败就不记这一手，不影响回合
@@ -167,7 +170,7 @@ export function classifyBeatStall(probe: Pick<BeatStallProbe, 'via' | 'actionId'
 }
 
 /**
- * 回合结束（sendMessage 的 finally）调用：焦点拍已完成、拍键已变、或命中本拍动作且已提交（没走格式重试）＝推进了，不记；
+ * 回合结束（sendMessage 的 finally）调用：焦点拍已完成、拍键已变、或命中本拍动作且已提交（走了格式重试的另看本拍确实结算了）＝推进了，不记；
  * 其余记一条 LCQ-SAV-065。返回写入的条目（测试用）。
  */
 export function finishBeatStallProbe(probe: BeatStallProbe | undefined, after: SaveData | null | undefined, extra: { pendingJudgement: boolean; intentHold: boolean }): ReturnType<typeof logEvent> {
@@ -177,9 +180,11 @@ export function finishBeatStallProbe(probe: BeatStallProbe | undefined, after: S
     if (!runtime) return null;
     const beatKeyAfter = questBeatKey(after);
     const completed = (runtime.completedEventIds || []).includes(probe.beatId);
-    // 走了格式重试的回合：重试请求不带本拍动作（eventAction），提交了也不等于本拍结算，照常判（8092 第 52 手主叙事 529 后漏记）。
+    // 走了格式重试的回合：重试带着本拍动作（carryNarrativeRetryOptions），按实际结果判——本拍结算尝试计数涨了才算推进；
+    // 没涨（重试也失败、或提交了却没结算）照常记（8092 第 52 手主叙事 529 后漏记）。
     // 没重试、照常提交的回合即使中途有上游报错（服务层内部重试成功），提交时带着本拍动作，仍算推进。
-    const actionSettled = Boolean(probe.via && HIT_VIAS.has(probe.via) && probe.committed && !probe.narrativeRetried && !probe.actionId?.startsWith('travel:'));
+    const retrySettled = !probe.narrativeRetried || beatAttemptCount(runtime, probe.beatId) > (probe.beatAttempts ?? 0);
+    const actionSettled = Boolean(probe.via && HIT_VIAS.has(probe.via) && probe.committed && retrySettled && !probe.actionId?.startsWith('travel:'));
     if (completed || beatKeyAfter !== probe.beatKey || actionSettled) return null;
     const judge = lastBeatJudgeOutcome();
     const judgeThisTurn = judge && judge.at >= probe.startedAt && judge.beatId === probe.beatId ? judge : null;
