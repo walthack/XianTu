@@ -40,6 +40,8 @@
 // --real-naive（须与 --real 同用）：Q20 探测。walker 这一手要先去某地（travel:）时，第一次不去，改为照任务日志目标原文打字——
 //   模拟「人还没到本拍地点就照日志打字」；没推进则同一拍之后照常先去地点。汇总里报探测手数与其中正文请求数、手后位置是否变了。
 // --max-hands N：到 N 手即停，照常收尾出报告（outcome=maxHands，不算未走完）。
+// 真实模式每手另记页面存档里三层记忆的条数（--json 的 real.hands[].mem，日志「[记忆]」行），用来看记忆总结有没有真的把中期记忆压成长期记忆。
+// 环境变量：SMOKE_HAND_PAUSE_MS=毫秒（每手收尾后停这么久再打下一手，模拟真人读完正文的间隔）；SMOKE_CONSOLE_GREP=正则（把匹配的页面控制台行打到日志；非调试模式下页面只放行 console.error）。
 import assert from 'node:assert/strict';
 import { writeFileSync } from 'node:fs';
 import { chromium } from 'playwright-core';
@@ -72,6 +74,7 @@ assert.ok(!NAIVE || REAL, '--real-naive 须与 --real 同用');
 assert.ok(MAX_HANDS === null || (Number.isInteger(MAX_HANDS) && MAX_HANDS > 0), '--max-hands 须为正整数');
 // 真实模型一手可能要几十秒到几分钟（主叙事＋判拍＋后台整理）：等待上限放宽。
 const WAIT_MS = REAL ? 300_000 : 60_000;
+const HAND_PAUSE_MS = Number(process.env.SMOKE_HAND_PAUSE_MS || 0);
 // --side 才加载（主链／秦线模式不受影响）。
 const SL = SIDE ? await quiet(() => import('./sideLineInventory.mjs')) : null;
 const TM = SIDE ? await quiet(() => loadTs('../src/modules/scenarioMods/actionTime.ts')) : null;
@@ -857,13 +860,18 @@ function readDiagOnce(page, sinceMs) {
   }), { since: sinceMs, codes: DIAG_CODES }).catch(() => null);
 }
 /** 每手一行（真实模式）；请求数与主叙事耗时在收尾时从 cur 取（后台请求可能晚于本手落定）。 */
+// 每手收尾时页面存档里三层记忆各有几条（看记忆总结有没有真的把中期记忆压成长期记忆）。
+let lastMem = null;
+const readMem = page => page.evaluate(expr => { const m = eval(expr)._s.get('gameState').toSaveData()?.社交?.记忆 || {}; return { short: (m.短期记忆 || []).length, mid: (m.中期记忆 || []).length, long: (m.长期记忆 || []).length }; }, PINIA).catch(() => null);
 function realHand(tm, save, after, label, res, moved, nodeMoved = null, diag = null, toasts = null) {
   const safe = /已替换为安全叙述|本轮只呈现已经确认的公开动静/.test(`${after.notice} ${after.narrative200}`), unrec = /行动没能识别/.test(after.hold);
   if (safe) real.safeReplaced++;
   if (unrec) real.unrecognized++;
   const row = { hand: moves, stage: rt(save).modId, beat: QL.questBeatKey(save), plan: label, via: res.via ?? null, how: res.failed || res.how, typed: current.typed ?? null,
     moved, nodeMoved, loose: !!current.loose, naive: !!current.naive, injected529: current.injected529 || 0, locationBefore: position(save).locationId, judged: current.judged ?? null, ms: Date.now() - tm, safe, unrecognized: unrec, hold: after.hold || '', notice: after.notice || '', location: position(after.save).locationId, narrative200: after.narrative200, diag, toasts, _cur: current };
+  row.mem = lastMem;
   real.hands.push(row);
+  if (lastMem) console.log(`[记忆] 手${moves} 短期 ${lastMem.short}／中期 ${lastMem.mid}／长期 ${lastMem.long}`);
   const r = reqCount(current);
   console.log(`[手] ${String(moves).padStart(3)} ${row.stage} ${row.beat ?? '-'} [${row.via ?? '×'}] ${String(row.how).slice(0, 80)} → ${moved ? '推进' : '未推进'}${nodeMoved === false ? '（walker 也不推进）' : ''}｜${(row.ms / 1000).toFixed(1)}s 请求 ${r.chat}+${r.embeddings}e${row.loose ? '｜改写' : ''}${row.judged ? `｜判拍 ${row.judged}` : ''}${safe ? '｜安全替换' : ''}${unrec ? '｜行动没能识别' : ''}`);
 }
@@ -881,6 +889,8 @@ try {
   if (REAL) await context.addInitScript(TOAST_OBSERVER);
   const page = await context.newPage();
   page.on('pageerror', error => pageErrors.push(`${error.message}`.slice(0, 300)));
+  // SMOKE_CONSOLE_GREP=正则：把匹配的页面控制台行原样打到日志（每行截 400 字），用来看没有进诊断日志的后台流程（如记忆总结）。
+  if (process.env.SMOKE_CONSOLE_GREP) { const re = new RegExp(process.env.SMOKE_CONSOLE_GREP); page.on('console', m => { const t = m.text(); if (re.test(t)) console.log(`[控制台] 手${moves} ${m.type()} ${t.slice(0, 400)}`); }); }
   try {
     let charId;
     current = { plan: null, requests: [] };
@@ -1009,7 +1019,8 @@ try {
         if (VERBOSE) console.log(`  · 手 ${moves} ${Date.now() - tm}ms [${res.via}] ${res.how} → ${moved ? '推进' : '未推进'}${current.beatCandidates ? ` 判定候选 ${JSON.stringify(current.beatCandidates)}` : ''}`);
       }
       const nodeMoved = expected.save ? (REAL ? realKeyOf(progressOf(expected.save)) !== realKeyOf(before) : keyOf(progressOf(expected.save)) !== keyOf(before)) : null;
-      if (REAL) realHand(tm, save, after, planLabel(plan), res, moved, nodeMoved, await readDiag(page, tm), await readToasts(page, tm));
+      // SMOKE_HAND_PAUSE_MS=毫秒：每手收尾后先停这么久再读记忆条数、再打下一手（模拟真人读完正文再动手的间隔）。
+      if (REAL) { const diag = await readDiag(page, tm); if (HAND_PAUSE_MS) await page.waitForTimeout(HAND_PAUSE_MS); lastMem = await readMem(page); realHand(tm, save, after, planLabel(plan), res, moved, nodeMoved, diag, await readToasts(page, tm)); }
       if (QIN && rt(after.save).modId === QIN_STAGE && !RET.getMapEntryReturnOffer(after.save)) {
         const n = await returnButtons(page);
         (qin.railMid ||= { moves: 0, early: [] }).moves++;
