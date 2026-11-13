@@ -12,6 +12,7 @@ import { resolveBeatTextUngated, type BeatVia } from './beatProgress';
 import { locationName, questActionGate, questBeatKey, questBeatSpec, questLogView } from './questLog';
 import { currentLocation } from './travel/travelLedger';
 import { lastBeatJudgeOutcome } from './naturalIntentRouter';
+import { peekRequestLifecycleDiagnostics } from '@/services/requestLifecycleDiagnostics';
 
 export const BEAT_STALL_REASONS = [
   'notThere', // 命中了本拍动作但人不在 where／who 不同场（beat.resolve via=notThere）
@@ -19,7 +20,8 @@ export const BEAT_STALL_REASONS = [
   'judgeUnsettled', // 发了判拍但没结算（detail.judgeOutcome＝LCQ-SAV-062 的 outcome）
   'judgeTimeout', // 判拍超时（含重发后仍超时）
   'travel', // 这一手命中的是罗盘移动动作（travel:…），本拍本身未结算
-  'turnFailed', // 命中了本拍动作，但这一手没提交（叙事失败／超时／撤回）
+  'upstreamError', // 命中了本拍动作，这一手的主叙事请求被上游报错（HTTP 错误／传输失败；detail.upstream 带 httpStatus）——不论之后格式重试有没有提交
+  'turnFailed', // 命中了本拍动作，但这一手没提交（叙事失败／超时／撤回），或走了格式重试（重试不带本拍动作，提交了也不结算；detail.upstream.retried）
   'scene', // 被场面（战斗等 sceneModule）接走
   'judgementPending', // 停在判定卡（待确认的行动判定）
   'intentHold', // 行动识别停下保留输入（没听清／识别失败）
@@ -57,7 +59,22 @@ export interface BeatStallProbe {
   clues: string[];
   narrativeSent: boolean;
   committed: boolean;
+  /** 这一手走了 MainGamePanel.retryAIResponse（格式重试；重试请求不带 eventAction，提交了本拍也不结算）。 */
+  narrativeRetried?: boolean;
   exit?: 'scene';
+}
+
+/** 本手期间主叙事（module=main、前台）请求的上游报错：只读请求生命周期诊断（不改请求）。 */
+export interface UpstreamTrace { retried: boolean; errors: number; status?: 'http_error' | 'failed'; httpStatus?: number }
+function upstreamTrace(probe: Pick<BeatStallProbe, 'startedAt' | 'narrativeRetried'>): UpstreamTrace | undefined {
+  const failed = peekRequestLifecycleDiagnostics().requests
+    .filter(r => r.module === 'main' && !r.background && r.startedAt >= probe.startedAt && (r.status === 'http_error' || r.status === 'failed'));
+  if (!failed.length && !probe.narrativeRetried) return undefined;
+  const last = failed[failed.length - 1];
+  return {
+    retried: Boolean(probe.narrativeRetried), errors: failed.length,
+    ...(last ? { status: last.status as 'http_error' | 'failed', ...(last.httpStatus !== null ? { httpStatus: last.httpStatus } : {}) } : {}),
+  };
 }
 
 const runtimeOf = (save: SaveData | null | undefined): any => (save as any)?.世界?.状态?.剧本模组;
@@ -129,7 +146,7 @@ function questRequirements(save: SaveData, beatId: string): Requirement[] {
 }
 
 /** 原因分类（纯函数，单测直接测）。 */
-export function classifyBeatStall(probe: Pick<BeatStallProbe, 'via' | 'actionId' | 'clues' | 'committed' | 'exit' | 'travelOnly'>, judgeOutcome: string | null, extra: { pendingJudgement: boolean; intentHold: boolean }): BeatStallReason {
+export function classifyBeatStall(probe: Pick<BeatStallProbe, 'via' | 'actionId' | 'clues' | 'committed' | 'exit' | 'travelOnly' | 'narrativeRetried'>, judgeOutcome: string | null, extra: { pendingJudgement: boolean; intentHold: boolean }, upstream?: UpstreamTrace): BeatStallReason {
   if (probe.exit === 'scene') return 'scene';
   const via = probe.via;
   if (via === 'notThere') return 'notThere';
@@ -137,7 +154,11 @@ export function classifyBeatStall(probe: Pick<BeatStallProbe, 'via' | 'actionId'
   if (via === 'miss' && probe.travelOnly) return 'notThere';
   if (judgeOutcome && judgeOutcome !== 'settled') return judgeOutcome === 'timeout' ? 'judgeTimeout' : 'judgeUnsettled';
   if (via === 'miss') return 'miss';
-  if (via && HIT_VIAS.has(via)) return probe.actionId?.startsWith('travel:') ? 'travel' : !probe.committed ? 'turnFailed' : 'other';
+  if (via && HIT_VIAS.has(via)) {
+    if (probe.actionId?.startsWith('travel:')) return 'travel';
+    if (upstream?.status) return 'upstreamError';
+    return !probe.committed || probe.narrativeRetried ? 'turnFailed' : 'other';
+  }
   if (via === 'other') return probe.clues.includes('freeActionTickets') || probe.clues.includes('followUpFreeAction') ? 'freeAction' : 'otherEngine';
   if (via === 'none') return 'noActions';
   if (!via && extra.pendingJudgement) return 'judgementPending';
@@ -146,7 +167,7 @@ export function classifyBeatStall(probe: Pick<BeatStallProbe, 'via' | 'actionId'
 }
 
 /**
- * 回合结束（sendMessage 的 finally）调用：焦点拍已完成、拍键已变、或命中本拍动作且已提交＝推进了，不记；
+ * 回合结束（sendMessage 的 finally）调用：焦点拍已完成、拍键已变、或命中本拍动作且已提交（没走格式重试）＝推进了，不记；
  * 其余记一条 LCQ-SAV-065。返回写入的条目（测试用）。
  */
 export function finishBeatStallProbe(probe: BeatStallProbe | undefined, after: SaveData | null | undefined, extra: { pendingJudgement: boolean; intentHold: boolean }): ReturnType<typeof logEvent> {
@@ -156,11 +177,14 @@ export function finishBeatStallProbe(probe: BeatStallProbe | undefined, after: S
     if (!runtime) return null;
     const beatKeyAfter = questBeatKey(after);
     const completed = (runtime.completedEventIds || []).includes(probe.beatId);
-    const actionSettled = Boolean(probe.via && HIT_VIAS.has(probe.via) && probe.committed && !probe.actionId?.startsWith('travel:'));
+    // 走了格式重试的回合：重试请求不带本拍动作（eventAction），提交了也不等于本拍结算，照常判（8092 第 52 手主叙事 529 后漏记）。
+    // 没重试、照常提交的回合即使中途有上游报错（服务层内部重试成功），提交时带着本拍动作，仍算推进。
+    const actionSettled = Boolean(probe.via && HIT_VIAS.has(probe.via) && probe.committed && !probe.narrativeRetried && !probe.actionId?.startsWith('travel:'));
     if (completed || beatKeyAfter !== probe.beatKey || actionSettled) return null;
     const judge = lastBeatJudgeOutcome();
     const judgeThisTurn = judge && judge.at >= probe.startedAt && judge.beatId === probe.beatId ? judge : null;
-    const reason = classifyBeatStall(probe, judgeThisTurn?.outcome ?? null, extra);
+    const upstream = upstreamTrace(probe);
+    const reason = classifyBeatStall(probe, judgeThisTurn?.outcome ?? null, extra, upstream);
     const requiredAfter = requirements(after, probe.beatId);
     const beatActionsAfter = getCurrentStoryEventActions(after).filter(item => item.eventId === probe.beatId);
     const here = currentLocation(after);
@@ -172,6 +196,7 @@ export function finishBeatStallProbe(probe: BeatStallProbe | undefined, after: S
       ...(judgeThisTurn ? { judgeOutcome: judgeThisTurn.outcome, judgeAttempt: judgeThisTurn.attempt } : {}),
       ...(!probe.via ? { exitBeforeResolve: { pendingJudgement: extra.pendingJudgement, intentHold: extra.intentHold } } : {}),
       narrativeSent: probe.narrativeSent, committed: probe.committed,
+      ...(upstream ? { upstream } : {}),
       location: { before: probe.locationId, descBefore: probe.locationDesc, after: locationAfter, changed: locationAfter !== probe.locationId },
       gate: {
         ...(reason === 'notThere' ? { notThereKind: probe.via === 'notThere' ? 'questGate' : 'travelOnly' } : {}),

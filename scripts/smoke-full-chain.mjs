@@ -796,10 +796,37 @@ const position = save => ({ 描述: save.角色.位置?.描述 ?? null, location
 const questTarget = save => { const e = questEntries(save)[0]; return e ? { title: e.title, objective: e.objective, place: e.place ?? null } : null; };
 const reqCount = cur => { const list = cur?.requests || []; return { total: list.length, chat: list.filter(k => k !== 'embeddings').length, embeddings: list.filter(k => k === 'embeddings').length }; };
 // 每手的诊断日志（--real）：从页面诊断日志自己的 IndexedDB（lcq-log／logs，不是存档接口）取本手开始后新增的这几种码，只取 code 与 detail。
-// 日志按 diagnostics.flushMs 批量落库，读前多等一会；旧包没有 LCQ-SAV-065、或库打不开，都按取不到处理（diag 为空数组或 null）。
+// LCQ-SAV-065 在 sendMessage 收尾（终存档之后）才写，比 isAIProcessing 撤下晚：先等输入区 data-turn-state 离开 processing（回合账结清），
+// 再按 diagnostics.flushMs 批量落库多等一会，之后隔 600ms 读一次、条数不再变就收（最多读 5 次）。旧包没有 LCQ-SAV-065、或库打不开，都按取不到处理（diag 为空数组或 null）。
 const DIAG_CODES = ['LCQ-SAV-053', 'LCQ-SAV-054', 'LCQ-SAV-062', 'LCQ-SAV-065'];
 async function readDiag(page, sinceMs) {
+  await page.waitForFunction(() => document.querySelector('[data-testid="turn-status"]')?.dataset.turnState !== 'processing', null, { timeout: 60_000, polling: 200 }).catch(() => null);
   await page.waitForTimeout(800);
+  let got = await readDiagOnce(page, sinceMs);
+  for (let i = 0; i < 4; i++) {
+    await page.waitForTimeout(600);
+    const again = await readDiagOnce(page, sinceMs);
+    const same = (again?.length ?? -1) === (got?.length ?? -1);
+    got = again;
+    if (same) break;
+  }
+  return got;
+}
+// 每手页面上出现过的浮动提示（src/components/common/ToastContainer.vue：.toast-container .toast .toast-message，默认 3 秒就撤）：
+// 页面里的 MutationObserver（openSmokeContext 之后 addInitScript 挂上）记下文本与时间，这里取本手开始后的，去重、每条截 120 字。
+const TOAST_OBSERVER = () => {
+  window.__toastSeen = [];
+  const note = el => { const text = (el.querySelector('.toast-message')?.textContent || el.textContent || '').replace(/\s+/g, ' ').trim(); if (text) window.__toastSeen.push({ t: Date.now(), text }); };
+  new MutationObserver(records => {
+    for (const record of records) for (const node of record.addedNodes) {
+      if (node.nodeType !== 1) continue;
+      if (node.matches('.toast')) note(node);
+      else for (const el of node.querySelectorAll('.toast')) note(el);
+    }
+  }).observe(document, { childList: true, subtree: true });
+};
+const readToasts = (page, sinceMs) => page.evaluate(since => [...new Set((window.__toastSeen || []).filter(x => x.t >= since).map(x => x.text.slice(0, 120)))], sinceMs).catch(() => null);
+function readDiagOnce(page, sinceMs) {
   return page.evaluate(({ since, codes }) => new Promise(resolve => {
     try {
       const open = indexedDB.open('lcq-log');
@@ -817,12 +844,12 @@ async function readDiag(page, sinceMs) {
   }), { since: sinceMs, codes: DIAG_CODES }).catch(() => null);
 }
 /** 每手一行（真实模式）；请求数与主叙事耗时在收尾时从 cur 取（后台请求可能晚于本手落定）。 */
-function realHand(tm, save, after, label, res, moved, nodeMoved = null, diag = null) {
+function realHand(tm, save, after, label, res, moved, nodeMoved = null, diag = null, toasts = null) {
   const safe = /已替换为安全叙述|本轮只呈现已经确认的公开动静/.test(`${after.notice} ${after.narrative200}`), unrec = /行动没能识别/.test(after.hold);
   if (safe) real.safeReplaced++;
   if (unrec) real.unrecognized++;
   const row = { hand: moves, stage: rt(save).modId, beat: QL.questBeatKey(save), plan: label, via: res.via ?? null, how: res.failed || res.how, typed: current.typed ?? null,
-    moved, nodeMoved, loose: !!current.loose, naive: !!current.naive, locationBefore: position(save).locationId, judged: current.judged ?? null, ms: Date.now() - tm, safe, unrecognized: unrec, hold: after.hold || '', notice: after.notice || '', location: position(after.save).locationId, narrative200: after.narrative200, diag, _cur: current };
+    moved, nodeMoved, loose: !!current.loose, naive: !!current.naive, locationBefore: position(save).locationId, judged: current.judged ?? null, ms: Date.now() - tm, safe, unrecognized: unrec, hold: after.hold || '', notice: after.notice || '', location: position(after.save).locationId, narrative200: after.narrative200, diag, toasts, _cur: current };
   real.hands.push(row);
   const r = reqCount(current);
   console.log(`[手] ${String(moves).padStart(3)} ${row.stage} ${row.beat ?? '-'} [${row.via ?? '×'}] ${String(row.how).slice(0, 80)} → ${moved ? '推进' : '未推进'}${nodeMoved === false ? '（walker 也不推进）' : ''}｜${(row.ms / 1000).toFixed(1)}s 请求 ${r.chat}+${r.embeddings}e${row.loose ? '｜改写' : ''}${row.judged ? `｜判拍 ${row.judged}` : ''}${safe ? '｜安全替换' : ''}${unrec ? '｜行动没能识别' : ''}`);
@@ -838,6 +865,7 @@ try {
   });
   guardRef = guard; storageRef = storage;
   if (REAL) { context.on('requestfinished', r => onRealDone(r, false)); context.on('requestfailed', r => onRealDone(r, true)); }
+  if (REAL) await context.addInitScript(TOAST_OBSERVER);
   const page = await context.newPage();
   page.on('pageerror', error => pageErrors.push(`${error.message}`.slice(0, 300)));
   try {
@@ -896,7 +924,7 @@ try {
         row.moves++; row.via[res.via]++; row.scene++; sceneCtx.moves++;
         if (VERBOSE) console.log(`  · 手 ${moves} ${Date.now() - tm}ms [${res.via}] ${res.how}`);
         const after = await readUi(page);
-        if (REAL) realHand(tm, save, after, `场面 ${sceneCtx.beat ?? ''}`, res, !after.scene, null, await readDiag(page, tm));
+        if (REAL) realHand(tm, save, after, `场面 ${sceneCtx.beat ?? ''}`, res, !after.scene, null, await readDiag(page, tm), await readToasts(page, tm));
         if (!after.scene) {
           const over = rt(after.save).gameOver;
           const last = after.save.系统?.扩展?.场面模块?.history?.at(-1);
@@ -968,7 +996,7 @@ try {
         if (VERBOSE) console.log(`  · 手 ${moves} ${Date.now() - tm}ms [${res.via}] ${res.how} → ${moved ? '推进' : '未推进'}${current.beatCandidates ? ` 判定候选 ${JSON.stringify(current.beatCandidates)}` : ''}`);
       }
       const nodeMoved = expected.save ? (REAL ? realKeyOf(progressOf(expected.save)) !== realKeyOf(before) : keyOf(progressOf(expected.save)) !== keyOf(before)) : null;
-      if (REAL) realHand(tm, save, after, planLabel(plan), res, moved, nodeMoved, await readDiag(page, tm));
+      if (REAL) realHand(tm, save, after, planLabel(plan), res, moved, nodeMoved, await readDiag(page, tm), await readToasts(page, tm));
       if (QIN && rt(after.save).modId === QIN_STAGE && !RET.getMapEntryReturnOffer(after.save)) {
         const n = await returnButtons(page);
         (qin.railMid ||= { moves: 0, early: [] }).moves++;

@@ -2844,6 +2844,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
           }
           logEvent({ code: 'LCQ-NAR-004', echo: false, detail: { errors: summarizeList(validation.errors), willRetry: true } });
           toast.warning('AI响应格式不正确，正在重试...');
+          if (beatStall) beatStall.narrativeRetried = true;
 
           // 尝试重新生成
           const retryResponse = await retryAIResponse(
