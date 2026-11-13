@@ -659,7 +659,7 @@ import {
 } from '@/modules/scenarioMods/baihuGambleRefusal';
 import { isQingyuOpeningPlaytestSave, isNanhuangDemoFinished, nextNanhuangPhase } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
 import { beginBeatStallProbe, finishBeatStallProbe, noteBeatStallVia, type BeatStallProbe } from '@/modules/scenarioMods/beatStallLog';
-import { intentSettleConfig, prepareBeatDeadlineTurn, applyBeatDeadlines, beatActionTable, beatMissNotice, beatTextNotThere, deadlineResolvedThisTurn, logBeatResolve, noteBeatActionIdleTurn, noteStageDepartureIdleTurn, resolveBeatText, stageDepartureMapTarget, type BeatVia } from '@/modules/scenarioMods/beatProgress';
+import { intentSettleConfig, prepareBeatDeadlineTurn, applyBeatDeadlines, beatActionTable, beatMissNotice, beatNotThereNote, beatTextNotThere, deadlineResolvedThisTurn, logBeatResolve, noteBeatActionIdleTurn, noteStageDepartureIdleTurn, resolveBeatText, stageDepartureMapTarget, type BeatVia } from '@/modules/scenarioMods/beatProgress';
 import { noteQuestIdleTurn, questActionGate, questArrivedDeparture, questGuideEnabled, takeQuestApproachLead } from '@/modules/scenarioMods/questLog';
 import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins';
 import {
@@ -2635,6 +2635,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     : exactSelectedOpenWorldAction
       || (routedIntentAction?.source === 'open_world_engine' ? routedIntentAction : undefined)
       || (scenarioSaveAtSend ? resolveWuyuanOpenWorldSelectionFromText(scenarioSaveAtSend, userMessage) : undefined);
+  let notThereNote: string | undefined;
   // beat.resolve（每回合一条）：点按钮、手打对上原句／按钮标签／作者短语才推进本拍；手打都没对上：不推进、回合照常叙事，
   // 弹提示列出本拍可做的动作并记 miss（用户 2026-11-02 拍板②）。判定确认后的二次执行沿用当初那一回合的记录。
   if (!isFollowUpExecution && scenarioSaveAtSend) {
@@ -2657,6 +2658,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       : beatIntentOpenWorld && beatOpenWorldAction ? { actionId: beatOpenWorldAction.identityId, intent: routedBeatIntent } : undefined);
     const missNotice = via === 'miss' || via === 'notThere' ? beatMissNotice(scenarioSaveAtSend) : undefined;
     if (missNotice) toast.info(missNotice);
+    notThereNote = beatNotThereNote(scenarioSaveAtSend, userMessage, via);
   }
 
   // 获取动作队列中的文本
@@ -2680,6 +2682,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       finalUserMessage += `\n【场景引子（作者写定，本回合照此开场；不得替玩家完成本拍）】${approachLead}\n`;
     }
   }
+  // Q20-A：人不在本拍地点的回合，告诉正文模型这一拍还没发生（beatNotThereNote）。
+  if (notThereNote) finalUserMessage += notThereNote;
   if (resolvedEventAction) {
     const result = resolvedEventAction;
     // 结果档给模型只写中文、只给模型看（真机 658435d5eb8b：档名被原样念进叙事）；事件／动作 ID 原样。
