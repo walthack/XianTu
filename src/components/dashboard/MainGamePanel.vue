@@ -156,7 +156,7 @@
             <div class="engine-action-hint">{{ branchDecision ? BRANCH_DECISION_HINT : qingyuOpeningDemo ? t('可以直接描述行动，也可点按建议填入') : t('点按填入，可修改后发送') }}</div>
           </div>
 
-          <div v-if="stageDepartureOffer && !questGuideOn" class="action-options opportunity-action-options">
+          <div v-if="stageDepartureOffer" class="action-options opportunity-action-options">
             <button
               class="action-option-btn opportunity-action-btn"
               :disabled="isAIProcessing || stageDeparturePending"
@@ -1032,10 +1032,9 @@ const qingyuOpeningDemo = computed(() => isQingyuOpeningPlaytestSave(gameStateSt
 const showScenarioActionMechanics = (option: ScenarioEngineActionSelection) => (
   !qingyuOpeningDemo.value || option.source !== 'event_engine'
 );
-// 任务引导（story.quest.enabled，默认关；questLog.ts）：开时撤主线、探索、启程按钮，玩家看任务日志与地图标记；关键选择拍仍出选项，
-// 作者写了 completion.where/who 的选项要人到了才弹（用户 2026-11-03 定 Q7=A）。开关关时以下过滤都不生效。
+// 任务引导（story.quest.enabled，默认关；questLog.ts）：开时任务日志与地图标记照常；主线、探索、启程按钮也照常显示（按钮化方案 B，用户 2026-11-14 暂定），
+// 输入框保留。作者写了 completion.where/who 的动作要人到了才出按钮（用户 2026-11-03 定 Q7=A）；人不在本拍地点时 runtime 给「前往」按钮。开关关时以下过滤都不生效。
 const questGuideOn = computed(() => questGuideEnabled(gameStateStore.toSaveData()));
-const questHidesButton = (option: { source?: string }) => questGuideOn.value && (option.source === 'event_engine' || option.source === 'exploration_engine');
 const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(() => {
   if (isAIProcessing.value || currentScene.value) return [];
   const live = gameStateStore.toSaveData();
@@ -1063,7 +1062,7 @@ const keyBeatHighlight = ref(false);
 let keyBeatConfirmedByCard = false;
 // 锁定时建议区与分支区都显示固定选项；未激活的锁选项（如决定步之前的致命选项）不提前显示。
 const engineButtonOptions = computed(() => currentScene.value || playtestFinished.value ? [] : branchDecision.value ? branchDecision.value.options.map((option, i) => ({ ...option, label: branchDecision.value!.labels[i] })) :
-  scenarioEngineActionOptions.value.filter(option => !questHidesButton(option) && !isKeyBeatCardAction(option as { source?: string; eventId?: string; actionId?: string })
+  scenarioEngineActionOptions.value.filter(option => !isKeyBeatCardAction(option as { source?: string; eventId?: string; actionId?: string })
     && !isDormantLockedOption(option as unknown as BranchDecisionCandidate)));
 /** 选项填入输入框时使用的原句（与 selectScenarioEngineAction 一致）。 */
 const engineOptionLine = (option: ScenarioEngineActionSelection): string => (
@@ -1302,7 +1301,7 @@ const currentNarrative = computed(() => {
       content: stripNarrativeMetaWords(stageEntry.text),
       time: currentTimeString,
       stateChanges: { changes: [] },
-      actionOptions: scenarioEngineActionOptions.value.filter(option => !questHidesButton(option)).map(engineOptionLine)
+      actionOptions: scenarioEngineActionOptions.value.map(engineOptionLine)
     };
   }
 
