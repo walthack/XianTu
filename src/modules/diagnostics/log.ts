@@ -30,6 +30,8 @@ export interface LogEventInput {
    * 只给叙事来源日志存模型正文全文用（narrativeSource.ts）；玩家原文不得走这里。
    */
   verbatim?: Record<string, string>;
+  /** 只对这一条覆盖 textChars（textKeys 下的字符串最多记几个字）；缺省用全局 diagnostics.textChars。目前只给 LCQ-SAV-065 用（story.quest.beatStall.textChars）。 */
+  textChars?: number;
 }
 
 export const SESSION_ID = `s_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
@@ -101,7 +103,7 @@ export function logEvent(input: LogEventInput): LogEntry | null {
     const cause = input.cause;
     const causeText = cause === undefined ? '' : scrubString(toText(cause), cfg);
     const msg = scrubString(input.msg ?? (causeText ? `${meaning}：${causeText}` : meaning), cfg, cfg.detailChars);
-    let detail = input.detail === undefined ? undefined : redact(input.detail, cfg);
+    let detail = input.detail === undefined ? undefined : redact(input.detail, input.textChars === undefined ? cfg : { ...cfg, textChars: input.textChars });
     if (input.verbatim) {
       const kept = Object.fromEntries(Object.entries(input.verbatim).map(([key, text]) => [key, scrubString(String(text), cfg, Number.MAX_SAFE_INTEGER)]));
       detail = detail && typeof detail === 'object' && !Array.isArray(detail) ? { ...(detail as object), ...kept } : detail === undefined ? kept : { detail, ...kept };

@@ -657,6 +657,7 @@ import {
   type BaihuGambleRefusalSelection,
 } from '@/modules/scenarioMods/baihuGambleRefusal';
 import { isQingyuOpeningPlaytestSave, isNanhuangDemoFinished, nextNanhuangPhase } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
+import { beginBeatStallProbe, finishBeatStallProbe, noteBeatStallVia, type BeatStallProbe } from '@/modules/scenarioMods/beatStallLog';
 import { intentSettleConfig, prepareBeatDeadlineTurn, applyBeatDeadlines, beatActionTable, beatMissNotice, beatTextNotThere, deadlineResolvedThisTurn, logBeatResolve, noteBeatActionIdleTurn, noteStageDepartureIdleTurn, resolveBeatText, stageDepartureMapTarget, type BeatVia } from '@/modules/scenarioMods/beatProgress';
 import { noteQuestIdleTurn, questActionGate, questArrivedDeparture, questGuideEnabled, takeQuestApproachLead } from '@/modules/scenarioMods/questLog';
 import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins';
@@ -2085,11 +2086,15 @@ async function runSceneOperationInner(operation: (save: any, deps: HostDeps) => 
   }
 }
 const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: JudgementResolution; restoreOnFailure?: SaveData | null }) => {
-  let diagnosticTurnId: string | null = null;
+  let diagnosticTurnId: string | null = null; let beatStall: BeatStallProbe | undefined;
   beginTurn(turnLedger);
   try {
+  // 主线拍没推进日志（LCQ-SAV-065，只观察）：判定确认后的二次执行、AI 处理中的重复发送不记；内层 try 只为在各条返回路径上收尾记一条。
+  try {
+  if (!isAIProcessing.value && !(execution && typeof execution === 'object' && ('resolution' in execution || 'skipPreflight' in execution))) beatStall = beginBeatStallProbe(gameStateStore.toSaveData(), inputText.value);
   const sceneSave = gameStateStore.toSaveData();
   if (sceneSave && hostNeeded(sceneSave, selectedScenarioEngineAction.value as any)) {
+    if (beatStall) beatStall.exit = 'scene';
     const text = composeJudgementAction(inputText.value, actionQueue.getActionPrompt());
     if (!text) return;
     const selected = selectedScenarioEngineAction.value as any;
@@ -2637,6 +2642,11 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       : otherEngine ? 'other'
       : userMessage && beatTextNotThere(scenarioSaveAtSend, userMessage) ? 'notThere'
       : userMessage && beatActionTable(scenarioSaveAtSend).actions.length ? 'miss' : 'none';
+    noteBeatStallVia(beatStall, via, matchedEventAction?.actionId ?? (beatIntentOpenWorld ? beatOpenWorldAction?.identityId : undefined), {
+      gambleRefusal: Boolean(resolvedGambleRefusalAction), opportunity: Boolean(resolvedOpportunityAction), openWorld: Boolean(resolvedOpenWorldAction),
+      beatOpenWorld: Boolean(beatOpenWorldAction), freeActionTickets: routedFreeActionTickets.length > 0, contractedJudgement: Boolean(contractedJudgementResolution),
+      followUpFreeAction: Boolean(followUpFreeAction), selfUse: Boolean(selfUse), crossCountryTravel: Boolean(crossCountryTravel),
+    });
     logBeatResolve(scenarioSaveAtSend, via, matchedEventAction ? { eventId: matchedEventAction.eventId, actionId: matchedEventAction.actionId, ...(via === 'intent' ? { intent: routedBeatIntent } : {}) }
       : beatIntentOpenWorld && beatOpenWorldAction ? { actionId: beatOpenWorldAction.identityId, intent: routedBeatIntent } : undefined);
     const missNotice = via === 'miss' || via === 'notThere' ? beatMissNotice(scenarioSaveAtSend) : undefined;
@@ -2782,6 +2792,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 
       (options as { qingyuTurnId?: string }).qingyuTurnId = qingyuTurnId;
       const narrativeStartedAt = Date.now();
+      if (beatStall) beatStall.narrativeSent = true;
       const budget = (GAME_NUMBERS.story as any).narrativeTurnBudget as { totalMs: number; notice: string };
       const captured = await captureAIResponseError(() => raceTurnBudget(bidirectionalSystem.processPlayerAction(
         finalUserMessage,
@@ -3107,6 +3118,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     let questArrivalStageId: string | undefined;
     let linePromptNotices: string[] = [];
     if (aiResetToken === resetSnapshot && aiResponse) {
+      if (beatStall) beatStall.committed = Boolean(aiResponse.transactionCommitted);
       const idleSave = gameStateStore.toSaveData();
       // 同场人物等回应：只在本回合正文已提交后提示，每拍一次（记进 系统.扩展，随下面的统一存档落盘）。
       if (idleSave && aiResponse.transactionCommitted) linePromptNotices = noteLinePrompts(idleSave);
@@ -3151,6 +3163,9 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       await nextTick();
       inputRef.value?.focus();
     }
+  }
+  } finally {
+    finishBeatStallProbe(beatStall, gameStateStore.toSaveData(), { pendingJudgement: Boolean(pendingJudgement.value), intentHold: Boolean(intentHoldMessage.value) });
   }
   } catch (error) { // lcq-allow: 内层 try 之外抛出的异常（本地预结算失败等）照旧上抛，由全局兜底记码；这里只解开「AI 处理中」，否则输入框锁到刷新为止
     uiStore.setAIProcessing(false);

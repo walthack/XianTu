@@ -111,7 +111,7 @@ export function resolveBeatText(save: SaveData | null | undefined, text: string,
   return hit && gateOk(save, hit) ? hit : questGuideEnabled(save) ? questExtraResolution(save!) : undefined;
 }
 
-function resolveBeatTextUngated(save: SaveData | null | undefined, text: string, mods: readonly ScenarioMod[]): BeatResolution | undefined {
+export function resolveBeatTextUngated(save: SaveData | null | undefined, text: string, mods: readonly ScenarioMod[]): BeatResolution | undefined {
   if (!save) return undefined;
   const key = beatLineKey(text);
   if (key) {
