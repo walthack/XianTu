@@ -143,6 +143,35 @@ export function beatTextNotThere(save: SaveData | null | undefined, text: string
   return Boolean(hit && !gateOk(save, hit) && !questExtraResolution(save!));
 }
 
+/**
+ * Q20-A（用户 2026-11-14 定）：人不在本拍地点（或要找的人不同场）的回合本拍不结算，但回合照常交给模型写正文；
+ * 这里给出附在这一回合用户消息后的固定说明，告诉模型这一拍还没发生，免得它把这一拍的戏演出来。
+ * 两种情形：via=notThere（这句话命中了本拍动作，where／who 闸门没过）；via=miss 且本拍动作表只剩罗盘移动（人不在本拍地点）。
+ * 其余返回 undefined；开关关恒为 undefined。不改结算。
+ */
+export function beatNotThereNote(save: SaveData | null | undefined, text: string, via: BeatVia): string | undefined {
+  if (!save || !questGuideEnabled(save) || (via !== 'notThere' && via !== 'miss')) return undefined;
+  const beatId = String(getScenarioFocusEvent(runtimeOf(save))?.id || '');
+  let place = '', who = '';
+  if (via === 'notThere') {
+    const hit = resolveBeatTextUngated(save, text, builtinMods());
+    if (hit?.action.kind !== 'event') return undefined;
+    const selection = hit.action.selection;
+    const gate = questActionGate(save, selection);
+    const completion = questBeatSpec(selection.eventId)?.actions?.[selection.actionId]?.completion;
+    if (gate.where === false) place = locationName(String(completion?.where || '').replace(/^place:/, ''));
+    if (gate.who === false) who = entityName('character', String(completion?.who || '').replace(/^npc:/, ''));
+  } else {
+    const ids = getCurrentStoryEventActions(save).filter(item => item.eventId === beatId).map(item => item.actionId);
+    if (!beatId || !ids.length || !ids.every(id => id.startsWith('travel:'))) return undefined;
+    place = locationName(ids[0].slice('travel:'.length));
+  }
+  if (!place && !who) return undefined;
+  const reason = [place && `玩家此刻不在${place}`, who && `${who}此刻不在玩家身边`].filter(Boolean).join('，');
+  const objective = questBeatSpec(beatId)?.objective || String(getScenarioFocusEvent(runtimeOf(save))?.objective || '');
+  return `\n【本拍尚未发生】${reason}，任务当前这一拍${objective ? `（${objective}）` : ''}还没有发生。本回合不得写出这一拍的内容或结果${place ? `；可以写玩家动身前往${place}` : ''}。\n`;
+}
+
 /** 作者标了 allowInquiry（信息探问允许直接问句）的动作：句末问号不挡短语匹配；其余动作问句照旧不认。 */
 function inquiryAlias(save: SaveData, text: string): ScenarioEventActionSelection | undefined {
   const statement = String(text || '').trim().replace(/[？?]+$/u, '');

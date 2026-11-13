@@ -210,6 +210,37 @@ test('开关开：s01 末一路手打推进到王哲传功之后；stage_02 有�
   assert.ok(missing.some(e => e.detail.beatKey === next.eventId), '缺目标文案记日志');
 }));
 
+test('Q20-A：人不在本拍地点的回合给正文模型一句「这一拍还没发生」；人在场、开关关、别的 via 都不给', () => withQuest(true, () => {
+  const line = '我向王哲请教他要交代的事';
+  const objective = Q.questBeatSpec('lcq.event.s02_01').objective;
+  // ① 引擎只给罗盘移动（拍自带 locationId、人在草原）：这句话记 miss，说明里写帅帐和本拍目标。
+  let s = turn(toStageReady(), '我收拾行装，准备上路').save;
+  moveTo(s, 'lcq.location.grassland', '中立边陲·草原');
+  const actions = R.getCurrentStoryEventActions(s).filter(a => a.eventId === 'lcq.event.s02_01');
+  assert.ok(actions.length && actions.every(a => a.actionId.startsWith('travel:')), '前提：此刻只有罗盘移动');
+  const travelNote = BP.beatNotThereNote(s, line, 'miss');
+  assert.match(travelNote, /【本拍尚未发生】玩家此刻不在帅帐，/);
+  assert.ok(travelNote.includes(objective) && travelNote.includes('不得写出这一拍的内容或结果') && travelNote.includes('可以写玩家动身前往帅帐'));
+  assert.equal(BP.beatNotThereNote(s, line, 'other'), undefined, '被别的引擎接走的回合不给');
+  assert.equal(BP.beatNotThereNote(s, line, 'button'), undefined);
+  // ② 任务闸门（completion.where）没过：via=notThere，同一句说明。
+  const gated = structuredClone(s);
+  delete rt(gated).events.find(e => e.id === 'lcq.event.s02_01').locationId;
+  assert.equal(BP.beatTextNotThere(gated, line), true);
+  assert.match(BP.beatNotThereNote(gated, line, 'notThere'), /【本拍尚未发生】玩家此刻不在帅帐，/);
+  // ③ 人在帅帐：这句话没对上（miss）也不给——这一拍此刻可以做。
+  moveTo(s, SHUAI_ZHANG, '中立边陲·帅帐');
+  assert.equal(BP.beatNotThereNote(s, '我在帐里四处看看。', 'miss'), undefined);
+  // ④ 开关关：恒不给。
+  moveTo(s, 'lcq.location.grassland', '中立边陲·草原');
+  QC.enabled = false;
+  try { assert.equal(BP.beatNotThereNote(s, line, 'miss'), undefined); } finally { QC.enabled = true; }
+  // 接线：sendMessage 把说明接在这一回合的用户消息后。
+  const panel = read('src/components/dashboard/MainGamePanel.vue');
+  assert.match(panel, /notThereNote = beatNotThereNote\(scenarioSaveAtSend, userMessage, via\);/);
+  assert.match(panel, /if \(notThereNote\) finalUserMessage \+= notThereNote;/);
+}));
+
 test('开关开：人不在 where 不结算、记 notThere 不算 miss；空转 3/6 回合逐级放提示，8 回合王哲主动来找后同场即算到地', () => withQuest(true, async () => {
   await resetLogState();
   let s = turn(toStageReady(), '我收拾行装，准备上路').save;
