@@ -764,7 +764,7 @@ const sceneTally = id => { const list = scenes.filter(x => x.stage === id); retu
 const printStage = row => console.log(`[关] ${String(stages.indexOf(row) + 1).padStart(2)} ${row.id.padEnd(36)} 手 ${String(row.moves).padStart(3)}（a ${row.via.a}［其中去地点 ${row.aPlace}］ / b ${row.via.b} / c ${row.via.c} / d ${row.via.d}；预备 ${row.prep}；场面 ${row.scene}）卡点 ${row.stuck} 差异 ${row.diffs}${sceneTally(row.id)}  ${((Date.now() - row.t) / 1000).toFixed(0)}s`);
 
 // ───────────── --real：统计 ─────────────
-const real = { profile: {}, hands: [], chat: 0, embeddings: 0, byKind: {}, failedRequests: 0, safeReplaced: 0, unrecognized: 0 };
+const real = { actionTime: {}, profile: {}, hands: [], chat: 0, embeddings: 0, byKind: {}, failedRequests: 0, safeReplaced: 0, unrecognized: 0 };
 const inflight = new Map(); // Playwright Request → { t0, cur, main }
 const pathOf = request => { try { const u = new URL(request.url()); return `${u.host}${u.pathname}`; } catch { return '?'; } }; // 不带查询串
 function onRealRequest(kind, body, request) {
@@ -786,6 +786,18 @@ function onRealDone(request, failed) {
   inflight.delete(request);
   if (failed) { real.failedRequests++; if (x.cur) x.cur.failedRequests = (x.cur.failedRequests || 0) + 1; }
   if (x.main && x.cur) (x.cur.narrMs ||= []).push(Date.now() - x.t0);
+  // 主叙事回包里模型给的 action_time（动作耗时档位）：流式回包逐块拼回正文再取；只记这一个字段的原样文本（前 80 字）或 'absent'。
+  if (x.main && !failed) request.response().then(r => r?.text()).then(raw => {
+    if (!raw) return;
+    let content = '';
+    for (const line of raw.split('\n')) { if (!line.startsWith('data:')) continue; try { content += JSON.parse(line.slice(5))?.choices?.[0]?.delta?.content ?? ''; } catch { /* [DONE] 等 */ } }
+    if (!content) { try { content = JSON.parse(raw)?.choices?.[0]?.message?.content ?? ''; } catch { /* 非 JSON */ } }
+    if (!content) return;
+    const m = content.match(/"action_time"\s*:\s*(\{[^}]*\}|"[^"]*"|[^,}\s]+)/);
+    const v = m ? m[1].replace(/\s+/g, ' ').slice(0, 80) : 'absent';
+    real.actionTime[v] = (real.actionTime[v] || 0) + 1;
+    if (x.cur) (x.cur.actionTime ||= []).push(v);
+  }).catch(() => {});
   // 判拍／意图请求的回包正文（模型输出，前 300 字）记到这一手，便于看没判中时模型回了什么。
   if (!failed && x.cur && (x.kind === 'beat' || x.kind === 'intent')) request.response().then(r => r?.json()).then(j => { (x.cur.judgeReplies ||= []).push(String(j?.choices?.[0]?.message?.content ?? '').replace(/\s+/g, ' ').slice(0, 300)); }).catch(() => {});
   const g = real.profile[x.sig] ||= { count: 0, failed: 0, ms: [], params: {}, status: {}, errorBodies: [] };
@@ -1103,7 +1115,7 @@ if (REAL) {
   realOut = { hosts: guardRef?.stats ? { allowed: guardRef.stats.allowed, violations: guardRef.stats.violations.length } : null, storage: storageRef,
     requests: { chat: real.chat, embeddings: real.embeddings, byKind: real.byKind, failed: real.failedRequests },
     handMs: { median: med(handMs), max: Math.max(0, ...handMs) }, narrationMs: { count: narr.length, median: med(narr), max: Math.max(0, ...narr) },
-    safeReplaced: real.safeReplaced, unrecognized: real.unrecognized, hands: real.hands,
+    safeReplaced: real.safeReplaced, unrecognized: real.unrecognized, actionTime: real.actionTime, hands: real.hands,
     profile: Object.fromEntries(Object.entries(real.profile).map(([k, g]) => [k, { count: g.count, failed: g.failed, medianMs: med(g.ms), maxMs: Math.max(0, ...g.ms), params: g.params, status: g.status, errorBodies: g.errorBodies }])) };
   // LCQ-SAV-065 按 detail.reason 计数；取不到诊断日志的手（旧包／库打不开）单独计。
   realOut.stall = { reasons: {}, entries: 0, handsWithoutDiag: real.hands.filter(h => !Array.isArray(h.diag)).length };
@@ -1122,6 +1134,7 @@ if (REAL) {
 }
 if (REAL) console.log(`[没推进原因] LCQ-SAV-065 共 ${realOut.stall.entries} 条：${Object.entries(realOut.stall.reasons).map(([k, n]) => `${k} ${n}`).join('、') || '无'}；取不到诊断日志 ${realOut.stall.handsWithoutDiag} 手`);
 if (REAL) for (const [k, g] of Object.entries(realOut.profile)) console.log(`[请求画像] ${k}：${g.count} 次，失败 ${g.failed}，中位 ${(g.medianMs / 1000).toFixed(1)}s／最长 ${(g.maxMs / 1000).toFixed(1)}s；${JSON.stringify(g.params)}；HTTP ${JSON.stringify(g.status)}`);
+if (REAL) console.log(`[真实模型] 主叙事回包里的 action_time：${JSON.stringify(realOut.actionTime)}`);
 if (REAL && NAIVE) { const nv = realOut.hands.filter(h => h.naive); console.log(`[真实模型] 人不在场探测 ${nv.length} 手：发了主叙事 ${nv.filter(h => h.narrMs.length).length}；手后位置变了 ${nv.filter(h => h.location !== h.locationBefore).length}；本手就推进 ${nv.filter(h => h.moved).length}`); }
 if (REAL && LOOSE) console.log(`[真实模型] 改写手 ${realOut.loose.hands}：推进 ${realOut.loose.moved}；发了判拍／意图请求 ${realOut.loose.judged}（其中推进 ${realOut.loose.judgedMoved}）；没推进 ${realOut.loose.notMoved.length}`);
 const failures = [];
