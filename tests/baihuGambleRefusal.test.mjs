@@ -1513,3 +1513,45 @@ test('sixty-zhu payment settles once on the second verified fee action', async (
   rtm.recordStoryEventStructuredAction(save, second);
   assert.equal(save.角色.背包.货币.金铢.数量, 60);
 });
+
+// PR #75 补用例（主叙事格式重试带结算输入）：拒赌这一类到不了格式重试——存档是固定道具合同（retryAIResponse 直接 return null），
+// AIBS 也只走本地正文、不请求模型（没有 529／坏 JSON 的第一次失败）。这里钉住：preview 只读；上游一律 529 时仍一次提交、只结算一次。
+test('拒赌：preview 只读；固定道具合同存档；上游一律 529 也不请求模型、第一次就提交，同一选择再发只是幂等重放', async () => {
+  setActivePinia(createPinia());
+  const { AIBidirectionalSystem } = await loadPipelineTs('../src/utils/AIBidirectionalSystem.ts');
+  const { useGameStateStore } = await loadPipelineTs('../src/stores/gameStateStore.ts');
+  const { aiService } = await loadPipelineTs('../src/services/aiService.ts');
+  const { AiHttpError } = await loadPipelineTs('../src/services/aiRetryPolicy.ts');
+  const refusal = await loadPipelineTs('../src/modules/scenarioMods/baihuGambleRefusal.ts');
+  const { usesFixedScenarioInventory } = await loadPipelineTs('../src/modules/scenarioMods/fixedInventoryContracts.ts');
+  const save = at('atProposed');
+  const selection = refusal.getBaihuGambleRefusalSelections(save).find(item => item.actionId === 'refuse_gamble');
+  assert.ok(selection);
+  assert.equal(usesFixedScenarioInventory(save), true, 'lcq 存档：retryAIResponse 不发格式重试');
+  const before = cloneJson(save);
+  assert.ok(refusal.previewBaihuGambleRefusalNarrative(save, selection), 'preview 出了本地正文');
+  assert.deepEqual(cloneJson(save), before, 'preview 不改存档（序列化后逐项相同）');
+
+  const keep = { check: aiService.checkAvailability, generate: aiService.generate, raw: aiService.generateRaw };
+  let calls = 0;
+  aiService.checkAvailability = () => ({ available: true, message: 'test-stub' });
+  aiService.generate = aiService.generateRaw = async () => { calls += 1; throw new AiHttpError('API错误 529: overloaded_error', { status: 529 }); };
+  try {
+    const store = useGameStateStore();
+    store.loadFromSaveData(save);
+    const profile = { 模式: '单机', 角色: { 名字: '程宗扬', 性别: '男' }, 存档列表: {} };
+    const options = () => ({ gambleRefusalAction: structuredClone(selection), shouldAbort: () => false });
+    const r1 = await AIBidirectionalSystem.processPlayerAction(selection.playerLine, profile, options());
+    assert.equal(calls, 0, '不请求模型');
+    assert.equal(r1.transactionCommitted, true);
+    const settled = cloneJson(refusal.readBaihuGambleRefusal(store.toSaveData()));
+    assert.equal(settled.phase, 'capture_ordered');
+    const r2 = await AIBidirectionalSystem.processPlayerAction(selection.playerLine, profile, options());
+    assert.equal(calls, 0);
+    // 同一选择再发是幂等重放（本文件「idempotent replay」用例同口径）：正文照旧，账本不再动。
+    assert.equal(r2.text, r1.text);
+    assert.deepEqual(cloneJson(refusal.readBaihuGambleRefusal(store.toSaveData())), settled, '拒赌账本只结算一次');
+  } finally {
+    Object.assign(aiService, { checkAvailability: keep.check, generate: keep.generate, generateRaw: keep.raw });
+  }
+});

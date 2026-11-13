@@ -199,3 +199,38 @@ test('MainGamePanel 接线：retryAIResponse 收第一次的 options、每次重
   assert.match(fn, /if \(aiResponse\.transactionCommitted\) carried = \{\};/);
   assert.match(src, /retryAIResponse\(\s*finalUserMessage,\s*character,\s*validation\.errors,\s*options\s*\)/);
 });
+
+// 提交了但校验不过：正文只有判定标记（〔战斗:…〕）的回包会照常落账，落账后正文被清成空串 → validateProcessedAIResponse 报「缺少有效的text字段」，
+// retryAIResponse 接着发下一次。这时这一手已经结算过，下一次重试不能再带结算输入（retryAIResponse：if (aiResponse.transactionCommitted) carried = {}）。
+const MARKER_ONLY = JSON.stringify({ text: '〔战斗:失败,判定值:32,难度:40〕', mid_term_memory: '只剩判定标记。', tavern_commands: [] });
+
+test('重试已提交但正文为空（校验不过）→ 下一次重试不带结算输入：本拍只结算一次', async () => {
+  const { validateProcessedAIResponse } = await load('../src/utils/processedAIResponseValidation.ts');
+  const seq = n => n === 1 ? http529() : n === 2 ? MARKER_ONLY : GOOD;
+  const run3 = async carryAfterCommit => {
+    const t = await setup('lyl.event.survey_wumu_mansion', 'circle_wumu_record_layout', seq);
+    try {
+      await t.run(TEXT, t.firstOptions);
+      // 照 retryAIResponse：carried 起始为第一次的结算输入；第 1 次重试提交了就清空。
+      let carried = carryNarrativeRetryOptions(t.firstOptions);
+      const r1 = await t.run(TEXT, { ...carried, ...t.retryOptions({}, 1) });
+      assert.equal(r1.transactionCommitted, true, '第 1 次重试提交了');
+      assert.equal(r1.text, '', '落账后正文清空');
+      assert.equal(validateProcessedAIResponse(r1).isValid, false, '校验不过 → retryAIResponse 会发第 2 次');
+      assert.equal(t.state().eventActionStates['lyl.event.survey_wumu_mansion'].attemptCount, 1, '第 1 次重试已结算本拍');
+      assert.ok(!runtime.getCurrentStoryEventActions(t.store.toSaveData()).some(a => a.actionId === 'circle_wumu_record_layout'), '第一步动作已不在当前动作里');
+      if (r1.transactionCommitted && !carryAfterCommit) carried = {};
+      const r2 = await t.run(TEXT, { ...carried, ...t.retryOptions({}, 2) });
+      assert.equal(r2.transactionCommitted, true);
+      assert.equal(validateProcessedAIResponse(r2).isValid, true);
+      return t.state().eventActionStates['lyl.event.survey_wumu_mansion'];
+    } finally { t.restore(); }
+  };
+  const guarded = await run3(false);
+  assert.equal(guarded.attemptCount, 1, '只结算一次');
+  assert.deepEqual(guarded.attempts.map(a => a.actionId), ['circle_wumu_record_layout']);
+  // 旁证（不是要求）：本例即使提交后照旧带着 eventAction，运行时也没有结算第二次（本拍已露出第二步，第一步动作不再是当前动作）。
+  // 所以 carried = {} 在这里是第二道防线；第一道是运行时对过期动作的拒绝。
+  const unguarded = await run3(true);
+  assert.equal(unguarded.attemptCount, 1);
+});
