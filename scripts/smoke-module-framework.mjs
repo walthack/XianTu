@@ -154,7 +154,7 @@ try {
     const release = kind => held[kind].splice(0).forEach(resolve => resolve());
     // 点当前事件动作按钮（填入原句并选中该结构化动作），再发送：走模块链路的非卡片事件动作回合。
     const sendEventAction = async () => {
-      // 任务模式（2026-11-03 起内测构建默认开）撤了主线按钮：手打该动作原句＝按字命中本拍动作（beatProgress.resolveBeatText），与点按钮填入同一句。
+      // 手打该动作原句＝按字命中本拍动作（2026-11-14 按钮化方案 B 起任务模式下主线按钮也显示，这里仍测手打路径）（beatProgress.resolveBeatText），与点按钮填入同一句。
       const button = page.locator('.engine-action-btn', { hasText: feeAction.label }).first();
       if (await button.count()) await button.click();
       else await page.locator('textarea.game-input').fill(feeAction.playerLine);

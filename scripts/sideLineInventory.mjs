@@ -108,7 +108,7 @@ async function finalId() { if (!FINAL_ID) FINAL_ID = (await loadTs('../src/modul
 
 const fmt = at => at ? `${at.stage.replace(/^(lcq|lyl|lyg)\./, '')}／${String(at.focus || '—').replace(/^(lcq|lyl|lyg)\.event\./, '')}（步 ${at.step}）` : '—';
 /** 入口（按设计）：人物线拍＝右栏「这一拍谁有戏」展开「回应／明确略过」按钮；支线拍＝任务模式下探索按钮被撤，只有手打（判定请求带探索候选）。 */
-export const designedEntry = line => line.kind === 'character' ? '右栏「这一拍谁有戏」→「回应：…」按钮（填入输入框后发送）' : '手打（任务模式撤探索按钮；「可投的门路」默认隐藏）→ 意图判定候选里的探索动作';
+export const designedEntry = line => line.kind === 'character' ? '右栏「这一拍谁有戏」→「回应：…」按钮（填入输入框后发送）' : '手打（「可投的门路」默认隐藏；按钮化方案 B 后主面板也有探索按钮）→ 意图判定候选里的探索动作';
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const args = process.argv.slice(2), ji = args.indexOf('--json'), jsonOut = ji >= 0 ? args[ji + 1] : null;
