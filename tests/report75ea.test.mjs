@@ -56,7 +56,7 @@ test('P2-1 界面：输入框与发送键都挂分支锁禁用，占位与提示
   assert.match(textarea, /branchDecisionInputLocked \? BRANCH_DECISION_INPUT_PLACEHOLDER :/, '占位文字明示有意禁用');
   assert.match(ui, /const branchDecisionInputLocked = computed\(\(\) => branchDecisionLocksInput\(branchDecision.value\)\)/);
   // 建议区在分支期间点按即确认（发送键已禁用，不能只填入）。
-  assert.match(ui, /@click="branchDecision \? confirmBranchDecision\(option\) : selectScenarioEngineAction\(option\)"/);
+  assert.match(ui, /@click="branchDecision \? confirmBranchDecision\(option\) : clickEngineOption\(option\)"/);
   assert.match(ui, /const confirmBranchDecision = async \(option: ScenarioEngineActionSelection\) => \{\n\s*selectScenarioEngineAction\(option\);\n\s*await sendMessage\(\);/, '点选项结算行为不变');
   // 文案不写死在组件里。
   assert.equal(B.BRANCH_DECISION_INPUT_PLACEHOLDER, config.inputPlaceholder);

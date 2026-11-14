@@ -132,7 +132,7 @@ test('P2-4 五原固定选项：建议可见，点按接赌/不赌即结算（75
   const ui=await read('src/components/dashboard/MainGamePanel.vue');
   assert.match(ui,/branchDecision.value \? branchDecision.value.options.map/);
   assert.doesNotMatch(ui,/<div v-if="!branchDecision" class="input-wrapper"/);
-  assert.match(ui,/@click="branchDecision \? confirmBranchDecision\(option\) : selectScenarioEngineAction\(option\)"/);
+  assert.match(ui,/@click="branchDecision \? confirmBranchDecision\(option\) : clickEngineOption\(option\)"/);
 });
 
 test('P2-5 太泉旧档补齐火山口地点：前往实际落位，到场不会提前完成圣果争夺',async()=>{

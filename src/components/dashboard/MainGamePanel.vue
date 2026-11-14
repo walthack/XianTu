@@ -145,7 +145,7 @@
             <button
               v-for="option in engineButtonOptions"
               :key="JSON.stringify(option)"
-              @click="branchDecision ? confirmBranchDecision(option) : selectScenarioEngineAction(option)"
+              @click="branchDecision ? confirmBranchDecision(option) : clickEngineOption(option)"
               class="action-option-btn engine-action-btn"
               :disabled="isAIProcessing"
             >
@@ -2039,6 +2039,15 @@ const onSelectLineAction = (payload?: { eventId?: string; actionId?: string }) =
   const option = scenarioEngineActionOptions.value.find(item => 'eventId' in item && item.eventId === payload?.eventId && 'actionId' in item && item.actionId === payload?.actionId);
   if (option) selectScenarioEngineAction(option);
   else toast.info(naturalIntentClarify(gameStateStore.toSaveData()));
+};
+// 跨国的「前往」按钮（用户 2026-11-14 选 a）：跨国须在地图上点选，所以点了不填输入框，直接打开地图并选中落点（?goto=），玩家在弹窗里确认前往。
+// 手打同一句仍走原来的提示（mapPreparationNotice）。
+const clickEngineOption = (option: ScenarioEngineActionSelection) => {
+  const save = gameStateStore.toSaveData();
+  const target = save ? crossCountryStoryTravel(save, option as { source?: string; eventId?: string; actionId?: string }) : undefined;
+  if (!target) { selectScenarioEngineAction(option); return; }
+  toast.info(crossCountryStoryTravelToast(target));
+  void router.push({ path: '/game/world-map', query: { goto: target.mapTargetId } });
 };
 const selectScenarioEngineAction = (option: ScenarioEngineActionSelection) => {
   selectedScenarioEngineAction.value = option;
