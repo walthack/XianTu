@@ -496,6 +496,18 @@ const focusQuestMarker = (key: string) => {
 };
 watch(questMarkerList, drawQuestMarkers, { deep: true });
 watch(() => route?.query?.quest, key => { drawQuestMarkers(); if (key) focusQuestMarker(String(key)); });
+// 主面板跨国「前往」按钮带 ?goto=<地点编号> 进来（用户 2026-11-14 选 a）：居中并选中该地点，弹窗里照常「前往此地 → 确认前往」。
+const selectGotoLocation = () => {
+  const id = canonicalLocationId(String(route?.query?.goto || ''));
+  const location = id ? mapLocationsLoaded.value.find(item => canonicalLocationId(String(item.id || '')) === id) : undefined;
+  if (!location?.coordinates || isMapHiddenLocation(String(location.id || ''))) return;
+  mapManager.value?.centerTo(location.coordinates.x, location.coordinates.y, false);
+  const rect = mapContainerRef.value?.getBoundingClientRect();
+  if (rect) popupPosition.value = { x: rect.width / 2, y: rect.height / 2 };
+  selectedContinent.value = null;
+  selectedLocation.value = location;
+};
+watch(() => route?.query?.goto, key => { if (key) selectGotoLocation(); });
 const selectedContinent = ref<any | null>(null);
 const mapStatus = ref('初始化中...');
 const popupPosition = ref({ x: 0, y: 0 });
@@ -2035,6 +2047,7 @@ const loadMapData = async (options?: { silent?: boolean; reset?: boolean }) => {
 
     drawQuestMarkers();
     if (route?.query?.quest) focusQuestMarker(String(route.query.quest));
+    if (route?.query?.goto) selectGotoLocation();
     mapStatus.value = `已加载 ${locationCount} 个地点`;
     if (!silent) {
       toast.success('地图加载完成');

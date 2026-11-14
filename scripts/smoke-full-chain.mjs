@@ -316,6 +316,18 @@ async function clickSend(page, locator, before) {
 async function mapTravel(page, locationId, before) {
   const opened = await openMapLocationPopup(page, locationId);
   if (!opened) return { ok: false, why: `地图上没画出 ${locationId}` };
+  return confirmMapPopup(page, opened, before);
+}
+/** 跨国「前往」按钮（用户 2026-11-14 选 a）：点了应直接打开地图并选中落点；这里只点按钮、等弹窗、确认，不自己去地图上找点。 */
+async function buttonMapTravel(page, btn, cross, before) {
+  await btn.click();
+  const popup = page.locator('.location-popup');
+  if (!(await popup.waitFor({ timeout: 15_000 }).then(() => true, () => false))) { await routerPush(page, '/game'); return { ok: false, why: '点了按钮没有出地图弹窗' }; }
+  const title = (await popup.locator('h4').innerText()).trim();
+  if (title !== cross.mapTargetName) { await routerPush(page, '/game'); return { ok: false, why: `弹窗选中的是「${title}」，应为「${cross.mapTargetName}」` }; }
+  return confirmMapPopup(page, { popup, name: title }, before);
+}
+async function confirmMapPopup(page, opened, before) {
   const go = opened.popup.locator('button.enter-region-btn', { hasText: '前往此地' });
   if (!(await go.count()) || await go.isDisabled()) { const why = (await opened.popup.innerText()).replace(/\s+/g, ' ').slice(0, 160); await routerPush(page, '/game'); return { ok: false, why: `「前往此地」不可点：${why}` }; }
   await go.click();
@@ -447,11 +459,16 @@ async function executeMove(page, ui, plan, attempt) {
     }
     if (action.actionId.startsWith('travel:')) {
       const naiveMain = NAIVE && attempt === 0 ? questEntries(save)[0] : null;
-      // SMOKE_PREFER_BUTTONS：同国的「前往」按钮直接点（跨国的前往按钮不送人，仍走下面的地图流程）。
-      if (PREFER_BUTTONS && !naiveMain && attempt === 0 && !MT.crossCountryStoryTravel(save, { source: 'event_engine', eventId: action.eventId, actionId: action.actionId })) {
+      // SMOKE_PREFER_BUTTONS：同国的「前往」按钮点了发送；跨国的点了直接开地图并选中落点（用户 2026-11-14 选 a），在弹窗里确认。
+      if (PREFER_BUTTONS && !naiveMain && attempt === 0) {
         const label = ENV.storyActionPresentation(action, save).label;
         const btn = page.locator('.engine-action-options button.engine-action-btn').filter({ hasText: label });
-        if (await btn.count()) { await clickSend(page, btn.first(), ui); return { via: 'b', place: true, how: `前往按钮「${label}」（walker：${action.actionId}）` }; }
+        const cross = MT.crossCountryStoryTravel(save, { source: 'event_engine', eventId: action.eventId, actionId: action.actionId });
+        if (cross && await btn.count()) {
+          const r = await buttonMapTravel(page, btn.first(), cross, ui);
+          if (r.ok) return { via: 'b', how: `跨国前往按钮「${label}」→ 地图已选中 ${r.name}（walker：${action.actionId}）`, prep: cross.mapTargetId !== cross.toId };
+          anomalies.push({ stage: rt(save).modId, what: '跨国前往按钮没有把地图选好', target: cross, why: r.why });
+        } else if (await btn.count()) { await clickSend(page, btn.first(), ui); return { via: 'b', place: true, how: `前往按钮「${label}」（walker：${action.actionId}）` }; }
       }
       if (naiveMain) { current.naive = true; await typeSend(page, naiveMain.objective, ui); return { via: current.judged ? 'c' : 'a', how: `【人不在场探测】手打任务目标「${naiveMain.objective}」（walker：${action.actionId}）` }; }
       const marker = markerOf(save, plan.focus);
@@ -1180,6 +1197,7 @@ const looseMiss = new Set(REAL && LOOSE ? real.hands.filter(h => h.loose && !h.m
 const unexplained = diffs.filter(d => !stuck.some(x => x.stage === d.stage && x.beat === d.beat) && !looseMiss.has(d.move));
 check(unexplained.length === 0, `有 ${unexplained.length} 处与 walker 的差异不能用卡点解释：${JSON.stringify(unexplained.slice(0, 3))}`);
 check(pageErrors.length === 0, `控制台未捕获异常：${pageErrors.slice(0, 3).join(' / ')}`);
+check(!anomalies.some(a => a.what === '跨国前往按钮没有把地图选好'), `跨国前往按钮没有把地图选好：${JSON.stringify(anomalies.filter(a => a.what === '跨国前往按钮没有把地图选好'))}`);
 check(!anomalies.some(a => a.what === 'LCQ 报错码'), `出现 LCQ 报错码：${JSON.stringify(anomalies.filter(a => a.what === 'LCQ 报错码').flatMap(a => a.codes))}`);
 if (!QIN && LAST === FINAL && outcome !== 'maxHands') {
   check(festival?.available && !festival.blocked && festival.button && !festival.button.disabled, `终关「${F.FESTIVAL.label}」应可点：${JSON.stringify(festival)}`);
