@@ -1,5 +1,5 @@
 {
-  "version": "518235dc6c3271a1",
+  "version": "919ed740eab0f7c6",
   "contracts": [
     {
       "meta": {
@@ -33231,6 +33231,11 @@
       "to": "569a4d8b"
     }
   ],
+  "assets": {
+    "portraits": [],
+    "scenes": [],
+    "cg": []
+  },
   "worldEvents": [
     {
       "id": "heimohaiFestival",

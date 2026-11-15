@@ -9,6 +9,8 @@ import {compileTimeline} from './content-pack-timeline.mjs';
 import {coreFormatKinds,emptyCoreFormats,coreDefinedIds,compileCoreFormats,validateCoreFormatsWithTs,compileContractRevisions} from './content-pack-core-formats.mjs';
 // 展示类（F0b）：endings、openWorldSlices、persistentEntries 三段，stageMeta 事件新字段与 texts 通配键，见 content-pack-presentation-formats.mjs
 import {presentationFormatKinds,emptyPresentationFormats,presentationDefinedIds,stageMetaEventExtraKeys,stageMetaPresentationExtraKeys,checkStageMetaPresentationExtras,presentationTextKeyReferences,checkPresentationTextKeys,compilePresentationFormats,rawStepScenePrefixes,validatePresentationFormatsWithTs} from './content-pack-presentation-formats.mjs';
+// 图片挂位（立绘／场景图／CG），见 content-pack-assets.mjs
+import {emptyAssets,scannedAssetRefs,compileAssets} from './content-pack-assets.mjs';
 const root=resolve(import.meta.dirname,'..');
 const kinds=['contracts','drafts','statuses','stages','overlays','questLines','entities','mapRoutes','mapEntries','heldActions','rails'];
 // 线路格式（宋线 S2）：stageMeta、railExtraBeats、secondaryLines 都是文件列表，每个文件是数组；编译后 railExtraBeats 并进包 rail，不单独进 catalog
@@ -21,6 +23,8 @@ fields.push('nationLines');
 fields.push('compassConditions');
 // 合同哈希迁移表（BZ1）：manifest.contractRevisions 是文件列表，每个文件是 [{eventId,from,to,note?}]；编译后进 catalog.contractRevisions（末尾），见 compileContractRevisions
 fields.push('contractRevisions');
+// 图片挂位（2026-11-16）：manifest.assets 是文件列表，每个文件是 {note?,portraits?,scenes?,cg?}；编译后进 catalog.assets（末尾），见 content-pack-assets.mjs
+fields.push('assets');
 // 世界事件（阶段 2b）：manifest.worldEvents 是文件列表，每个文件是 [{id,eventId,actionId,startedExtensionKey,stageId,availableWhen,blockedInStageIds,closes,textKeys}]；编译后进 catalog.worldEvents
 fields.push('worldEvents');
 // 世界事件 startedExtensionKey 不得占用的 系统.扩展 键：src 里读写过的键（tests/contentPackValidation.test.mjs 扫描 src 核对，新加的键没登记会红）；
@@ -56,7 +60,7 @@ const definedIds=(kind,x)=>{
  if(kind==='lineCompass')return [['lineId',x.lineId]];
  if(kind==='nationLines')return [['nationLine',x?.lineId]];
  if(kind==='compassConditions')return [['compassCondition',x?.id]];
- if(kind==='contractRevisions')return [];
+ if(kind==='contractRevisions'||kind==='assets')return [];
  if(kind==='worldEvents')return [['worldEvent',x?.id]];
  if(kind==='overlays'||kind==='stageMeta'||kind==='railExtraBeats')return [];
  if(kind==='secondaryLines')return [['secondaryLine',x.id]];
@@ -71,7 +75,7 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  const numbers=await loadNumbers(sourceRoot);
  const packIds=new Set(),packs=[];
  const nationLines=[],compassConditions=[],worldEvents=[];
- const contractRevisions=[];
+ const contractRevisions=[],assets=[];
  for(const dir of (await readdir(packsDir,{withFileTypes:true})).filter(x=>x.isDirectory()).map(x=>x.name).sort()){
   const m=JSON.parse(await readFile(join(packsDir,dir,'manifest.json'),'utf8'));
   if(!object(m)||m.schemaVersion!==1||typeof m.id!=='string'||!m.id||packIds.has(m.id))fail(`${dir}: invalid version/id`);packIds.add(m.id);
@@ -98,6 +102,7 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   if(!Array.isArray(m.nationLines||[]))fail(`${m.id}.nationLines: expected file list`);for(const path of m.nationLines||[]){const v=await load(path);if(!Array.isArray(v))fail(`${m.id}.nationLines: expected array`);own('nationLines',v);nationLines.push(...v.map(value=>({packId:m.id,value})));}
   if(!Array.isArray(m.compassConditions||[]))fail(`${m.id}.compassConditions: expected file list`);for(const path of m.compassConditions||[]){const v=await load(path);if(!Array.isArray(v))fail(`${m.id}.compassConditions: expected array`);own('compassConditions',v);compassConditions.push(...v);}
   if(!Array.isArray(m.contractRevisions||[]))fail(`${m.id}.contractRevisions: expected file list`);for(const path of m.contractRevisions||[]){const value=await load(path);own('contractRevisions',Array.isArray(value)?value:[value]);contractRevisions.push({packId:m.id,value});}
+  if(!Array.isArray(m.assets||[]))fail(`${m.id}.assets: expected file list`);for(const path of m.assets||[]){const value=await load(path);own('assets',[value]);assets.push({packId:m.id,value});}
   if(!Array.isArray(m.worldEvents||[]))fail(`${m.id}.worldEvents: expected file list`);for(const path of m.worldEvents||[]){const v=await load(path);if(!Array.isArray(v))fail(`${m.id}.worldEvents: expected array`);own('worldEvents',v);worldEvents.push(...v);}
   if(m.timeline){const v=await load(m.timeline);if(!Array.isArray(v))fail(`${m.id}.timeline: expected array`);own('timeline',v);timelineInserts.push(...v);}
   for(const k of ['playtests','entries'])if(m[k]){const v=await load(m[k]);if(!Array.isArray(v))fail(`${m.id}.${k}: expected array`);own(k,v);catalog[k].push(...v);}
@@ -109,7 +114,7 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  for(const [packId,raw] of rawByPack)for(const {kind,value} of raw)if(kind==='overlays'&&object(value))for(const e of value.events||[])if(typeof e?.id==='string'&&!baseEvents.has(e.id)&&!stageEvents.has(`event\u0000${e.id}`))define('event',e.id,packId);
  // B1：二级线的 after 只是全局排序提示（mergeSecondaryLines 在全部包线上解析），不算跨包引用，不要求 dependsOn；找不到、成环、同 after、重复 id 照旧报错
  // B3：主轴 stages[].pillars 是编译期按枚举（bloodline｜taiquan）校验的闭集，不是 id 引用（"taiquan" 与太泉包的线 id 同名），不进归属扫描；storyAxis 其余字段照扫
- const unscanned=(kind,value)=>{if(!object(value))return value;if(kind==='storyAxis'&&Array.isArray(value.stages))return {...value,stages:value.stages.map(s=>{if(!object(s))return s;const {pillars:_pillars,...rest}=s;return rest;})};if(kind!=='secondaryLines')return value;const {after:_after,...rest}=value;return rest;};
+ const unscanned=(kind,value)=>{if(kind==='assets')return scannedAssetRefs(value);if(!object(value))return value;if(kind==='storyAxis'&&Array.isArray(value.stages))return {...value,stages:value.stages.map(s=>{if(!object(s))return s;const {pillars:_pillars,...rest}=s;return rest;})};if(kind!=='secondaryLines')return value;const {after:_after,...rest}=value;return rest;};
  for(const [packId,raw] of rawByPack){const seen=visible(packId);const scan=v=>{if(typeof v==='string'){for(const c of referenceCandidates(v)){const q=owners.get(c);if(q&&![...q].some(x=>seen.has(x)))fail(`${packId} references ${c} owned by ${[...q].join('/')}; add dependsOn`);}}else if(Array.isArray(v))v.forEach(scan);else if(object(v))for(const[k,x]of Object.entries(v)){scan(k);scan(x);}};for(const {kind,value} of raw)scan(unscanned(kind,value));}
  // Stage assets use the same numeric authority as quest lines; prose is held in pack texts.
  const resolveText=(value,where)=>{
@@ -320,6 +325,8 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   catalog.compassConditions=compassConditions;}
  // 合同哈希迁移表（BZ1）：放在 compassConditions 之后（catalog 末段），既有校验的报错先后不变
  catalog.contractRevisions=compileContractRevisions(contractRevisions,{events});
+ // 图片挂位：紧接 contractRevisions（catalog 末段），既有校验的报错先后不变；没有包声明时是三个空数组
+ catalog.assets=assets.length?await compileAssets(assets,{events}):emptyAssets();
  unique(catalog.mapEntries,e=>e.id,'mapEntries');
  // 2026-11-12：字段白名单＝运行时读取的字段（mapEntries.ts MapEntry）；locationId 须是规范地点 id（locations.json 主 id，且不是包 locationAliases.canonical 的键——运行时按 canonicalLocationId 比对，别名永远对不上），且不与别的入口共用（运行时 find 只取第一条）
  {const mainLocationIds=new Set(JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/locations.json'),'utf8')).entries.map(e=>e.id)),entryOfLocation=new Map();

@@ -1,0 +1,72 @@
+/**
+ * 图片挂位（catalog.assets，2026-11-16）：立绘／场景图／CG 的解析与缺图回落。纯函数，不读 DOM、不发请求。
+ * file 是相对素材根目录的路径；素材根目录与界面显示尚未接。所有函数的第二参数可传合成数据，默认读 CONTENT_PACKS.assets。
+ * 没有图（返回 null／[]）时界面只走文字：立绘只显示名牌，CG 不挡拍。
+ */
+import {CONTENT_PACKS} from './index';
+
+export type PortraitExpression='neutral'|'joy'|'anger'|'sorrow'|'surprise'|'shy';
+/** 编译时已补齐默认值：bust 必有 outfitId＋expression，full 必有 outfitId，avatar 两者都没有。 */
+export type PackPortrait=
+ |{characterId:string;kind:'bust';outfitId:string;expression:PortraitExpression;file:string}
+ |{characterId:string;kind:'full';outfitId:string;file:string}
+ |{characterId:string;kind:'avatar';file:string};
+/** variant 为 null＝该类型的默认图。 */
+export interface PackScene {sceneType:string;variant:string|null;file:string}
+export interface PackCg {eventId:string;seq:number;file:string}
+export interface PackAssets {portraits:PackPortrait[];scenes:PackScene[];cg:PackCg[]}
+
+export type PortraitFallback='exact'|'outfitNeutral'|'defaultNeutral'|'avatar';
+export interface PortraitRequest {characterId:string;outfitId?:string;expression?:PortraitExpression}
+export interface ResolvedPortrait {file:string;kind:'bust'|'avatar';outfitId?:string;expression?:PortraitExpression;fallback:PortraitFallback}
+export interface SceneRequest {sceneType:string;variant?:string}
+
+const EMPTY:PackAssets={portraits:[],scenes:[],cg:[]};
+const packAssets=():PackAssets=>CONTENT_PACKS.assets??EMPTY;
+const bust=(a:PackAssets,characterId:string,outfitId:string,expression:string)=>a.portraits.find(p=>p.kind==='bust'&&p.characterId===characterId&&p.outfitId===outfitId&&p.expression===expression);
+
+/** 半身立绘的整条回落链：指定服装＋表情 → 指定服装＋neutral → default＋neutral → 头像。缺的级跳过；同一条目只出现一次（记最先命中的那一级）。 */
+export function portraitCandidates(req:PortraitRequest,assets:PackAssets=packAssets()):ResolvedPortrait[] {
+ const outfit=req.outfitId??'default',expression=req.expression??'neutral';
+ const levels:[PortraitFallback,PackPortrait|undefined][]=[
+  ['exact',bust(assets,req.characterId,outfit,expression)],
+  ['outfitNeutral',bust(assets,req.characterId,outfit,'neutral')],
+  ['defaultNeutral',bust(assets,req.characterId,'default','neutral')],
+  ['avatar',assets.portraits.find(p=>p.kind==='avatar'&&p.characterId===req.characterId)],
+ ];
+ const out:ResolvedPortrait[]=[],seen=new Set<PackPortrait>();
+ for(const [fallback,p] of levels){if(!p||seen.has(p))continue;seen.add(p);
+  out.push(p.kind==='bust'?{file:p.file,kind:'bust',outfitId:p.outfitId,expression:p.expression,fallback}:{file:p.file,kind:'avatar',fallback});}
+ return out;
+}
+export function resolvePortrait(req:PortraitRequest,assets:PackAssets=packAssets()):ResolvedPortrait|null {return portraitCandidates(req,assets)[0]??null;}
+/** 界面加载 failedFile 失败（如 404）后调用：返回回落链上排在它后面的下一条；它不在链上或已是最后一条时返回 null。 */
+export function nextPortraitFallback(req:PortraitRequest,failedFile:string,assets:PackAssets=packAssets()):ResolvedPortrait|null {
+ const chain=portraitCandidates(req,assets),i=chain.findIndex(c=>c.file===failedFile);return i<0?null:chain[i+1]??null;
+}
+
+/** 全身立绘：指定服装 → default → null。 */
+export function resolveFullBody(req:{characterId:string;outfitId?:string},assets:PackAssets=packAssets()):Extract<PackPortrait,{kind:'full'}>|null {
+ const full=(o:string)=>assets.portraits.find((p):p is Extract<PackPortrait,{kind:'full'}>=>p.kind==='full'&&p.characterId===req.characterId&&p.outfitId===o);
+ return full(req.outfitId??'default')??full('default')??null;
+}
+/** 头像：只取头像，没有就 null（不拿半身图顶）。 */
+export function resolveAvatar(characterId:string,assets:PackAssets=packAssets()):Extract<PackPortrait,{kind:'avatar'}>|null {
+ return assets.portraits.find((p):p is Extract<PackPortrait,{kind:'avatar'}>=>p.kind==='avatar'&&p.characterId===characterId)??null;
+}
+
+/** 场景图回落链：指定变体 → 该类型默认图（variant 为 null 的那条）。 */
+export function sceneCandidates(req:SceneRequest,assets:PackAssets=packAssets()):PackScene[] {
+ const out:PackScene[]=[];
+ const add=(v:string|null)=>{const s=assets.scenes.find(x=>x.sceneType===req.sceneType&&x.variant===v);if(s&&!out.includes(s))out.push(s);};
+ if(req.variant!==undefined)add(req.variant);add(null);return out;
+}
+export function resolveScene(req:SceneRequest,assets:PackAssets=packAssets()):PackScene|null {return sceneCandidates(req,assets)[0]??null;}
+export function nextSceneFallback(req:SceneRequest,failedFile:string,assets:PackAssets=packAssets()):PackScene|null {
+ const chain=sceneCandidates(req,assets),i=chain.findIndex(c=>c.file===failedFile);return i<0?null:chain[i+1]??null;
+}
+
+/** 该事件的全部 CG，按 seq 升序；没有就 []（走文字，不挡拍）。 */
+export function resolveCg(eventId:string,assets:PackAssets=packAssets()):PackCg[] {
+ return assets.cg.filter(c=>c.eventId===eventId).sort((a,b)=>a.seq-b.seq);
+}

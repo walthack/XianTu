@@ -525,3 +525,36 @@ manifest `mapEntries` 是 JSON 文件路径数组，每个文件是对象或对�
 - 从包里删掉的实体，旧索引里还在，校验照样通过。
 
 这一条牵涉 canon:build 流水线，本次没有改。
+
+## 2026-11-16 图片挂位 assets（立绘、场景图、CG）
+
+给将来的立绘、场景图、CG 留位置，并定好缺图时怎么退回文字。现在一张图都没有，没有包声明这一段，游戏行为不变。**素材根目录放在哪、界面怎么显示，都还没接，待定。**
+
+- **格式**：manifest 加 `assets: ["assets.json", …]`（文件列表）。每个文件是对象，四个键都可省略：
+  ```json
+  {"note": "只给作者看",
+   "portraits": [{"characterId": "liuchao.character.xiao_zi", "kind": "bust", "outfitId": "default", "expression": "neutral", "file": "characters/liuchao.character.xiao_zi/bust__default__neutral.webp"}],
+   "scenes": [{"sceneType": "city", "variant": "night", "file": "scenes/city__night.webp"}],
+   "cg": [{"eventId": "<事件 id>", "seq": 1, "file": "cg/<包 id>/<事件 id>__1.webp"}]}
+  ```
+  - 立绘 `portraits`：`characterId` 须是人物总表里的角色 id（整串比对，名字和别名不算）。`kind` 是 `bust`（半身）、`full`（全身）或 `avatar`（头像）。`outfitId` 省略即 `default`，头像不许写。`expression` 只有半身能写，取 `neutral`／`joy`／`anger`／`sorrow`／`surprise`／`shy`，省略即 `neutral`。同一个角色＋种类＋服装＋表情全部包里只能有一条。
+  - 场景图 `scenes`：`sceneType` 必填；`variant` 省略表示这一类的默认图。同一个类型＋变体全部包里只能有一条。
+  - CG `cg`：`eventId` 须是存在的事件；`seq` 是正整数；同一个事件＋序号全部包里只能有一条。引用别的包里的事件要写 `dependsOn`（和其它段一样）。
+  - `sceneType`、`variant`、`outfitId` 只许小写字母、数字、下划线、连字符。
+  - `file` 是相对素材根目录的路径：不许以 `/` 开头，不许含 `..`、`\`、空段；扩展名只许 `.png`、`.webp`、`.jpg`、`.jpeg`（小写）。同一个文件全部包里只能声明一次。**编译时不检查文件是否存在。**
+  - 每条都可写 `note`，编译时剥掉；别的键报错。
+- **编译结果**：catalog 末尾多一段 `assets: {portraits, scenes, cg}`，省略的值补成显式值（半身补齐服装和表情，全身补齐服装，场景没写变体时 `variant` 为 `null`）。没有包声明时是三个空数组。编译代码在 `scripts/content-pack-assets.mjs`。
+- **文件名约定**（建议，编译不强制）：
+  - 半身 `characters/<角色id>/bust__<服装>__<表情>.<扩展名>`
+  - 全身 `characters/<角色id>/full__<服装>.<扩展名>`
+  - 头像 `characters/<角色id>/avatar.<扩展名>`
+  - 场景 `scenes/<类型>__<变体>.<扩展名>`（默认图 `scenes/<类型>.<扩展名>`）
+  - CG `cg/<包id>/<事件id>__<序号>.<扩展名>`
+- **缺图回落**（`src/modules/contentPacks/assets.ts`，纯函数）：
+  - 半身 `resolvePortrait`：指定服装＋指定表情 → 指定服装＋`neutral` → `default`＋`neutral` → 头像 → 没有（界面只显示名牌和文字）。返回值的 `fallback` 写明落在哪一级。
+  - 全身 `resolveFullBody`：指定服装 → `default` → 没有。
+  - 头像 `resolveAvatar`：只找头像，不拿半身图顶替。
+  - 场景 `resolveScene`：指定变体 → 这一类的默认图 → 没有。
+  - CG `resolveCg`：这个事件的全部 CG，按序号排好；没有就是空列表，照常走文字，不挡剧情。
+  - 图片加载失败（比如文件不存在）时，`nextPortraitFallback`／`nextSceneFallback` 给出回落链上的下一张，没有就返回空。
+- 测试：`tests/packAssets.test.mjs`。
