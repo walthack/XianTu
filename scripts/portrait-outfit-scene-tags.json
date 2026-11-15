@@ -1,0 +1,691 @@
+{
+ "note": "外观主表 portrait-visual-master.json 每套服饰的场景标签。2026-11-16 由 Fable 逐条读服饰文字标的，尚未经用户审；要改直接改这里，再跑 scripts/link-portrait-visual-master.mjs。键是「人物总表 id/服饰 id」；总表里没有卡的人用「name:名字」。",
+ "vocabulary": {
+  "daily": "日常、便装",
+  "battle": "战斗、戎装（甲胄、战衣、武者装束）",
+  "court": "朝堂、官服（官袍、冠冕、内侍服色）",
+  "formal": "盛装、华服",
+  "religious": "僧道法服",
+  "performance": "歌舞",
+  "mourning": "丧服",
+  "disguise": "乔装、微服"
+ },
+ "outfits": {
+  "liuchao.character.a_jiman_bana/default": {
+   "name": "阿姬曼·芭娜",
+   "tags": [],
+   "untagged": "来源图是私密场景，不据此标场景"
+  },
+  "lcq.character.agamenon/default": {
+   "name": "阿伽门侬",
+   "tags": [
+    "battle"
+   ]
+  },
+  "canon.character.886a02fef4/default": {
+   "name": "阿兰迦",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.a_xi/default": {
+   "name": "阿夕",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.ba_bi_mo_seng/default": {
+   "name": "八臂魔僧",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.bai_nichang/default": {
+   "name": "白霓裳",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.bi_ji/default": {
+   "name": "碧姬",
+   "tags": [
+    "performance"
+   ]
+  },
+  "liuchao.character.cai_jingzhong/default": {
+   "name": "蔡敬仲",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.cheng_guang/default": {
+   "name": "成光",
+   "tags": [
+    "performance"
+   ]
+  },
+  "lyg.character.chou_shiliang/default": {
+   "name": "仇士良",
+   "tags": [
+    "court"
+   ]
+  },
+  "canon.character.d9c55fd65a/default": {
+   "name": "达古的孪生妻子",
+   "tags": [
+    "daily"
+   ]
+  },
+  "lcq.character.dai_jixue/default": {
+   "name": "黛姬雪娜",
+   "tags": [
+    "battle"
+   ]
+  },
+  "lyg.character.np060/default": {
+   "name": "黛绮丝",
+   "tags": [
+    "daily"
+   ]
+  },
+  "canon.character.ad2b156b4d/default": {
+   "name": "董媛",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.dong_zhuo/default": {
+   "name": "董卓",
+   "tags": [
+    "battle"
+   ]
+  },
+  "canon.character.38068abbd7/default": {
+   "name": "独孤谓",
+   "tags": [
+    "daily",
+    "court"
+   ]
+  },
+  "lyg.character.guan_hai/default": {
+   "name": "观海",
+   "tags": [
+    "religious"
+   ]
+  },
+  "liuchao.character.gui_wu_wang/default": {
+   "name": "鬼巫王",
+   "tags": [
+    "battle"
+   ]
+  },
+  "liuchao.character.guo_jie/default": {
+   "name": "郭解",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.ha_mi_chi/default": {
+   "name": "哈迷蚩",
+   "tags": [
+    "daily"
+   ]
+  },
+  "lcq.character.han_geng/default": {
+   "name": "韩庚",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.he_yilian/default": {
+   "name": "何漪莲",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.huan_yu/default": {
+   "name": "桓郁",
+   "tags": [
+    "battle"
+   ]
+  },
+  "canon.character.252ab2efbe/default": {
+   "name": "黄氏",
+   "tags": [],
+   "untagged": "来源图是私密场景，不据此标场景"
+  },
+  "liuchao.character.huo_zi_meng/default": {
+   "name": "霍子孟",
+   "tags": [
+    "battle"
+   ]
+  },
+  "liuchao.character.jian_yu_ji/default": {
+   "name": "剑玉姬",
+   "tags": [
+    "battle"
+   ]
+  },
+  "liuchao.character.jian_yu_ji/variant-1": {
+   "name": "剑玉姬",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.jin_mi_di/default": {
+   "name": "金蜜镝",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.jin_wu_zhu/default": {
+   "name": "金兀术",
+   "tags": [
+    "battle"
+   ]
+  },
+  "liuchao.character.jing_li/default": {
+   "name": "惊理",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.jing_kong/default": {
+   "name": "净空",
+   "tags": [
+    "religious"
+   ]
+  },
+  "lyg.character.kuiji/default": {
+   "name": "窥基",
+   "tags": [
+    "religious",
+    "battle"
+   ]
+  },
+  "liuchao.character.le_mingzhu/default": {
+   "name": "乐明珠",
+   "tags": [
+    "daily"
+   ]
+  },
+  "lyg.character.li_jinxiang/default": {
+   "name": "黎锦香",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.li_ang/default": {
+   "name": "李昂",
+   "tags": [
+    "court"
+   ]
+  },
+  "liuchao.character.li_fuguo/default": {
+   "name": "李辅国",
+   "tags": [
+    "court",
+    "religious"
+   ]
+  },
+  "liuchao.character.li_shi_shi/default": {
+   "name": "李师师",
+   "tags": [
+    "formal"
+   ]
+  },
+  "canon.character.81d313b84d/default": {
+   "name": "李十二娘",
+   "tags": [
+    "performance"
+   ]
+  },
+  "liuchao.character.li_xun/default": {
+   "name": "李训",
+   "tags": [
+    "court",
+    "disguise"
+   ]
+  },
+  "liuchao.character.li_yan/default": {
+   "name": "李炎",
+   "tags": [
+    "court"
+   ]
+  },
+  "lyg.character.li_shi_ji/default": {
+   "name": "李药师",
+   "tags": [
+    "daily",
+    "battle",
+    "court"
+   ]
+  },
+  "liuchao.character.liao_qun_yu/default": {
+   "name": "廖群玉",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.liu_ao/default": {
+   "name": "刘骜",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.lu_jing/default": {
+   "name": "卢景",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.lu_qian/default": {
+   "name": "陆谦",
+   "tags": [
+    "court"
+   ]
+  },
+  "liuchao.character.lv_fengxian/default": {
+   "name": "吕奉先",
+   "tags": [
+    "daily",
+    "battle"
+   ]
+  },
+  "liuchao.character.lv_ji/default": {
+   "name": "吕冀",
+   "tags": [
+    "daily",
+    "mourning",
+    "court"
+   ]
+  },
+  "lyl.character.lv_jujun/default": {
+   "name": "吕巨君",
+   "tags": [
+    "battle"
+   ]
+  },
+  "liuchao.character.lv_zhi/default": {
+   "name": "吕雉",
+   "tags": [
+    "formal"
+   ]
+  },
+  "liuchao.character.lv_zhi/variant-1": {
+   "name": "吕雉",
+   "tags": [
+    "formal"
+   ]
+  },
+  "canon.character.bc5fcc1459/default": {
+   "name": "罗立言",
+   "tags": [
+    "court"
+   ]
+  },
+  "liuchao.character.meng_niang/default": {
+   "name": "梦娘",
+   "tags": [
+    "daily"
+   ]
+  },
+  "lyl.character.np043/default": {
+   "name": "宁成",
+   "tags": [
+    "daily",
+    "court"
+   ]
+  },
+  "liuchao.character.ning_yu/default": {
+   "name": "凝羽",
+   "tags": [
+    "battle"
+   ]
+  },
+  "liuchao.character.pan_jinlian/default": {
+   "name": "潘金莲",
+   "tags": [
+    "battle"
+   ]
+  },
+  "liuchao.character.pan_jinlian/variant-1": {
+   "name": "潘金莲",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.qi_yuan/default": {
+   "name": "祁远",
+   "tags": [
+    "formal"
+   ]
+  },
+  "liuchao.character.qi_yu_xian/default": {
+   "name": "齐羽仙",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.qing_mian_shou/default": {
+   "name": "青面兽",
+   "tags": [
+    "battle"
+   ]
+  },
+  "liuchao.character.ruan_xiang_lin/default": {
+   "name": "阮香琳",
+   "tags": [],
+   "untagged": "来源图是私密场景，不据此标场景"
+  },
+  "liuchao.character.ruan_xiang_ning/default": {
+   "name": "阮香凝",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.shang_zhen_yu/default": {
+   "name": "殇侯",
+   "tags": [
+    "formal",
+    "daily"
+   ]
+  },
+  "liuchao.character.shang_zhen_yu/variant-1": {
+   "name": "殇侯",
+   "tags": [
+    "daily"
+   ]
+  },
+  "lyg.character.she_fu_ren/default": {
+   "name": "蛇夫人",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.shen_wan_ying/default": {
+   "name": "申婉盈",
+   "tags": [
+    "daily"
+   ]
+  },
+  "lyg.character.shi_chao/default": {
+   "name": "石超",
+   "tags": [
+    "formal"
+   ]
+  },
+  "liuchao.character.su_daji/default": {
+   "name": "苏妲己",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.su_li/default": {
+   "name": "苏荔",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.su_li/variant-1": {
+   "name": "苏荔",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.sun_shou/default": {
+   "name": "孙寿",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.sun_shou/variant-1": {
+   "name": "孙寿",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.tao_hong_min/default": {
+   "name": "陶弘敏",
+   "tags": [
+    "battle"
+   ]
+  },
+  "lyg.character.wang_zhongsi/default": {
+   "name": "王忠嗣",
+   "tags": [
+    "daily"
+   ]
+  },
+  "canon.character.4e519b8f03/default": {
+   "name": "文泽",
+   "tags": [
+    "daily"
+   ]
+  },
+  "lyl.character.wen_qingyu/default": {
+   "name": "闻清语",
+   "tags": [
+    "daily"
+   ]
+  },
+  "lcq.character.nanhuang_xi_furen/default": {
+   "name": "樨夫人",
+   "tags": [],
+   "untagged": "来源图是私密场景，不据此标场景"
+  },
+  "liuchao.character.xiang_ya/default": {
+   "name": "相雅",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.xiao_ling_er/default": {
+   "name": "小玲儿",
+   "tags": [
+    "battle"
+   ]
+  },
+  "canon.character.7ba7ded095/default": {
+   "name": "小桃红",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.xiao_zi/default": {
+   "name": "小紫",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.xin_yong/default": {
+   "name": "信永",
+   "tags": [
+    "religious"
+   ]
+  },
+  "liuchao.character.xu_huang/default": {
+   "name": "徐璜",
+   "tags": [
+    "court"
+   ]
+  },
+  "liuchao.character.yang_yuhuan/default": {
+   "name": "杨玉环",
+   "tags": [
+    "formal"
+   ]
+  },
+  "name:已死老僧/default": {
+   "name": "已死老僧",
+   "tags": [],
+   "untagged": "没有可用的服饰信息"
+  },
+  "liuchao.character.yi_hu/default": {
+   "name": "易虎",
+   "tags": [
+    "religious"
+   ]
+  },
+  "liuchao.character.yin_fulan/default": {
+   "name": "尹馥兰",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.ying_su_nv/default": {
+   "name": "罂粟女",
+   "tags": [
+    "daily"
+   ]
+  },
+  "canon.character.c640720c88/default": {
+   "name": "游婵",
+   "tags": [],
+   "untagged": "没有可用的服饰信息"
+  },
+  "lyl.character.np060/default": {
+   "name": "友通期",
+   "tags": [],
+   "untagged": "来源图是私密场景，不据此标场景"
+  },
+  "lyg.character.yu_chaoen/default": {
+   "name": "鱼朝恩",
+   "tags": [
+    "court"
+   ]
+  },
+  "lyg.character.np033/default": {
+   "name": "鱼玄机",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.yu_zi_yuan/default": {
+   "name": "俞子元",
+   "tags": [
+    "daily",
+    "disguise"
+   ]
+  },
+  "liuchao.character.yu_bai_ying/default": {
+   "name": "虞白樱",
+   "tags": [
+    "battle"
+   ]
+  },
+  "liuchao.character.yu_bai_ying/variant-1": {
+   "name": "虞白樱",
+   "tags": [
+    "battle"
+   ]
+  },
+  "liuchao.character.yu_zi_wei/default": {
+   "name": "虞紫薇",
+   "tags": [
+    "battle"
+   ]
+  },
+  "lcq.character.yue_shuang/default": {
+   "name": "月霜",
+   "tags": [
+    "battle"
+   ]
+  },
+  "lcq.character.yue_shuang/variant-1": {
+   "name": "月霜",
+   "tags": [
+    "battle"
+   ]
+  },
+  "liuchao.character.yun_cang_feng/default": {
+   "name": "云苍峰",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.yun_dan_liu/default": {
+   "name": "云丹琉",
+   "tags": [
+    "battle"
+   ]
+  },
+  "liuchao.character.yun_ru_yao/default": {
+   "name": "云如瑶",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.yun_ru_yao/variant-1": {
+   "name": "云如瑶",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.zhang_yun/default": {
+   "name": "张恽",
+   "tags": [
+    "mourning"
+   ]
+  },
+  "liuchao.character.zhao_ying/default": {
+   "name": "赵充国",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.zhao_feiyan/default": {
+   "name": "赵飞燕",
+   "tags": [
+    "performance"
+   ]
+  },
+  "liuchao.character.zhao_gui_zhen/default": {
+   "name": "赵归真",
+   "tags": [
+    "religious"
+   ]
+  },
+  "liuchao.character.zhao_he_de/default": {
+   "name": "赵合德",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.zheng_zhu/default": {
+   "name": "郑注",
+   "tags": [
+    "court"
+   ]
+  },
+  "liuchao.character.zhong_hangyue/default": {
+   "name": "中行说",
+   "tags": [
+    "court"
+   ]
+  },
+  "name:周妙芸/default": {
+   "name": "周妙芸",
+   "tags": [
+    "formal"
+   ]
+  },
+  "canon.character.6ec7e21839/default": {
+   "name": "朱殷",
+   "tags": [],
+   "untagged": "来源是囚禁场面，现有标签都不合适"
+  },
+  "liuchao.character.zhuo_yunjun/default": {
+   "name": "卓云君",
+   "tags": [
+    "daily"
+   ]
+  },
+  "liuchao.character.zuo_tongzhi/default": {
+   "name": "左彤芝",
+   "tags": [
+    "daily"
+   ]
+  }
+ }
+}
