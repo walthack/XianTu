@@ -82,7 +82,8 @@ test('①a 冻结文件只改两处并已重新上锁：runtime.ts 不动，AIBS
   // 2026-11-05 用户批准 runtime.ts 只改 import + 1 行调用（强制路途后地点回写兜底 reconcileNanhuangPositionFromLedger）。
   // 2026-11-09 用户批准 runtime.ts 只改交接 §6 三处（当面拆信待会合、O2/Y5 合同修订迁移、共同经历跳过权威缺席者）。
   // 2026-11-12 BZ1（11-11 至 11-16 自主解冻授权）：runtime.ts 只改 import CONTENT_PACKS 与合同哈希迁移表定义（表进核心包 contract-revisions.json）。
-  assert.equal(base.files['src/modules/scenarioMods/runtime.ts'], '15ccd16714694a3cad1b29ac5087c3f0661fe51fa3c46d22684821b3fb7c90f4');
+  // 2026-11-16 用户批准（ASK-USER Q10 选 A）：runtime.ts 只改同伴入队补登记表 3 行（性别列回位：阿姬曼 女、武二郎 男、小紫 女）。
+  assert.equal(base.files['src/modules/scenarioMods/runtime.ts'], 'caa1d9bf005f1810d0c04f5c2252fc240d3181d1902c85c03288bab6af263a6f');
 });
 
 test('①a 普通叙事回合搜刮：先本地预结算出回执正文（不请求模型），落账按回执入包；清单未配置照旧交模型', () => {

@@ -3742,9 +3742,9 @@ function settleEarlyStoryTrade(saveData: SaveData, runtime: RuntimeState, eventI
 function syncEarlyEncounteredCharacters(saveData: SaveData, runtime: RuntimeState): void {
   const source = { ...(runtime.canon as any), ...(runtime as any).content, opening: runtime.opening || {} };
   for (const [eventId, characterId, name, gender] of [
-    ['lcq.event.free_ajiman', 'liuchao.character.a_jiman_bana', ...entityAliases("character","liuchao.character.a_jiman_bana"), '女'],
-    ['lcq.event.wuerlang_joins', 'liuchao.character.wu_er_lang', ...entityAliases("character","liuchao.character.wu_er_lang"), '男'],
-    ['lcq.event.xiaozi_first_appears', 'liuchao.character.xiao_zi', ...entityAliases("character","liuchao.character.xiao_zi"), '女'],
+    ['lcq.event.free_ajiman', 'liuchao.character.a_jiman_bana', entityAliases("character","liuchao.character.a_jiman_bana")[0], '女'],
+    ['lcq.event.wuerlang_joins', 'liuchao.character.wu_er_lang', entityAliases("character","liuchao.character.wu_er_lang")[0], '男'],
+    ['lcq.event.xiaozi_first_appears', 'liuchao.character.xiao_zi', entityAliases("character","liuchao.character.xiao_zi")[0], '女'],
   ]) {
     if (runtime.completedEventIds?.includes(eventId) || runtime.eventActionStates?.[eventId]?.attempts?.some(item => item.outcome === 'success')) {
       ensureEncounteredScenarioCharacter(saveData, source, characterId, { name, gender });

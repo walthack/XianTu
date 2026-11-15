@@ -93,8 +93,9 @@ test('runtime.ts 三张表（未导出，钉公开入口）：migrateBatch6TextC
   const met = Object.entries(snap.runtimeTables.s0204MapContract.guidance).filter(([, v]) => v === null).map(([k]) => k);
   assert.equal(met.length, 6);
   assert.ok(met.filter(k => k.includes('|')).every(k => k.startsWith('lcq.zone.wuyuan.pastry_shop|') && k.includes('|player|')));
-  // 同伴补登记：现状三人性别都落成「其他」（表里性别列被别名展开挤位，见 b0-summary）
-  assert.deepEqual(snap.runtimeTables.earlyEncounters.results.all.map(r => r.gender), ['其他', '其他', '其他']);
+  // 同伴补登记：2026-11-16 用户批准修正（ASK-USER Q10 选 A）——性别列原先被别名展开挤位、三人都落成「其他」；
+  // 现按表里写的落账。快照只重写了 earlyEncounters 这一段的性别，其余各段未动。
+  assert.deepEqual(snap.runtimeTables.earlyEncounters.results.all.map(r => r.gender), ['女', '男', '女']);
 });
 
 test('persistentLineEntries 缺口：algaeCollected 各依据（拍回执／路径回执／发物回执／背包）', () => {

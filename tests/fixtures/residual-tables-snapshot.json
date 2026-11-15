@@ -10923,7 +10923,7 @@
       "key": "liuchao.character.a_jiman_bana",
       "id": "liuchao.character.a_jiman_bana",
       "name": "阿姬曼·芭娜",
-      "gender": "其他",
+      "gender": "女",
       "relation": "相识"
      }
     ],
@@ -10932,7 +10932,7 @@
       "key": "liuchao.character.a_jiman_bana",
       "id": "liuchao.character.a_jiman_bana",
       "name": "阿姬曼·芭娜",
-      "gender": "其他",
+      "gender": "女",
       "relation": "相识"
      }
     ],
@@ -10941,7 +10941,7 @@
       "key": "liuchao.character.wu_er_lang",
       "id": "liuchao.character.wu_er_lang",
       "name": "武二郎",
-      "gender": "其他",
+      "gender": "男",
       "relation": "相识"
      }
     ],
@@ -10950,7 +10950,7 @@
       "key": "liuchao.character.wu_er_lang",
       "id": "liuchao.character.wu_er_lang",
       "name": "武二郎",
-      "gender": "其他",
+      "gender": "男",
       "relation": "相识"
      }
     ],
@@ -10959,7 +10959,7 @@
       "key": "liuchao.character.xiao_zi",
       "id": "liuchao.character.xiao_zi",
       "name": "小紫",
-      "gender": "其他",
+      "gender": "女",
       "relation": "相识"
      }
     ],
@@ -10968,7 +10968,7 @@
       "key": "liuchao.character.xiao_zi",
       "id": "liuchao.character.xiao_zi",
       "name": "小紫",
-      "gender": "其他",
+      "gender": "女",
       "relation": "相识"
      }
     ],
@@ -10977,21 +10977,21 @@
       "key": "liuchao.character.a_jiman_bana",
       "id": "liuchao.character.a_jiman_bana",
       "name": "阿姬曼·芭娜",
-      "gender": "其他",
+      "gender": "女",
       "relation": "相识"
      },
      {
       "key": "liuchao.character.wu_er_lang",
       "id": "liuchao.character.wu_er_lang",
       "name": "武二郎",
-      "gender": "其他",
+      "gender": "男",
       "relation": "相识"
      },
      {
       "key": "liuchao.character.xiao_zi",
       "id": "liuchao.character.xiao_zi",
       "name": "小紫",
-      "gender": "其他",
+      "gender": "女",
       "relation": "相识"
      }
     ]
