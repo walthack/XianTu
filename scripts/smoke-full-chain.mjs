@@ -843,6 +843,8 @@ function onRealDone(request, failed) {
   if (!failed) request.response().then(async r => { if (!r) return; const st = r.status(); g.status[st] = (g.status[st] || 0) + 1; if (st >= 400 && g.errorBodies.length < 5) g.errorBodies.push(String(await r.text().catch(() => '')).replace(/\s+/g, ' ').slice(0, 200)); }).catch(() => {});
   g.count++; if (failed) g.failed++; g.ms.push(Date.now() - x.t0); g.params[x.params] = (g.params[x.params] || 0) + 1;
 }
+// 回包是 HTTP 4xx／5xx 的请求数（网络层没断、上游拒了，如额度用完的 402）：这种不计入上面的「失败」，单独数。
+const httpErrorsOf = profile => { const n = { total: 0, narration: 0 }; for (const [sig, g] of Object.entries(profile)) for (const [st, c] of Object.entries(g.status)) if (Number(st) >= 400) { n.total += c; if (sig.startsWith('narration')) n.narration += c; } return n; };
 const position = save => ({ 描述: save.角色.位置?.描述 ?? null, locationId: save.角色.位置?.locationId ?? null });
 const questTarget = save => { const e = questEntries(save)[0]; return e ? { title: e.title, objective: e.objective, place: e.place ?? null } : null; };
 const reqCount = cur => { const list = (cur?.requests || []).filter(k => k !== 'inject529'); return { total: list.length, chat: list.filter(k => k !== 'embeddings').length, embeddings: list.filter(k => k === 'embeddings').length }; };
@@ -1159,7 +1161,7 @@ if (REAL) {
   const med = list => { const x = [...list].sort((a, b) => a - b); return x.length ? x[Math.floor(x.length / 2)] : null; };
   const handMs = real.hands.map(h => h.ms), narr = real.hands.flatMap(h => h.narrMs);
   realOut = { hosts: guardRef?.stats ? { allowed: guardRef.stats.allowed, violations: guardRef.stats.violations.length } : null, storage: storageRef,
-    requests: { chat: real.chat, embeddings: real.embeddings, byKind: real.byKind, failed: real.failedRequests },
+    requests: { chat: real.chat, embeddings: real.embeddings, byKind: real.byKind, failed: real.failedRequests, httpErrors: httpErrorsOf(real.profile) },
     handMs: { median: med(handMs), max: Math.max(0, ...handMs) }, narrationMs: { count: narr.length, median: med(narr), max: Math.max(0, ...narr) },
     safeReplaced: real.safeReplaced, unrecognized: real.unrecognized, actionTime: real.actionTime, hands: real.hands,
     profile: Object.fromEntries(Object.entries(real.profile).map(([k, g]) => [k, { count: g.count, failed: g.failed, medianMs: med(g.ms), maxMs: Math.max(0, ...g.ms), params: g.params, status: g.status, errorBodies: g.errorBodies }])) };
@@ -1174,7 +1176,7 @@ if (overlays.length) console.log(`[弹窗] ${JSON.stringify(overlays)}`);
 console.log(`[合计] ${stages.length} 关，${total.moves} 手（a ${total.a} / b ${total.b} / c ${total.c} / d ${total.d}；预备 ${total.prep}），卡点 ${stuck.length}，与 walker 差异 ${diffs.length}，用时 ${(ms / 60000).toFixed(1)} 分钟，结局 ${outcome}`);
 if (festival) console.log(`[大祭] ${JSON.stringify(festival)}`);
 if (REAL) {
-  console.log(`[真实模型] 请求 chat ${realOut.requests.chat}／embeddings ${realOut.requests.embeddings}（按种类 ${JSON.stringify(realOut.requests.byKind)}；失败 ${realOut.requests.failed}）`);
+  console.log(`[真实模型] 请求 chat ${realOut.requests.chat}／embeddings ${realOut.requests.embeddings}（按种类 ${JSON.stringify(realOut.requests.byKind)}；失败 ${realOut.requests.failed}；HTTP 4xx／5xx ${realOut.requests.httpErrors.total}，其中主叙事 ${realOut.requests.httpErrors.narration}）`);
   console.log(`[真实模型] 每手耗时 中位 ${(realOut.handMs.median / 1000 || 0).toFixed(1)}s／最长 ${(realOut.handMs.max / 1000).toFixed(1)}s；主叙事 ${realOut.narrationMs.count} 次，中位 ${(realOut.narrationMs.median / 1000 || 0).toFixed(1)}s／最长 ${(realOut.narrationMs.max / 1000).toFixed(1)}s`);
   console.log(`[真实模型] 「已替换为安全叙述」${realOut.safeReplaced} 手，「行动没能识别」${realOut.unrecognized} 手；存档接口：读配置 ${storageRef.configGet}，替身读 ${storageRef.stubbedRead}，拦下写 ${storageRef.blockedWrite.length}${storageRef.blockedWrite.length ? ` ${JSON.stringify([...new Set(storageRef.blockedWrite)])}` : ''}`);
 }
@@ -1186,6 +1188,8 @@ if (REAL && LOOSE) console.log(`[真实模型] 改写手 ${realOut.loose.hands}�
 const failures = [];
 const check = (ok, what) => { if (!ok) failures.push(what); };
 check((QIN ? ['railDone'] : ['done', 'until', 'maxHands']).includes(outcome), `未走完：outcome=${outcome}`);
+// 真实模式：主叙事请求一次都没成功（全部被上游以 4xx／5xx 拒绝）时，这一段什么都没验证到，不能报通过。
+if (REAL && realOut && real.byKind.narration) check(realOut.requests.httpErrors.narration < real.byKind.narration, `真实模型主叙事请求 ${real.byKind.narration} 次全部被上游拒绝（HTTP 4xx／5xx），本段无效`);
 if (QIN) for (const c of qin.checks) { if (!c.ok) failures.push(`秦线：${c.what}`); }
 if (QIN) check(qin.ret && qin.reenter, '秦线：返回与返回后检查应已执行');
 const expectedSeen = outcome === 'maxHands' ? EXPECTED_STAGES.slice(0, stages.length) : EXPECTED_STAGES;
