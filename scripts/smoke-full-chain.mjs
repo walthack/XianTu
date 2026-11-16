@@ -41,7 +41,7 @@
 //   模拟「人还没到本拍地点就照日志打字」；没推进则同一拍之后照常先去地点。汇总里报探测手数与其中正文请求数、手后位置是否变了。
 // --max-hands N：到 N 手即停，照常收尾出报告（outcome=maxHands，不算未走完）。
 // 真实模式每手另记页面存档里三层记忆的条数（--json 的 real.hands[].mem，日志「[记忆]」行），用来看记忆总结有没有真的把中期记忆压成长期记忆。
-// 环境变量：SMOKE_KEEP_REJECTED=1（真实模式下，被硬门禁换成兜底句的那几手，把模型原回包全文记进 --json 的 real.hands[].rejectedNarratives）；SMOKE_PREFER_BUTTONS=1（主线合同动作、同国「前往」、关末启程有按钮就点按钮，不手打；默认关）；SMOKE_HAND_PAUSE_MS=毫秒（每手收尾后停这么久再打下一手，模拟真人读完正文的间隔）；SMOKE_CONSOLE_GREP=正则（把匹配的页面控制台行打到日志；非调试模式下页面只放行 console.error）。
+// 环境变量：SMOKE_KEEP_REJECTED=1（真实模式下，被硬门禁换成兜底句的那几手，把模型原回包全文记进 --json 的 real.hands[].rejectedNarratives；没换成兜底句但一手里有两份以上主叙事回包的——自动重写救回的——记进 rewrittenNarratives）；SMOKE_PREFER_BUTTONS=1（主线合同动作、同国「前往」、关末启程有按钮就点按钮，不手打；默认关）；SMOKE_HAND_PAUSE_MS=毫秒（每手收尾后停这么久再打下一手，模拟真人读完正文的间隔）；SMOKE_CONSOLE_GREP=正则（把匹配的页面控制台行打到日志；非调试模式下页面只放行 console.error）。
 import assert from 'node:assert/strict';
 import { writeFileSync } from 'node:fs';
 import { chromium } from 'playwright-core';
@@ -1173,7 +1173,7 @@ const total = stages.reduce((acc, s) => { for (const k of 'abcd') acc[k] += s.vi
 const sideOut = SIDE ? { results: side.results, seenDoable: Object.fromEntries(side.seenDoable), charRows: side.charRows, compass: side.compass } : undefined;
 let realOut;
 if (REAL) {
-  for (const h of real.hands) { const r = reqCount(h._cur); Object.assign(h, { requests: r, kinds: [...(h._cur?.requests || [])], narrMs: h._cur?.narrMs || [], judgeReplies: h._cur?.judgeReplies || [], failedRequests: h._cur?.failedRequests || 0 }); if (h.safe && h._cur?.narrBodies) h.rejectedNarratives = h._cur.narrBodies; delete h._cur; }
+  for (const h of real.hands) { const r = reqCount(h._cur); Object.assign(h, { requests: r, kinds: [...(h._cur?.requests || [])], narrMs: h._cur?.narrMs || [], judgeReplies: h._cur?.judgeReplies || [], failedRequests: h._cur?.failedRequests || 0 }); if (h.safe && h._cur?.narrBodies) h.rejectedNarratives = h._cur.narrBodies; else if (h._cur?.narrBodies?.length > 1) h.rewrittenNarratives = h._cur.narrBodies; delete h._cur; }
   const med = list => { const x = [...list].sort((a, b) => a - b); return x.length ? x[Math.floor(x.length / 2)] : null; };
   const handMs = real.hands.map(h => h.ms), narr = real.hands.flatMap(h => h.narrMs);
   realOut = { hosts: guardRef?.stats ? { allowed: guardRef.stats.allowed, violations: guardRef.stats.violations.length } : null, storage: storageRef,
