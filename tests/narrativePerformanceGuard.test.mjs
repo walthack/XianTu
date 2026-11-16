@@ -375,3 +375,33 @@ test('Q7-D：写给模型的数字门禁例句与门禁同源——会拦的确�
   assert.match(source, /不得自行补人数、距离或比例。' \+ QUANTITY_GUARD_HINT : ''\}/);
   assert.match(source, /等定性表述。\$\{LOSS_GUARD_HINT\}/);
 });
+
+test('Q7-B：数字硬门禁返回命中的原句；重写说明点名原句并带对应的写法说明；其余门禁不带', async () => {
+  const G = await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
+  const quantityPrompt = 'renderGuard.rejectConcreteQuantities=true；renderGuard.allowUnverifiedQuantities=false。';
+  const lossPrompt = 'renderGuard.rejectUngroundedHandoffLosses=true。当前没有结构化损失回执：';
+  const quantity = G.validateNarrativePerformance('镇口起了风。近处一名披甲校尉按刀喝问。你停下脚步。', '我去看看。', quantityPrompt);
+  assert.deepEqual(quantity.offendingSentences, ['近处一名披甲校尉按刀喝问']);
+  const loss = G.validateNarrativePerformance('她俯身扶起一名腿伤伙计。你接手护送。', '我去看看。', lossPrompt);
+  assert.deepEqual(loss.offendingSentences, ['她俯身扶起一名腿伤伙计']);
+  const clean = G.validateNarrativePerformance('镇口起了风。你停下脚步。', '我去看看。', quantityPrompt);
+  assert.equal(clean.valid, true);
+  assert.equal('offendingSentences' in clean, false, '没命中时不带这个字段');
+  const quantityRetry = G.performanceRetryInstruction(quantity.issues, quantity.offendingSentences);
+  assert.ok(quantityRetry.includes('被判违规的原句（重写时不得照抄）：「近处一名披甲校尉按刀喝问」'));
+  assert.ok(quantityRetry.includes(G.QUANTITY_GUARD_HINT) && !quantityRetry.includes(G.LOSS_GUARD_HINT));
+  const lossRetry = G.performanceRetryInstruction(loss.issues, loss.offendingSentences);
+  assert.ok(lossRetry.includes(G.LOSS_GUARD_HINT) && !lossRetry.includes(G.QUANTITY_GUARD_HINT));
+  assert.equal(G.performanceRetryInstruction(['硬门禁：正文命中阶段禁词“某词”']).includes('被判违规的原句'), false);
+});
+
+test('Q7-B：AIBS 非分步路由——硬门禁命中先自动重写一次，预算用尽或重写仍违规才落兜底句（源码顺序）', async () => {
+  const { readFileSync } = await import('node:fs');
+  const source = readFileSync(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
+  const block = source.slice(source.indexOf('// 非分步路由同样执行一次表演门禁'), source.indexOf('// 🔥 文本优化'));
+  const at = text => { const i = block.indexOf(text); assert.ok(i >= 0, `应有：${text}`); return i; };
+  assert.ok(at('const longRequestLeft = (remainingQingyuTurnLongRequests() ?? 1) > 0;') < at('if (hardViolation ? !longRequestLeft : usesFixedScenarioInventory(saveData)) {'));
+  assert.ok(at('长请求预算已用尽，已丢弃正文与伴随指令，不再重写') < at('performanceRetryInstruction(performance.issues, performance.offendingSentences)'));
+  assert.ok(at('performanceRetryInstruction(performance.issues, performance.offendingSentences)') < at('非分步重试仍违规，已丢弃正文与伴随指令'));
+  assert.equal(block.split('_performance_retry').length, 3, '重写请求仍只有原来那一处（两种宿主各一行）');
+});

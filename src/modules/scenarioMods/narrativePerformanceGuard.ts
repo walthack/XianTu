@@ -5,6 +5,8 @@ import { findInternalNarrativeControlLeaks } from '@/utils/textSanitizer';
 export interface NarrativePerformanceCheck {
   valid: boolean;
   issues: string[];
+  /** 两条数字硬门禁命中的原句（Q7-B：自动重写时点名给模型，告诉它改哪一句）；其余门禁不填。 */
+  offendingSentences?: string[];
 }
 
 export interface NarrativePerformanceAttemptDecision extends NarrativePerformanceCheck {
@@ -241,19 +243,19 @@ function hasExplicitUnverifiedQuantityContext(sentence: string): boolean {
     && !AUTHORITATIVE_QUANTITY_CONTEXT.test(sentence);
 }
 
-function concreteQuantityViolation(narrative: string, scenarioPrompt: string): boolean {
+function concreteQuantitySentences(narrative: string, scenarioPrompt: string): string[] {
   const guarded = /renderGuard\.rejectConcreteQuantities=true/.test(scenarioPrompt)
     || /mustNotInvent=[^。\n]*具体兵力数字/.test(scenarioPrompt);
-  if (!guarded) return false;
-  return narrative.split(/[。！？\n]/).some(sentence =>
+  if (!guarded) return [];
+  return narrative.split(/[。！？\n]/).filter(sentence =>
     sentenceHasUnauthorizedQuantity(sentence, scenarioPrompt)
   );
 }
 
-function ungroundedHandoffLossViolation(narrative: string, scenarioPrompt: string): boolean {
-  if (!/renderGuard\.rejectUngroundedHandoffLosses=true/.test(scenarioPrompt)) return false;
+function ungroundedHandoffLossSentences(narrative: string, scenarioPrompt: string): string[] {
+  if (!/renderGuard\.rejectUngroundedHandoffLosses=true/.test(scenarioPrompt)) return [];
   const groundedClaims = parseGroundedHandoffLossClaims(scenarioPrompt);
-  return narrative.split(/[。！？\n]/).some(sentence => {
+  return narrative.split(/[。！？\n]/).filter(sentence => {
     if (hasExplicitUnverifiedQuantityContext(sentence)) return false;
     const ungroundedRemainder = groundedClaims.reduce(
       (remainder, claim) => remainder.split(claim).join(''),
@@ -357,11 +359,16 @@ export function validateNarrativePerformance(
   if (reservedFutureTerm) {
     issues.push(`${HARD_ISSUE_PREFIX}正文提前演出后续步骤保留内容“${reservedFutureTerm}”`);
   }
-  if (concreteQuantityViolation(narrative, scenarioPrompt)) {
+  const offendingSentences: string[] = [];
+  const quantitySentences = concreteQuantitySentences(narrative, scenarioPrompt);
+  if (quantitySentences.length) {
     issues.push(`${HARD_ISSUE_PREFIX}正文补造了具体兵力数字、军事距离或比例`);
+    offendingSentences.push(...quantitySentences);
   }
-  if (ungroundedHandoffLossViolation(narrative, scenarioPrompt)) {
+  const lossSentences = ungroundedHandoffLossSentences(narrative, scenarioPrompt);
+  if (lossSentences.length) {
     issues.push(`${HARD_ISSUE_PREFIX}跨拍正文补造了无来源的精确伤亡或财货损失`);
+    offendingSentences.push(...lossSentences);
   }
   const atomicClaimIssue = atomicPrivateClaimViolation(
     narrative,
@@ -369,7 +376,7 @@ export function validateNarrativePerformance(
     atomicPrivateClaims,
   );
   if (atomicClaimIssue) issues.push(`${HARD_ISSUE_PREFIX}${atomicClaimIssue}`);
-  if (!DECISION_SCENE.test(userInput)) return { valid: issues.length === 0, issues };
+  if (!DECISION_SCENE.test(userInput)) return { valid: issues.length === 0, issues, ...(offendingSentences.length ? { offendingSentences } : {}) };
   for (const name of [...entityAliases("character","liuchao.character.xiao_zi"), ...entityAliases("character","liuchao.character.jia_wenhe")]) {
     if (!scenarioPrompt.includes(`【${name}·角色表演卡`) || !narrative.includes(name)) continue;
     const speech = namedSpeech(narrative, name);
@@ -377,11 +384,15 @@ export function validateNarrativePerformance(
       issues.push(`${name}只汇报/等待，没有亲自提出或实施会改变本轮选择的具体方案`);
     }
   }
-  return { valid: issues.length === 0, issues };
+  return { valid: issues.length === 0, issues, ...(offendingSentences.length ? { offendingSentences } : {}) };
 }
 
-export function performanceRetryInstruction(issues: string[]): string {
-  return `上稿未通过内部检查：${issues.join('；')}。这段检查说明只供重写时使用，严禁复述到正文。保留已接地事实，整段重写；不得提前演出被标为后续步骤保留内容的动作、台词或结果。若提示词给出 atomicPrivateClaims 且玩家明确要求核对有证据事实，必须逐字复述其中 claim；除此之外只可回答不知道／没有证据，不得补写回忆、见闻、服饰、时长、地点、来源或传闻。必须让被点名角色亲口说出或亲自实施一个具体可行动方案（含先手、后手、代价或退出条件之一），随后把选择留给玩家。不得让主角代为分析/下令，不得新增存档与正典没有的兵力、伤亡、人物或事件。跨拍余波没有结构化损失回执时，伤亡、伤者、财货、车船与牲畜损失只写定性结果或“仍待清点”，不得补精确数量。涉及军务、护卫或路线时，改写为不带数字的职责、通行、次序、联络和可见动作，不得补人数、距离或比例；命中的禁词或秘密关联改用已经公开的表象承接，不得换一种肯定说法再次坐实。`;
+export function performanceRetryInstruction(issues: string[], offendingSentences: string[] = []): string {
+  // Q7-B：数字硬门禁命中时点名原句，并把字面规则与可换的写法一并给出（只说「补造了数字」模型不知道是哪一句、也不觉得「一名军士」算数字）。
+  const quantityHint = offendingSentences.length
+    ? `被判违规的原句（重写时不得照抄）：${offendingSentences.slice(0, 4).map(sentence => `「${sentence.trim().slice(0, 80)}」`).join('')}。${issues.some(issue => issue.includes('兵力数字')) ? QUANTITY_GUARD_HINT : ''}${issues.some(issue => issue.includes('伤亡或财货损失')) ? LOSS_GUARD_HINT : ''}`
+    : '';
+  return `上稿未通过内部检查：${issues.join('；')}。${quantityHint}这段检查说明只供重写时使用，严禁复述到正文。保留已接地事实，整段重写；不得提前演出被标为后续步骤保留内容的动作、台词或结果。若提示词给出 atomicPrivateClaims 且玩家明确要求核对有证据事实，必须逐字复述其中 claim；除此之外只可回答不知道／没有证据，不得补写回忆、见闻、服饰、时长、地点、来源或传闻。必须让被点名角色亲口说出或亲自实施一个具体可行动方案（含先手、后手、代价或退出条件之一），随后把选择留给玩家。不得让主角代为分析/下令，不得新增存档与正典没有的兵力、伤亡、人物或事件。跨拍余波没有结构化损失回执时，伤亡、伤者、财货、车船与牲畜损失只写定性结果或“仍待清点”，不得补精确数量。涉及军务、护卫或路线时，改写为不带数字的职责、通行、次序、联络和可见动作，不得补人数、距离或比例；命中的禁词或秘密关联改用已经公开的表象承接，不得换一种肯定说法再次坐实。`;
 }
 
 /**

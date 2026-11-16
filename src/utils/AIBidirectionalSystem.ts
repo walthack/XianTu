@@ -1773,23 +1773,26 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
       if (!shouldActuallySplit && gmResponse?.text) {
         const performance = validateNarrativePerformance(gmResponse.text, finalUserInput, scenarioStoryPrompt);
         if (!performance.valid) {
-          if (usesFixedScenarioInventory(saveData) || hasHardNarrativeViolation(performance)) {
-            if (hasHardNarrativeViolation(performance)) {
+          // Q7-B（用户 2026-11-16 批）：硬门禁命中且本回合长请求预算还有时，先自动重写一次（走下面的重写分支），仍违规才落兜底句。
+          const hardViolation = hasHardNarrativeViolation(performance);
+          const longRequestLeft = (remainingQingyuTurnLongRequests() ?? 1) > 0;
+          if (hardViolation ? !longRequestLeft : usesFixedScenarioInventory(saveData)) {
+            if (hardViolation) {
               gmResponse.text = safeNarrativeFallbackForContext(finalUserInput, scenarioStoryPrompt);
               gmResponse.narrativeNotice = '原回应与当前场景不一致，已替换为安全叙述。请查看当前状态后继续。';
               gmResponse.mid_term_memory = '';
               gmResponse.tavern_commands = [];
               gmResponse.action_options = [];
-              console.error('[叙事硬门禁] 已丢弃正文与伴随指令，不再发长请求重写：', performance.issues);
+              console.error('[叙事硬门禁] 长请求预算已用尽，已丢弃正文与伴随指令，不再重写：', performance.issues);
             } else {
               console.warn('[角色表演门禁] 普通问题保留已解析正文，不再发长请求重写：', performance.issues);
             }
-          } else if ((remainingQingyuTurnLongRequests() ?? 1) <= 0) {
+          } else if (!longRequestLeft) {
             console.warn('[角色表演门禁] 长请求预算已用尽，不再重写');
           } else {
           options?.onProgressUpdate?.('角色表演门禁：重写正文…');
-          const retryInput = `${finalUserInput}\n\n${performanceRetryInstruction(performance.issues)}`;
-          console.warn('[角色表演门禁] 非分步正文退回重写：', performance.issues);
+          const retryInput = `${finalUserInput}\n\n${performanceRetryInstruction(performance.issues, performance.offendingSentences)}`;
+          console.warn(hardViolation ? '[叙事硬门禁] 命中，自动重写一次：' : '[角色表演门禁] 非分步正文退回重写：', performance.issues);
           const retryRaw = tavernHelper
             ? await tavernHelper.generate({
                 user_input: retryInput,
