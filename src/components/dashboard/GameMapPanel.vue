@@ -271,7 +271,7 @@
     </div>
 
     <!-- 地图图例 -->
-    <div class="map-legend" :class="{ collapsed: legendCollapsed }">
+    <div v-show="!travelPlayback" class="map-legend" :class="{ collapsed: legendCollapsed }">
       <div class="legend-header" @click="legendCollapsed = !legendCollapsed">
         <div class="legend-title">{{ worldName }}图例</div>
         <button class="legend-toggle">
@@ -2465,7 +2465,7 @@ const handleFullscreenChange = () => {
 .travel-playback {
   position: absolute;
   inset: 0;
-  z-index: 1100; /* 高过图例（1000）：演时图例也点不动 */
+  z-index: 1100; /* 图例在地图容器外面、盖不住，演时用 v-show 整个收起（否则展开的图例会挡住目的地） */
   cursor: pointer;
   touch-action: none;
 }
