@@ -27,6 +27,7 @@ import {
   privateFactNeedsNarrativeAssociationGuard,
 } from './privateKnowledgeGuard';
 import { formatVoiceCard } from './voiceCards';
+import { LOSS_GUARD_HINT, QUANTITY_GUARD_HINT } from './narrativePerformanceGuard';
 import { undisclosedSelfFactsPromptLine } from './undisclosedSelfFacts';
 import { encounterPromptFacts } from './randomEncounter';
 import { getWuyuanOpenWorldPrompt } from './wuyuanOpenWorldSlice';
@@ -397,7 +398,7 @@ function formatWorldActorContract(runtime: StoryRuntime, anchor: ScenarioModEven
     .filter((name): name is string => Boolean(name)));
   const guardedTerms = (guard?.forbiddenTerms || []).filter(term => !confirmedKnownNames.has(term));
   const guardLine = guard
-    ? `\n- renderGuard.forbiddenTerms=${guardedTerms.join('|')}；renderGuard.forbiddenAssociations=${JSON.stringify(guard.forbiddenAssociations || [])}；renderGuard.rejectConcreteQuantities=${guard.rejectConcreteQuantities === true}；renderGuard.allowUnverifiedQuantities=${guard.allowUnverifiedQuantities === true}。未核实数字必须带明确消息来源与不确定性，只是角色主张，绝不等同或写回世界真值。${guard.rejectConcreteQuantities === true ? '涉及军务、护卫或路线时，只写职责、通行、次序、联络和可见动作；除非存档已明确给出，否则不得自行补人数、距离或比例。' : ''}该行是最终落稿硬门禁，命中时必须重写，不得展示违规草稿。`
+    ? `\n- renderGuard.forbiddenTerms=${guardedTerms.join('|')}；renderGuard.forbiddenAssociations=${JSON.stringify(guard.forbiddenAssociations || [])}；renderGuard.rejectConcreteQuantities=${guard.rejectConcreteQuantities === true}；renderGuard.allowUnverifiedQuantities=${guard.allowUnverifiedQuantities === true}。未核实数字必须带明确消息来源与不确定性，只是角色主张，绝不等同或写回世界真值。${guard.rejectConcreteQuantities === true ? '涉及军务、护卫或路线时，只写职责、通行、次序、联络和可见动作；除非存档已明确给出，否则不得自行补人数、距离或比例。' + QUANTITY_GUARD_HINT : ''}该行是最终落稿硬门禁，命中时必须重写，不得展示违规草稿。`
     : '';
   const forbiddenBefore = contract.decisionCore?.canonPolicy.forbiddenBefore || [];
   const timelineState = runtime.eventTimeline?.[anchor.id];
@@ -1226,7 +1227,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
         const groundedLossBoundary = groundedLossClaims.length
           ? `引擎已经落账的精确损失事实仅限以下逐字声明：${groundedLossClaims.join('｜')}。如需使用精确数量，必须原样引用其中一条，不得改换主语、数量或结果，也不得顺带补充其他损失。renderGuard.groundedHandoffLossClaims=${JSON.stringify(groundedLossClaims)}；`
           : '当前没有结构化损失回执：';
-        const lossGroundingBoundary = `renderGuard.rejectUngroundedHandoffLosses=true。${groundedLossBoundary}不得为回执之外的伤亡、伤者、失踪者、财货、车船或牲畜损失补造精确数量；其余只可使用“仍待清点”“有人受伤”“部分货物受损”等定性表述。带明确消息来源且明确标为未核实的角色传闻可以保留，但不得当成事实或写回世界状态。`;
+        const lossGroundingBoundary = `renderGuard.rejectUngroundedHandoffLosses=true。${groundedLossBoundary}不得为回执之外的伤亡、伤者、失踪者、财货、车船或牲畜损失补造精确数量；其余只可使用“仍待清点”“有人受伤”“部分货物受损”等定性表述。${LOSS_GUARD_HINT}带明确消息来源且明确标为未核实的角色传闻可以保留，但不得当成事实或写回世界状态。`;
         if (settledBeat?.bridgedAtTurn === undefined) {
           return `【跨拍承接·余波铺垫，不改真值】上一拍「${settledEvent.name}」刚由玩家亲历完成；当前入口是“${destination}”。本轮先用一小段余波接住上一拍，再通过同伴反应、环境异样或新出现的需求铺到当前入口附近；${movement}。不得复演上一拍，不得直接完成当前事件；资料未声明具体时长时不得编造精确日期或距离。${lossGroundingBoundary}`;
         }

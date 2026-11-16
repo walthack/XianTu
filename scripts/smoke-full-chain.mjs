@@ -41,7 +41,7 @@
 //   模拟「人还没到本拍地点就照日志打字」；没推进则同一拍之后照常先去地点。汇总里报探测手数与其中正文请求数、手后位置是否变了。
 // --max-hands N：到 N 手即停，照常收尾出报告（outcome=maxHands，不算未走完）。
 // 真实模式每手另记页面存档里三层记忆的条数（--json 的 real.hands[].mem，日志「[记忆]」行），用来看记忆总结有没有真的把中期记忆压成长期记忆。
-// 环境变量：SMOKE_PREFER_BUTTONS=1（主线合同动作、同国「前往」、关末启程有按钮就点按钮，不手打；默认关）；SMOKE_HAND_PAUSE_MS=毫秒（每手收尾后停这么久再打下一手，模拟真人读完正文的间隔）；SMOKE_CONSOLE_GREP=正则（把匹配的页面控制台行打到日志；非调试模式下页面只放行 console.error）。
+// 环境变量：SMOKE_KEEP_REJECTED=1（真实模式下，被硬门禁换成兜底句的那几手，把模型原回包全文记进 --json 的 real.hands[].rejectedNarratives）；SMOKE_PREFER_BUTTONS=1（主线合同动作、同国「前往」、关末启程有按钮就点按钮，不手打；默认关）；SMOKE_HAND_PAUSE_MS=毫秒（每手收尾后停这么久再打下一手，模拟真人读完正文的间隔）；SMOKE_CONSOLE_GREP=正则（把匹配的页面控制台行打到日志；非调试模式下页面只放行 console.error）。
 import assert from 'node:assert/strict';
 import { writeFileSync } from 'node:fs';
 import { chromium } from 'playwright-core';
@@ -837,6 +837,8 @@ function onRealDone(request, failed) {
     const v = m ? m[1].replace(/\s+/g, ' ').slice(0, 80) : 'absent';
     real.actionTime[v] = (real.actionTime[v] || 0) + 1;
     if (x.cur) (x.cur.actionTime ||= []).push(v);
+    // SMOKE_KEEP_REJECTED=1：留下这一手主叙事回包的全文，收尾时只把「已替换为安全叙述」那几手的写进 --json（看模型到底写了什么被硬门禁丢掉；只在测试脚本里留，游戏不记）。
+    if (x.cur && process.env.SMOKE_KEEP_REJECTED) (x.cur.narrBodies ||= []).push(content);
   }).catch(() => {});
   // 判拍／意图请求的回包正文（模型输出，前 300 字）记到这一手，便于看没判中时模型回了什么。
   if (!failed && x.cur && (x.kind === 'beat' || x.kind === 'intent')) request.response().then(r => r?.json()).then(j => { (x.cur.judgeReplies ||= []).push(String(j?.choices?.[0]?.message?.content ?? '').replace(/\s+/g, ' ').slice(0, 300)); }).catch(() => {});
@@ -902,6 +904,18 @@ function readDiagOnce(page, sinceMs) {
 // 每手收尾时页面存档里三层记忆各有几条（看记忆总结有没有真的把中期记忆压成长期记忆）。
 let lastMem = null;
 const readMem = page => page.evaluate(expr => { const m = eval(expr)._s.get('gameState').toSaveData()?.社交?.记忆 || {}; return { short: (m.短期记忆 || []).length, mid: (m.中期记忆 || []).length, long: (m.长期记忆 || []).length }; }, PINIA).catch(() => null);
+// SMOKE_WATCH_RELATION=<角色id>：真实模式下每手读页面存档里这个角色的关系条目，名字／性别／出生日期第一次出现或有变化时打一行并记进 --json 的 real.watchedRelation。
+const WATCH_RELATION = process.env.SMOKE_WATCH_RELATION || null;
+let lastWatched = null;
+async function watchRelation(page) {
+  if (!WATCH_RELATION) return;
+  const v = await page.evaluate(([expr, id]) => { const p = eval(expr)._s.get('gameState').toSaveData()?.社交?.关系?.[id]; return p ? { 名字: p.名字 ?? null, 性别: p.性别 ?? null, 出生日期: p.出生日期 ?? null } : null; }, [PINIA, WATCH_RELATION]).catch(() => null);
+  const text = JSON.stringify(v);
+  if (text === lastWatched) return;
+  lastWatched = text;
+  (real.watchedRelation ||= []).push({ hand: moves, value: v });
+  console.log(`[关系] 手${moves} ${WATCH_RELATION} ${text}`);
+}
 function realHand(tm, save, after, label, res, moved, nodeMoved = null, diag = null, toasts = null) {
   const safe = /已替换为安全叙述|本轮只呈现已经确认的公开动静/.test(`${after.notice} ${after.narrative200}`), unrec = /行动没能识别/.test(after.hold);
   if (safe) real.safeReplaced++;
@@ -1059,7 +1073,7 @@ try {
       }
       const nodeMoved = expected.save ? (REAL ? realKeyOf(progressOf(expected.save)) !== realKeyOf(before) : keyOf(progressOf(expected.save)) !== keyOf(before)) : null;
       // SMOKE_HAND_PAUSE_MS=毫秒：每手收尾后先停这么久再读记忆条数、再打下一手（模拟真人读完正文再动手的间隔）。
-      if (REAL) { const diag = await readDiag(page, tm); if (HAND_PAUSE_MS) await page.waitForTimeout(HAND_PAUSE_MS); lastMem = await readMem(page); realHand(tm, save, after, planLabel(plan), res, moved, nodeMoved, diag, await readToasts(page, tm)); }
+      if (REAL) { const diag = await readDiag(page, tm); if (HAND_PAUSE_MS) await page.waitForTimeout(HAND_PAUSE_MS); lastMem = await readMem(page); await watchRelation(page); realHand(tm, save, after, planLabel(plan), res, moved, nodeMoved, diag, await readToasts(page, tm)); }
       if (QIN && rt(after.save).modId === QIN_STAGE && !RET.getMapEntryReturnOffer(after.save)) {
         const n = await returnButtons(page);
         (qin.railMid ||= { moves: 0, early: [] }).moves++;
@@ -1159,13 +1173,13 @@ const total = stages.reduce((acc, s) => { for (const k of 'abcd') acc[k] += s.vi
 const sideOut = SIDE ? { results: side.results, seenDoable: Object.fromEntries(side.seenDoable), charRows: side.charRows, compass: side.compass } : undefined;
 let realOut;
 if (REAL) {
-  for (const h of real.hands) { const r = reqCount(h._cur); Object.assign(h, { requests: r, kinds: [...(h._cur?.requests || [])], narrMs: h._cur?.narrMs || [], judgeReplies: h._cur?.judgeReplies || [], failedRequests: h._cur?.failedRequests || 0 }); delete h._cur; }
+  for (const h of real.hands) { const r = reqCount(h._cur); Object.assign(h, { requests: r, kinds: [...(h._cur?.requests || [])], narrMs: h._cur?.narrMs || [], judgeReplies: h._cur?.judgeReplies || [], failedRequests: h._cur?.failedRequests || 0 }); if (h.safe && h._cur?.narrBodies) h.rejectedNarratives = h._cur.narrBodies; delete h._cur; }
   const med = list => { const x = [...list].sort((a, b) => a - b); return x.length ? x[Math.floor(x.length / 2)] : null; };
   const handMs = real.hands.map(h => h.ms), narr = real.hands.flatMap(h => h.narrMs);
   realOut = { hosts: guardRef?.stats ? { allowed: guardRef.stats.allowed, violations: guardRef.stats.violations.length } : null, storage: storageRef,
     requests: { chat: real.chat, embeddings: real.embeddings, byKind: real.byKind, failed: real.failedRequests, httpErrors: httpErrorsOf(real.profile) },
     handMs: { median: med(handMs), max: Math.max(0, ...handMs) }, narrationMs: { count: narr.length, median: med(narr), max: Math.max(0, ...narr) },
-    safeReplaced: real.safeReplaced, unrecognized: real.unrecognized, actionTime: real.actionTime, hands: real.hands,
+    safeReplaced: real.safeReplaced, unrecognized: real.unrecognized, watchedRelation: real.watchedRelation || null, actionTime: real.actionTime, hands: real.hands,
     profile: Object.fromEntries(Object.entries(real.profile).map(([k, g]) => [k, { count: g.count, failed: g.failed, medianMs: med(g.ms), maxMs: Math.max(0, ...g.ms), params: g.params, status: g.status, errorBodies: g.errorBodies }])) };
   // LCQ-SAV-065 按 detail.reason 计数；取不到诊断日志的手（旧包／库打不开）单独计。
   realOut.stall = { reasons: {}, entries: 0, handsWithoutDiag: real.hands.filter(h => !Array.isArray(h.diag)).length };
