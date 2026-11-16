@@ -458,7 +458,7 @@ const travelToSelectedLocation = async () => {
   const playTravel = selection ? mapTravelPlayback(save, selection) : undefined;
   if (!selection || !settleMapTravel(save, selection)) { mapTravelNotice.value = '此处暂无已开放且登记路程的路线，不能前往。'; return; }
   mapTravelBusy.value = true;
-  try { gameStateStore.loadFromSaveData(save); await gameStateStore.saveGame(); await playTravel?.(); mapTravelNotice.value = mapTravelArrivalNotice(save);
+  try { gameStateStore.loadFromSaveData(save); await gameStateStore.saveGame(); let notice = mapTravelArrivalNotice(save);
     // 跨国启程（用户 2026-11-02 拍板④）：启程按钮记下的下一关在别国，人到了目标国就在这里切关。
     const arrived = gameStateStore.toSaveData();
     // 任务引导开（story.quest.enabled）：同国到了下一关开场落点也即切关（questArrivedDeparture；source＝出发前）。
@@ -466,8 +466,10 @@ const travelToSelectedLocation = async () => {
     if (arrived && departedStageId) {
       gameStateStore.systemExtensions = (arrived as any).系统.扩展;
       const departed = await gameStateStore.transitionToNextStage(departedStageId);
-      mapTravelNotice.value = departed.ok ? (departed.toName ? `已启程：${departed.toName}` : '已启程') : (departed.reason || '此刻还不能启程');
+      notice = departed.ok ? (departed.toName ? `已启程：${departed.toName}` : '已启程') : (departed.reason || '此刻还不能启程');
     }
+    // 赶路回放放在切关之后：落账、存档、切关都做完才演，演到一半刷新或关页面不会留下「人到了、关没切」的档。
+    await playTravel?.(); mapTravelNotice.value = notice;
   }
   finally { mapTravelBusy.value = false; }
 };

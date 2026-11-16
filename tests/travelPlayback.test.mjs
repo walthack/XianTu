@@ -121,3 +121,14 @@ test('回放天数与结算同源：跨国＝实际扣的天数、国内＝片�
   assert.ok(selection);
   assert.deepEqual(M.mapTravelPlaybackRoute(s, selection), { days: 0 });
 });
+
+test('地图面板：赶路回放排在存档与切关之后（演到一半刷新不会留下「人到了、关没切」的档）', async () => {
+  const { readFileSync } = await import('node:fs');
+  const vue = readFileSync(new URL('../src/components/dashboard/GameMapPanel.vue', import.meta.url), 'utf8');
+  const body = vue.slice(vue.indexOf('const travelToSelectedLocation = async'), vue.indexOf('finally { mapTravelBusy.value = false; }'));
+  const at = text => { const i = body.indexOf(text); assert.ok(i >= 0, `应有：${text}`); return i; };
+  assert.ok(at('settleMapTravel(save, selection)') < at('await gameStateStore.saveGame()'));
+  assert.ok(at('await gameStateStore.saveGame()') < at('await gameStateStore.transitionToNextStage(departedStageId)'));
+  assert.ok(at('await gameStateStore.transitionToNextStage(departedStageId)') < at('await playTravel?.()'));
+  assert.equal(body.split('await playTravel?.()').length, 2, '回放只调一次');
+});
