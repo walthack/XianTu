@@ -902,6 +902,18 @@ function readDiagOnce(page, sinceMs) {
 // 每手收尾时页面存档里三层记忆各有几条（看记忆总结有没有真的把中期记忆压成长期记忆）。
 let lastMem = null;
 const readMem = page => page.evaluate(expr => { const m = eval(expr)._s.get('gameState').toSaveData()?.社交?.记忆 || {}; return { short: (m.短期记忆 || []).length, mid: (m.中期记忆 || []).length, long: (m.长期记忆 || []).length }; }, PINIA).catch(() => null);
+// SMOKE_WATCH_RELATION=<角色id>：真实模式下每手读页面存档里这个角色的关系条目，名字／性别／出生日期第一次出现或有变化时打一行并记进 --json 的 real.watchedRelation。
+const WATCH_RELATION = process.env.SMOKE_WATCH_RELATION || null;
+let lastWatched = null;
+async function watchRelation(page) {
+  if (!WATCH_RELATION) return;
+  const v = await page.evaluate(([expr, id]) => { const p = eval(expr)._s.get('gameState').toSaveData()?.社交?.关系?.[id]; return p ? { 名字: p.名字 ?? null, 性别: p.性别 ?? null, 出生日期: p.出生日期 ?? null } : null; }, [PINIA, WATCH_RELATION]).catch(() => null);
+  const text = JSON.stringify(v);
+  if (text === lastWatched) return;
+  lastWatched = text;
+  (real.watchedRelation ||= []).push({ hand: moves, value: v });
+  console.log(`[关系] 手${moves} ${WATCH_RELATION} ${text}`);
+}
 function realHand(tm, save, after, label, res, moved, nodeMoved = null, diag = null, toasts = null) {
   const safe = /已替换为安全叙述|本轮只呈现已经确认的公开动静/.test(`${after.notice} ${after.narrative200}`), unrec = /行动没能识别/.test(after.hold);
   if (safe) real.safeReplaced++;
@@ -1059,7 +1071,7 @@ try {
       }
       const nodeMoved = expected.save ? (REAL ? realKeyOf(progressOf(expected.save)) !== realKeyOf(before) : keyOf(progressOf(expected.save)) !== keyOf(before)) : null;
       // SMOKE_HAND_PAUSE_MS=毫秒：每手收尾后先停这么久再读记忆条数、再打下一手（模拟真人读完正文再动手的间隔）。
-      if (REAL) { const diag = await readDiag(page, tm); if (HAND_PAUSE_MS) await page.waitForTimeout(HAND_PAUSE_MS); lastMem = await readMem(page); realHand(tm, save, after, planLabel(plan), res, moved, nodeMoved, diag, await readToasts(page, tm)); }
+      if (REAL) { const diag = await readDiag(page, tm); if (HAND_PAUSE_MS) await page.waitForTimeout(HAND_PAUSE_MS); lastMem = await readMem(page); await watchRelation(page); realHand(tm, save, after, planLabel(plan), res, moved, nodeMoved, diag, await readToasts(page, tm)); }
       if (QIN && rt(after.save).modId === QIN_STAGE && !RET.getMapEntryReturnOffer(after.save)) {
         const n = await returnButtons(page);
         (qin.railMid ||= { moves: 0, early: [] }).moves++;
@@ -1165,7 +1177,7 @@ if (REAL) {
   realOut = { hosts: guardRef?.stats ? { allowed: guardRef.stats.allowed, violations: guardRef.stats.violations.length } : null, storage: storageRef,
     requests: { chat: real.chat, embeddings: real.embeddings, byKind: real.byKind, failed: real.failedRequests, httpErrors: httpErrorsOf(real.profile) },
     handMs: { median: med(handMs), max: Math.max(0, ...handMs) }, narrationMs: { count: narr.length, median: med(narr), max: Math.max(0, ...narr) },
-    safeReplaced: real.safeReplaced, unrecognized: real.unrecognized, actionTime: real.actionTime, hands: real.hands,
+    safeReplaced: real.safeReplaced, unrecognized: real.unrecognized, watchedRelation: real.watchedRelation || null, actionTime: real.actionTime, hands: real.hands,
     profile: Object.fromEntries(Object.entries(real.profile).map(([k, g]) => [k, { count: g.count, failed: g.failed, medianMs: med(g.ms), maxMs: Math.max(0, ...g.ms), params: g.params, status: g.status, errorBodies: g.errorBodies }])) };
   // LCQ-SAV-065 按 detail.reason 计数；取不到诊断日志的手（旧包／库打不开）单独计。
   realOut.stall = { reasons: {}, entries: 0, handsWithoutDiag: real.hands.filter(h => !Array.isArray(h.diag)).length };
