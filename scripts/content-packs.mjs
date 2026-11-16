@@ -142,8 +142,10 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   if(action.action_time!==undefined){const t=action.action_time;if(!object(t)||Object.keys(t).some(k=>!['tier','days'].includes(k))||!['一瞬','片刻','一时辰','半日','一日','数日'].includes(t.tier)||(t.tier==='数日'? !Number.isSafeInteger(t.days)||t.days<=0:t.days!==undefined))fail(`invalid action_time ${event.id}`);}
  }
  const locationIds=new Set(JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/locations.json'),'utf8')).entries.flatMap(e=>[e.id,...(e.aliases||[])]));
+ // via：途经坐标（地图移动第一步，只管赶路回放的画法、不影响天数）；与地图地点坐标同口径（locations.json coordinates，游戏坐标 0–10000）
+ const validMapRouteVia=via=>Array.isArray(via)&&via.length>0&&via.every(p=>object(p)&&Object.keys(p).length===2&&['x','y'].every(k=>typeof p[k]==='number'&&Number.isFinite(p[k])&&p[k]>=0&&p[k]<=10000));
  unique(catalog.mapRoutes,r=>r.id,'map route');
- for(const r of catalog.mapRoutes)if(!object(r)||Object.keys(r).some(k=>!['id','fromId','toId','dayCost','unlockWhen'].includes(k))||!locationIds.has(r.fromId)||!locationIds.has(r.toId)||r.fromId===r.toId||!(r.dayCost==='several'||typeof r.dayCost==='number'&&Number.isFinite(r.dayCost)&&r.dayCost>=0)||(r.unlockWhen!==undefined&&(!Array.isArray(r.unlockWhen)||r.unlockWhen.some(id=>typeof id!=='string'))))fail(`invalid map route ${r?.id}`);
+ for(const r of catalog.mapRoutes)if(!object(r)||Object.keys(r).some(k=>!['id','fromId','toId','dayCost','unlockWhen','via'].includes(k))||!locationIds.has(r.fromId)||!locationIds.has(r.toId)||r.fromId===r.toId||!(r.dayCost==='several'||typeof r.dayCost==='number'&&Number.isFinite(r.dayCost)&&r.dayCost>=0)||(r.unlockWhen!==undefined&&(!Array.isArray(r.unlockWhen)||r.unlockWhen.some(id=>typeof id!=='string')))||(r.via!==undefined&&!validMapRouteVia(r.via)))fail(`invalid map route ${r?.id}`);
  const events=new Map([...stages.values()].flatMap(s=>(s.scenario?.events||[]).map(e=>[e.id,e])));
  for(const r of catalog.mapRoutes)for(const id of r.unlockWhen||[])if(!events.has(id))fail(`map route ${r.id}: unknown unlock event ${id}`);
  const playtests=new Map(catalog.playtests.map(x=>[x.id,x]));
