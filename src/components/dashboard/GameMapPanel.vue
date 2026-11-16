@@ -101,6 +101,21 @@
     <div class="map-container" ref="mapContainerRef">
       <canvas ref="canvasRef"></canvas>
 
+      <!-- 赶路过程（纯表现回放）：盖住画布锁住拖动/缩放/点选，点一下或空格/Esc 跳过 -->
+      <div v-if="travelPlayback" class="travel-playback" data-testid="travel-playback" @click="skipPlayback" @wheel.prevent @touchmove.prevent>
+        <svg class="travel-playback-svg" width="100%" height="100%" aria-hidden="true">
+          <polyline :points="travelPlayback.route" class="travel-route" />
+          <polyline :points="travelPlayback.traveled" class="travel-traveled" />
+          <circle :cx="travelPlayback.from.x" :cy="travelPlayback.from.y" r="6" class="travel-from" />
+          <g :transform="`translate(${travelPlayback.to.x},${travelPlayback.to.y})`" class="travel-to">
+            <line x1="0" y1="0" x2="0" y2="-22" /><path d="M0,-22 L14,-17 L0,-12 Z" />
+          </g>
+          <circle :cx="travelPlayback.marker.x" :cy="travelPlayback.marker.y" r="8" class="travel-marker" />
+        </svg>
+        <div class="travel-day-line" data-testid="travel-playback-day">{{ travelPlayback.dayLine }}</div>
+        <button type="button" class="travel-skip" data-testid="travel-playback-skip" @click.stop="skipPlayback">跳过</button>
+      </div>
+
       <!-- 初始化地图按钮 (仅在地图为空时显示) -->
       <div v-if="!hasMapContent && !isInitializing && !scenarioMapLocked" class="initialize-map-overlay">
         <div class="initialize-prompt">
@@ -148,7 +163,7 @@
     </div>
 
     <!-- 地点信息弹窗 -->
-    <div v-if="selectedLocation && !isFactionLocation(selectedLocation)" class="location-popup" :style="popupStyle">
+    <div v-if="selectedLocation && !isFactionLocation(selectedLocation) && !travelPlayback" class="location-popup" :style="popupStyle">
       <div class="popup-header">
         <h4>{{ selectedLocation.name }}</h4>
         <button @click="closePopup" class="close-btn">×</button>
@@ -406,7 +421,8 @@ import { questArrivedDeparture, questGuideEnabled, questMarkers, type QuestMarke
 import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins';
 import { canonicalLocationId } from '@/modules/scenarioMods/travel/locationIds';
 import { useRoute } from 'vue-router';
-import { selectMapTravel, settleMapTravel, mapTravelRestriction, withMapCapitalMarkers, withoutMapHiddenLocations, isMapHiddenLocation, mapTravelPreview, mapTravelConfirmed, mapTravelArrivalNotice, mapHeaderInfo } from '@/modules/scenarioMods/travel/mapTravel';
+import { selectMapTravel, settleMapTravel, mapTravelRestriction, withMapCapitalMarkers, withoutMapHiddenLocations, isMapHiddenLocation, mapTravelPreview, mapTravelConfirmed, mapTravelArrivalNotice, mapHeaderInfo, mapTravelPlaybackRoute, type MapTravelSelection } from '@/modules/scenarioMods/travel/mapTravel';
+import { travelPlaybackPlan, travelPlaybackFrame, type TravelPoint } from '@/modules/scenarioMods/travel/travelPlayback';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { toast } from '@/utils/toast';
 import { logEvent } from '@/modules/diagnostics/log';
@@ -438,9 +454,11 @@ const travelToSelectedLocation = async () => {
   if (!mapTravelConfirmed(preview, travelConfirmation.value)) { travelConfirmation.value = preview.key; return; }
   travelConfirmation.value = null;
   const selection = selectMapTravel(save, String(selectedLocation.value.id || ''));
+  // 赶路回放（地图移动第一步，纯表现）：出发地与天数在落账前取，存档成功后才演。
+  const playTravel = selection ? mapTravelPlayback(save, selection) : undefined;
   if (!selection || !settleMapTravel(save, selection)) { mapTravelNotice.value = '此处暂无已开放且登记路程的路线，不能前往。'; return; }
   mapTravelBusy.value = true;
-  try { gameStateStore.loadFromSaveData(save); await gameStateStore.saveGame(); mapTravelNotice.value = mapTravelArrivalNotice(save);
+  try { gameStateStore.loadFromSaveData(save); await gameStateStore.saveGame(); await playTravel?.(); mapTravelNotice.value = mapTravelArrivalNotice(save);
     // 跨国启程（用户 2026-11-02 拍板④）：启程按钮记下的下一关在别国，人到了目标国就在这里切关。
     const arrived = gameStateStore.toSaveData();
     // 任务引导开（story.quest.enabled）：同国到了下一关开场落点也即切关（questArrivedDeparture；source＝出发前）。
@@ -459,6 +477,69 @@ const mapContainerRef = ref<HTMLDivElement | null>(null);
 const mapManager = ref<GameMapManager | null>(null);
 // 冒烟脚本的入口（scripts/lineSmokeHarness.mjs openMapLocationPopup 靠它算地点的屏幕坐标）：正式构建里 script setup 的内部状态不外露，只能经 expose 读到。
 defineExpose({ mapManager });
+/**
+ * 赶路过程（地图移动方案第一步，用户 2026-11-16 批）：「确认前往」落账并存档后，地图把出发地与目的地放进画面，占位标记沿路线走、走过的路留虚线，
+ * 上方一行日期字；走完再出抵达提示。这是回放：存档早已到了，演到一半刷新人已在目的地、天数只扣一次。
+ * 演时覆盖层盖住画布（锁拖动/缩放/点选），点一下或空格/Esc 跳过。系统「减少动态效果」时不演。
+ */
+interface TravelPlaybackView { dayLine: string; route: string; traveled: string; from: TravelPoint; to: TravelPoint; marker: TravelPoint }
+const travelPlayback = ref<TravelPlaybackView | null>(null);
+let skipTravelPlayback: (() => void) | null = null;
+const skipPlayback = () => skipTravelPlayback?.();
+const mapPointOf = (id: string): TravelPoint | undefined => {
+  const canonical = canonicalLocationId(id);
+  const c = mapLocationsLoaded.value.find(l => canonicalLocationId(String(l.id || '')) === canonical)?.coordinates;
+  return c && Number.isFinite(c.x) && Number.isFinite(c.y) ? { x: c.x, y: c.y } : undefined;
+};
+/** 落账前调用（只读）：出发地取落账前位置，天数与结算同源（mapTravelPlaybackRoute）。返回存档后执行的回放；演不了时 undefined。 */
+function mapTravelPlayback(save: any, selection: MapTravelSelection): (() => Promise<void>) | undefined {
+  const route = mapTravelPlaybackRoute(save, selection);
+  const position = save?.角色?.位置;
+  const from = mapPointOf(selection.fromId) || (Number.isFinite(position?.x) && Number.isFinite(position?.y) ? { x: position.x, y: position.y } : undefined);
+  const destination = selectedLocation.value?.coordinates;
+  const to = mapPointOf(selection.toId) || (destination ? { x: destination.x, y: destination.y } : undefined);
+  if (!route || !from || !to || !mapManager.value) return undefined;
+  if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
+  const plan = travelPlaybackPlan({ from, to, days: route.days, via: route.via, destinationName: String(selectedLocation.value?.name || '') });
+  return () => runTravelPlayback(plan);
+}
+function runTravelPlayback(plan: ReturnType<typeof travelPlaybackPlan>): Promise<void> {
+  const manager = mapManager.value;
+  if (!manager) return Promise.resolve();
+  // 把整条路放进画面：上方留日期行，四周留边；不放大到超过 1 倍（片刻的近路不至于怼满屏）。
+  const view = manager.getViewportState();
+  const xs = plan.path.map(p => p.x), ys = plan.path.map(p => p.y);
+  const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+  const scale = Math.max(0.1, Math.min(1, (view.screenWidth * 0.7) / Math.max(1, maxX - minX), (view.screenHeight * 0.55) / Math.max(1, maxY - minY)));
+  const cx = (minX + maxX) / 2, cy = (minY + maxY) / 2;
+  manager.setZoom(scale, false);
+  manager.centerTo(cx, cy - (view.screenHeight * 0.06) / scale, false);
+  const fitted = manager.getViewportState();
+  const screen = (p: TravelPoint): TravelPoint => ({ x: fitted.screenWidth / 2 + (p.x - fitted.x) * fitted.scale, y: fitted.screenHeight / 2 + (p.y - fitted.y) * fitted.scale });
+  const line = (points: TravelPoint[]) => points.map(p => { const q = screen(p); return `${q.x.toFixed(1)},${q.y.toFixed(1)}`; }).join(' ');
+  const route = line(plan.path), from = screen(plan.path[0]), to = screen(plan.path[plan.path.length - 1]);
+  const show = (t: number) => { const f = travelPlaybackFrame(plan, t); travelPlayback.value = { dayLine: f.dayLine, route, traveled: line(f.traveled), from, to, marker: screen(f.point) }; };
+  return new Promise<void>(resolve => {
+    let raf = 0, hold: ReturnType<typeof setTimeout> | undefined;
+    const start = performance.now();
+    const finish = () => {
+      cancelAnimationFrame(raf); if (hold) clearTimeout(hold);
+      window.removeEventListener('keydown', onKey, true);
+      skipTravelPlayback = null; travelPlayback.value = null; resolve();
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === ' ' || e.key === 'Escape' || e.key === 'Esc') { e.preventDefault(); e.stopPropagation(); finish(); } };
+    const step = () => {
+      const t = (performance.now() - start) / plan.durationMs;
+      show(t);
+      if (t < 1) raf = requestAnimationFrame(step);
+      else hold = setTimeout(finish, 400); // 抵达那一行停一下再出提示
+    };
+    skipTravelPlayback = finish;
+    window.addEventListener('keydown', onKey, true);
+    show(0); raf = requestAnimationFrame(step);
+  });
+}
+
 const selectedLocation = ref<WorldLocation | null>(null);
 const selectedTravelRestriction = computed(() => {
   const save = gameStateStore.toSaveData();
@@ -1382,6 +1463,7 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
+  skipTravelPlayback?.();
   window.removeEventListener('resize', handleResize);
   document.removeEventListener('fullscreenchange', handleFullscreenChange);
   mapManager.value?.destroy();
@@ -2375,6 +2457,50 @@ const handleFullscreenChange = () => {
   border-radius: 12px;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
+}
+
+/* 赶路过程（占位画法：线、点、小旗，不依赖图片） */
+.travel-playback {
+  position: absolute;
+  inset: 0;
+  z-index: 1100; /* 高过图例（1000）：演时图例也点不动 */
+  cursor: pointer;
+  touch-action: none;
+}
+.travel-playback-svg { position: absolute; inset: 0; }
+.travel-route { fill: none; stroke: rgba(120, 53, 15, 0.25); stroke-width: 3; }
+.travel-traveled { fill: none; stroke: #b45309; stroke-width: 3; stroke-dasharray: 8 6; stroke-linecap: round; }
+.travel-from { fill: #fff; stroke: #78350f; stroke-width: 2; }
+.travel-to line { stroke: #78350f; stroke-width: 2; }
+.travel-to path { fill: #b45309; }
+.travel-marker { fill: #b45309; stroke: #fff; stroke-width: 2.5; }
+.travel-day-line {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100% - 24px);
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(28, 25, 23, 0.78);
+  color: #fef3c7;
+  font-size: 15px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+.travel-skip {
+  position: absolute;
+  left: 12px; /* 右下是图例 */
+  bottom: 12px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(28, 25, 23, 0.7);
+  color: #fef3c7;
+  font-size: 13px;
 }
 
 canvas {

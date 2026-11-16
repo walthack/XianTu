@@ -167,6 +167,20 @@ export async function readPersisted(page, charId) {
   }, { expr: PINIA, charId });
 }
 
+/**
+ * 地图「确认前往」之后调用：赶路动画（地图移动第一步，纯表现回放，先落账存档再演）若出现就点跳过，等它收起再继续原来的等待。
+ * 动画在存档写完后才出现，故先等它出现（最多 appearMs）；没出现（减少动态效果、无坐标）也照常返回。返回 { appeared, dayLine }。
+ */
+export async function skipTravelPlayback(page, { appearMs = 5_000 } = {}) {
+  const overlay = page.locator('[data-testid="travel-playback"]');
+  const appeared = await overlay.waitFor({ state: 'visible', timeout: appearMs }).then(() => true, () => false);
+  if (!appeared) return { appeared: false, dayLine: null };
+  const dayLine = await page.locator('[data-testid="travel-playback-day"]').innerText().catch(() => null);
+  await page.locator('[data-testid="travel-playback-skip"]').click({ timeout: 3_000 }).catch(() => null);
+  await overlay.waitFor({ state: 'detached', timeout: 10_000 });
+  return { appeared: true, dayLine };
+}
+
 /** 在地图页拖动画布把地点拖到画布中央附近，再点它，等弹窗标题＝地名（同 smoke-map-festival-ending 的做法）。地图上没画出该地点返回 null。 */
 export async function openMapLocationPopup(page, locationId, { tries = 30 } = {}) {
   await page.evaluate(() => document.querySelector('#app').__vue_app__.config.globalProperties.$router.push('/game/world-map'));
