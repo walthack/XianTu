@@ -57,6 +57,21 @@ const INVENTION_GUARDS: Array<{ marker: RegExp; violation: RegExp; issue: string
   },
 ];
 
+// Q7-D（用户 2026-11-16 批准）：把两条数字硬门禁「按字面逐句查、连『一』也算数词」这一点明说给模型，并给出会被拦与不会被拦的写法。
+// 真实模型约 3%–5% 的正文回合因这两条被整段换成兜底句；原说明只写「不得自行补人数」，模型不会把「一名军士上前」当成补人数。
+// 例句与门禁同源：tests/narrativePerformanceGuard.test.mjs 逐条验证「会拦的确实拦、换的写法确实不拦」，改门禁正则时这里跟着改。
+export const QUANTITY_GUARD_EXAMPLES = {
+  rejected: ['一名军士上前', '一骑快马奔来', '一队骑兵掠过', '数十骑掠过', '一营兵马赶到', '军中折损三成'],
+  accepted: ['有军士上前', '那名军士上前', '几名军士上前', '快马奔来', '骑兵掠过', '大队人马赶到', '军中折损大半'],
+} as const;
+export const LOSS_GUARD_EXAMPLES = {
+  rejected: ['一个伙计受了伤', '一人重伤', '死了一匹马', '两辆车被冲翻'],
+  accepted: ['有伙计受了伤', '有人重伤', '折了牲口', '有几辆车被冲翻'],
+} as const;
+const quote = (items: readonly string[]) => items.map(item => `「${item}」`).join('');
+export const QUANTITY_GUARD_HINT = `这一条按字面逐句检查，连「一」在内的任何数词都算：写到兵、骑、军士、甲士、亲兵、亲卫、营、人马、兵马、守军、援军时不要带数词，${quote(QUANTITY_GUARD_EXAMPLES.rejected)}都会被判违规、整段作废；改用${quote(QUANTITY_GUARD_EXAMPLES.accepted)}这类不带数词的写法。`;
+export const LOSS_GUARD_HINT = `这一条按字面逐句检查，连「一」在内的任何数词都算：${quote(LOSS_GUARD_EXAMPLES.rejected)}都会被判违规、整段作废；改用${quote(LOSS_GUARD_EXAMPLES.accepted)}这类不带数词的写法。`;
+
 function namedSpeech(text: string, name: string): string {
   const start = text.indexOf(name);
   return start >= 0 ? text.slice(start) : text;

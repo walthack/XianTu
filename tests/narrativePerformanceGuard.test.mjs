@@ -357,3 +357,21 @@ test('hard render violations receive one buffered rewrite before local fallback'
   assert.match(first.retryInstruction, /不得补人数、距离或比例/);
   assert.match(performanceRetryInstruction(first.issues), /不得换一种肯定说法再次坐实/);
 });
+
+test('Q7-D：写给模型的数字门禁例句与门禁同源——会拦的确实拦，换的写法确实不拦；两条说明都进了剧本提示', async () => {
+  const G = await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
+  const hard = (text, scenarioPrompt) => G.hasHardNarrativeViolation(G.validateNarrativePerformance(`${text}。`, '我去看看。', scenarioPrompt));
+  const quantityPrompt = 'renderGuard.rejectConcreteQuantities=true；renderGuard.allowUnverifiedQuantities=false。';
+  const lossPrompt = 'renderGuard.rejectUngroundedHandoffLosses=true。当前没有结构化损失回执：';
+  for (const text of G.QUANTITY_GUARD_EXAMPLES.rejected) assert.equal(hard(text, quantityPrompt), true, `应拦：${text}`);
+  for (const text of G.QUANTITY_GUARD_EXAMPLES.accepted) assert.equal(hard(text, quantityPrompt), false, `不应拦：${text}`);
+  for (const text of G.LOSS_GUARD_EXAMPLES.rejected) assert.equal(hard(text, lossPrompt), true, `应拦：${text}`);
+  for (const text of G.LOSS_GUARD_EXAMPLES.accepted) assert.equal(hard(text, lossPrompt), false, `不应拦：${text}`);
+  for (const text of [...G.QUANTITY_GUARD_EXAMPLES.rejected, ...G.QUANTITY_GUARD_EXAMPLES.accepted]) assert.ok(G.QUANTITY_GUARD_HINT.includes(`「${text}」`));
+  for (const text of [...G.LOSS_GUARD_EXAMPLES.rejected, ...G.LOSS_GUARD_EXAMPLES.accepted]) assert.ok(G.LOSS_GUARD_HINT.includes(`「${text}」`));
+  // 说明本身放进剧本提示后不得被门禁的「正文检查」以外的逻辑误用：两处拼接点都引用了常量。
+  const { readFileSync } = await import('node:fs');
+  const source = readFileSync(new URL('../src/modules/scenarioMods/storyContext.ts', import.meta.url), 'utf8');
+  assert.match(source, /不得自行补人数、距离或比例。' \+ QUANTITY_GUARD_HINT : ''\}/);
+  assert.match(source, /等定性表述。\$\{LOSS_GUARD_HINT\}/);
+});
