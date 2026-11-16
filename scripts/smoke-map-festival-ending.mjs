@@ -203,8 +203,8 @@ async function travelFromPopup(page, popup, nextModId) {
   await page.waitForFunction(({ expr, next }) => eval(expr)._s.get('gameState').toSaveData()?.世界?.状态?.剧本模组?.modId === next, { expr: PINIA, next: nextModId }, { timeout: 20_000 });
   await page.waitForTimeout(600);
   const after = (await page.locator('.location-popup').innerText().catch(() => '')).replace(/\s+/g, ' ');
-  // 走完弹窗回来（演时收起）。注：抵达提示「已按地图路线抵达…」被模板里优先的限制语「你已在此地。」盖住，是改动前就有的显示次序，不在这里改。
-  assert.ok(after.includes('你已在此地') || after.includes('已按地图路线抵达'), `赶路动画收起后弹窗应回来并写抵达后的状态：${after.slice(0, 120)}`);
+  // 走完弹窗回来（演时收起），写刚才这次出行的结果：抵达提示或「已启程：…」（不再被限制语「你已在此地。」盖住）。
+  assert.ok(after.includes('已按地图路线抵达') || after.includes('已启程'), `赶路动画收起后弹窗应回来并写抵达提示：${after.slice(0, 120)}`);
   console.log(`  赶路动画：出现（${playback.dayLine}）→ 跳过 → 弹窗：${after.slice(0, 80)}`);
 }
 const sidebarFestival = page => page.evaluate(label => {

@@ -170,8 +170,9 @@
       </div>
       <div class="popup-content">
         <p class="location-type">{{ getLocationTypeName(selectedLocation.type) }}</p>
-        <p v-if="selectedTravelRestriction">{{ selectedTravelRestriction }}</p>
-        <p v-else-if="mapTravelNotice">{{ mapTravelNotice }}</p>
+        <!-- 刚点过「前往」的结果（抵达／已启程／无路线）优先于限制语：到达后限制语恒为「你已在此地。」，原先把抵达提示盖住了 -->
+        <p v-if="mapTravelNotice">{{ mapTravelNotice }}</p>
+        <p v-else-if="selectedTravelRestriction">{{ selectedTravelRestriction }}</p>
         <p class="location-desc">{{ selectedTravelPreview?.description || selectedLocation.description || selectedLocation.描述 }}</p>
         <div v-if="selectedLocation.danger_level" class="location-detail">
           <strong>安全等级：</strong>{{ selectedLocation.danger_level }}
