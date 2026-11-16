@@ -317,22 +317,24 @@ test('迁移表条目：合同从 from 迁到 to 时，有进度的状态哈希�
   assert.deepEqual(view.eventActionStates[id].preparations, state.preparations);
 });
 
-test('现状钉子：门禁注重复——每次 registry 重投影都给角色多加一条【关系身份门禁】（41465259 现状，不是应当如此）', async () => {
-  // 原因（读代码）：characterResolver.ts 重投影时按 promptLayers.derivedNotePrefixes（mod-kit/prompt-layers.json）剥掉旧的派生注，
-  // 而该表没有「【关系身份门禁】」，所以旧门禁注被当成玩家/LLM 写的注保留，buildNotes 又追加一条新的。读档对账一次 registry
-  // 改版只跑一次，所以表现为每次 REGISTRY_VERSION 变化 +1 条（真机 10-31 档 playtest-cd16 的卓云君已有两条一样的）。
-  // 不丢进度，只让人物注变长。修了（前缀表补上）这条会红：把期望改成「再投影一次不变」即可。
-  const gateCounts = chars => (chars || []).map(c => (c?.profile?.notes || []).filter(n => String(n).startsWith('【关系身份门禁】')).length);
+test('门禁注不重复：registry 重投影后每个角色的【关系身份门禁】条数不变（Q13，用户 2026-11-16 批准补前缀）', async () => {
+  // characterResolver.ts 重投影时按 promptLayers.derivedNotePrefixes（mod-kit/prompt-layers.json）剥掉旧的派生注再重新生成。
+  // 该表原先没有「【关系身份门禁】」，旧门禁注被当成玩家/LLM 写的注保留，每次 REGISTRY_VERSION 变化 +1 条
+  // （真机 10-31 档 playtest-cd16 的卓云君有两条一样的）。补上前缀后：再投影一次条数不变；旧档里重复的在重投影时收成当前关该有的那几条。
+  assert.ok(PROMPT_LAYERS.derivedNotePrefixes.includes('【关系身份门禁】'));
+  const gateNotes = chars => (chars || []).map(c => (c?.profile?.notes || []).filter(n => String(n).startsWith('【关系身份门禁】')));
   const { buttons } = await runChain('checkpoints/current-han-entry.json', { bumpRegistry: true });
-  const view = rt(buttons.view), once = gateCounts(view.canon.characters);
+  const view = rt(buttons.view), once = gateNotes(view.canon.characters);
   const twice = structuredClone(view.canon.characters);
   H.quiet(() => resolveScenarioCharacters(twice, view.modId));
-  const delta = gateCounts(twice).map((n, i) => n - once[i]);
-  assert.ok(once.some(n => n === 1), '对账后应有带一条门禁注的角色');
-  assert.deepEqual(delta.filter(d => d !== 0 && d !== 1), [], '每次重投影门禁注只多一条');
-  assert.equal(delta.filter(d => d === 1).length, once.filter(n => n > 0).length, '带门禁注的角色再投影一次各多一条');
-  const real = rt(H.readFixtureSave('playtest-cd16/stuck-s01-01.json')).canon.characters;
-  assert.ok(gateCounts(real).some(n => n >= 2), '真机档里已经有重复的门禁注');
+  assert.ok(once.some(n => n.length >= 1), '对账后应有带门禁注的角色');
+  assert.deepEqual(gateNotes(twice), once, '再投影一次门禁注原样不变');
+  for (const notes of once) assert.equal(new Set(notes).size, notes.length, '同一角色没有重复的门禁注');
+  const realSave = rt(H.readFixtureSave('playtest-cd16/stuck-s01-01.json'));
+  const real = structuredClone(realSave.canon.characters);
+  assert.ok(gateNotes(real).some(n => new Set(n).size < n.length), '真机旧档里原有重复的门禁注');
+  H.quiet(() => resolveScenarioCharacters(real, realSave.modId));
+  for (const notes of gateNotes(real)) assert.equal(new Set(notes).size, notes.length, '旧档重投影后重复的门禁注收掉');
 });
 
 test('自检（收尾）：整份文件跑下来没有记过 LCQ-SAV-044（getReconcileDeps 从未降级）', () => {

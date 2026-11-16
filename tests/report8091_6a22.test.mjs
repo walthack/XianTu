@@ -88,11 +88,15 @@ function qinReady() {
 test('P1-3 地图双击确认→真实 store load/save→MainGamePanel computed：秦首拍行动建议非空', async () => {
   const store = await gameStore(qinReady());
   const map = read('src/components/dashboard/GameMapPanel.vue');
-  const fn = cut(map, 'const travelToSelectedLocation = async', 'const canvasRef', ['gameStateStore','mapTravelBusy','mapTravelUi','selectedLocation','mapTravelPreview','mapTravelNotice','mapTravelConfirmed','travelConfirmation','selectMapTravel','settleMapTravel','mapTravelArrivalNotice','stageDepartureArrived','questArrivedDeparture','BUILTIN_SCENARIO_MODS'], '\nreturn travelToSelectedLocation;');
+  const fn = cut(map, 'const travelToSelectedLocation = async', 'const canvasRef', ['gameStateStore','mapTravelBusy','mapTravelUi','selectedLocation','mapTravelPreview','mapTravelNotice','mapTravelConfirmed','travelConfirmation','selectMapTravel','settleMapTravel','mapTravelArrivalNotice','stageDepartureArrived','questArrivedDeparture','BUILTIN_SCENARIO_MODS','mapTravelPlayback'], '\nreturn travelToSelectedLocation;');
   const confirm={value:null}, busy={value:false};
   const BP = await load('modules/scenarioMods/beatProgress.ts');
-  const go = fn(store,busy,{isAIProcessing:false},{value:{id:'liuchao.location.xianyang'}},M.mapTravelPreview,{value:''},M.mapTravelConfirmed,confirm,M.selectMapTravel,M.settleMapTravel,M.mapTravelArrivalNotice,BP.stageDepartureArrived,()=>undefined,[]);
-  await go(); assert.ok(confirm.value); await go();
+  // 赶路回放（地图移动第一步）：落账前取出发地（仍在原地），存档后才演——演的那一刻存档里人已到咸阳。
+  const played=[];
+  const playback=(save,selection)=>{ played.push({prepared:save.角色.位置.locationId,toId:selection.toId}); return async()=>{ played.at(-1).atPlay=store.toSaveData().角色.位置.描述; }; };
+  const go = fn(store,busy,{isAIProcessing:false},{value:{id:'liuchao.location.xianyang'}},M.mapTravelPreview,{value:''},M.mapTravelConfirmed,confirm,M.selectMapTravel,M.settleMapTravel,M.mapTravelArrivalNotice,BP.stageDepartureArrived,()=>undefined,[],playback);
+  await go(); assert.ok(confirm.value); assert.equal(played.length,0,'未确认不演'); await go();
+  assert.equal(played.length,1); assert.notEqual(played[0].prepared,'liuchao.location.xianyang','出发地取落账前位置'); assert.equal(played[0].atPlay,'秦·咸阳','先落账存档再演');
   const saved=store.toSaveData(); assert.equal(saved.角色.位置.描述,'秦·咸阳');
   assert.deepEqual(R.getCurrentStoryEventActions(saved).map(a=>a.eventId),['liuchao.event.qin_enter_xianyang']);
   const actions=engineOptions(store); assert.ok(actions.some(a=>a.eventId==='liuchao.event.qin_enter_xianyang'));

@@ -528,7 +528,7 @@ manifest `mapEntries` 是 JSON 文件路径数组，每个文件是对象或对�
 
 ## 2026-11-16 图片挂位 assets（立绘、场景图、CG）
 
-给将来的立绘、场景图、CG 留位置，并定好缺图时怎么退回文字。现在一张图都没有，没有包声明这一段，游戏行为不变。**素材根目录放在哪、界面怎么显示，都还没接，待定。**
+给将来的立绘、场景图、CG 留位置，并定好缺图时怎么退回文字。现在一张图都没有，没有包声明这一段，游戏行为不变。**素材根目录是 `src/assets/`**（用户 2026-11-16 定：立绘放 `src/assets/characters/`、场景图放 `src/assets/scenes/`、CG 放 `src/assets/cg/`，与现有的 `src/assets/endings/` 并列；代码里是 `assets.ts` 的 `ASSET_ROOT`／`ASSET_DIRS`）。**界面怎么显示还没接，待定；接入要改构建配置，须先问用户。**
 
 - **格式**：manifest 加 `assets: ["assets.json", …]`（文件列表）。每个文件是对象，四个键都可省略：
   ```json
@@ -544,7 +544,7 @@ manifest `mapEntries` 是 JSON 文件路径数组，每个文件是对象或对�
   - `file` 是相对素材根目录的路径：不许以 `/` 开头，不许含 `..`、`\`、空段；扩展名只许 `.png`、`.webp`、`.jpg`、`.jpeg`（小写）。同一个文件全部包里只能声明一次。**编译时不检查文件是否存在。**
   - 每条都可写 `note`，编译时剥掉；别的键报错。
 - **编译结果**：catalog 末尾多一段 `assets: {portraits, scenes, cg}`，省略的值补成显式值（半身补齐服装和表情，全身补齐服装，场景没写变体时 `variant` 为 `null`）。没有包声明时是三个空数组。编译代码在 `scripts/content-pack-assets.mjs`。
-- **文件名约定**（建议，编译不强制）：
+- **文件名约定**（建议，编译不强制；路径从 `src/assets/` 起算）：
   - 半身 `characters/<角色id>/bust__<服装>__<表情>.<扩展名>`
   - 全身 `characters/<角色id>/full__<服装>.<扩展名>`
   - 头像 `characters/<角色id>/avatar.<扩展名>`

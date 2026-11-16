@@ -16,7 +16,8 @@ import { logEvent } from '../../diagnostics/log';
 import { domesticTravelDays } from './routeDays';
 import { calendarConfig, gameTimeFromMinutes, gameTimeMinutes } from '@/utils/time';
 /** questRoute：剧情路程特例（questRouteDays 名单节点），国内也按两地路程天数结算。 */
-export interface MapTravelRoute { id: string; fromId: string; toId: string; dayCost: number | 'several'; unlockWhen?: string[]; questRoute?: boolean }
+/** via：途经坐标（与地图地点坐标同口径），只管赶路回放的画法，不影响天数（地图移动方案第一步）。 */
+export interface MapTravelRoute { id: string; fromId: string; toId: string; dayCost: number | 'several'; unlockWhen?: string[]; questRoute?: boolean; via?: { x: number; y: number }[] }
 /** 国内地图移动按原方式计时（片刻，story.actionTime.minutes.moment）；只有跨国才按路程天数（REPORT-8091-4c8245a5 P1）。 */
 export const MOMENT_DAY_COST = 0;
 export interface MapTravelSelection { source: 'map'; actionId: string; fromId: string; toId: string; routeId: string }
@@ -323,6 +324,16 @@ function isDomesticMapRoute(route: MapTravelRoute): boolean {
 export function mapRouteMinutes(route: MapTravelRoute): number {
   if (isDomesticMapRoute(route)) return actionTimeConfig().minutes.moment;
   return (route.dayCost === 'several' ? SEVERAL_DAYS_PLACEHOLDER : route.dayCost) * 1440;
+}
+/**
+ * 赶路回放取的天数与途经点（只读，落账前调用）：与结算同一条路线（mapRoutes 按 routeId）、同一口径（国内片刻＝0，否则 dayCost）。
+ * 剧情入口转场不另计路程，按片刻演；路线找不到时 undefined（不演）。
+ */
+export function mapTravelPlaybackRoute(save: SaveData, selection: MapTravelSelection): { days: number | 'several'; via?: { x: number; y: number }[] } | undefined {
+  if (CONTENT_PACKS.mapEntries?.some(e => e.locationId === canonicalLocationId(selection.toId))) return { days: 0 };
+  const route = mapRoutes(save, selection.toId).find(r => r.id === selection.routeId);
+  if (!route) return undefined;
+  return { days: isDomesticMapRoute(route) ? 0 : route.dayCost, ...(route.via?.length ? { via: route.via } : {}) };
 }
 export function mapTravelConfirmed(preview: ReturnType<typeof mapTravelPreview>, confirmationKey: string | null): boolean {
   return !!preview && preview.key === confirmationKey;

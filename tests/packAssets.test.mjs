@@ -207,3 +207,13 @@ test('CG：该事件全部条目按 seq 升序，不改原数组；没有返回 
  assert.equal(JSON.stringify(FULL.cg),before);
  assert.deepStrictEqual(A.resolveCg('lcq.event.none',FULL),[]);
 });
+test('素材目录：src/assets 下 characters／scenes／cg 三个子目录都在，文档里的文件名约定以它们开头',async()=>{
+ const {stat}=await import('node:fs/promises');
+ assert.equal(A.ASSET_ROOT,'src/assets');
+ assert.deepStrictEqual(A.ASSET_DIRS,{portraits:'characters',scenes:'scenes',cg:'cg'});
+ const doc=await readFile(join(root,'docs/handoffs/2026-10-11/CONTENT-PACK-CONTRACT.md'),'utf8');
+ for(const dir of Object.values(A.ASSET_DIRS)){
+  assert.ok((await stat(join(root,A.ASSET_ROOT,dir))).isDirectory(),`${dir} 目录应存在`);
+  assert.ok(doc.includes(`\`${dir}/<`),`文档的文件名约定应以 ${dir}/ 开头`);
+ }
+});

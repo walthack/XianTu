@@ -45,7 +45,7 @@
 import assert from 'node:assert/strict';
 import { writeFileSync } from 'node:fs';
 import { chromium } from 'playwright-core';
-import { MODS, PINIA, enterIsolatedCharacter, importAndLoad, loadTs, openMapLocationPopup, openSmokeContext, quiet, readFixtureSlot } from './lineSmokeHarness.mjs';
+import { MODS, PINIA, enterIsolatedCharacter, importAndLoad, loadTs, openMapLocationPopup, openSmokeContext, quiet, readFixtureSlot, skipTravelPlayback } from './lineSmokeHarness.mjs';
 
 const { step, rt, formalNewSave, expectedMainline, unsettledRailBeats, withFixedHost } = await import('../tests/mainlineWalker.mjs');
 const [R, W, QL, BP, F, BD, BG, GN, MT, P, RET, I, NM] = await quiet(() => Promise.all([
@@ -335,6 +335,7 @@ async function confirmMapPopup(page, opened, before) {
   if (!(await confirm.count())) { const why = (await opened.popup.innerText()).replace(/\s+/g, ' ').slice(0, 160); await routerPush(page, '/game'); return { ok: false, why: `无「确认前往」：${why}` }; }
   const loc0 = before.save.角色.位置?.locationId;
   await confirm.click();
+  await skipTravelPlayback(page);
   await page.waitForFunction(({ expr, loc0, mod0 }) => {
     const save = eval(expr)._s.get('gameState').toSaveData();
     return save?.角色?.位置?.locationId !== loc0 || save?.世界?.状态?.剧本模组?.modId !== mod0;
@@ -717,6 +718,7 @@ async function qinEnter(page, ui) {
   const confirm = opened.popup.locator('button.enter-region-btn', { hasText: '确认前往' });
   if (!qinCheck(await confirm.count(), '应出「确认前往」')) return { failed: '无「确认前往」' };
   await confirm.click();
+  await skipTravelPlayback(page);
   await page.waitForFunction(({ expr, next }) => eval(expr)._s.get('gameState').toSaveData()?.世界?.状态?.剧本模组?.modId === next, { expr: PINIA, next: QIN_STAGE }, { timeout: 20_000 }).catch(() => null);
   await page.waitForFunction(expr => !eval(expr)._s.get('ui').isAIProcessing, PINIA, { timeout: 60_000 });
   await page.waitForTimeout(600);
