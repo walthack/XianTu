@@ -1,6 +1,6 @@
 // 图片挂位（assets，2026-11-16）：立绘 portraits／场景图 scenes／CG cg 三类，只建机制，不放真图。
 // manifest.assets 是文件列表，每个文件是对象 {note?,portraits?,scenes?,cg?}；条目与文件顶层的 note 只给作者看，编译时剥掉。
-// 编译期只校验数据形状与引用（人物总表、事件），不检查图片文件是否存在（素材根目录未定，运行时另有回落，见 src/modules/contentPacks/assets.ts）。
+// 编译期只校验数据形状与引用（人物总表、事件），不检查图片文件是否存在（素材根目录是 src/assets/，立绘 characters/、场景图 scenes/、CG cg/；运行时另有回落，见 src/modules/contentPacks/assets.ts）。
 import {join} from 'node:path';
 import {createJiti} from 'jiti';
 const root=join(import.meta.dirname,'..');

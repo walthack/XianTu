@@ -1,6 +1,6 @@
 /**
  * 图片挂位（catalog.assets，2026-11-16）：立绘／场景图／CG 的解析与缺图回落。纯函数，不读 DOM、不发请求。
- * file 是相对素材根目录的路径；素材根目录与界面显示尚未接。所有函数的第二参数可传合成数据，默认读 CONTENT_PACKS.assets。
+ * file 是相对素材根目录 src/assets/ 的路径（用户 2026-11-16 定：立绘 characters/、场景图 scenes/、CG cg/，各一个子目录）；界面显示尚未接。所有函数的第二参数可传合成数据，默认读 CONTENT_PACKS.assets。
  * 没有图（返回 null／[]）时界面只走文字：立绘只显示名牌，CG 不挡拍。
  */
 import {CONTENT_PACKS} from './index';
@@ -20,6 +20,10 @@ export type PortraitFallback='exact'|'outfitNeutral'|'defaultNeutral'|'avatar';
 export interface PortraitRequest {characterId:string;outfitId?:string;expression?:PortraitExpression}
 export interface ResolvedPortrait {file:string;kind:'bust'|'avatar';outfitId?:string;expression?:PortraitExpression;fallback:PortraitFallback}
 export interface SceneRequest {sceneType:string;variant?:string}
+
+/** 素材根目录（相对仓库根）与三类图各自的子目录；manifest 里的 file 从根目录起算。 */
+export const ASSET_ROOT='src/assets';
+export const ASSET_DIRS={portraits:'characters',scenes:'scenes',cg:'cg'} as const;
 
 const EMPTY:PackAssets={portraits:[],scenes:[],cg:[]};
 const packAssets=():PackAssets=>CONTENT_PACKS.assets??EMPTY;
