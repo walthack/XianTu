@@ -20,7 +20,7 @@
       "maxTokens": 16384,
       "maxTokensNote": "consistency 模块卡单次输出上限（含推理，估计；max 档推理较长，Q4 实测后校准）；API 连接的 maxTokens 更小时取更小值。",
       "degradedAttempts": 1,
-      "hourlyBudget": 60,
+      "hourlyBudget": 120,
       "npcMemoryKeep": 12,
       "npcMemoryKeepNote": "后端落账后每个 NPC 的 社交.关系.记忆 封顶条数（估计，与自由行动 memory.keep 同量级；按尾部最新保留）。",
       "extensionKey": "dualModelConsistency",
