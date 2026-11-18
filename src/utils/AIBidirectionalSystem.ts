@@ -912,7 +912,7 @@ class AIBidirectionalSystemClass {
         // 道具正文不授予物品；实际背包变更在本地回执/指令权限入口校验。
         const check = compiled && !endingText ? validateLegacyVisibleNarrative(text, compiled.packet, { partial: true, userInput: playerLine, storyPrompt: compiled.storyPrompt, allowItemObservation: true }) : { valid: true, issues: [] };
         if (!endingText && moduleOnly) assertPlayerAgency(text, userMessage, compiled?.packet.present || []);
-        if (!endingText && (!check.valid || !text.includes('你'))) throw new Error('模块正文检查失败：' + check.issues.join('；'));
+        if (!endingText && (!check.valid || !stripSpeakerMarks(text).includes('你'))) throw new Error('模块正文检查失败：' + check.issues.join('；'));
         return { text, route, action_time: readModuleActionTime(raw) };
       } catch (error) {
         // 已成功取得正文之后的所有校验失败都是拒稿；传输失败不进入这里。
@@ -3185,12 +3185,12 @@ ${stripSpeakerMarks(step1Text)}
     // 风险行动伤害必须来自结构化本地 judgement resolution。
 
     const inspectedItemChanges = modelNarrativeCanWriteState && !fixedInventory
-      ? this.reconcileInspectedItemDescriptions(saveData, options?.userAction || '', textContent, sortedCommands)
+      ? this.reconcileInspectedItemDescriptions(saveData, options?.userAction || '', stripSpeakerMarks(textContent), sortedCommands)
       : [];
     commandAppliedChanges.push(...inspectedItemChanges);
 
     const inspectedNpcChanges = modelNarrativeCanWriteState
-      ? this.reconcileInspectedNpcAppearance(saveData, options?.userAction || '', textContent, sortedCommands)
+      ? this.reconcileInspectedNpcAppearance(saveData, options?.userAction || '', stripSpeakerMarks(textContent), sortedCommands)
       : [];
     commandAppliedChanges.push(...inspectedNpcChanges);
 

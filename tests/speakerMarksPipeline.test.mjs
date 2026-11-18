@@ -110,3 +110,31 @@ test('分步第 2 步：发给模型的【第1步正文】不带记号', async (
   assert.match(step2.user_input, /【第1步正文】\n易虎收起短刀。“路通了。”/);
   assert.doesNotMatch(step2.user_input, /[〈〉]/);
 });
+
+// Q30 第 1 点（用户 2026-11-18 20:08 批）：查看物品／打量人物的自由回合，摘进存档的描述与外貌状态不带记号。
+test('查看物品、打量人物：写进存档的物品描述与当前外貌状态不带记号', async () => {
+  fresh();
+  const save = createMinimalSaveDataV3();
+  save.角色.背包 = { ...(save.角色.背包 || {}), 物品: { item_knife: { 物品ID: 'item_knife', 名称: '短刀', 类型: '其他', 数量: 1, 描述: '' } } };
+  save.社交.关系 = { ...(save.社交.关系 || {}), 易虎: { 名字: '易虎', 性别: '男', 外貌描述: '' } };
+  useGameStateStore().loadFromSaveData(save);
+  const restore = quiet();
+  let saved;
+  try {
+    ({ saveData: saved } = await AIBidirectionalSystem.processGmResponse(
+      { text: '你细看短刀，刃口有一道缺痕。〈易虎〉“这短刀跟了我十年。”易虎身形魁梧，披着旧皮甲。〈程宗扬〉“好刀。”', mid_term_memory: MID, tavern_commands: [], action_options: [] },
+      save, false, () => false, { userAction: '查看短刀，打量易虎' }));
+    await flush();
+  } finally { restore(); }
+  assert.ok(String(saved.角色.背包.物品.item_knife.描述).includes('短刀'), '应写入查看后的物品描述：' + saved.角色.背包.物品.item_knife.描述);
+  assert.ok(String(saved.社交.关系.易虎.当前外貌状态 || '').length > 0, '应写入打量后的外貌状态');
+  assert.doesNotMatch(JSON.stringify(saved), LEAK, '整份存档不得带记号');
+});
+
+// 模块演出「正文必须出现『你』」那条写在 AIBS 的大函数里，没有单独可调的入口；这里只钉住源码用的是去记号后的正文。
+test('模块演出：「正文必须出现你」按去记号后的正文判断（源码钉）', async () => {
+  const { readFileSync } = await import('node:fs');
+  const source = readFileSync(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
+  assert.ok(source.includes("!stripSpeakerMarks(text).includes('你')"));
+  assert.equal(source.includes("!text.includes('你')"), false);
+});
