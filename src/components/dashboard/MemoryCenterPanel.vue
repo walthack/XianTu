@@ -601,6 +601,7 @@ import { vectorMemoryService, type VectorMemoryEntry } from '@/services/vectorMe
 import { narrativeRagService, type NarrativeRagEntry } from '@/services/narrativeRagService';
 import { reviewTextOf } from '@/services/narrativeSummary';
 import { loadDetailsFor } from '@/services/narrativeDetailStore';
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
 import { useAPIManagementStore } from '@/stores/apiManagementStore'; // 导入API管理Store
 import { summarizeMemoryShortTerm } from '@/services/promptRedaction';
 import moderationConfig from '../../../mod-kit/ai-content-moderation.json';
@@ -1556,7 +1557,7 @@ const exportMemoriesAsNovel = async () => {
       const isPlayer = entry.type === 'user' || entry.type === 'player';
       const detailId = (entry as { detailId?: unknown }).detailId;
       const reviewText = reviewTextOf(entry, typeof detailId === 'string' ? details[detailId] : undefined);
-      const content = (reviewText ?? t('本回合没有概要，本机也没有保存全文')).replace(/【.*?】/g, '').trim(); // 移除时间戳
+      const content = stripSpeakerMarks(reviewText ?? t('本回合没有概要，本机也没有保存全文')).replace(/【.*?】/g, '').trim(); // 移除时间戳与说话人记号
 
       if (isPlayer) {
         novelText += `${t('我说')}: "${content}"\n`;

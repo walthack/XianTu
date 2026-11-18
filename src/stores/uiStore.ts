@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 import { GAME_NUMBERS } from '@/modules/sceneModule/numbers';
 import { ref, shallowRef, computed, type Component } from 'vue';
 import { sanitizeAITextForDisplay, extractTextFromJsonResponse } from '@/utils/textSanitizer';
+import { stripSpeakerMarksForStreaming } from '@/utils/speakerMarks';
 import { isBackendConfigured, fetchBackendVersion } from '@/services/backendConfig';
 
 interface RetryDialogConfig {
@@ -175,14 +176,14 @@ export const useUIStore = defineStore('ui', () => {
     rawStreamingContent.value = content;
     // 🔥 流式过程中也尝试解析 JSON 提取 text 字段
     const extracted = extractTextFromJsonResponse(content);
-    streamingContent.value = extracted || sanitizeAITextForDisplay(content);
+    streamingContent.value = stripSpeakerMarksForStreaming(extracted || sanitizeAITextForDisplay(content));
   }
 
   function appendStreamingContent(chunk: string) {
     rawStreamingContent.value += chunk;
     // 🔥 流式过程中也尝试解析 JSON 提取 text 字段
     const extracted = extractTextFromJsonResponse(rawStreamingContent.value);
-    streamingContent.value = extracted || sanitizeAITextForDisplay(rawStreamingContent.value);
+    streamingContent.value = stripSpeakerMarksForStreaming(extracted || sanitizeAITextForDisplay(rawStreamingContent.value));
   }
 
   function clearStreamingContent() {

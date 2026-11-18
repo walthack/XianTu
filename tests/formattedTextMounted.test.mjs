@@ -7,6 +7,13 @@ import { compileScript, parse } from '@vue/compiler-sfc';
 import { createSSRApp, h } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 
+// FormattedText 引入了纯函数模块 speakerMarks.ts（无依赖），同样编成 data URL 供挂载。
+async function speakerMarksModuleUrl() {
+  const source = await readFile(new URL('../src/utils/speakerMarks.ts', import.meta.url), 'utf8');
+  const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
+  return `data:text/javascript;base64,${Buffer.from(js).toString('base64')}`;
+}
+
 async function loadFormattedTextComponent() {
   const filename = new URL('../src/components/common/FormattedText.vue', import.meta.url).pathname;
   const source = await readFile(filename, 'utf8');
@@ -29,7 +36,8 @@ async function loadFormattedTextComponent() {
     .replaceAll("from 'vue'", `from '${import.meta.resolve('vue')}'`)
     .replaceAll('from "vue"', `from '${import.meta.resolve('vue')}'`)
     .replaceAll("from 'vue/server-renderer'", `from '${import.meta.resolve('@vue/server-renderer')}'`)
-    .replaceAll('from "vue/server-renderer"', `from '${import.meta.resolve('@vue/server-renderer')}'`);
+    .replaceAll('from "vue/server-renderer"', `from '${import.meta.resolve('@vue/server-renderer')}'`)
+    .replaceAll("from '@/utils/speakerMarks'", `from '${await speakerMarksModuleUrl()}'`);
   const moduleUrl = `data:text/javascript;base64,${Buffer.from(resolvable).toString('base64')}`;
   return (await import(moduleUrl)).default;
 }

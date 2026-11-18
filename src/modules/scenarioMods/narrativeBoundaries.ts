@@ -1,4 +1,5 @@
 import {entityName} from './namedEntities';
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
 import {entityNamePattern} from './namedEntities';
 import { xiaoziDisclosure, isDisclosureFactAllowed, approvedChapterGates } from './characterResolver';
 /**
@@ -43,7 +44,7 @@ export function narrativeBoundaryNote(eventId: string | undefined, completed: bo
 export function validateNarrativeBoundary(text: string, eventId: string | undefined, completed: boolean): void {
   const boundary = completed ? null : getNarrativeBoundary(eventId);
   if (!boundary) return;
-  const clauses = text.split(/[。！？\n]/);
+  const clauses = stripSpeakerMarks(text).split(/[。！？\n]/);
   const strip = (clause: string) => boundary.negations ? clause.replace(boundary.negations, '') : clause;
   if (clauses.some(clause => boundary.forbidden.test(strip(clause)))) throw new Error(boundary.rejectMessage);
 }
@@ -59,7 +60,8 @@ export function stripNarrativeBoundaryClauses(text: string, eventId: string | un
   const removed: string[] = [];
   const kept = segments.filter(segment => {
     if (/^\n+$/.test(segment)) return true;
-    const stripped = boundary.negations ? segment.replace(boundary.negations, '') : segment;
+    const judged = stripSpeakerMarks(segment);
+    const stripped = boundary.negations ? judged.replace(boundary.negations, '') : judged;
     if (boundary.forbidden.test(stripped)) { removed.push(segment.trim()); return false; }
     return true;
   });
@@ -69,6 +71,7 @@ export function stripNarrativeBoundaryClauses(text: string, eventId: string | un
 /** 南荒当前现场与未揭身份约束；只退稿，不改变状态。 */
 export function validateNanhuangCanonNarrative(text: string, stageId: string, location: string, completed: string[], disclosureContext?: Parameters<typeof xiaoziDisclosure>[0]): void {
   if (!/^lcq\.stage_0(?:3b|4|4b|5b)/.test(stageId)) return;
+  text = stripSpeakerMarks(text);
   if (new RegExp("(?:"+entityNamePattern("character","canon.character.a33134d511")+")"+"|"+"(?:"+entityNamePattern("character","canon.character.a33134d511")+")","").test(text) && new RegExp("(?:"+"(?:"+entityNamePattern("character","canon.character.a33134d511")+")"+"|"+"(?:"+entityNamePattern("character","canon.character.a33134d511")+")"+")[^。！？\\n]{0,35}(?:她(?:不|的|是|有|说)|丈夫|女性|女人)|(?:"+"(?:"+entityNamePattern("character","canon.character.a33134d511")+")"+"|"+"(?:"+entityNamePattern("character","canon.character.a33134d511")+")"+")[\\s\\S]{0,80}(?:她不喜见血|她有一女|她在丈夫死后)|她[^。！？\\n]{0,12}(?:遗腹女|生下)","").test(text)) throw new Error('岳帅性别冲突：岳帅名岳鹏举，是男性');
   if (new RegExp("(?:"+entityNamePattern("location","lcq.location.sheyi_village")+")"+"|蛇彝领地","").test(location) && new RegExp("(?:老彝婆|蛇彝斥候|"+"(?:"+entityNamePattern("location","lcq.location.sheyi_village")+")"+"民|蛇祖)[^。！？\\n]{0,20}(?:躲|走|说|开口|挥|现身|出现|看着|递|活着)|(?:你|"+"(?:"+entityNamePattern("character","liuchao.character.cheng_zongyang")+")"+")[^。！？\\n]{0,12}(?:被白蛇咬|白蛇咬伤)","").test(text)) throw new Error('蛇彝村现场冲突：空村不新增活村民或无回执伤势');
   if (new RegExp("灵飞镜[^。！？\\n]{0,20}(?:"+"(?:"+entityNamePattern("character","liuchao.character.a_xi")+")"+"性命相连|前朝名将遗物)|(?:潘师姐|潘掌门)[^。！？\\n]{0,12}(?:不同意|点了头)","").test(text)) throw new Error('南荒事实冲突：不得编造灵飞镜来历、性命绑定或潘金莲许可');
@@ -98,6 +101,7 @@ export function validateNanhuangCanonNarrative(text: string, stageId: string, lo
 }
 
 export function validateQingyuNarrativeFacts(text: string, eventId?: string): void {
+  text = stripSpeakerMarks(text);
   if (new RegExp("(?:"+entityNamePattern("character","liuchao.character.su_li")+")"+"[^。！？\\n]{0,12}(?:是|正是|担任|身为)?"+"(?:"+entityNamePattern("location","liuchao.location.biyu_village")+")"+"长|"+"(?:"+entityNamePattern("location","liuchao.location.biyu_village")+")"+"长"+"(?:"+entityNamePattern("character","liuchao.character.su_li")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.xiao_zi")+")"+"[^。！？\\n]{0,20}(?:叫|喊|唤)"+"(?:"+entityNamePattern("character","liuchao.character.su_li")+")"+"[^。！？\\n]{0,8}娘|"+"(?:"+entityNamePattern("character","liuchao.character.xiao_zi")+")"+"[^。！？\\n]{0,30}(?:叫|喊)[^。！？\\n]{0,8}娘[^。！？\\n]{0,100}"+"(?:"+entityNamePattern("character","liuchao.character.su_li")+")","").test(text)) throw new Error('正典关系冲突：苏荔是花苗族长，不是小紫的母亲');
   if (new RegExp("(?:"+entityNamePattern("faction","liuchao.faction.hei_mo_hai")+")"+"(?:的)?(?:海底|海水|海域|水脉|封印)|(?:整片|一片|那片)"+"(?:"+entityNamePattern("faction","liuchao.faction.hei_mo_hai")+")","").test(text)) throw new Error('黑魔海是宗派，不是海域或封印之物');
   if (new RegExp("(?:"+entityNamePattern("enemy","lcq.enemy.blood_tiger_yi_hu")+")"+"[^。！？\\n]{0,60}虎斑[^。！？\\n]{0,35}"+"(?:"+entityNamePattern("character","liuchao.character.wu_er_lang")+")"+"[^。！？\\n]{0,12}(?:如出一辙|相似|一样)|死老头留下的遗物","").test(text)) throw new Error('南荒事实冲突：不编血虎与武二郎外貌同源或死老头遗物');

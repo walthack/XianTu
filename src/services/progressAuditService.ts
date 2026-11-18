@@ -1,4 +1,5 @@
 import { get, set } from 'lodash';
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
 import type { SaveData, StateChange } from '@/types/game';
 import { parseJsonSmart } from '@/utils/jsonExtract';
 
@@ -267,6 +268,8 @@ function buildAuditUserPrompt(input: ProgressAuditInput): string {
  * 只在校验后确有变化时写 `系统.扩展.任务追踪.即兴目标` 并返回一条 StateChange。
  */
 export async function runProgressAudit(input: ProgressAuditInput): Promise<StateChange[]> {
+  // 发给审计模型的正文不带说话人记号
+  input = { ...input, recentText: stripSpeakerMarks(input.recentText) };
   const userPrompt = buildAuditUserPrompt(input);
 
   let rawText: string;

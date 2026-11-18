@@ -1,5 +1,6 @@
 
 import {entityAliases} from './namedEntities';
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
 import { findInternalNarrativeControlLeaks } from '@/utils/textSanitizer';
 
 export interface NarrativePerformanceCheck {
@@ -332,6 +333,7 @@ export function validateNarrativePerformance(
   userInput: string,
   scenarioPrompt: string,
 ): NarrativePerformanceCheck {
+  narrative = stripSpeakerMarks(narrative);
   const issues: string[] = [];
   const controlLeaks = findInternalNarrativeControlLeaks(narrative);
   if (controlLeaks.length) {

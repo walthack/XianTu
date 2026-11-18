@@ -1,4 +1,5 @@
 import type { SaveData } from '@/types/game';
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
 import { validateNanhuangCanonNarrative } from '../narrativeBoundaries';
 
 export type GuardMode = 'enforce' | 'shadow' | 'off';
@@ -23,6 +24,7 @@ export function evaluateGuardRules(text: string, rules: GuardRule[], context: { 
 }
 /** Gender candidates are semantic-only. No approval for deterministic gender rejection yet. */
 export function genderShadowFindings(text: string, actors: Array<{ name: string; gender?: string }>, eventId?: string, draft?: number): GuardFinding[] {
+  text = stripSpeakerMarks(text);
   const escaped = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   return evaluateGuardRules(text, [{ id: 'gender.named-pronoun', severity: 'soft', mode: 'shadow', inspect: value => {
     // Ignore quoted speech rather than guessing its referent. This is a candidate, never a rejection.

@@ -85,6 +85,7 @@ import { narrativeOutsideJson, parseJsonSmart, stripModelThinking } from '@/util
 import { composeShortTermMemoryEntry, sanitizePersistedMemoryEntry } from '@/utils/memorySanitizer';
 import { summaryEntry, entriesForPrompt } from '@/services/narrativeSummary';
 import { narrativeEntryWithDetail } from '@/services/narrativeDetailStore';
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
 import { filterActionOptionsByPov } from '@/utils/actionOptionsPovGuard';
 import type { APIUsageType } from '@/stores/apiManagementStore';
 import { buildScenarioCanonPrompt } from '@/modules/scenarioMods/canonGuard';
@@ -611,7 +612,7 @@ class AIBidirectionalSystemClass {
     if (!Array.isArray(options)) return [];
     const cleaned = options
       .filter((opt) => typeof opt === 'string')
-      .map((opt) => sanitizeAITextForDisplay(opt).trim())
+      .map((opt) => stripSpeakerMarks(sanitizeAITextForDisplay(opt)).trim())
       .filter((opt) => opt.length > 0);
     // #14:选项含主角名=视角漂移到同伴 NPC 的确定性信号,拒收
     try {
@@ -1584,7 +1585,7 @@ ${stateJsonString}
 ${finalUserInput}
 
 【第1步正文】
-${step1Text}
+${stripSpeakerMarks(step1Text)}
 
 ${missingItems.length > 0 ? `【上次结构化输出缺失】
 第1步正文已经叙述玩家获得/收下了这些物品：${missingItems.join('、')}。
@@ -2238,7 +2239,7 @@ ${worldStandardsPrompt}
 ${userPrompt}
 
 【第1步正文】
-${step1Text}
+${stripSpeakerMarks(step1Text)}
 
 请按"分步生成（开局-第2步）"规则输出 JSON。
         `.trim();
@@ -2932,7 +2933,7 @@ ${step1Text}
       if (warnings.length) { textContent = [textContent, ...warnings].filter(Boolean).join('\n\n'); midTermContent = textContent; }
     }
     response.text = textContent;
-    response.mid_term_memory = midTermContent;
+    response.mid_term_memory = midTermContent = stripSpeakerMarks(midTermContent);
     // 处理 text：可选写入叙事历史；可选写入短期记忆
     if (textContent) {
       if (behavior.appendNarrativeHistory) {

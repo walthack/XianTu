@@ -1,4 +1,5 @@
 import { mapArrivalViolation } from './travel/mapTravel';
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
 import { isContentModerationError } from '@/services/apiErrorMessage';
 import {LEVELS} from '../../utils/realmUtils';
 import { filterLedgerMemory, type GuardFinding } from './ledger/guardFramework';
@@ -115,11 +116,13 @@ export function validateModuleSettlementNarrative(text: string, eventId: string,
 }
 /** 摘要先用摘录式证据：不接受模型增加关系、物品或世界事实。 */
 export function moduleMemorySentences(text: string): Array<{ id: number; text: string }> {
+  text = stripSpeakerMarks(text);
   const paragraphs = text.split(/\n+/).map(value => value.trim()).filter(Boolean);
   const parts = paragraphs.length > 1 ? paragraphs : (text.match(/[^。！？\n]+[。！？]?[”’」』"]?/g) || []);
   return parts.map(text => text.trim()).filter(Boolean).map((text, id) => ({ id, text }));
 }
 export function validateModuleSide(raw: string, text: string, type: 'memory'): string {
+  text = stripSpeakerMarks(text);
   const object = parseModuleObject(raw);
   if (type === 'memory') {
     if (Array.isArray(object.sentenceIds)) {
@@ -181,7 +184,8 @@ export function appendModuleReceipt(save: SaveData, receipt: ModuleReceipt): voi
   assertDemoModulePath(save, receipt.path);
   const extensions = (save as any).系统.扩展 ||= {};
   const receipts = getModuleReceipts(save).filter(item => item.id !== receipt.id);
-  extensions[MODULE_TURN_KEY] = { version: 1, receipts: [...receipts, receipt].slice(-20) };
+  // 存档里的回执正文不带说话人记号（记号只在本机全文副本里）
+  extensions[MODULE_TURN_KEY] = { version: 1, receipts: [...receipts, { ...receipt, text: stripSpeakerMarks(receipt.text) }].slice(-20) };
 }
 export interface ModuleScope { characterId: string; slotId: string; epoch: number; history: string; }
 export function matchesModuleScope(a: ModuleScope, b: ModuleScope): boolean {
@@ -259,6 +263,7 @@ export { validateNanhuangCanonNarrative } from './narrativeBoundaries';
 /** 场景事实只能来自作者步骤与本地账本；不从模型稿推导人物、境界或钱物。 */
 export function validateStepSceneNarrative(text: string, card: import('./schema').ScenarioStepScene | undefined,
   scene: { 时段?: string; presentActors?: Array<{ name: string; gender?: string; appearance?: string }>; 账本摘要?: any; 搜刮回执?: Array<{ currency?: string; quantity: number }> }, recent: string[] = []): void {
+  text = stripSpeakerMarks(text);
   const yiHu = scene.账本摘要?.人物状态?.易虎?.status;
   if (yiHu && yiHu !== 'present' && text.split(/[。！？\n]/).some(sentence => /易虎/.test(sentence) && /留下来|留下.{0,8}帮|帮(?:夫人|樨夫人)|带路|向导|熟悉.{0,12}(?:路|商路)|随队|归队/.test(sentence) && !/生前|曾经|当年|过去|失踪前|不是|不能|不再|无法|并未/.test(sentence))) throw new ModuleNarrativeGuardError('人物状态冲突：易虎已失踪或被炼成血虎，不能当普通活人调用');
   for (const group of card?.factChecks || []) {

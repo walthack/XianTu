@@ -1,4 +1,5 @@
 import promptLayers from '../../../mod-kit/prompt-layers.json';
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
 
 import {entityAliases} from './namedEntities';
 
@@ -544,7 +545,7 @@ export function stripNarrativeEntityTypeConflicts(text: string): { text: string;
     // 只拦“X 是/乃 Y”的实体直断，不能把“为他牵马”“作势拔剑”或比喻当成变物。
     const offender = protectedNames.find(name => new RegExp(
       `${escapeRegExp(name)}\\s*(?:便|正|原来)?(?:是|乃)(?!不是|并非|绝非)[^，。！？]{0,6}(?:${bannedType})`,
-    ).test(sentence));
+    ).test(stripSpeakerMarks(sentence)));
     if (offender) {
       conflicts.push(`正典人物/别名“${offender}”被叙事改写为非人物实体`);
       continue;
@@ -581,7 +582,8 @@ export function stripNarrativeUnintroducedCharacters(
   const conflicts: string[] = [];
   const kept: string[] = [];
   for (let index = 0; index < parts.length; index += 2) {
-    const sentence = parts[index] || '';
+    // 说话人记号只随段删留，不参与判断
+    const sentence = stripSpeakerMarks(parts[index] || '');
     const tail = parts[index + 1] || '';
     // 合同明确要求讲述某人的旧事，不等于该人在现场登场；不能删掉合法回忆对白。
     const offender = blocked.find(name => sentence.includes(name)
@@ -590,7 +592,7 @@ export function stripNarrativeUnintroducedCharacters(
       conflicts.push(`未登场正典人物“${offender}”被提前写入叙事/记忆`);
       continue;
     }
-    kept.push(sentence, tail);
+    kept.push(parts[index] || '', tail);
   }
   return { text: kept.join('').trim(), conflicts };
 }

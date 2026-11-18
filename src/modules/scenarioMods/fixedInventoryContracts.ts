@@ -1,5 +1,6 @@
 
 import {entityNamePattern} from './namedEntities';
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
 import {contentName} from './entityCatalog';
 import type { ScenarioPlayerCompletionEffects } from './schema';
 import type { SaveData } from '@/types/game';
@@ -203,6 +204,7 @@ export function unsupportedInventoryGainNames(
   grantedNames: string[],
   context?: ItemReferenceContext,
 ): string[] {
+  text = stripSpeakerMarks(text);
   const allowed = new Set(grantedNames.map(getInventoryItemIdentityKey));
   const detected = detectNarratedInventoryGainEntries(text)
     .map(item => item.名称)

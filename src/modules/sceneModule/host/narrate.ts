@@ -1,4 +1,5 @@
 import { GAME_NUMBERS } from '../numbers';
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
 import { interrogationProblems } from '../interrogation';
 import { interrogationChapter, interrogationMaterial } from './information';
 import { readExt } from './ext';
@@ -138,6 +139,7 @@ export function closedSceneFacts(save: any): string[] {
   });
 }
 export function closedSceneNarrativeProblems(save: any, text: string): string[] {
+  text = stripSpeakerMarks(text);
   return readExt(save).history.slice(-3).flatMap(record => {
     const c = sceneContractById(record.contractId);
     return c ? [...(c.continuity?.checks || []).flatMap(check=>(check.forbiddenNarration || []).filter(word=>word && text.includes(word)).map(()=>check.requirement)), ...(c.narration?.outputChecks || []).filter(check => check.afterScene && evalExpr(check.when,c,record.state) && new RegExp(check.pattern).test(text)).map(check => check.message)] : [];

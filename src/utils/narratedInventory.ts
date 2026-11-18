@@ -1,3 +1,5 @@
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
+
 const INVENTORY_ITEM_NOUNS = [
   '玉简',
   '玉',
@@ -127,6 +129,7 @@ function addNarratedGain(found: Map<string, NarratedInventoryGain>, rawValue: st
 
 export function detectNarratedInventoryGainEntries(text: string): NarratedInventoryGain[] {
   if (!text || typeof text !== 'string') return [];
+  text = stripSpeakerMarks(text);
 
   const found = new Map<string, NarratedInventoryGain>();
   const patterns = [
@@ -150,6 +153,7 @@ export function detectNarratedInventoryGains(text: string): string[] {
 
 export function detectNarratedInventoryPossessions(text: string): string[] {
   if (!text || typeof text !== 'string') return [];
+  text = stripSpeakerMarks(text);
 
   const found = new Set<string>(detectNarratedInventoryGains(text));
   const possessionContext = /怀中|袖中|囊中|背包|储物袋|行囊|随身|身上|安然无恙|还在|尚在|未失/.test(text);
