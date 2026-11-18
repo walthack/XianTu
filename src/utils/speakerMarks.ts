@@ -6,6 +6,7 @@
  *
  * 保守规则：记号内容 1–12 个字，只含文字/数字（允许间隔号 ·），不含空白、换行和其他标点。
  * 不合这个形状的 `〈…〉`（如含标点的长句）不当记号，原样保留。
+ * 存全文／显示时，句首被当主语写的完整记号去括号留名字，见 unwrapBeforeProse。
  * 认的开引号与 FormattedText.vue 一致：“ 「 "。
  */
 
@@ -22,6 +23,17 @@ const VALID_MARK = new RegExp(String.raw`〈(${NAME_CHAR}{1,12})〉(?=${OPEN_QUO
 /** 流式预览：文本末尾停在半个记号上（`〈` 或 `〈凝`，还没写到右括号）。 */
 const PARTIAL_TAIL = new RegExp(String.raw`〈${NAME_CHAR}{0,12}$`, 'u');
 
+/**
+ * 模型把记号当主语写（`〈秦桧〉将文书摊在案上`，2026-11-18 真实模型 28 手里见到 1 次）：整个删掉句子就没了主语。
+ * 只在存全文／显示这条路上处理：完整记号在句首（文首、换行或句末标点之后）、后面紧跟正文文字、且正文不是以同一个名字开头时，
+ * 去括号留下名字；其余情况删掉。概要、选项、判断用的 stripSpeakerMarks 不做这一步，一律删。
+ */
+const PROSE_START = new RegExp(String.raw`^${NAME_CHAR}`, 'u');
+function unwrapBeforeProse(mark: string, name: string, offset: number, whole: string): string {
+  const after = whole.slice(offset + mark.length);
+  return PROSE_START.test(after) && !after.startsWith(name) && /(?:^|[。！？…\n”」"】])\s*$/.test(whole.slice(0, offset)) ? name : '';
+}
+
 /** 删掉所有说话人记号（含写坏的）；给概要、记忆、选项、发回模型的上下文、导出和判断用。 */
 export function stripSpeakerMarks(text: string): string {
   if (!text || !text.includes('〈')) return text;
@@ -32,7 +44,7 @@ export function stripSpeakerMarks(text: string): string {
 export function normalizeSpeakerMarks(text: string): string {
   if (!text || !text.includes('〈')) return text;
   return text
-    .replace(COMPLETE_MARK, (mark, _name, offset: number, whole: string) => (/^[“「"]/.test(whole.slice(offset + mark.length)) ? mark : ''))
+    .replace(COMPLETE_MARK, (mark, name: string, offset: number, whole: string) => (/^[“「"]/.test(whole.slice(offset + mark.length)) ? mark : unwrapBeforeProse(mark, name, offset, whole)))
     .replace(BROKEN_MARK, '')
     .replace(EMPTY_MARK, '');
 }

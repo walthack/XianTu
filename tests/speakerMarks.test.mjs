@@ -27,6 +27,15 @@ test('stripSpeakerMarks：完整记号、缺右括号、不紧跟引号、空记
   assert.equal(marks.stripSpeakerMarks(PLAIN), PLAIN);
 });
 
+test('记号被当主语写在句首：存全文与显示时去括号留名字；句中的、名字重复的、概要选项用的 strip 仍删', () => {
+  const raw = '卓云君立在阶旁。〈秦桧〉将一卷文书摊在案上。〈秦桧〉“黑魔海肯撤。”\n〈你〉抬手示意。';
+  assert.equal(marks.stripSpeakerMarks(raw), '卓云君立在阶旁。将一卷文书摊在案上。“黑魔海肯撤。”\n抬手示意。');
+  assert.equal(marks.normalizeSpeakerMarks('〈易虎〉易虎说路通了。他说〈凝羽〉毒清了。'), '易虎说路通了。他说毒清了。');
+  assert.equal(marks.normalizeSpeakerMarks(raw), '卓云君立在阶旁。秦桧将一卷文书摊在案上。〈秦桧〉“黑魔海肯撤。”\n你抬手示意。');
+  assert.deepEqual(marks.parseSpeakerMarks(raw), { text: '卓云君立在阶旁。秦桧将一卷文书摊在案上。“黑魔海肯撤。”\n你抬手示意。', speakers: [{ index: 20, speaker: '秦桧' }] });
+  assert.equal(marks.stripSpeakerMarks('他说〈凝羽〉毒清了。'), '他说毒清了。');
+});
+
 test('保守规则：含标点或超过 12 字的〈…〉不当记号，原样保留', () => {
   const prose = '书上写着〈此乃上古遗留之物，切勿轻动〉几个字。〈一二三四五六七八九十十一十二十三〉';
   assert.equal(marks.stripSpeakerMarks(prose), prose);
