@@ -239,6 +239,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { parseSpeakerMarks, stripSpeakerMarks } from '@/utils/speakerMarks'
 
 const showHelpModal = ref(false)
 
@@ -267,6 +268,8 @@ interface JudgementData {
 interface TextPart {
   type: 'environment' | 'psychology' | 'dialogue' | 'judgement-card' | 'normal' | 'quote' | 'bold' | 'italic'
   content: string | JudgementData
+  /** 说话人记号给出的说话人（只作数据，本版界面不渲染） */
+  speaker?: string
 }
 
 const isJudgementData = (content: string | JudgementData): content is JudgementData => {
@@ -541,7 +544,9 @@ const parsedText = computed(() => {
     .replace(/\r\n/g, '\n')      // 统一 Windows 换行符
     .replace(/\r/g, '\n')        // 统一 Mac 换行符
 
-  const processedText = repairCommonAIFormat(normalizedText)
+  // 说话人记号〈名字〉只在显示时拿掉，说话人按开引号位置挂到对应对白上
+  const { text: processedText, speakers } = parseSpeakerMarks(repairCommonAIFormat(normalizedText))
+  const speakerAt = new Map(speakers.map(item => [item.index, item.speaker]))
 
   while (currentIndex < processedText.length) {
     // 查找标记的顺序：先找最近的开始标记
@@ -712,9 +717,11 @@ const parsedText = computed(() => {
           }
         }
       } else {
+        const speaker = speakerAt.get(nextMarker.start)
         parts.push({
           type: nextMarker.type,
-          content: processedText.slice(nextMarker.start, nextMarker.end)
+          content: processedText.slice(nextMarker.start, nextMarker.end),
+          ...(speaker ? { speaker } : {})
         })
       }
     }
@@ -722,7 +729,7 @@ const parsedText = computed(() => {
     currentIndex = nextMarker.end
   }
 
-  return parts.length > 0 ? parts : [{ type: 'normal', content: text }]
+  return parts.length > 0 ? parts : [{ type: 'normal', content: stripSpeakerMarks(text) }]
 })
 
 const getPartClass = (type: string) => {

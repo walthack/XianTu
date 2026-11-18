@@ -1,5 +1,6 @@
 
 import {entityNamePattern} from './namedEntities';
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
 export class PlayerAgencyViolationError extends Error {
   readonly code = 'PLAYER_AGENCY_VIOLATION';
   constructor(readonly actions: string[]) {
@@ -23,7 +24,7 @@ const THIRD_PARTY_RIGHT_BEFORE_VERB = /(?:[他她](?!们)|对方|那人|此人|�
 
 export function unauthorizedPlayerActions(narrative: string, playerIntent: string, otherActors: string[] = []): string[] {
   const intentClauses = playerIntent.split(/[，,。！!？?；;\n]/);
-  const prose = narrative.replace(/[“「『][^”」』]*[”」』]/g, '');
+  const prose = stripSpeakerMarks(narrative).replace(/[“「『][^”」』]*[”」』]/g, '');
   const clauses = prose.split(/[。！？；\n]/);
   return ACTIONS.filter(action => {
     const acted = clauses.some(clause => {

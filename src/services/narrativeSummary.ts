@@ -1,5 +1,6 @@
 import { GAME_NUMBERS, registerNumbersValidator } from '@/modules/sceneModule/numbers';
 import { composeShortTermMemoryEntry, stripNarrativeTimePrefix } from '@/utils/memorySanitizer';
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
 
 /**
  * 详细描写不入档（设计稿 2026-11-03「提示词历史与审核拒绝」第七节方案 B）的纯函数。
@@ -24,7 +25,7 @@ export function isNoSummary(entry: unknown): boolean {
 export function entriesForPrompt(shortTerm: readonly string[], latestRaw?: string): string[] {
   const out = shortTerm.filter(entry => !isNoSummary(entry));
   const tailChars = GAME_NUMBERS.prompt.recentContext.tailChars;
-  const raw = typeof latestRaw === 'string' ? latestRaw.trim() : '';
+  const raw = typeof latestRaw === 'string' ? stripSpeakerMarks(latestRaw).trim() : '';
   if (tailChars > 0 && raw) out.push(Array.from(raw).slice(-tailChars).join(''));
   return out;
 }

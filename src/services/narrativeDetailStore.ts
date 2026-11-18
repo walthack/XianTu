@@ -1,6 +1,7 @@
 import { openDB, type IDBPDatabase } from 'idb';
 import { GAME_NUMBERS } from '@/modules/sceneModule/numbers';
 import { logError } from '@/modules/diagnostics/log';
+import { normalizeSpeakerMarks } from '@/utils/speakerMarks';
 
 /**
  * 叙事正文的本地全文副本（设计稿 2026-11-03「提示词历史与审核拒绝」第七节方案 B）。
@@ -120,6 +121,8 @@ export function narrativeDetailId(index: number, content: string): string {
  * 正文全文按 存档标识＋detailId 另存本地副本，不等待，写失败记 LCQ-SAV-061（回看退回概要）。
  */
 export function narrativeEntryWithDetail(saveKey: string, index: number, summary: string, fullText: string) {
+  // 全文副本保留说话人记号，但写坏的记号（缺右括号、不紧跟开引号）存之前删掉
+  fullText = normalizeSpeakerMarks(fullText);
   const detailId = narrativeDetailId(index, fullText);
   if (saveKey && fullText) {
     saveDetail(saveKey, detailId, fullText).catch(error => logError('LCQ-SAV-061', error, { detail: { reason: 'detail_write_failed', index, detailId } }));

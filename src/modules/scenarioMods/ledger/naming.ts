@@ -1,4 +1,5 @@
 import overrides from '../../../../mod-kit/entity-ledger/overrides.json';
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
 
 /** 显示标签不是自报姓名。所有渠道以角色id读同一章门表，不反向以标签建人物。 */
 export type NamingChannel = 'panel' | 'narration' | 'protagonistAddress' | 'protagonistThought' | 'npcAddress' | 'selfReportedName';
@@ -33,6 +34,7 @@ export function npcAddressWithheld(id: string, runtime: Runtime, channel: Naming
 }
 /** 正文里「角色名 + 35字内 + 尚未放开的称呼词」命中则返回该词；namePattern 由调用方给出（实体名正则）。 */
 export function withheldAddressUsed(id: string, runtime: Runtime, text: string, namePattern: string): string | undefined {
+  text = stripSpeakerMarks(text);
   return npcAddressWithheld(id, runtime).find(w => text.includes(w) && new RegExp('(?:' + namePattern + ')[^。！？\\n]{0,35}' + w).test(text));
 }
 export function namingAliases(id: string): string[] { return entities.find(e => e.id === id)?.aliases || []; }

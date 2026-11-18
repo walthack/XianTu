@@ -1,4 +1,5 @@
 import { statusNamePattern } from '../sceneModule/statuses';
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
 import { findInternalNarrativeControlLeaks } from '@/utils/textSanitizer';
 import {
   hasHardNarrativeViolation,
@@ -206,7 +207,7 @@ export function validateLegacyVisibleNarrative(
   options: { partial?: boolean; userInput?: string; storyPrompt?: string; allowItemObservation?: boolean } = {},
 ): LegacyVisibleNarrativeCheck {
   const issues: string[] = [];
-  const narrative = String(text || '');
+  const narrative = stripSpeakerMarks(String(text || ''));
   if (!narrative.trim()) {
     if (!options.partial) issues.push('正文为空');
     return { valid: issues.length === 0, issues };

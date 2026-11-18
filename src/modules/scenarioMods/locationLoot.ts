@@ -1,4 +1,5 @@
 import type { SaveData } from '@/types/game';
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
 import defaults from '../../../mod-kit/location-loot.qingyu.json';
 import { canonicalLocationId } from './travel/locationIds';
 import { currentLocation } from './travel/travelLedger';
@@ -362,6 +363,7 @@ export function lootReceiptText(receipt: LocationLootReceipt): string {
 
 /** 演出只允许收好本次回执物，不约束玩家观察清单外的物件。 */
 export function validateLootNarrative(text: string, receipt: LocationLootReceipt, items: Array<{ id: string; name: string }> = []): void {
+  text = stripSpeakerMarks(text);
   if (receipt.drops.some(drop => !text.includes(drop.name))) throw new Error('搜刮正文遗漏本次已入账物品');
   const clauses = text.split(/[。！？\n]/);
   const labels = ['铜铢', '银铢', '金铢', ...Object.values(QINGYU_LOOT_TABLE.locations).flatMap(loc => loc.entries.map(entry => entry.currency || items.find(item => item.id === entry.itemId)?.name))];

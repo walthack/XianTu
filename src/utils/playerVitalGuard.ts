@@ -1,4 +1,5 @@
 import { get, set } from 'lodash';
+import { stripSpeakerMarks } from '@/utils/speakerMarks';
 import type { SaveData } from '@/types/game';
 import { judgementNumbers } from './judgementConfig';
 
@@ -39,7 +40,7 @@ export function recoverUnmarkedPlayerZeroHealth(
   const current = get(saveData, HEALTH_PATH);
   const max = get(saveData, HEALTH_MAX_PATH);
   if (typeof current !== 'number' || current > 0 || typeof max !== 'number' || max <= 0) return null;
-  if (hasExplicitPlayerDeathNarration(saveData, narration)) return null;
+  if (hasExplicitPlayerDeathNarration(saveData, stripSpeakerMarks(narration))) return null;
 
   const restored = Math.max(1, Math.ceil(max * judgementNumbers().injury.zeroHealthRecoveryRatio));
   set(saveData, HEALTH_PATH, restored);
