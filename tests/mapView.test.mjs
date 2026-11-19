@@ -22,8 +22,8 @@ test('地点：名字、说明、小字、前往＋区域地图', () => {
   const d = mapDetail({ ...base, selectedLocation: town, selectedTravelPreview: { description: '路上说明', label: '路程两日', arrival: '到时是傍晚' } });
   assert.equal(d.name, '五原城');
   assert.equal(d.body, '路上说明');
-  assert.deepEqual(d.head, ['城镇坊市']);
-  assert.deepEqual(d.lines, ['安全等级：安全', '路程两日', '到时是傍晚']);
+  assert.deepEqual(d.head, ['城镇坊市', '路程两日', '到时是傍晚']);
+  assert.deepEqual(d.lines, ['安全等级：安全']);
   assert.deepEqual(acts(d), ['travel:前往此地', 'region:🗺️ 进入区域地图']);
 });
 
@@ -40,7 +40,7 @@ test('地点：限制语时前往禁用；刚前往的提示优先于限制语',
 test('地点：确认态多「取消」「确认前往」；忙或模型处理中禁用前往；区域生成中', () => {
   const d = mapDetail({ ...base, selectedLocation: town, travelConfirmation: 'k' });
   assert.deepEqual(acts(d), ['cancel:取消', 'travel:确认前往', 'region:🗺️ 进入区域地图']);
-  assert.equal(d.lines.at(-1), '确认前往此地？');
+  assert.equal(d.head.at(-1), '确认前往此地？');
   assert.deepEqual(acts(mapDetail({ ...base, selectedLocation: town, isAIProcessing: true, isLoadingRegion: true })), ['travel:前往此地(禁)', 'region:⏳ 生成中...(禁)']);
 });
 

@@ -5,7 +5,7 @@
 
 export type MapActionKey = 'cancel' | 'travel' | 'region';
 export type MapAction = { key: MapActionKey; label: string; disabled: boolean };
-/** head＝老弹窗正文上面那一两行（类型、刚前往的结果或限制语），放在正文前面，免得被长说明挤到看不见 */
+/** head＝放在正文前面的一行：类型、刚前往的结果或限制语、路程、到达时刻、确认语（老弹窗里后三样在说明后面；字框矮，挪到前面免得被长说明挤到看不见） */
 export type MapDetail = { name: string; head: string[]; body: string; lines: string[]; actions: MapAction[] };
 
 /** 老面板实例上读到的那几样（同名） */
@@ -39,9 +39,10 @@ export function mapDetail(s: MapPanelState): MapDetail | null {
     if (loc.danger_level) lines.push(`安全等级：${loc.danger_level}`);
     if (loc.suitable_for) lines.push(`适合境界：${loc.suitable_for}`);
     if (loc.controlled_by) lines.push(`控制势力：${loc.controlled_by}`);
-    if (s.selectedTravelPreview) lines.push(String(s.selectedTravelPreview.label ?? ''));
-    if (s.selectedTravelPreview?.arrival) lines.push(s.selectedTravelPreview.arrival);
-    if (s.travelConfirmation) lines.push('确认前往此地？');
+    // 路程、到达时刻、确认语放在正文前面：字框矮，说明一长它们就滚到看不见，而这几句是点「确认前往」前要看的
+    if (s.selectedTravelPreview) head.push(String(s.selectedTravelPreview.label ?? ''));
+    if (s.selectedTravelPreview?.arrival) head.push(s.selectedTravelPreview.arrival);
+    if (s.travelConfirmation) head.push('确认前往此地？');
     const actions: MapAction[] = [];
     if (s.travelConfirmation) actions.push({ key: 'cancel', label: '取消', disabled: false });
     actions.push({
