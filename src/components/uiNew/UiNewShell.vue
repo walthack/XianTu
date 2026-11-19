@@ -25,7 +25,7 @@
           <div class="un-pane"><div class="un-panel-body"><slot /></div></div>
         </section>
         <slot v-else />
-        <!-- 「任务」：任务目标／任务日志只在老右栏里，这里整块搬用老右栏组件 -->
+        <!-- 「任务」：任务目标／任务日志只在老右栏里。复用老右栏组件（同一份数据和逻辑），样式里只留任务那几块，其余（数值、境界、状态等）藏起 -->
         <section v-if="questOpen && !panelOpen" class="un-panel un-framed" data-testid="ui-new-quest">
           <i class="un-orn-c tl"></i><i class="un-orn-c tr"></i><i class="un-orn-c bl"></i><i class="un-orn-c br"></i><i class="un-orn-m mb"></i>
           <div class="un-panel-ttl">
@@ -34,7 +34,7 @@
           <div class="un-panel-acts">
             <button class="pq xs on" type="button" @click="questOpen = false">{{ t('收起') }}</button>
           </div>
-          <div class="un-pane"><div class="un-panel-body un-quest-body"><ErrorBoundary><RightSidebar /></ErrorBoundary></div></div>
+          <div class="un-pane"><div class="un-panel-body un-quest-body"><p class="un-quest-empty" data-testid="ui-new-quest-empty">{{ t('眼下没有记下的事') }}</p><ErrorBoundary><RightSidebar /></ErrorBoundary></div></div>
         </section>
         <slot name="extra" />
       </template>
