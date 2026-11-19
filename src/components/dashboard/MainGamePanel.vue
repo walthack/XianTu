@@ -988,7 +988,7 @@ import XingyuehuQuestPlaytestHud from '@/components/dashboard/XingyuehuQuestPlay
 // 新界面（?ui=new）摆法：模板根上 v-if/v-else，同一份状态、同一套处理函数，只换一种渲染。
 // 老卡片放进字框「你打算」里或盖在场景框上，标记和类名照抄老模板，样式沿用本组件的 scoped 样式。
 // 模板根前不写注释：注释会让组件根变成片段，生产构建也会把它留进 DOM。
-import { uiNewActive } from '@/composables/uiNew';
+import { uiNewActive, uiNewReadPosition } from '@/composables/uiNew';
 import { splitNarrativeSegments, segmentSpeaker } from '@/utils/narrativeSegments';
 import { stripSpeakerMarksForStreaming } from '@/utils/speakerMarks';
 import { getTravelCard } from '@/modules/scenarioMods/travel/travelLedger';
@@ -4084,11 +4084,20 @@ const unNarrativeKey = computed(() => {
   return n ? `${history.length}|${n.type}|${history[history.length - 1]?.time || ''}` : '';
 });
 watch(unNarrativeKey, (key, old) => {
+  // 开关功能页时本组件会重新挂载（老界面也是两个 router-view 来回切）：同一手就接着上次读到的位置
+  if (old === undefined && key && uiNewReadPosition.value?.key === key) {
+    unSegIndex.value = uiNewReadPosition.value.index;
+    unAtEnd.value = uiNewReadPosition.value.atEnd;
+    return;
+  }
   const fresh = unAwaitFresh && !!old && !!key;
   unSegIndex.value = 0;
   unAtEnd.value = !fresh;
   if (fresh && !isAIProcessing.value) unAwaitFresh = false;
 }, { immediate: true });
+watch([unNarrativeKey, unSegIndex, unAtEnd], ([key, index, atEnd]) => {
+  uiNewReadPosition.value = key ? { key, index, atEnd } : null;
+});
 watch(unSegments, segs => { if (unSegIndex.value >= segs.length) unSegIndex.value = Math.max(0, segs.length - 1); });
 // 自动：每隔几秒出下一段，只存在内存里
 let unAutoTimer: ReturnType<typeof setInterval> | null = null;

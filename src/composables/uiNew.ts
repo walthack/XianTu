@@ -17,3 +17,6 @@ if (UI_NEW_REQUESTED && typeof window !== 'undefined') {
 
 /** 新界面是否生效：带了 ?ui=new 且窗口够宽。 */
 export const uiNewActive = computed(() => UI_NEW_REQUESTED && viewportWidth.value >= UI_NEW_MIN_WIDTH);
+
+/** 字框读到这一手的第几段：主面板随功能页开关重新挂载后接着读。只在内存里，刷新即丢。 */
+export const uiNewReadPosition: { value: { key: string; index: number; atEnd: boolean } | null } = { value: null };
