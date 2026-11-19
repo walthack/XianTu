@@ -25,9 +25,62 @@
   --un-act-a: #161f46;
   --un-act-b: #0a0f24;
 
+  /* ---- 功能页、老卡片用的全局变量（style.css 的 :root / data-theme）在新界面下改成「夜」：一次换掉，不逐个面板改 ---- */
+  --color-background: #080b19;
+  --color-background-transparent: rgba(8, 11, 25, .88);
+  --color-surface: #0d1330;
+  --color-surface-transparent: rgba(13, 19, 48, .72);
+  --color-surface-light: #1c2752;
+  --color-surface-hover: #172048;
+  /* 主按钮、选中：靛蓝亮牌。老面板有 50 多处「主色底＋白字」，主色必须压得住白字，所以不用淡金当主色 */
+  --color-primary: #5b75d0;
+  --color-primary-rgb: 91, 117, 208;
+  --color-primary-hover: #6d86dc;
+  --color-primary-active: #4a64c0;
+  --color-primary-light: rgba(91, 117, 208, .22);
+  /* 次强调：暗一点的金（老面板偶有「强调色底＋白字」，太亮的淡金压不住） */
+  --color-accent: #a8893f;
+  --color-accent-hover: #b99a4f;
+  --color-accent-light: rgba(232, 213, 154, .16);
+  --color-accent-rgb: 168, 137, 63;
+  --color-text: #e8ebf7;
+  --color-text-secondary: #b4bddb;
+  --color-text-muted: #9aa6cc;
+  --color-white-soft: #e8ebf7;
+  --color-border: rgba(182, 192, 222, .24);
+  --color-border-hover: rgba(182, 192, 222, .45);
+  --color-border-rgb: 182, 192, 222;
+  --color-success: #7ea87f;
+  --color-success-hover: #6d9670;
+  --color-warning: #d0a63f;
+  --color-warning-hover: #b8912f;
+  --color-error: #d0604f;
+  --color-error-hover: #b84d3e;
+  --color-info: #9fb3e6;
+  --color-info-hover: #8aa1d8;
+  --color-danger: var(--color-error);
+  --color-danger-hover: #b84d3e;
+  --color-hover: var(--color-surface-hover);
+  --color-code-bg: rgba(5, 7, 15, .6);
+  --scrollbar-track-color: transparent;
+  --scrollbar-thumb-color: rgba(182, 192, 222, .35);
+  --scrollbar-thumb-hover-color: rgba(182, 192, 222, .55);
+  --color-background-rgb: 8, 11, 25;
+  --color-surface-rgb: 13, 19, 48;
+  --color-success-rgb: 126, 168, 127;
+  --color-warning-rgb: 208, 166, 63;
+  --color-error-rgb: 208, 96, 79;
+  --color-info-rgb: 159, 179, 230;
+  --vital-health: #c65042;
+  --vital-lingqi: #6f9ec4;
+  --vital-spirit: #d0a63f;
+  --vital-lifespan: #9a7fb0;
+
   /* ---- 字体（只用系统字体） ---- */
   --un-font-title: "Weibei SC", "STKaiti", "Kaiti SC", "KaiTi", serif;
   --un-font-body: "STKaiti", "Kaiti SC", "KaiTi", serif;
+  --font-family-serif: var(--un-font-body);
+  --font-family-sans-serif: var(--un-font-body);
 
   /* ---- 尺寸 ---- */
   --u: min(calc(100vw / 1440), calc(100vh / 900));
@@ -287,10 +340,93 @@
 .ui-new .un-log-tools { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
 
 /* 老卡片放进字框／弹层时的底色（卡片自身样式沿用 MainGamePanel 的 scoped 样式） */
-.ui-new .un-plan .judgement-preflight-card,
-.ui-new .un-plan .judgement-result-card,
-.ui-new .un-plan .key-beat-card,
-.ui-new .un-plan .game-over-card,
+.ui-new .un-deck .judgement-preflight-card,
+.ui-new .un-deck .judgement-result-card,
+.ui-new .un-deck .key-beat-card,
+.ui-new .un-deck .game-over-card,
 .ui-new .un-plan .action-queue-display,
 .ui-new .un-plan .free-action-receipt,
 .ui-new .un-plan .intent-hold-message { margin: 0; }
+
+/* 场景框里的拍板卡片（判定、关键抉择、分支、结局）：居中、字号跟着缩放 */
+.ui-new .un-deck { margin: auto; width: min(100%, calc(820 * var(--u))); display: flex; flex-direction: column; gap: calc(12 * var(--u)); font-size: calc(18 * var(--u)); }
+.ui-new .un-deck .judgement-preflight-card, .ui-new .un-deck .judgement-result-card { font-size: calc(18 * var(--u)); }
+.ui-new .un-deck .judgement-preflight-actions button,
+.ui-new .un-deck .game-over-acts button { font-size: calc(17 * var(--u)); padding: calc(8 * var(--u)) calc(16 * var(--u)); font-family: var(--un-font-body); }
+.ui-new .un-deck .key-beat-card { background: linear-gradient(var(--un-mid), var(--un-deep)); border-color: var(--un-line); }
+.ui-new .un-deck .key-beat-title { font-size: calc(18 * var(--u)); color: var(--un-acc); letter-spacing: .14em; }
+.ui-new .un-deck .key-beat-option { font-size: calc(20 * var(--u)); min-height: calc(48 * var(--u)); color: var(--un-ink); background: linear-gradient(90deg, var(--un-act-a), var(--un-act-b)); border-color: var(--un-line2); border-left: 4px solid var(--un-acc); }
+.ui-new .un-deck .key-beat-option:hover:not(:disabled) { border-color: var(--un-line); border-left-color: var(--un-acc); }
+.ui-new .un-deck .key-beat-hint { font-size: calc(15 * var(--u)); color: var(--un-sub); }
+.ui-new .un-deck .game-over-card { background: linear-gradient(var(--un-mid), var(--un-deep)); }
+.ui-new .un-deck .game-over-card h3 { font-family: var(--un-font-title); font-weight: 400; font-size: calc(28 * var(--u)); letter-spacing: .12em; }
+.ui-new .un-deck .game-over-tag { font-size: calc(14 * var(--u)); }
+.ui-new .un-deck .game-over-hint { font-size: calc(17 * var(--u)); line-height: 1.7; }
+.ui-new .un-over.scene-card { scrollbar-width: thin; scrollbar-color: var(--un-line2) transparent; }
+
+/* 字框正文：说话段用正文主色、旁白段用次一级（.un-say / .un-say.n 定），不再带老正文的金色等着色；回看弹层不受影响 */
+.ui-new .un-box .un-say .text-dialogue,
+.ui-new .un-box .un-say .text-quote,
+.ui-new .un-box .un-say .text-environment,
+.ui-new .un-box .un-say .text-psychology,
+.ui-new .un-box .un-say .text-normal,
+.ui-new .un-box .un-say .text-bold,
+.ui-new .un-box .un-say .text-italic { color: inherit; }
+.ui-new .un-box .un-say .text-dialogue,
+.ui-new .un-box .un-say .text-quote { font-weight: inherit; }
+
+/* 全局提示条：新界面下挪到场景框上沿居中，不盖右列的动词（ToastContainer 在 App 根上，只能靠 :has 判断新界面在不在） */
+body:has(.ui-new-shell) .toast-container {
+  --ug: min(calc(100vw / 1440), calc(100vh / 900)); /* 同 .ui-new 的 --u */
+  /* 放在立绘区上沿（场景框和右列之间）：不挡右列的动词，也不盖场景框里的卡片。右边距 = 右内边距 26 + 右列 132 + 列距 18 */
+  top: calc(34 * var(--ug));
+  left: auto;
+  right: calc(176 * var(--ug));
+  max-width: calc((100vw - 228 * var(--ug)) / 4.2);
+  align-items: flex-end;
+}
+
+/* 「任务」页：老右栏里只留任务目标／任务日志、人物任务、二级线（含 .quest-main/.quest-log/.quest-improv 的块），
+   以及带操作按钮的世界事件卡（.quest-next-btn）和「世界正在行动」（.actor-section，可点「介入」）——这两块别处没有入口，藏了就点不到；
+   其余（数值、境界、状态、认知、编年史）藏起；一块都没有时显示「眼下没有记下的事」 */
+.ui-new .un-quest-body .right-sidebar > .sidebar-header { display: none; }
+.ui-new .un-quest-body .right-sidebar > .sidebar-content > :not(.quest-section) { display: none; }
+.ui-new .un-quest-body .right-sidebar > .sidebar-content > .quest-section:not(.actor-section):not(:has(.quest-main, .quest-log, .quest-improv, .quest-next-btn)) { display: none; }
+.ui-new .un-quest-body .right-sidebar { background: transparent; border: 0; box-shadow: none; height: auto; }
+.ui-new .un-quest-empty { display: block; margin: calc(40 * var(--u)) 0; text-align: center; font-size: calc(22 * var(--u)); letter-spacing: .2em; color: var(--un-sub); }
+.ui-new .un-quest-body:has(.quest-main, .quest-log, .quest-improv, .quest-next-btn, .actor-section) .un-quest-empty { display: none; }
+
+/* 功能页里写死的暖褐、石青（[data-theme='dark'] 下的 scoped 写法，变量覆盖管不到）：只补看得出突兀的几处。多套一层 .un-panel 以压过 scoped 规则 */
+.ui-new .un-panel .un-panel-body .section-header { background: var(--color-surface-light); border-bottom-color: var(--color-border); }
+.ui-new .un-panel .un-panel-body .panel-header,
+.ui-new .un-panel .un-panel-body .current-save-section,
+.ui-new .un-panel .un-panel-body .saves-section,
+.ui-new .un-panel .un-panel-body .operations-section { background: var(--color-surface); border-color: var(--color-border); }
+.ui-new .un-panel .un-panel-body .save-card { background: var(--color-surface); border-color: var(--color-border); }
+.ui-new .un-panel .un-panel-body .save-card:hover { background: var(--color-surface-hover); }
+.ui-new .un-panel .un-panel-body .save-card.active { background: var(--color-surface-light); border-color: var(--color-primary); }
+.ui-new .un-panel .un-panel-body .panel-title,
+.ui-new .un-panel .un-panel-body .section-title,
+.ui-new .un-panel .un-panel-body .character-name,
+.ui-new .un-panel .un-panel-body .save-name { color: var(--color-text); }
+.ui-new .un-panel .un-panel-body .save-subtitle,
+.ui-new .un-panel .un-panel-body .saves-count { color: var(--color-text-secondary); }
+.ui-new .un-panel .un-panel-body .action-btn,
+.ui-new .un-panel .un-panel-body .card-btn { background: var(--color-surface-light); border-color: var(--color-border); }
+.ui-new .un-panel .un-panel-body .operation-btn:hover { background: var(--color-surface-hover); }
+.ui-new .un-panel .un-panel-body .range-value { color: var(--color-text-secondary); }
+
+/* 「任务」页：老右栏字号偏小，整体放大；开着任务页时把下面的主面板藏起（它还挂着，只是不显示，免得字框从框边露出来） */
+.ui-new .un-quest-body .right-sidebar { zoom: 1.35; }
+.ui-new .un-stage-slot:has(> [data-testid="ui-new-quest"]) > .un-main { visibility: hidden; }
+/* 任务签：老样式是浅底上压线色字（线色字由行内样式给），夜色下看不清；改成透明底＋描边 */
+.ui-new .un-quest-body .right-sidebar .quest-tag-main { background: transparent; color: var(--un-acc); border: 1px solid currentColor; }
+.ui-new .un-panel .un-panel-body .settings-section { background: var(--color-surface); border-color: var(--color-border); }
+.ui-new .un-panel .un-panel-body .setting-item:hover { background: var(--color-surface-hover); }
+.ui-new .un-panel .un-panel-body .utility-btn,
+.ui-new .un-panel .un-panel-body .setting-select,
+.ui-new .un-panel .un-panel-body .setting-textarea,
+.ui-new .un-panel .un-panel-body .form-input-inline { background: var(--color-surface-light); border-color: var(--color-border); color: var(--color-text); }
+.ui-new .un-panel .un-panel-body .saves-count:not(.online-badge) { background: transparent; border-color: var(--color-border); }
+.ui-new .un-panel .un-panel-body .api-card { background: var(--color-surface); border-color: var(--color-border); }
+.ui-new .un-panel .un-panel-body .api-card:hover { background: var(--color-surface-hover); }

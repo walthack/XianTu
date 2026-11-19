@@ -8,30 +8,126 @@
           <div v-else class="un-place">{{ unPlaceName }}</div>
         </div>
         <i class="un-orn-c tl"></i><i class="un-orn-c tr"></i><i class="un-orn-c bl"></i><i class="un-orn-c br"></i><i class="un-orn-m mt"></i><i class="un-orn-m mb"></i>
-        <!-- 盖在场景框上：路途卡、试玩 HUD -->
-        <div class="un-over" v-if="!currentScene">
+        <!-- 盖在场景框上：路途卡、试玩 HUD、场面（战斗）卡；需要玩家拍板的卡片（判定、关键抉择、分支、结局）也放这里，字框只留选项和输入 -->
+        <div class="un-over" :class="{ 'scene-card': currentScene || unDeckActive }" :data-testid="currentScene ? 'ui-new-scene-card' : undefined">
           <aside v-if="currentTravelCard" class="travel-card" aria-label="路途卡">
             <strong>{{ currentTravelCard.from }} → {{ currentTravelCard.to }} · {{ currentTravelCard.duration }}</strong>
             <p>{{ currentTravelCard.summary || currentTravelCard.label }}</p>
-            <p v-if="currentTravelCard.companions?.length">同行：{{ currentTravelCard.companions.join('、') }}</p>
+            <p v-if="!currentScene && currentTravelCard.companions?.length">同行：{{ currentTravelCard.companions.join('、') }}</p>
           </aside>
           <XingyuehuQuestPlaytestHud />
-        </div>
-        <!-- 场面（战斗）卡：本步不重新设计，整块盖在场景框上 -->
-        <div v-else class="un-over scene-card" data-testid="ui-new-scene-card">
-          <aside v-if="currentTravelCard" class="travel-card" aria-label="路途卡">
-            <strong>{{ currentTravelCard.from }} → {{ currentTravelCard.to }} · {{ currentTravelCard.duration }}</strong>
-            <p>{{ currentTravelCard.summary || currentTravelCard.label }}</p>
-          </aside>
-          <XingyuehuQuestPlaytestHud />
-          <div v-if="sceneTestControls">
-            <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps)=>setSceneTestDice(save,deps,1,sceneTestControls))">测试：固定骰1（验证输局）</button>
-            <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps)=>setSceneTestDice(save,deps,20,sceneTestControls))">测试：固定骰20</button>
-            <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps)=>setSceneTestDice(save,deps,null,sceneTestControls))">恢复随机</button>
+          <template v-if="currentScene">
+            <!-- 场面（战斗）卡：本步不重新设计 -->
+            <div v-if="sceneTestControls">
+              <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps)=>setSceneTestDice(save,deps,1,sceneTestControls))">测试：固定骰1（验证输局）</button>
+              <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps)=>setSceneTestDice(save,deps,20,sceneTestControls))">测试：固定骰20</button>
+              <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps)=>setSceneTestDice(save,deps,null,sceneTestControls))">恢复随机</button>
+            </div>
+            <SceneEncounterCard :scene="currentScene" :brief="currentSceneBrief" :busy="isAIProcessing" :crystal="currentCrystalAvailable"
+              @confirm="runSceneOperation(confirmSceneAction)" @choice="runSceneOperation(confirmSceneChoice)"
+              @crystal="(mode: 'wound' | 'defense') => runSceneOperation((save,deps) => useNicheCrystal(save,mode,deps))" @edit="runSceneOperation(editSceneAction)" @finish="runSceneOperation(finishScene)" />
+          </template>
+          <div v-if="unDeckActive" class="un-deck" data-testid="ui-new-deck">
+            <section v-if="pendingJudgement" class="judgement-preflight-card">
+              <div class="judgement-preflight-title">行动判定（尚未掷骰） · {{ judgementPromptLabels(pendingJudgement).kind }}</div>
+              <div class="judgement-preflight-action">{{ pendingJudgement.actionText }}</div>
+              <p>{{ pendingJudgement.whyNow }}</p>
+              <div class="judgement-preflight-factors">
+                <span v-for="factor in pendingJudgement.factors" :key="factor.label">{{ factor.label }} {{ factor.value >= 0 ? '+' : '' }}{{ factor.value }}</span>
+                <span>难度 {{ pendingJudgement.difficulty.value }}</span>
+              </div>
+              <small>
+                <template v-if="pendingJudgement.stakes.perfect">完美成功：{{ pendingJudgement.stakes.perfect }}　</template>
+                <template v-if="pendingJudgement.stakes.greatSuccess">大成功：{{ pendingJudgement.stakes.greatSuccess }}　</template>
+                成功：{{ pendingJudgement.stakes.success }}　部分成功：{{ pendingJudgement.stakes.partial }}　失败：{{ pendingJudgement.stakes.failure }}
+                <template v-if="pendingJudgement.stakes.criticalFailure">　大失败：{{ pendingJudgement.stakes.criticalFailure }}</template>
+              </small>
+              <div class="judgement-preflight-actions">
+                <button @click="executePendingJudgement" :disabled="isAIProcessing">确认并掷骰</button>
+                <button v-if="showJudgementTestControls" class="test-great-success-button" @click="executePendingJudgement('great_success')" :disabled="isAIProcessing">大成功（测试）</button>
+                <button @click="changePendingJudgement" :disabled="isAIProcessing">换一种做法</button>
+                <button @click="cancelPendingJudgement" :disabled="isAIProcessing">撤回</button>
+              </div>
+            </section>
+            <section v-else-if="latestJudgement?.status === 'resolved'" class="judgement-result-card">
+              <div class="judgement-preflight-title">本地判定结果 · {{ judgementPromptLabels(latestJudgement).outcome }}</div>
+              <div>{{ latestJudgement.actionText }}</div>
+              <div class="judgement-preflight-factors">
+                <span>骰点 {{ latestJudgement.roll }}</span>
+                <span>总值 {{ latestJudgement.total }}</span>
+                <span>难度 {{ latestJudgement.difficulty.value }}</span>
+                <span>策略 {{ judgementPromptLabels(latestJudgement).canonPolicy }}</span>
+                <span v-if="latestJudgement.testOverride">测试强制 {{ latestJudgement.testOverride }}</span>
+              </div>
+              <small v-if="latestJudgement.appliedEffects.length || latestJudgement.settledEffects?.length">已写入：{{ [...latestJudgement.appliedEffects, ...(latestJudgement.settledEffects || [])].map(describeJudgementEffect).join('、') }}</small>
+              <small v-else>本次没有确定性状态余波。</small>
+            </section>
+            <section v-if="keyBeatCard" class="key-beat-card" :class="{ 'is-highlighted': keyBeatHighlight }" data-testid="key-beat-card">
+              <div class="key-beat-title">{{ KEY_BEAT_CARD_TITLE }}</div>
+              <button
+                v-for="option in keyBeatCard.options"
+                :key="`${option.selection.eventId}:${option.selection.actionId}`"
+                class="key-beat-option"
+                data-testid="key-beat-option"
+                :disabled="isAIProcessing"
+                @click="confirmKeyBeatCard(option)"
+              >
+                <span class="key-beat-label">{{ option.label }}</span>
+                <span v-if="option.stepTag || option.judgementTag" class="key-beat-tag">{{ [option.stepTag, option.judgementTag].filter(Boolean).join(' · ') }}</span>
+              </button>
+              <p class="key-beat-hint">{{ KEY_BEAT_CARD_HINT }}</p>
+            </section>
+            <section v-if="branchDecision" class="key-beat-card" data-testid="branch-decision">
+              <div class="key-beat-title">{{ BRANCH_DECISION_TITLE }}</div>
+              <button
+                v-for="(option, index) in branchDecision.options"
+                :key="`${option.eventId}:${option.actionId}`"
+                class="key-beat-option"
+                data-testid="branch-decision-option"
+                :disabled="isAIProcessing"
+                @click="confirmBranchDecision(option)"
+              >
+                <span class="key-beat-label">{{ branchDecision.labels[index] }}</span>
+              </button>
+              <p class="key-beat-hint">{{ BRANCH_DECISION_HINT }}</p>
+            </section>
+            <div v-if="scenarioGameOver" class="game-over-card">
+              <img v-if="scenarioEndingImage && resolveEndingImage(currentNarrative?.image) !== scenarioEndingImage" :src="scenarioEndingImage" :alt="scenarioGameOver.title" class="ending-image" />
+              <div class="game-over-head">
+                <span class="game-over-tag">本局结束<template v-if="scenarioEndingCode"> · 结局 {{ scenarioEndingCode }}</template></span>
+                <h3>{{ scenarioGameOver.title }}</h3>
+              </div>
+              <p class="game-over-hint">这条路走到了尽头。本局结局如下。</p>
+              <p v-for="(fact, index) in scenarioEndingParagraphs" :key="index" class="game-over-hint">{{ fact }}</p>
+              <div class="game-over-acts">
+                <button v-if="canRollback" @click="rollbackToLastConversation" class="go-primary">回到上一轮</button>
+                <button @click="router.push('/')" class="go-ghost">返回角色选择</button>
+              </div>
+            </div>
+            <div v-else-if="nanhuangDemoFinished" class="game-over-card">
+              <div class="game-over-head"><span class="game-over-tag">本期结束</span><h3>南荒这一段已经走完</h3></div>
+              <p class="game-over-hint">{{ nextPlaytestPhase ? '进度已保留，点下面的按钮直接进入下一期，不用重玩。' : '这是试玩的最后一期，进度已保留。' }}</p>
+              <div class="game-over-acts">
+                <button v-if="nextPlaytestPhase" class="go-primary" :disabled="phaseContinueBlocked({ pending: phaseContinuePending, processing: isAIProcessing, finished: nanhuangDemoFinished })" @click="continueToNextPhase">{{ UN_PHASE_CONTINUE_LABEL }}</button>
+                <button :class="nextPlaytestPhase ? 'go-ghost' : 'go-primary'" @click="router.push('/qingyu-opening-playtest')">返回试玩入口</button>
+              </div>
+            </div>
+            <div v-else-if="xingyuehuPlaytestFinished" class="game-over-card">
+              <div class="game-over-head">
+                <span class="game-over-tag">试玩完成</span>
+                <h3>{{ xingyuehuLandingFinished ? '星月湖组织支持这一段已经听清' : '星月湖这一段任务线已经结束' }}</h3>
+              </div>
+              <p class="game-over-hint">{{
+                xingyuehuLandingFinished
+                  ? '这是星月湖组织支持的阶段结局，不是整个星月湖故事完结。'
+                  : '谢艺的命运、你的介入方式和星月湖的回应都已写入这个隔离存档。'
+              }}</p>
+              <div class="game-over-acts">
+                <button @click="router.push('/xingyuehu-quest-playtest')" class="go-primary">返回试玩入口</button>
+                <button @click="router.push('/')" class="go-ghost">返回角色选择</button>
+              </div>
+            </div>
           </div>
-          <SceneEncounterCard :scene="currentScene" :brief="currentSceneBrief" :busy="isAIProcessing" :crystal="currentCrystalAvailable"
-            @confirm="runSceneOperation(confirmSceneAction)" @choice="runSceneOperation(confirmSceneChoice)"
-            @crystal="(mode: 'wound' | 'defense') => runSceneOperation((save,deps) => useNicheCrystal(save,mode,deps))" @edit="runSceneOperation(editSceneAction)" @finish="runSceneOperation(finishScene)" />
         </div>
       </section>
       <!-- 主要角色立绘区：第②步做，本步留空 -->
@@ -80,40 +176,6 @@
       <template v-else>
         <div class="un-who">{{ t('你打算') }}</div>
         <div class="un-plan" data-testid="ui-new-plan">
-          <section v-if="pendingJudgement" class="judgement-preflight-card">
-            <div class="judgement-preflight-title">行动判定（尚未掷骰） · {{ judgementPromptLabels(pendingJudgement).kind }}</div>
-            <div class="judgement-preflight-action">{{ pendingJudgement.actionText }}</div>
-            <p>{{ pendingJudgement.whyNow }}</p>
-            <div class="judgement-preflight-factors">
-              <span v-for="factor in pendingJudgement.factors" :key="factor.label">{{ factor.label }} {{ factor.value >= 0 ? '+' : '' }}{{ factor.value }}</span>
-              <span>难度 {{ pendingJudgement.difficulty.value }}</span>
-            </div>
-            <small>
-              <template v-if="pendingJudgement.stakes.perfect">完美成功：{{ pendingJudgement.stakes.perfect }}　</template>
-              <template v-if="pendingJudgement.stakes.greatSuccess">大成功：{{ pendingJudgement.stakes.greatSuccess }}　</template>
-              成功：{{ pendingJudgement.stakes.success }}　部分成功：{{ pendingJudgement.stakes.partial }}　失败：{{ pendingJudgement.stakes.failure }}
-              <template v-if="pendingJudgement.stakes.criticalFailure">　大失败：{{ pendingJudgement.stakes.criticalFailure }}</template>
-            </small>
-            <div class="judgement-preflight-actions">
-              <button @click="executePendingJudgement" :disabled="isAIProcessing">确认并掷骰</button>
-              <button v-if="showJudgementTestControls" class="test-great-success-button" @click="executePendingJudgement('great_success')" :disabled="isAIProcessing">大成功（测试）</button>
-              <button @click="changePendingJudgement" :disabled="isAIProcessing">换一种做法</button>
-              <button @click="cancelPendingJudgement" :disabled="isAIProcessing">撤回</button>
-            </div>
-          </section>
-          <section v-else-if="latestJudgement?.status === 'resolved'" class="judgement-result-card">
-            <div class="judgement-preflight-title">本地判定结果 · {{ judgementPromptLabels(latestJudgement).outcome }}</div>
-            <div>{{ latestJudgement.actionText }}</div>
-            <div class="judgement-preflight-factors">
-              <span>骰点 {{ latestJudgement.roll }}</span>
-              <span>总值 {{ latestJudgement.total }}</span>
-              <span>难度 {{ latestJudgement.difficulty.value }}</span>
-              <span>策略 {{ judgementPromptLabels(latestJudgement).canonPolicy }}</span>
-              <span v-if="latestJudgement.testOverride">测试强制 {{ latestJudgement.testOverride }}</span>
-            </div>
-            <small v-if="latestJudgement.appliedEffects.length || latestJudgement.settledEffects?.length">已写入：{{ [...latestJudgement.appliedEffects, ...(latestJudgement.settledEffects || [])].map(describeJudgementEffect).join('、') }}</small>
-            <small v-else>本次没有确定性状态余波。</small>
-          </section>
 
           <div v-if="actionQueue.pendingActions.length > 0" class="action-queue-display">
             <div class="queue-header">
@@ -130,77 +192,12 @@
             </div>
           </div>
 
-          <section v-if="keyBeatCard" class="key-beat-card" :class="{ 'is-highlighted': keyBeatHighlight }" data-testid="key-beat-card">
-            <div class="key-beat-title">{{ KEY_BEAT_CARD_TITLE }}</div>
-            <button
-              v-for="option in keyBeatCard.options"
-              :key="`${option.selection.eventId}:${option.selection.actionId}`"
-              class="key-beat-option"
-              data-testid="key-beat-option"
-              :disabled="isAIProcessing"
-              @click="confirmKeyBeatCard(option)"
-            >
-              <span class="key-beat-label">{{ option.label }}</span>
-              <span v-if="option.stepTag || option.judgementTag" class="key-beat-tag">{{ [option.stepTag, option.judgementTag].filter(Boolean).join(' · ') }}</span>
-            </button>
-            <p class="key-beat-hint">{{ KEY_BEAT_CARD_HINT }}</p>
-          </section>
-          <section v-if="branchDecision" class="key-beat-card" data-testid="branch-decision">
-            <div class="key-beat-title">{{ BRANCH_DECISION_TITLE }}</div>
-            <button
-              v-for="(option, index) in branchDecision.options"
-              :key="`${option.eventId}:${option.actionId}`"
-              class="key-beat-option"
-              data-testid="branch-decision-option"
-              :disabled="isAIProcessing"
-              @click="confirmBranchDecision(option)"
-            >
-              <span class="key-beat-label">{{ branchDecision.labels[index] }}</span>
-            </button>
-            <p class="key-beat-hint">{{ BRANCH_DECISION_HINT }}</p>
-          </section>
           <div v-if="intentHoldMessage" class="intent-hold-message" data-testid="intent-hold-message" role="status">{{ intentHoldMessage }}</div>
           <div v-if="freeActionReceipts.length" class="free-action-receipt" data-testid="free-action-receipt" role="status">
             <p v-for="line in freeActionReceipts" :key="line">{{ line }}</p>
             <button type="button" class="free-action-receipt-dismiss" data-testid="free-action-receipt-dismiss" @click="freeActionReceipts = []">{{ packText('free.receipt.dismiss') }}</button>
           </div>
 
-          <div v-if="scenarioGameOver" class="game-over-card">
-            <img v-if="scenarioEndingImage && resolveEndingImage(currentNarrative?.image) !== scenarioEndingImage" :src="scenarioEndingImage" :alt="scenarioGameOver.title" class="ending-image" />
-            <div class="game-over-head">
-              <span class="game-over-tag">本局结束<template v-if="scenarioEndingCode"> · 结局 {{ scenarioEndingCode }}</template></span>
-              <h3>{{ scenarioGameOver.title }}</h3>
-            </div>
-            <p class="game-over-hint">这条路走到了尽头。本局结局如下。</p>
-            <p v-for="(fact, index) in scenarioEndingParagraphs" :key="index" class="game-over-hint">{{ fact }}</p>
-            <div class="game-over-acts">
-              <button v-if="canRollback" @click="rollbackToLastConversation" class="go-primary">回到上一轮</button>
-              <button @click="router.push('/')" class="go-ghost">返回角色选择</button>
-            </div>
-          </div>
-          <div v-else-if="nanhuangDemoFinished" class="game-over-card">
-            <div class="game-over-head"><span class="game-over-tag">本期结束</span><h3>南荒这一段已经走完</h3></div>
-            <p class="game-over-hint">{{ nextPlaytestPhase ? '进度已保留，点下面的按钮直接进入下一期，不用重玩。' : '这是试玩的最后一期，进度已保留。' }}</p>
-            <div class="game-over-acts">
-              <button v-if="nextPlaytestPhase" class="go-primary" :disabled="phaseContinueBlocked({ pending: phaseContinuePending, processing: isAIProcessing, finished: nanhuangDemoFinished })" @click="continueToNextPhase">{{ UN_PHASE_CONTINUE_LABEL }}</button>
-              <button :class="nextPlaytestPhase ? 'go-ghost' : 'go-primary'" @click="router.push('/qingyu-opening-playtest')">返回试玩入口</button>
-            </div>
-          </div>
-          <div v-else-if="xingyuehuPlaytestFinished" class="game-over-card">
-            <div class="game-over-head">
-              <span class="game-over-tag">试玩完成</span>
-              <h3>{{ xingyuehuLandingFinished ? '星月湖组织支持这一段已经听清' : '星月湖这一段任务线已经结束' }}</h3>
-            </div>
-            <p class="game-over-hint">{{
-              xingyuehuLandingFinished
-                ? '这是星月湖组织支持的阶段结局，不是整个星月湖故事完结。'
-                : '谢艺的命运、你的介入方式和星月湖的回应都已写入这个隔离存档。'
-            }}</p>
-            <div class="game-over-acts">
-              <button @click="router.push('/xingyuehu-quest-playtest')" class="go-primary">返回试玩入口</button>
-              <button @click="router.push('/')" class="go-ghost">返回角色选择</button>
-            </div>
-          </div>
 
           <p v-if="crossCountryNotice" class="un-hint" role="status">{{ crossCountryNotice }}</p>
 
@@ -4031,6 +4028,10 @@ const unSegments = computed(() => currentNarrative.value ? splitNarrativeSegment
 const unSegIndex = ref(0);
 const unAtEnd = ref(true);
 const unReading = computed(() => uiNewActive.value && !isAIProcessing.value && !unAtEnd.value && unSegIndex.value < unSegments.value.length);
+// 要玩家拍板的卡片（判定、关键抉择、分支、结局）放在场景框里；和「你打算」同一时机出现（这一手读完、不在生成中）
+const unDeckActive = computed(() => uiNewActive.value && !isAIProcessing.value && !unReading.value && Boolean(
+  pendingJudgement.value || latestJudgement.value?.status === 'resolved' || keyBeatCard.value || branchDecision.value
+  || scenarioGameOver.value || nanhuangDemoFinished.value || xingyuehuPlaytestFinished.value));
 const unCurrentSegment = computed(() => unSegments.value[Math.min(unSegIndex.value, unSegments.value.length - 1)] || '');
 const unSpeaker = computed(() => segmentSpeaker(unCurrentSegment.value));
 const unAuto = ref(false);
