@@ -15,6 +15,8 @@
         <!-- 功能页：盖住场景框、立绘区和字框，右列不动；功能内容仍用现有面板 -->
         <!-- 背包：新摆法（大框＋字框），老背包面板挂在里面借逻辑；不走下面的通用功能页框 -->
         <UiNewInventory v-if="panelOpen && route.name === 'Inventory'" @close="backToGame" />
+        <!-- 存档：同背包页的办法（大框＋字框），老存档面板挂在里面借逻辑 -->
+        <UiNewSaves v-else-if="panelOpen && route.name === 'Save'" @close="backToGame" />
         <section v-else-if="panelOpen" class="un-panel un-framed" data-testid="ui-new-panel">
           <i class="un-orn-c tl"></i><i class="un-orn-c tr"></i><i class="un-orn-c bl"></i><i class="un-orn-c br"></i><i class="un-orn-m mb"></i>
           <div class="un-panel-ttl">
@@ -24,7 +26,10 @@
             <button v-for="btn in panelActions" :key="btn.key" class="pq xs" type="button" :title="btn.title" @click="btn.onClick">{{ btn.title }}</button>
             <button class="pq xs on" type="button" data-testid="ui-new-panel-close" @click="backToGame">{{ t('收起') }}</button>
           </div>
-          <div class="un-pane"><div class="un-panel-body"><slot /></div></div>
+          <div class="un-pane"><div class="un-panel-body"><slot />
+            <!-- 「人物」：老右栏里人物页没有的三块（状态效果、玩家认知与路径、战役编年史）。复用老右栏组件（同一份数据和逻辑），样式里只留这三块 -->
+            <div v-if="route.name === 'CharacterDetails'" class="un-char-extra" data-testid="ui-new-char-extra"><ErrorBoundary><RightSidebar /></ErrorBoundary></div>
+          </div></div>
         </section>
         <slot v-else />
         <!-- 「任务」：任务目标／任务日志只在老右栏里。复用老右栏组件（同一份数据和逻辑），样式里只留任务那几块，其余（数值、境界、状态等）藏起 -->
@@ -99,6 +104,7 @@ import { computeScenarioPresence } from '@/modules/scenarioMods/storyContext';
 import { uiNewLead } from '@/composables/uiNewLead';
 import RightSidebar from '@/components/dashboard/RightSidebar.vue';
 import UiNewInventory from '@/components/uiNew/UiNewInventory.vue';
+import UiNewSaves from '@/components/uiNew/UiNewSaves.vue';
 import ErrorBoundary from '@/components/common/ErrorBoundary.vue';
 import '@/styles/ui-new.css';
 
