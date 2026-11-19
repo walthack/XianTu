@@ -857,3 +857,70 @@ body:has(.ui-new-shell.un-phone) .toast-container { top: calc(env(safe-area-inse
 /* 按钮排不下时横向滑：靠右用首个按钮的 auto 外边距（justify-content:flex-end 溢出到左边会滑不到） */
 .ui-new.un-phone .un-inv-side { justify-content: flex-start; }
 .ui-new.un-phone .un-inv-side > :first-child { margin-left: auto; }
+
+/* ================= 窄屏：标题页（竖排：游戏名在上、月亮在后面当背景、牌子居中一列、次要入口和版本号在下） ================= */
+.ui-new.un-title.un-phone { overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; padding: calc(env(safe-area-inset-top, 0px) + 9vh) 16px calc(env(safe-area-inset-bottom, 0px) + 12px); }
+/* 天空 SVG 按高度铺、横向挪到月亮（viewBox x=1040）落在屏幕正中 */
+.ui-new.un-title.un-phone .un-title-sky { position: fixed; top: 0; height: 100%; width: auto; aspect-ratio: 1440 / 900; left: calc(50vw - 100svh * 1.6 * 1040 / 1440); }
+.ui-new.un-title.un-phone .un-title-main { position: relative; left: auto; top: auto; align-items: center; text-align: center; width: 100%; }
+.ui-new.un-title.un-phone .un-title-name { font-size: calc(76 * var(--pk)); letter-spacing: .2em; text-indent: .2em; text-shadow: 0 0 18px rgba(182, 192, 222, .55); }
+.ui-new.un-title.un-phone .un-title-sub { font-size: max(15px, calc(15 * var(--pk))); letter-spacing: .16em; }
+.ui-new.un-title.un-phone .un-title-rule { width: min(78%, 360px); margin: 20px 0 30px; }
+.ui-new.un-title.un-phone .un-title-rule i { width: 10px; height: 10px; }
+.ui-new.un-title.un-phone .un-title-menu { gap: 14px; align-items: center; }
+.ui-new.un-title.un-phone .un-title-menu .pq { width: calc(228 * var(--pk)); height: calc(54 * var(--pk)); min-height: 48px; font-size: calc(22 * var(--pk)); }
+.ui-new.un-title.un-phone .un-title-minor { margin-top: 26px; justify-content: center; gap: 0 18px; font-size: 15px; letter-spacing: .08em; }
+.ui-new.un-title.un-phone .un-title-link, .ui-new.un-title.un-phone .un-title-legacy summary { min-height: 44px; display: inline-flex; align-items: center; }
+.ui-new.un-title.un-phone .un-title-legacy { display: block; text-align: center; }
+.ui-new.un-title.un-phone .un-title-legacy[open] { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.ui-new.un-title.un-phone .un-title-foot { position: relative; left: auto; bottom: auto; margin-top: auto; padding-top: 24px; justify-content: center; font-size: 13px; }
+
+/* ================= 窄屏：场面（战斗）卡 ================= */
+/* 对手剪影在场景框里横排：放得下居中，放不下横向滑（safe center 溢出时从左开始） */
+.ui-new.un-phone .un-cb { gap: 6px; }
+.ui-new.un-phone .un-cb-head { flex-wrap: wrap; gap: 2px 10px; padding-right: 92px; }
+.ui-new.un-phone .un-cb-head strong { font-size: 18px; }
+.ui-new.un-phone .un-cb-head span { font-size: 14px; }
+.ui-new.un-phone .un-cb-foes { justify-content: safe center; gap: 8px; overflow-x: auto; scrollbar-width: none; min-height: 150px; }
+.ui-new.un-phone .un-cb-foe, .ui-new.un-phone .un-cb-foes.many .un-cb-foe { flex: 0 0 calc(108 * var(--pk)); }
+.ui-new.un-phone .un-cb-plate, .ui-new.un-phone .un-cb-foes.many .un-cb-plate { font-size: 14px; padding: 2px 6px; letter-spacing: .04em; white-space: normal; text-align: center; }
+.ui-new.un-phone .un-cb-st { font-size: 12px; }
+.ui-new.un-phone .un-cb-more { flex: 0 0 120px; font-size: 14px; }
+.ui-new.un-phone .un-cb-more small { font-size: 12px; }
+.ui-new.un-phone .un-cb-info { font-size: 14px; max-height: 40%; }
+.ui-new.un-phone .un-cb-info.un-folded { max-height: 1.6em; overflow: hidden; }
+.ui-new.un-phone .un-cb-fold { flex: none; align-self: flex-start; min-height: 44px; padding: 0 4px; background: none; border: 0; color: var(--un-acc); font: inherit; font-size: 15px; letter-spacing: .1em; text-decoration: underline dotted; cursor: pointer; }
+.ui-new.un-phone .un-cb-tools { flex-wrap: wrap; }
+.ui-new.un-phone .un-cb-tools button { min-height: 44px; font-size: 14px; }
+.ui-new.un-phone .un-cb-toggle { min-height: 44px; min-width: 44px; top: 0; right: 4px; font-size: 14px; }
+/* 预览／抉择／收束：字框上下排——上面玩家原话和说明（自己滚），下面目标、难度、加值、成功率、按钮（不滚）；字框临时加高 */
+.ui-new.un-phone .un-main.un-cbdec { grid-template-rows: minmax(0, 1fr) 0 max(var(--up-box), min(calc(var(--up-h) * .46), 400px)); }
+.ui-new.un-phone .un-cbd { flex-direction: column; gap: 6px; padding: 26px 12px 6px 14px; }
+.ui-new.un-phone .un-cbd-l { flex: 1 1 auto; min-height: 44px; font-size: 16px; }
+.ui-new.un-phone .un-cbd-l .un-cbd-text { font-size: max(16px, calc(17 * var(--pk))); }
+.ui-new.un-phone .un-cbd-r { flex: none; border-left: 0; border-top: 1px solid var(--un-line2); padding: 6px 0 0; gap: 4px; }
+.ui-new.un-phone .un-cbd-goal { font-size: 15px; }
+.ui-new.un-phone .un-cbd-nums { font-size: 22px; gap: 18px; }
+.ui-new.un-phone .un-cbd-nums small { font-size: 13px; }
+.ui-new.un-phone .un-cbd-odds { font-size: 13px; gap: 0 10px; }
+.ui-new.un-phone .un-cbd-acts { margin-top: 2px; gap: 8px; }
+.ui-new.un-phone .un-cbd-acts button { font-size: 16px; }
+.ui-new.un-phone .un-cbd-ctl { margin-top: -6px; }
+/* 路途卡和场面同时在时：盖层整体可滚，剪影一排保底高度 */
+.ui-new.un-phone .un-over.un-cb-on { overflow-y: auto; }
+.ui-new.un-phone .un-cb { flex: 1 0 auto; }
+.ui-new.un-title.un-phone { height: var(--un-vvh, 100dvh); }
+.ui-new.un-title.un-phone .un-title-sky { left: calc(50vw - var(--un-vvh, 100dvh) * 1.6 * 1040 / 1440); }
+.ui-new.un-title.un-phone { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 56px); }
+.ui-new.un-title.un-phone .un-title-foot { position: fixed; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); margin: 0; padding: 0; }
+/* 「局势」展开：信息区顶替剪影一排（不用再在框里往下滚才看得到） */
+.ui-new.un-phone .un-cb:has(> .un-cb-fold[aria-expanded="true"]) > .un-cb-foes { display: none; }
+.ui-new.un-phone .un-cb-fold[aria-expanded="true"] + .un-cb-info { flex: 1 1 auto; max-height: none; }
+/* 矮屏（横屏手机）：拍板块下半截改成横向折行，省高度 */
+@media (max-height: 500px) {
+  .ui-new.un-phone .un-cbd-r { flex-direction: row; flex-wrap: wrap; align-items: center; column-gap: 14px; }
+  .ui-new.un-phone .un-cbd-acts { margin-top: 0; }
+  .ui-new.un-phone .un-cbd-ctl { margin-top: 0; margin-left: auto; }
+}
+/* 「收起」在按钮行里吸在右端，其余按钮从它下面横滑过去：按钮再多也总看得见「收起」 */
+.ui-new.un-phone .un-inv-side > [data-testid="ui-new-panel-close"] { position: sticky; right: 0; z-index: 1; box-shadow: -10px 0 10px var(--un-deep); }

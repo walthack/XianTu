@@ -1,7 +1,7 @@
 <template>
   <!-- 新界面标题页（照设计稿 pc-11 的摆法）：夜色底、左边游戏名和一列六角牌、右边一轮月（内联 SVG，程序画的）。
        入口与老首页 ModeSelection.vue 一一对应：同一条路由／同一个事件（交给 App.vue 同一个处理函数），不加不减。 -->
-  <div class="ui-new un-title" data-testid="ui-new-title">
+  <div class="ui-new un-title" :class="uiNewPhone ? 'un-phone' : undefined" data-testid="ui-new-title">
     <svg class="un-title-sky" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
         <radialGradient id="unTitleMoon" cx="50%" cy="45%" r="60%">
@@ -59,6 +59,7 @@ import { useRouter } from 'vue-router';
 import { CONTENT_PACKS } from '@/modules/contentPacks';
 import { getBuildInfo, formatVersionLabel, formatVersionDetail } from '@/modules/diagnostics/buildInfo';
 import { LIUCHAO_ENTRY_MOD_ID, showGenericStartEntry } from '@/modules/scenarioMods/liuchaoEntry';
+import { uiNewPhone } from '@/composables/uiNew';
 import '@/styles/ui-new.css';
 
 // 以下数据与函数逐条照抄 src/views/ModeSelection.vue（同一来源、同一路由、同一事件）

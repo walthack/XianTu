@@ -1,5 +1,5 @@
 <template>
-  <div v-if="uiNewActive" class="un-main" :class="uiNewPhone ? { 'un-tall': !!(currentScene || unDeckActive) } : undefined" data-testid="ui-new-main">
+  <div v-if="uiNewActive" class="un-main" :class="uiNewPhone ? { 'un-tall': !!(currentScene || unDeckActive), 'un-cbdec': unCombatDecide } : undefined" data-testid="ui-new-main">
     <div class="un-top">
       <!-- 场景框：有图放图（当前叙事的插图），没图放深色底＋当前地点名。不放人物立绘。 -->
       <section class="un-scene un-framed" data-testid="ui-new-scene">
@@ -46,7 +46,8 @@
                   <small>{{ unCombat.foes.slice(COMBAT_FOE_MAX).map(foe => foe.status ? `${foe.name}：${foe.status}` : foe.name).join('　') }}</small>
                 </div>
               </div>
-              <div class="un-cb-info">
+              <button v-if="uiNewPhone" type="button" class="un-cb-fold" data-testid="ui-new-combat-fold" :aria-expanded="unCbInfoOpen" @click="unCbInfoOpen = !unCbInfoOpen">{{ unCbInfoOpen ? '收起局势' : '局势 · 我方 · 可用' }}</button>
+              <div class="un-cb-info" :class="uiNewPhone && !unCbInfoOpen ? 'un-folded' : undefined">
                 <p v-if="currentScene.notice" class="un-cb-notice">{{ currentScene.notice }}</p>
                 <p v-if="!currentScene.pending && !currentScene.choice && currentScene.state.status === 'engaged'" class="un-cb-notice">在下方输入本拍目标和打法，预览后再确认。</p>
                 <p v-if="unCombat.ours.length" data-testid="ui-new-combat-ours">我方　{{ unCombat.ours.join('　') }}</p>
@@ -4153,6 +4154,8 @@ const unCombatModel = computed(() => {
 const unCombatClassic = ref(false);
 watch(() => currentScene.value?.contractId, () => { unCombatClassic.value = false; });
 const unCombat = computed(() => unCombatClassic.value ? null : unCombatModel.value);
+// 窄屏：场景框里的信息区默认收成一条（notice／输入提示仍露出第一行），点「局势」展开
+const unCbInfoOpen = ref(false);
 // 字框里的拍板块：和「你打算」同一时机（这一手读完、不在生成中）
 const unCombatDecide = computed(() => !!unCombat.value && !!currentScene.value && Boolean(currentScene.value.pending || currentScene.value.choice || currentScene.value.state.status === 'decided'));
 const unCurrentSegment = computed(() => unSegments.value[Math.min(unSegIndex.value, unSegments.value.length - 1)] || '');
