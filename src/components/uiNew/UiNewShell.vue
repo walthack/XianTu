@@ -13,7 +13,9 @@
       </template>
       <template v-else>
         <!-- 功能页：盖住场景框、立绘区和字框，右列不动；功能内容仍用现有面板 -->
-        <section v-if="panelOpen" class="un-panel un-framed" data-testid="ui-new-panel">
+        <!-- 背包：新摆法（大框＋字框），老背包面板挂在里面借逻辑；不走下面的通用功能页框 -->
+        <UiNewInventory v-if="panelOpen && route.name === 'Inventory'" @close="backToGame" />
+        <section v-else-if="panelOpen" class="un-panel un-framed" data-testid="ui-new-panel">
           <i class="un-orn-c tl"></i><i class="un-orn-c tr"></i><i class="un-orn-c bl"></i><i class="un-orn-c br"></i><i class="un-orn-m mb"></i>
           <div class="un-panel-ttl">
             <span class="pq on" style="width:auto;min-width:calc(150 * var(--u));height:calc(48 * var(--u));font-size:calc(26 * var(--u))">{{ panelTitle }}</span>
@@ -96,6 +98,7 @@ import { locationDescriptionWithCountry } from '@/modules/scenarioMods/travel/lo
 import { computeScenarioPresence } from '@/modules/scenarioMods/storyContext';
 import { uiNewLead } from '@/composables/uiNewLead';
 import RightSidebar from '@/components/dashboard/RightSidebar.vue';
+import UiNewInventory from '@/components/uiNew/UiNewInventory.vue';
 import ErrorBoundary from '@/components/common/ErrorBoundary.vue';
 import '@/styles/ui-new.css';
 

@@ -1567,6 +1567,13 @@ const refreshFromTavern = async () => {
   }
 }
 
+// 新界面背包页（?ui=new，UiNewInventory.vue）借这个面板的同一份状态和同一批函数；老界面不读这些，行为不变
+defineExpose({
+  activeTab, selectedItem, searchQuery, selectedCategory, sortBy, itemList, itemCategories, filteredItems,
+  equipBusy, cultivateBusy, isEquipped, isCultivating, selectItem, useItem, discardItem, toggleEquip, toggleCultivate,
+  qualityText, formatItemAttributes, totalValueInBase, baseCurrencyLabel, isTavernEnvFlag, refreshing, refreshFromTavern,
+})
+
 </script>
 
 <style scoped>
