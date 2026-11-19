@@ -130,8 +130,40 @@
           </div>
         </div>
       </section>
-      <!-- 主要角色立绘区：第②步做，本步留空 -->
-      <section class="un-lead" aria-hidden="true"></section>
+      <!-- 主要角色立绘区：一场一个主要角色，不挂名牌；有图放图（现在一定没有），没图放实心剪影；没有主要角色就空着 -->
+      <section class="un-lead" aria-hidden="true" data-testid="ui-new-lead">
+        <Transition name="un-lead-fade">
+          <div v-if="unLead" :key="unLead.name" class="un-lead-fig" :data-lead="unLead.name" :data-lead-rule="unLead.rule" :data-lead-basis="unLead.basis" :data-silhouette="unLead.imageUrl ? undefined : unLead.silhouette">
+            <img v-if="unLead.imageUrl" :src="unLead.imageUrl" alt="" class="un-lead-img" />
+            <!-- 程序画的通用人形占位，以后绘图会换：束发宽袖的男子／挽髻长裙的女子／不分性别的披风人形 -->
+            <svg v-else-if="unLead.silhouette === 'male'" class="un-sil" viewBox="0 0 240 460" preserveAspectRatio="xMinYMax meet">
+              <defs><linearGradient id="un-sil-g-m" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#18224a" /><stop offset="1" stop-color="#070a18" /></linearGradient></defs>
+              <g fill="url(#un-sil-g-m)">
+                <ellipse cx="120" cy="16" rx="12" ry="11" /><rect x="98" y="14" width="44" height="5" rx="2.5" />
+                <ellipse cx="120" cy="60" rx="28" ry="34" /><rect x="108" y="86" width="24" height="24" />
+                <path d="M120 102 C92 104 66 112 50 132 C34 156 26 210 20 270 C10 300 2 340 0 380 V460 H240 V380 C238 340 230 300 220 270 C214 210 206 156 190 132 C174 112 148 104 120 102Z" />
+              </g>
+            </svg>
+            <svg v-else-if="unLead.silhouette === 'female'" class="un-sil" viewBox="0 0 240 460" preserveAspectRatio="xMinYMax meet">
+              <defs><linearGradient id="un-sil-g-f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#18224a" /><stop offset="1" stop-color="#070a18" /></linearGradient></defs>
+              <g fill="url(#un-sil-g-f)">
+                <ellipse cx="120" cy="22" rx="22" ry="16" /><rect x="132" y="6" width="5" height="34" rx="2.5" transform="rotate(35 134 23)" />
+                <ellipse cx="120" cy="64" rx="25" ry="31" /><rect x="110" y="88" width="20" height="22" />
+                <path d="M120 104 C100 106 80 112 68 128 C58 146 60 190 72 228 C76 242 78 252 76 262 C62 320 42 390 28 460 H212 C198 390 178 320 164 262 C162 252 164 242 168 228 C180 190 182 146 172 128 C160 112 140 106 120 104Z" />
+                <path d="M68 128 C46 160 38 230 40 304 C48 310 60 308 66 300 C64 244 68 192 76 160Z" />
+                <path d="M172 128 C194 160 202 230 200 304 C192 310 180 308 174 300 C176 244 172 192 164 160Z" />
+              </g>
+            </svg>
+            <svg v-else class="un-sil" viewBox="0 0 240 460" preserveAspectRatio="xMinYMax meet">
+              <defs><linearGradient id="un-sil-g-n" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#18224a" /><stop offset="1" stop-color="#070a18" /></linearGradient></defs>
+              <g fill="url(#un-sil-g-n)">
+                <path d="M120 18 C90 18 74 44 74 74 C74 96 84 110 94 118 H146 C156 110 166 96 166 74 C166 44 150 18 120 18Z" />
+                <path d="M94 108 C68 116 48 136 38 172 C24 240 12 340 4 460 H236 C228 340 216 240 202 172 C192 136 172 116 146 108Z" />
+              </g>
+            </svg>
+          </div>
+        </Transition>
+      </section>
     </div>
 
     <!-- 字框 -->
@@ -986,6 +1018,7 @@ import XingyuehuQuestPlaytestHud from '@/components/dashboard/XingyuehuQuestPlay
 // 老卡片放进字框「你打算」里或盖在场景框上，标记和类名照抄老模板，样式沿用本组件的 scoped 样式。
 // 模板根前不写注释：注释会让组件根变成片段，生产构建也会把它留进 DOM。
 import { uiNewActive, uiNewReadPosition } from '@/composables/uiNew';
+import { uiNewLead as unLead, useUiNewLead } from '@/composables/uiNewLead';
 import { splitNarrativeSegments, segmentSpeaker } from '@/utils/narrativeSegments';
 import { stripSpeakerMarksForStreaming } from '@/utils/speakerMarks';
 import { getTravelCard } from '@/modules/scenarioMods/travel/travelLedger';
@@ -4034,6 +4067,8 @@ const unDeckActive = computed(() => uiNewActive.value && !isAIProcessing.value &
   || scenarioGameOver.value || nanhuangDemoFinished.value || xingyuehuPlaytestFinished.value));
 const unCurrentSegment = computed(() => unSegments.value[Math.min(unSegIndex.value, unSegments.value.length - 1)] || '');
 const unSpeaker = computed(() => segmentSpeaker(unCurrentSegment.value));
+// 立绘区主要角色：按这一手正文（带说话人记号）定，结果在 uiNewLead 里，底行「在场」也读它
+useUiNewLead(() => currentNarrative.value?.content || '');
 const unAuto = ref(false);
 const unLogOpen = ref(false);
 const unLogPaneRef = ref<HTMLDivElement>();

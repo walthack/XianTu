@@ -94,6 +94,7 @@ import { toast } from '@/utils/toast';
 import { chatBus } from '@/utils/chatBus';
 import { locationDescriptionWithCountry } from '@/modules/scenarioMods/travel/locationIds';
 import { computeScenarioPresence } from '@/modules/scenarioMods/storyContext';
+import { uiNewLead } from '@/composables/uiNewLead';
 import RightSidebar from '@/components/dashboard/RightSidebar.vue';
 import ErrorBoundary from '@/components/common/ErrorBoundary.vue';
 import '@/styles/ui-new.css';
@@ -210,6 +211,9 @@ const presentLine = computed(() => {
     if (!presence) return '';
     const playerName = String(gameStateStore.character?.名字 || '');
     const names = [...presence.presentNames].filter(name => name && name !== playerName);
+    // 立绘区的主要角色排第一个（其余保持原顺序）
+    const lead = uiNewLead.value?.name;
+    if (lead && names.includes(lead)) names.sort((a, b) => Number(b === lead) - Number(a === lead));
     return names.length ? names.join(' · ') : t('只有你');
   } catch {
     // lcq-allow: 在场只是底行显示，算不出就不显示，不影响游戏
