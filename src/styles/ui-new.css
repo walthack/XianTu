@@ -1,0 +1,296 @@
+/*
+ * 新界面外壳（?ui=new，第①步）样式。所有规则挂在 .ui-new 下，不影响老界面。
+ * 配色「夜」：靛蓝底、银线、淡金点缀。换配色只改下面这一组变量。
+ * 尺寸按设计稿 1440×900 的像素写，乘 --u（= 视口相对设计稿的缩放）跟着窗口变。
+ * 花饰 SVG 搬自设计稿脚本 mock7.mjs（程序画的占位，以后绘图会重画）。
+ */
+.ui-new {
+  /* ---- 配色（夜） ---- */
+  --un-ink: #e8ebf7;      /* 正文字 */
+  --un-sub: #9aa6cc;      /* 次一级字（旁白、说明） */
+  --un-line: #b6c0de;     /* 银线 */
+  --un-line2: #4a5788;    /* 暗线 */
+  --un-acc: #e8d59a;      /* 淡金点缀 */
+  --un-deep: #070a18;     /* 最深底 */
+  --un-mid: #0d1330;      /* 中底 */
+  --un-hi: #1c2752;       /* 亮底 */
+  --un-on-top: #3a4f9c;   /* 亮牌上 */
+  --un-on-bot: #22346a;   /* 亮牌下 */
+  --un-tag-top: #26366e;  /* 名签上 */
+  --un-tag-bot: #141d40;  /* 名签下 */
+  --un-page-bg: #080b19;
+  --un-glow-a: #1e2d5c;
+  --un-glow-b: #141d40;
+  --un-input-bg: #05070f;
+  --un-act-a: #161f46;
+  --un-act-b: #0a0f24;
+
+  /* ---- 字体（只用系统字体） ---- */
+  --un-font-title: "Weibei SC", "STKaiti", "Kaiti SC", "KaiTi", serif;
+  --un-font-body: "STKaiti", "Kaiti SC", "KaiTi", serif;
+
+  /* ---- 尺寸 ---- */
+  --u: min(calc(100vw / 1440), calc(100vh / 900));
+  --un-col-w: calc(132 * var(--u));
+  --un-box-h: calc(216 * var(--u));
+  --un-bar-h: calc(42 * var(--u));
+  --un-gap-x: calc(18 * var(--u));
+  --un-gap-y: calc(18 * var(--u));
+
+  /* 花饰（颜色写死在 SVG 里：银线 #b6c0de、淡金 #e8d59a；换配色时一起改） */
+  --un-orn-corner: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M6 98 V30 Q6 6 30 6 H98' fill='none' stroke='%23b6c0de' stroke-width='6' stroke-linecap='round'/%3E%3Cpath d='M18 84 V36 Q18 18 36 18 H84' fill='none' stroke='%23e8d59a' stroke-width='2'/%3E%3Cpath d='M30 31 C54 20 66 42 52 52 C42 59 30 51 35 42 C38 37 45 38 46 43' fill='none' stroke='%23b6c0de' stroke-width='4.5' stroke-linecap='round'/%3E%3Cpath d='M98 6 q-14 12 -34 9 q16 -9 34 -9z M6 98 q12 -14 9 -34 q-9 16 -9 34z' fill='%23e8d59a'/%3E%3Ccircle cx='29' cy='30' r='3.5' fill='%23e8d59a'/%3E%3C/svg%3E");
+  --un-orn-mid: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='30' viewBox='0 0 160 30'%3E%3Cpath d='M0 15 H52 M108 15 H160' stroke='%23b6c0de' stroke-width='3'/%3E%3Cpath d='M80 2 L96 15 L80 28 L64 15Z' fill='%23e8d59a' stroke='%23b6c0de' stroke-width='2'/%3E%3Cpath d='M52 15 q8 -12 18 -6 q-10 0 -12 6 q2 6 12 6 q-10 6 -18 -6z M108 15 q-8 -12 -18 -6 q10 0 12 6 q-2 6 -12 6 q10 6 18 -6z' fill='%23b6c0de'/%3E%3Ccircle cx='80' cy='15' r='3' fill='%23b6c0de'/%3E%3C/svg%3E");
+}
+
+/* ================= 外壳网格 ================= */
+.ui-new.ui-new-shell {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--un-col-w);
+  grid-template-rows: minmax(0, 1fr) var(--un-box-h) var(--un-bar-h);
+  column-gap: var(--un-gap-x);
+  row-gap: var(--un-gap-y);
+  padding: calc(30 * var(--u)) calc(26 * var(--u)) calc(10 * var(--u)) calc(34 * var(--u));
+  color: var(--un-ink);
+  font-family: var(--un-font-body);
+  background:
+    radial-gradient(calc(900 * var(--u)) calc(560 * var(--u)) at 78% 22%, var(--un-glow-a) 0, transparent 66%),
+    radial-gradient(calc(900 * var(--u)) calc(500 * var(--u)) at 10% 100%, var(--un-glow-b) 0, transparent 66%),
+    var(--un-page-bg);
+}
+.ui-new *, .ui-new *::before, .ui-new *::after { box-sizing: border-box; }
+.ui-new .un-ft { font-family: var(--un-font-title); font-weight: 400; }
+
+/* 主区（MainGamePanel 新摆法或功能页）占满上两行左右两列；右列压在它上面 */
+.ui-new .un-stage-slot {
+  grid-row: 1 / 3; grid-column: 1 / 3; min-height: 0; min-width: 0; position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--un-col-w);
+  grid-template-rows: minmax(0, 1fr) var(--un-box-h);
+  column-gap: var(--un-gap-x);
+  row-gap: var(--un-gap-y);
+}
+.ui-new .un-stage-slot > * { grid-area: 1 / 1 / 3 / 3; min-height: 0; min-width: 0; }
+.ui-new .un-stage-slot > .un-panel { grid-area: 1 / 1 / 3 / 2; }
+
+/* ================= 六角牌（所有能点的东西统一这一种） ================= */
+.ui-new .pq {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: calc(124 * var(--u));
+  height: calc(54 * var(--u));
+  padding: 0 calc(14 * var(--u));
+  font-family: var(--un-font-title);
+  font-size: calc(25 * var(--u));
+  letter-spacing: .14em;
+  text-indent: .14em;
+  white-space: nowrap;
+  color: var(--un-ink);
+  cursor: pointer;
+  background: linear-gradient(var(--un-hi), var(--un-mid));
+  border: 1px solid var(--un-line);
+  box-shadow: inset 0 0 0 3px var(--un-mid), inset 0 0 0 4px var(--un-line2);
+  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 10px 100%, 0 50%);
+  transition: filter .15s;
+}
+.ui-new .pq:hover:not(:disabled) { filter: brightness(1.25); }
+.ui-new .pq.on { background: linear-gradient(var(--un-on-top), var(--un-on-bot)); color: var(--un-acc); }
+.ui-new .pq.dim, .ui-new .pq:disabled { color: var(--un-sub); opacity: .6; cursor: default; }
+.ui-new .pq.sm { width: auto; min-width: calc(88 * var(--u)); height: calc(40 * var(--u)); font-size: calc(19 * var(--u)); }
+.ui-new .pq.xs { width: auto; min-width: calc(64 * var(--u)); height: calc(32 * var(--u)); font-size: calc(16 * var(--u)); letter-spacing: .08em; text-indent: .08em; }
+
+/* ================= 带花饰的框 ================= */
+.ui-new .un-framed { position: relative; border: 3px solid var(--un-line); }
+.ui-new .un-framed > .un-orn-c {
+  position: absolute; width: calc(78 * var(--u)); height: calc(78 * var(--u));
+  background: var(--un-orn-corner) 0 0 / 100% 100% no-repeat; z-index: 3; pointer-events: none;
+}
+.ui-new .un-orn-c.tl { left: calc(-13 * var(--u)); top: calc(-13 * var(--u)); }
+.ui-new .un-orn-c.tr { right: calc(-13 * var(--u)); top: calc(-13 * var(--u)); transform: scaleX(-1); }
+.ui-new .un-orn-c.bl { left: calc(-13 * var(--u)); bottom: calc(-13 * var(--u)); transform: scaleY(-1); }
+.ui-new .un-orn-c.br { right: calc(-13 * var(--u)); bottom: calc(-13 * var(--u)); transform: scale(-1); }
+.ui-new .un-framed > .un-orn-m {
+  position: absolute; left: 50%; width: calc(140 * var(--u)); height: calc(26 * var(--u)); margin-left: calc(-70 * var(--u));
+  background: var(--un-orn-mid) 0 0 / 100% 100% no-repeat; z-index: 3; pointer-events: none;
+}
+.ui-new .un-orn-m.mt { top: calc(-14 * var(--u)); }
+.ui-new .un-orn-m.mb { bottom: calc(-14 * var(--u)); }
+.ui-new .un-pane {
+  position: absolute; inset: calc(9 * var(--u));
+  border: 1px solid var(--un-line2);
+  background: linear-gradient(var(--un-mid), var(--un-deep));
+  overflow: hidden;
+}
+
+/* ================= 右列 ================= */
+.ui-new .un-cmd {
+  grid-row: 1; grid-column: 2;
+  position: relative; z-index: 6;
+  display: flex; flex-direction: column; align-items: center;
+  gap: calc(13 * var(--u));
+  min-height: 0; overflow-y: auto; overflow-x: hidden;
+  scrollbar-width: none;
+}
+.ui-new .un-cmd .pq { width: var(--un-col-w); }
+.ui-new .un-rule { width: calc(92 * var(--u)); border-top: 1px solid var(--un-line); opacity: .55; margin-top: calc(4 * var(--u)); }
+.ui-new .mi {
+  display: flex; align-items: center; gap: calc(9 * var(--u));
+  width: calc(100 * var(--u));
+  font-size: calc(19 * var(--u)); letter-spacing: .3em;
+  color: var(--un-sub); background: none; border: 0; padding: 0; cursor: pointer;
+  font-family: var(--un-font-body);
+}
+.ui-new .mi i { width: calc(7 * var(--u)); height: calc(7 * var(--u)); transform: rotate(45deg); flex: none; background: var(--un-line2); }
+.ui-new .mi:hover, .ui-new .mi.on { color: var(--un-acc); }
+.ui-new .mi.on i { background: var(--un-acc); }
+.ui-new .mi.more { font-size: calc(15 * var(--u)); letter-spacing: .2em; }
+.ui-new .un-more {
+  position: absolute; right: calc(26 * var(--u) + var(--un-col-w) + 8px); top: calc(30 * var(--u));
+  z-index: 30; min-width: calc(190 * var(--u)); max-height: calc(100% - 60 * var(--u)); overflow-y: auto;
+  padding: calc(12 * var(--u)) calc(16 * var(--u));
+  background: linear-gradient(var(--un-mid), var(--un-deep));
+  border: 2px solid var(--un-line);
+  box-shadow: inset 0 0 0 4px var(--un-deep), inset 0 0 0 5px var(--un-line2), 0 10px 30px rgba(0,0,0,.6);
+  display: flex; flex-direction: column; gap: calc(10 * var(--u));
+}
+.ui-new .un-more .mi { width: auto; letter-spacing: .15em; font-size: calc(18 * var(--u)); }
+
+/* ================= 底行 ================= */
+.ui-new .un-bar {
+  grid-row: 3; grid-column: 1 / 3;
+  display: flex; align-items: center; gap: calc(30 * var(--u));
+  min-width: 0; overflow: hidden; white-space: nowrap;
+  font-size: calc(18 * var(--u)); letter-spacing: .08em;
+  border-top: 1px solid var(--un-line2); color: var(--un-sub);
+}
+.ui-new .un-bar b { font-family: var(--un-font-title); font-weight: 400; font-size: calc(21 * var(--u)); letter-spacing: .14em; color: var(--un-ink); overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.ui-new .un-bar .who-here { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.ui-new .un-bar .sp { flex: 1; }
+.ui-new .un-bar .st { display: flex; align-items: center; gap: calc(8 * var(--u)); font-size: calc(17 * var(--u)); flex: none; }
+.ui-new .un-bar .st u { display: block; width: calc(92 * var(--u)); height: calc(9 * var(--u)); background: var(--un-mid); border: 1px solid var(--un-line2); text-decoration: none; }
+.ui-new .un-bar .st u i { display: block; height: 100%; background: linear-gradient(var(--un-line), #6f7fb8); }
+
+/* ================= 功能页框（盖住场景框和立绘区） ================= */
+.ui-new .un-panel { grid-row: 1 / 3; grid-column: 1; position: relative; z-index: 20; min-height: 0; }
+.ui-new .un-panel .un-pane { overflow: auto; color: var(--color-text, #e8ebf7); }
+.ui-new .un-panel .un-panel-ttl { position: absolute; left: calc(44 * var(--u)); top: calc(-25 * var(--u)); z-index: 4; display: flex; gap: calc(10 * var(--u)); align-items: center; }
+.ui-new .un-panel .un-panel-acts { position: absolute; right: calc(60 * var(--u)); top: calc(-20 * var(--u)); z-index: 4; display: flex; gap: calc(8 * var(--u)); }
+.ui-new .un-panel-body { padding: calc(30 * var(--u)) calc(16 * var(--u)) calc(16 * var(--u)); height: 100%; overflow: auto; }
+
+/* ================= 主面板新摆法（MainGamePanel 内） ================= */
+.ui-new .un-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--un-col-w);
+  grid-template-rows: minmax(0, 1fr) var(--un-box-h);
+  column-gap: var(--un-gap-x);
+  row-gap: var(--un-gap-y);
+  min-height: 0; height: 100%;
+}
+.ui-new .un-top { grid-row: 1; grid-column: 1; display: grid; grid-template-columns: minmax(0, 3.2fr) minmax(0, 1fr); column-gap: var(--un-gap-x); min-height: 0; position: relative; }
+.ui-new .un-scene { min-height: 0; }
+.ui-new .un-scene .un-pic { position: absolute; inset: calc(9 * var(--u)); border: 1px solid var(--un-line2); background: #111 center / cover no-repeat; filter: saturate(.75) hue-rotate(8deg); box-shadow: inset 0 0 60px rgba(0,0,0,.55); }
+.ui-new .un-scene .un-place { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--un-font-title); font-size: calc(40 * var(--u)); letter-spacing: .3em; color: var(--un-sub); opacity: .75; text-align: center; padding: 0 1em; }
+.ui-new .un-lead { min-height: 0; } /* 主要角色立绘区：第②步做，本步留空 */
+/* 盖在场景框上的东西（场面卡、路途卡、试玩 HUD） */
+.ui-new .un-over { position: absolute; inset: calc(9 * var(--u)); z-index: 5; overflow: auto; padding: calc(14 * var(--u)); pointer-events: none; display: flex; flex-direction: column; gap: 10px; }
+.ui-new .un-over > * { pointer-events: auto; }
+.ui-new .un-over.scene-card { background: rgba(7, 10, 24, .88); pointer-events: auto; }
+
+/* 字框 */
+.ui-new .un-box {
+  grid-row: 2; grid-column: 1 / 3;
+  position: relative; z-index: 5; min-height: 0;
+  background: linear-gradient(var(--un-mid), var(--un-deep));
+  border: 2px solid var(--un-line);
+  box-shadow: inset 0 0 0 5px var(--un-deep), inset 0 0 0 6px var(--un-line2), 0 10px 30px rgba(0,0,0,.6);
+  outline: none;
+}
+.ui-new .un-box.reading { cursor: pointer; }
+.ui-new .un-who {
+  position: absolute; left: calc(44 * var(--u)); top: calc(-25 * var(--u)); z-index: 2;
+  height: calc(46 * var(--u)); padding: 0 calc(24 * var(--u)) 0 calc(20 * var(--u));
+  display: flex; align-items: center;
+  font-family: var(--un-font-title); font-size: calc(27 * var(--u)); letter-spacing: .2em;
+  background: linear-gradient(var(--un-tag-top), var(--un-tag-bot)); color: var(--un-acc);
+  border: 1px solid var(--un-line); box-shadow: 0 3px 8px rgba(0,0,0,.6);
+}
+.ui-new .un-say {
+  position: absolute; inset: 0;
+  padding: calc(40 * var(--u)) calc(76 * var(--u)) calc(52 * var(--u)) calc(64 * var(--u));
+  font-size: calc(26 * var(--u)); line-height: 1.72; letter-spacing: .04em;
+  color: var(--un-ink); overflow-y: auto;
+}
+.ui-new .un-say.n { color: var(--un-sub); }
+.ui-new .un-say.n p:first-child, .ui-new .un-say.n .formatted-text { text-indent: 2em; }
+/* 正文里沿用 FormattedText 的上色，但在新界面里压回夜色 */
+.ui-new .un-say .formatted-text { font-size: inherit; line-height: inherit; color: inherit; }
+.ui-new .un-ctl {
+  position: absolute; right: calc(26 * var(--u)); bottom: calc(14 * var(--u));
+  display: flex; align-items: center; gap: calc(22 * var(--u));
+  font-size: calc(17 * var(--u)); color: var(--un-sub); letter-spacing: .2em; z-index: 3;
+}
+.ui-new .un-ctl button { background: none; border: 0; padding: 0; color: inherit; font: inherit; letter-spacing: inherit; cursor: pointer; }
+.ui-new .un-ctl button:hover, .ui-new .un-ctl button.on { color: var(--un-acc); }
+.ui-new .un-dots { display: flex; gap: 6px; align-items: center; }
+.ui-new .un-dots i { width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--un-sub); }
+.ui-new .un-dots i.d { background: var(--un-sub); }
+.ui-new .un-dots i.c { background: var(--un-acc); border-color: var(--un-acc); width: 11px; height: 11px; }
+.ui-new .un-next { font-size: calc(22 * var(--u)); color: var(--un-acc); letter-spacing: 0; animation: un-bob 1.2s ease-in-out infinite; }
+@keyframes un-bob { 50% { transform: translateY(3px); } }
+
+/* 「你打算」 */
+.ui-new .un-plan { position: absolute; inset: 0; overflow-y: auto; padding: calc(34 * var(--u)) calc(60 * var(--u)) calc(48 * var(--u)); display: flex; flex-direction: column; gap: calc(12 * var(--u)); }
+.ui-new .un-acts { display: grid; grid-template-columns: 1fr 1fr; gap: calc(12 * var(--u)) calc(22 * var(--u)); }
+.ui-new .un-act {
+  min-height: calc(52 * var(--u)); display: flex; align-items: center; gap: calc(14 * var(--u));
+  padding: calc(6 * var(--u)) calc(20 * var(--u)); text-align: left;
+  font-family: var(--un-font-body); font-size: calc(21 * var(--u)); color: var(--un-ink);
+  background: linear-gradient(90deg, var(--un-act-a), var(--un-act-b));
+  border: 1px solid var(--un-line2); border-left: 4px solid var(--un-acc); cursor: pointer;
+}
+.ui-new .un-act:hover:not(:disabled) { border-color: var(--un-line); border-left-color: var(--un-acc); }
+.ui-new .un-act:disabled { opacity: .55; cursor: default; }
+.ui-new .un-act em { font-family: var(--un-font-title); font-style: normal; color: var(--un-acc); font-size: calc(20 * var(--u)); flex: none; }
+.ui-new .un-act .tag { font-size: calc(15 * var(--u)); color: var(--un-acc); border: 1px solid var(--un-line2); padding: 0 6px; flex: none; }
+.ui-new .un-act small { color: var(--un-sub); font-size: calc(15 * var(--u)); }
+.ui-new .un-hint { font-size: calc(15 * var(--u)); color: var(--un-sub); letter-spacing: .1em; }
+.ui-new .un-label { font-size: calc(16 * var(--u)); color: var(--un-sub); letter-spacing: .2em; }
+.ui-new .un-inp { display: flex; align-items: center; gap: calc(10 * var(--u)); padding: calc(6 * var(--u)) calc(8 * var(--u)) calc(6 * var(--u)) calc(16 * var(--u)); background: var(--un-input-bg); border: 1px solid var(--un-line2); }
+.ui-new .un-inp textarea {
+  flex: 1; min-width: 0; resize: none; background: transparent; border: 0; outline: none;
+  color: var(--un-ink); font-family: var(--un-font-body); font-size: calc(20 * var(--u)); line-height: 1.5;
+  height: calc(40 * var(--u)); max-height: calc(110 * var(--u));
+}
+.ui-new .un-inp textarea::placeholder { color: var(--un-sub); }
+.ui-new .un-wait { position: absolute; inset: 0; padding: calc(34 * var(--u)) calc(64 * var(--u)) calc(48 * var(--u)); display: flex; flex-direction: column; gap: calc(8 * var(--u)); overflow: hidden; }
+.ui-new .un-wait .un-wait-head { display: flex; align-items: center; gap: calc(14 * var(--u)); color: var(--un-acc); font-size: calc(18 * var(--u)); letter-spacing: .2em; }
+.ui-new .un-wait .un-wait-text { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; color: var(--un-sub); font-size: calc(20 * var(--u)); line-height: 1.7; }
+.ui-new .un-dot-pulse { width: 9px; height: 9px; border-radius: 50%; background: var(--un-acc); animation: un-pulse 1s ease-in-out infinite; }
+@keyframes un-pulse { 50% { opacity: .25; } }
+
+/* 回看弹层 */
+.ui-new .un-modal { position: absolute; inset: 0; z-index: 40; background: rgba(4, 6, 14, .72); display: flex; align-items: center; justify-content: center; }
+.ui-new .un-modal-box { position: relative; width: min(1040px, 86%); height: 86%; }
+.ui-new .un-modal-box .un-pane { overflow-y: auto; padding: calc(36 * var(--u)) calc(40 * var(--u)); color: var(--un-ink); font-size: calc(19 * var(--u)); line-height: 1.75; }
+.ui-new .un-modal-ttl { position: absolute; left: calc(44 * var(--u)); top: calc(-25 * var(--u)); z-index: 4; }
+.ui-new .un-modal-close { position: absolute; right: calc(44 * var(--u)); top: calc(-20 * var(--u)); z-index: 4; }
+.ui-new .un-log-entry { padding: calc(14 * var(--u)) 0; border-bottom: 1px dashed var(--un-line2); }
+.ui-new .un-log-entry .un-log-intent { color: var(--un-acc); font-size: .9em; margin-bottom: 4px; }
+.ui-new .un-log-entry.current { border-bottom: 0; }
+.ui-new .un-log-tools { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
+
+/* 老卡片放进字框／弹层时的底色（卡片自身样式沿用 MainGamePanel 的 scoped 样式） */
+.ui-new .un-plan .judgement-preflight-card,
+.ui-new .un-plan .judgement-result-card,
+.ui-new .un-plan .key-beat-card,
+.ui-new .un-plan .game-over-card,
+.ui-new .un-plan .action-queue-display,
+.ui-new .un-plan .free-action-receipt,
+.ui-new .un-plan .intent-hold-message { margin: 0; }
