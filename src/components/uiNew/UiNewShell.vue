@@ -1,5 +1,5 @@
 <template>
-  <div class="ui-new ui-new-shell" data-testid="ui-new-shell">
+  <div class="ui-new ui-new-shell" :class="uiNewPhone ? { 'un-phone': true, 'un-kb': uiNewKeyboard, 'un-paneled': panelOpen || questOpen || uiStore.showCharacterManagement } : undefined" data-testid="ui-new-shell">
     <!-- 主区：游戏主面板（MainGamePanel 新摆法）或功能页 -->
     <div class="un-stage-slot">
       <template v-if="!dataReady">
@@ -76,19 +76,26 @@
 
     <!-- 「更多」：老左栏里七项之外的入口（老左栏没有显示条件，全部列出） -->
     <div v-if="moreOpen" class="un-more" data-testid="ui-new-more-list">
+      <template v-if="uiNewPhone">
+        <button v-for="item in MENU" :key="item.label" type="button" class="mi" :class="{ on: isMenuOn(item) }" :disabled="item.needsCharacter && !activeCharacter" @click="clickMenu(item)"><i></i>{{ item.label }}</button>
+        <div class="un-rule" style="width:100%"></div>
+      </template>
       <button v-for="item in MORE" :key="item.label" type="button" class="mi" :class="{ on: isMenuOn(item) }" @click="clickMore(item)"><i></i>{{ t(item.label) }}</button>
       <div class="un-rule" style="width:100%"></div>
       <button type="button" class="mi" @click="moreOpen = false; handleBackToMenu()"><i></i>{{ t('返回道途') }}</button>
+      <button v-if="uiNewPhone" type="button" class="pq xs on un-more-close" data-testid="ui-new-more-close" @click="moreOpen = false">{{ t('收起') }}</button>
     </div>
 
     <!-- 底行：地点、日期时辰、在场、三条数值（与老顶栏／老右栏同一份来源） -->
     <footer v-if="dataReady" class="un-bar" data-testid="ui-new-bar">
       <b>{{ currentLocation }}</b>
-      <span>{{ gameTime }}</span>
-      <span v-if="presentLine" class="who-here">{{ t('在场') }}　{{ presentLine }}</span>
+      <span :title="uiNewPhone ? gameTime : undefined">{{ uiNewPhone ? shortGameTime(gameTime) : gameTime }}</span>
+      <span v-if="presentLine && !uiNewPhone" class="who-here">{{ t('在场') }}　{{ presentLine }}</span>
+      <button v-if="presentLine && uiNewPhone" type="button" class="un-here-btn" :class="{ on: hereOpen }" data-testid="ui-new-here" @click="hereOpen = !hereOpen">{{ t('在场') }}</button>
       <span class="sp"></span>
-      <span v-for="v in VITALS" :key="v" class="st">{{ t(v) }}<u><i :style="{ width: vitalPercent(v) + '%' }"></i></u>{{ vitalValue(v) }}</span>
+      <span v-for="v in VITALS" :key="v" class="st">{{ uiNewPhone ? t(v).slice(0, 1) : t(v) }}<u><i :style="{ width: vitalPercent(v) + '%' }"></i></u>{{ vitalValue(v) }}</span>
     </footer>
+    <div v-if="uiNewPhone && hereOpen && presentLine && dataReady" class="un-here" data-testid="ui-new-here-strip" @click="hereOpen = false">{{ t('在场') }}　{{ presentLine }}</div>
   </div>
 </template>
 
@@ -104,6 +111,8 @@ import { chatBus } from '@/utils/chatBus';
 import { locationDescriptionWithCountry } from '@/modules/scenarioMods/travel/locationIds';
 import { computeScenarioPresence } from '@/modules/scenarioMods/storyContext';
 import { uiNewLead } from '@/composables/uiNewLead';
+import { uiNewPhone, uiNewKeyboard } from '@/composables/uiNew';
+import { shortGameTime } from '@/components/uiNew/phoneLayout';
 import RightSidebar from '@/components/dashboard/RightSidebar.vue';
 import UiNewInventory from '@/components/uiNew/UiNewInventory.vue';
 import UiNewSaves from '@/components/uiNew/UiNewSaves.vue';
@@ -153,6 +162,8 @@ const VITALS = ['气血', '灵气', '神识'] as const;
 
 const questOpen = ref(false);
 const moreOpen = ref(false);
+// 窄屏：底行「在场」收成一个小按钮，点一下在底行上方展开一条；右列的七项菜单收进「更多」排在最前（模板里不写注释：开发构建会把注释留进 DOM）
+const hereOpen = ref(false);
 const activeCharacter = computed(() => characterStore.activeCharacterProfile);
 
 const isMenuOn = (item: MenuItem) => item.quest ? questOpen.value : !!item.routeNames?.includes(String(route.name));

@@ -631,3 +631,172 @@ body:has(.ui-new-shell) .toast-container {
 .ui-new .un-cbd-ctl { position: static; align-self: flex-end; }
 .ui-new .un-cb-foes.many .un-cb-plate { white-space: normal; text-overflow: clip; font-size: calc(16 * var(--u)); letter-spacing: .06em; text-align: center; padding: calc(3 * var(--u)) calc(8 * var(--u)); }
 .ui-new .un-cb-info .un-cb-o + .un-cb-o::before { content: '　·　'; color: var(--un-line2); }
+
+/* ================= 窄屏摆法（?ui=new 且窗口 <1024：外壳根上有 .un-phone） =================
+ * 从上到下：场景框（约屏高三成）／中间一带（左：三个动词＋更多；右：主要角色剪影）／字框／底行。
+ * 尺寸以 390 宽设计稿（手机-01…05，CSS 像素）为准，乘 --pk 放大：--pk = clamp(1, min(宽/390, 高/844), 1.5)。
+ * 竖屏平板（768×1024）同一摆法按 --pk 放大（约 1.2 倍），不居中限宽。横屏手机高度不够时外壳自己纵向滚动。
+ * 外壳高度＝可见区域高度 --un-vvh（uiNew.ts 按 visualViewport 写到 <html> 上；没有时退回 100dvh），软键盘弹出时跟着变矮。
+ * 电脑宽的规则（--u）不动；这里把 --u 换成按窄屏算的值，没单独改到的老规则也跟着放大到能看清。 */
+.ui-new.un-phone {
+  --pk: clamp(1px, min(calc(100vw / 390), calc(var(--un-vvh, 100dvh) / 844)), 1.5px);
+  --u: calc(var(--pk) * .66);
+  --up-h: var(--un-vvh, 100dvh);
+  --up-pt: calc(env(safe-area-inset-top, 0px) + 12px);
+  --up-px: calc(env(safe-area-inset-left, 0px) + 10px);
+  --up-pr: calc(env(safe-area-inset-right, 0px) + 10px);
+  --up-pb: env(safe-area-inset-bottom, 0px);
+  --up-scene: clamp(120px, calc(var(--up-h) * .3), calc(330 * var(--pk)));
+  --up-box: clamp(210px, calc(var(--up-h) * .34), calc(380 * var(--pk)));
+  --up-mid-min: 196px;
+  --up-gap: 12px;
+  --up-bar: calc(44 * var(--pk));
+}
+.ui-new.ui-new-shell.un-phone {
+  position: fixed; left: 0; right: 0; top: var(--un-vvt, 0px);
+  width: auto; height: var(--up-h);
+  overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(calc(var(--up-scene) + var(--up-mid-min) + var(--up-box) + 2 * var(--up-gap)), 1fr) var(--up-bar);
+  column-gap: 0; row-gap: 6px;
+  padding: var(--up-pt) var(--up-pr) var(--up-pb) var(--up-px);
+  scrollbar-width: none;
+}
+.ui-new.un-phone .un-stage-slot {
+  grid-row: 1; grid-column: 1;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: var(--up-scene) minmax(0, 1fr) var(--up-box);
+  column-gap: 0; row-gap: var(--up-gap);
+}
+.ui-new.un-phone .un-stage-slot > * { grid-area: 1 / 1 / 4 / 2; }
+.ui-new.un-phone .un-stage-slot > .un-panel { grid-area: 1 / 1 / 4 / 2; margin-top: 14px; }
+/* 六角牌：可点区域不小于 44 */
+.ui-new.un-phone .pq { min-height: 44px; font-size: max(15px, calc(19 * var(--pk))); clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 8px 100%, 0 50%); }
+.ui-new.un-phone .pq.sm, .ui-new.un-phone .pq.xs { min-width: 64px; font-size: max(15px, calc(16 * var(--pk))); }
+.ui-new.un-phone .un-framed { border-width: 2px; }
+.ui-new.un-phone .un-framed > .un-orn-c { width: 40px; height: 40px; }
+.ui-new.un-phone .un-orn-c.tl { left: -7px; top: -7px; } .ui-new.un-phone .un-orn-c.tr { right: -7px; top: -7px; }
+.ui-new.un-phone .un-orn-c.bl { left: -7px; bottom: -7px; } .ui-new.un-phone .un-orn-c.br { right: -7px; bottom: -7px; }
+.ui-new.un-phone .un-framed > .un-orn-m { width: 80px; height: 15px; margin-left: -40px; }
+.ui-new.un-phone .un-orn-m.mt { top: -8px; } .ui-new.un-phone .un-orn-m.mb { bottom: -8px; }
+.ui-new.un-phone .un-pane { inset: 5px; }
+
+/* 中间一带左边：三个动词＋更多（外壳右列在窄屏挪到这里；七项菜单收进「更多」） */
+.ui-new.un-phone .un-cmd {
+  position: absolute; grid-row: auto; grid-column: auto;
+  left: calc(var(--up-px) + 4px); top: calc(var(--up-pt) + var(--up-scene) + var(--up-gap) + 8px);
+  max-height: max(calc(var(--up-mid-min) - 12px), calc(var(--up-h) - var(--up-pt) - var(--up-scene) - var(--up-box) - 2 * var(--up-gap) - 16px - var(--up-bar) - var(--up-pb)));
+  min-height: 0; overflow-y: auto; align-items: flex-start; gap: 6px; z-index: 6;
+}
+.ui-new.un-phone .un-cmd .pq { width: calc(104 * var(--pk)); height: 44px; font-size: max(17px, calc(21 * var(--pk))); }
+.ui-new.un-phone .un-cmd .un-rule, .ui-new.un-phone .un-cmd .mi:not(.more) { display: none; }
+.ui-new.un-phone .mi { font-size: max(16px, calc(17 * var(--pk))); width: auto; min-height: 44px; gap: 10px; letter-spacing: .2em; }
+.ui-new.un-phone .mi i { width: 7px; height: 7px; }
+.ui-new.un-phone .un-cmd .mi.more { padding: 0 12px 0 4px; }
+/* 功能页开着、要拍板的卡片占大场景框、软键盘弹出时：动词让位 */
+.ui-new.un-phone.un-paneled .un-cmd, .ui-new.un-phone.un-kb .un-cmd,
+.ui-new.un-phone:has(.un-main.un-tall) .un-cmd { display: none; }
+/* 「更多」：底部抽屉，两列，点外面不关（有「收起」） */
+.ui-new.un-phone .un-more {
+  position: absolute; left: var(--up-px); right: var(--up-pr); top: auto; bottom: calc(var(--up-pb) + var(--up-bar) + 8px);
+  min-width: 0; max-height: calc(var(--up-h) - var(--up-pt) - var(--up-bar) - var(--up-pb) - 16px);
+  padding: 14px 14px 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; align-content: start;
+}
+.ui-new.un-phone .un-more .mi { font-size: 16px; letter-spacing: .12em; }
+.ui-new.un-phone .un-more .un-rule { grid-column: 1 / -1; margin: 6px 0; }
+.ui-new.un-phone .un-more .un-more-close { grid-column: 1 / -1; justify-self: end; margin-top: 8px; }
+
+/* 底行：地点、时分、在场按钮、气／灵／神 */
+.ui-new.un-phone .un-bar { grid-row: 2; grid-column: 1; gap: 8px; font-size: max(13px, calc(13.5 * var(--pk))); letter-spacing: .04em; }
+.ui-new.un-phone .un-bar b { font-size: max(15px, calc(16 * var(--pk))); letter-spacing: .04em; flex: 0 1 auto; }
+.ui-new.un-phone .un-bar > span:not(.st):not(.sp) { flex: none; }
+.ui-new.un-phone .un-bar .st { font-size: max(13px, calc(13 * var(--pk))); gap: 3px; }
+.ui-new.un-phone .un-bar .st u { width: calc(24 * var(--pk)); height: 6px; }
+.ui-new.un-phone .un-here-btn { flex: none; min-height: 44px; min-width: 44px; padding: 0 4px; background: none; border: 0; color: var(--un-sub); font: inherit; letter-spacing: .1em; text-decoration: underline dotted; cursor: pointer; }
+.ui-new.un-phone .un-here-btn.on { color: var(--un-acc); }
+.ui-new.un-phone .un-here {
+  position: absolute; left: var(--up-px); right: var(--up-pr); bottom: calc(var(--up-pb) + var(--up-bar) + 4px); z-index: 25;
+  padding: 10px 14px; font-size: 15px; line-height: 1.6; color: var(--un-ink);
+  background: linear-gradient(var(--un-mid), var(--un-deep)); border: 1px solid var(--un-line);
+}
+
+/* 主面板：场景框／中间一带／字框三行，un-top 拆开（场景框在第一行，剪影站在第二行右边、压到字框后面） */
+.ui-new.un-phone .un-main { grid-template-columns: minmax(0, 1fr); grid-template-rows: var(--up-scene) minmax(0, 1fr) var(--up-box); column-gap: 0; row-gap: var(--up-gap); }
+.ui-new.un-phone .un-top { display: contents; }
+.ui-new.un-phone .un-scene { grid-row: 1; grid-column: 1; position: relative; }
+.ui-new.un-phone .un-scene .un-pic { inset: 5px; }
+.ui-new.un-phone .un-scene .un-place { font-size: calc(26 * var(--pk)); }
+.ui-new.un-phone .un-over { inset: 5px; padding: 8px; }
+.ui-new.un-phone .un-lead { grid-row: 2 / 4; grid-column: 1; position: relative; }
+.ui-new.un-phone .un-lead-fig { left: auto; right: 0; top: -14px; bottom: auto; width: min(62%, calc((var(--up-h) * .55) * 240 / 460)); aspect-ratio: 240 / 460; }
+.ui-new.un-phone .un-box { grid-row: 3; grid-column: 1; border-width: 2px; box-shadow: inset 0 0 0 4px var(--un-deep), inset 0 0 0 5px var(--un-line2), 0 6px 20px rgba(0,0,0,.6); }
+/* 要拍板的卡片／场面：场景框临时占掉中间一带，卡片在框内滚 */
+.ui-new.un-phone .un-main.un-tall { grid-template-rows: minmax(0, 1fr) 0 var(--up-box); }
+.ui-new.un-phone .un-main.un-tall .un-lead { display: none; }
+/* 软键盘弹出：只留字框（场景框、剪影收起），字框占满可见区域 */
+.ui-new.un-phone.un-kb { grid-template-rows: minmax(160px, 1fr) var(--up-bar); }
+.ui-new.un-phone.un-kb .un-stage-slot, .ui-new.un-phone.un-kb .un-main { grid-template-rows: 0 0 minmax(0, 1fr); row-gap: 0; }
+.ui-new.un-phone.un-kb .un-scene, .ui-new.un-phone.un-kb .un-lead { visibility: hidden; }
+.ui-new.un-phone.un-kb .un-box { margin-top: 22px; }
+
+/* 字框 */
+.ui-new.un-phone .un-who { left: 14px; top: -19px; height: 36px; padding: 0 14px; font-size: max(17px, calc(20 * var(--pk))); letter-spacing: .14em; }
+.ui-new.un-phone .un-say { padding: 26px 16px 50px 18px; font-size: max(16px, calc(18 * var(--pk))); line-height: 1.62; letter-spacing: .02em; }
+.ui-new.un-phone .un-ctl { right: 8px; bottom: 4px; left: 8px; justify-content: flex-end; gap: 2px; font-size: 15px; letter-spacing: .06em; }
+.ui-new.un-phone .un-ctl button { min-height: 44px; min-width: 44px; padding: 0 6px; flex: none; }
+.ui-new.un-phone .un-dots { gap: 4px; min-width: 0; flex: 0 1 auto; overflow: hidden; padding: 0 4px; }
+.ui-new.un-phone .un-dots i { width: 6px; height: 6px; flex: none; }
+.ui-new.un-phone .un-dots i.c { width: 8px; height: 8px; }
+.ui-new.un-phone .un-next { font-size: 18px; }
+.ui-new.un-phone .un-plan { padding: 26px 12px 4px; gap: 8px; }
+.ui-new.un-phone .un-acts { grid-template-columns: 1fr; gap: 8px; }
+.ui-new.un-phone .un-act { min-height: 46px; padding: 6px 12px; gap: 10px; font-size: max(16px, calc(17 * var(--pk))); }
+.ui-new.un-phone .un-act em { font-size: max(16px, calc(17 * var(--pk))); }
+.ui-new.un-phone .un-act .tag, .ui-new.un-phone .un-act small { font-size: 13px; }
+.ui-new.un-phone .un-hint, .ui-new.un-phone .un-label { font-size: 14px; }
+.ui-new.un-phone .un-inp { padding: 4px 4px 4px 12px; gap: 6px; flex: none; }
+/* 16px 以上：iOS 聚焦输入框不会自动放大页面 */
+.ui-new.un-phone .un-inp textarea { font-size: max(16px, calc(17 * var(--pk))); height: 44px; max-height: 96px; padding: 10px 0; line-height: 1.4; }
+.ui-new.un-phone .un-inp .pq { min-width: 76px; }
+.ui-new.un-phone .un-plan > .un-ctl { position: static; margin-top: 0 !important; }
+.ui-new.un-phone .un-wait { padding: 26px 16px 12px; }
+.ui-new.un-phone .un-wait .un-wait-head { font-size: 15px; }
+.ui-new.un-phone .un-wait .un-wait-text { font-size: 16px; }
+/* 字框里的老小卡片（最近操作、回执等）按钮不小于 44 */
+.ui-new.un-phone .un-plan .free-action-receipt-dismiss, .ui-new.un-phone .un-plan .clear-queue-btn, .ui-new.un-phone .un-plan .remove-action-btn { min-height: 44px; min-width: 44px; }
+
+/* 场景框里的拍板卡片（判定、关键抉择、分支、结局） */
+.ui-new.un-phone .un-deck { width: 100%; font-size: 15px; }
+.ui-new.un-phone .un-deck .judgement-preflight-card, .ui-new.un-phone .un-deck .judgement-result-card { font-size: 15px; }
+.ui-new.un-phone .un-deck .judgement-preflight-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.ui-new.un-phone .un-deck .judgement-preflight-actions button,
+.ui-new.un-phone .un-deck .game-over-acts button { min-height: 44px; font-size: 15px; padding: 6px 12px; }
+.ui-new.un-phone .un-deck .key-beat-option { min-height: 46px; font-size: 16px; }
+.ui-new.un-phone .un-deck .key-beat-title { font-size: 15px; }
+.ui-new.un-phone .un-deck .key-beat-hint { font-size: 13px; }
+.ui-new.un-phone .un-deck .game-over-card h3 { font-size: 20px; }
+.ui-new.un-phone .un-deck .game-over-hint { font-size: 15px; }
+.ui-new.un-phone .travel-card { font-size: 14px; }
+
+/* 回看弹层 */
+.ui-new.un-phone .un-modal { position: fixed; top: var(--un-vvt, 0px); height: var(--up-h); padding: var(--up-pt) var(--up-pr) calc(var(--up-pb) + 8px) var(--up-px); }
+.ui-new.un-phone .un-modal-box { width: 100%; height: 100%; margin-top: 14px; }
+.ui-new.un-phone .un-modal-box .un-pane { padding: 30px 14px 14px; font-size: 16px; }
+.ui-new.un-phone .un-modal-ttl { left: 14px; top: -22px; }
+.ui-new.un-phone .un-modal-close { right: 14px; top: -22px; }
+.ui-new.un-phone .un-modal-ttl .pq { min-width: 96px !important; height: 44px !important; font-size: 18px !important; }
+
+/* 功能页框（通用） */
+.ui-new.un-phone .un-panel .un-panel-ttl { left: 14px; top: -22px; }
+.ui-new.un-phone .un-panel .un-panel-ttl .pq { min-width: 96px !important; height: 44px !important; font-size: 18px !important; }
+.ui-new.un-phone .un-panel .un-panel-acts { right: 12px; top: -22px; gap: 6px; max-width: calc(100% - 140px); overflow-x: auto; scrollbar-width: none; }
+.ui-new.un-phone .un-panel-body { padding: 28px 8px 10px; }
+
+/* 全局提示条：窄屏放在顶上通栏 */
+body:has(.ui-new-shell.un-phone) .toast-container { top: calc(env(safe-area-inset-top, 0px) + 8px); left: 8px; right: 8px; max-width: none; align-items: stretch; }
+.ui-new.un-phone .un-inp textarea::placeholder { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 场景框盖层里的试玩 HUD 等老小部件：可点区域不小于 44 */
+.ui-new.un-phone .un-over summary, .ui-new.un-phone .un-over button { min-height: 44px; }
+.ui-new.un-phone .un-over summary { line-height: 44px; }
+.ui-new.un-phone .un-over label:has(> input[type=checkbox]) { display: inline-flex; align-items: center; min-height: 44px; }
+
