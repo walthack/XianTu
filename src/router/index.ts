@@ -4,7 +4,8 @@
  * @license CC BY-NC-SA 4.0 - 商业使用需授权
  */
 import { createRouter, createMemoryHistory } from 'vue-router';
-import ModeSelection from '../views/ModeSelection.vue';
+// 首页：?ui=new 且窗口够宽时换新标题页，否则原样渲染老首页 ModeSelection（见 TitleRoute.vue）
+import TitleRoute from '../components/uiNew/TitleRoute.vue';
 import CharacterCreation from '../views/CharacterCreation.vue';
 import GameView from '../views/GameView.vue';
 import ScenarioModManagerView from '../views/ScenarioModManagerView.vue';
@@ -66,7 +67,7 @@ const routes = [
   {
     path: '/',
     name: 'ModeSelection',
-    component: ModeSelection,
+    component: TitleRoute,
   },
   {
     path: '/creation',
