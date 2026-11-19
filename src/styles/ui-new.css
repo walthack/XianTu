@@ -378,12 +378,12 @@
 /* 全局提示条：新界面下挪到场景框上沿居中，不盖右列的动词（ToastContainer 在 App 根上，只能靠 :has 判断新界面在不在） */
 body:has(.ui-new-shell) .toast-container {
   --ug: min(calc(100vw / 1440), calc(100vh / 900)); /* 同 .ui-new 的 --u */
-  top: calc(44 * var(--ug));
-  right: auto;
-  /* 场景框中线：左内边距 34 + 场景框宽一半；场景框宽 =（100vw − 左右内边距 60 − 右列 132 − 列距 18 − 立绘区列距 18）× 3.2 / 4.2 */
-  left: calc(34 * var(--ug) + (100vw - 228 * var(--ug)) * 3.2 / 4.2 / 2);
-  transform: translateX(-50%);
-  align-items: center;
+  /* 放在立绘区上沿（场景框和右列之间）：不挡右列的动词，也不盖场景框里的卡片。右边距 = 右内边距 26 + 右列 132 + 列距 18 */
+  top: calc(34 * var(--ug));
+  left: auto;
+  right: calc(176 * var(--ug));
+  max-width: calc((100vw - 228 * var(--ug)) / 4.2);
+  align-items: flex-end;
 }
 
 /* 「任务」页：老右栏里只留任务目标／任务日志、人物任务、二级线（含 .quest-main/.quest-log/.quest-improv 的块），
