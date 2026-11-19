@@ -183,7 +183,12 @@ const fillVerb = async (verb: string) => {
 
 // ---- 底行数据：与 TopBar.vue / RightSidebar.vue 同一份来源 ----
 const currentLocation = computed(() => {
-  try { return locationDescriptionWithCountry(gameStateStore.location) || t('初始地'); } catch { return t('初始地'); }
+  try {
+    return locationDescriptionWithCountry(gameStateStore.location) || t('初始地');
+  } catch {
+    // lcq-allow: 与 TopBar 同口径，地点读不出时显示「初始地」
+    return t('初始地');
+  }
 });
 const gameTime = computed(() => {
   // 格式照 TopBar.vue 的 gameTime
@@ -207,6 +212,7 @@ const presentLine = computed(() => {
     const names = [...presence.presentNames].filter(name => name && name !== playerName);
     return names.length ? names.join(' · ') : t('只有你');
   } catch {
+    // lcq-allow: 在场只是底行显示，算不出就不显示，不影响游戏
     return '';
   }
 });
@@ -237,8 +243,8 @@ const handleBackToMenu = () => {
       try {
         await gameStateStore.saveBeforeExit();
         toast.success(t('游戏已保存'));
-      } catch (error) {
-        console.error('[返回道途] 保存游戏失败:', error);
+      } catch {
+        // lcq-allow: 照 LeftSidebar 原样，保存失败给提示后仍退出
         toast.error(t('游戏保存失败，但仍会继续退出。'));
       }
       await exitToMenu();

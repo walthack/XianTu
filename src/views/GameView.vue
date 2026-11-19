@@ -1,5 +1,4 @@
 <template>
-  <!-- 新界面外壳（只在网址带 ?ui=new 且窗口 ≥1024 时启用，见 src/utils/uiNew.ts） -->
   <UiNewShell
     v-if="uiNewActive"
     :data-ready="isDataReady"
@@ -181,7 +180,8 @@ import CharacterManagement from '@/components/character-creation/CharacterManage
 import ErrorBoundary from '@/components/common/ErrorBoundary.vue';
 import SectMigrationModal from '@/components/dashboard/components/SectMigrationModal.vue';
 import UiNewShell from '@/components/uiNew/UiNewShell.vue';
-import { uiNewActive } from '@/utils/uiNew';
+// 新界面外壳：只在网址带 ?ui=new 且窗口 ≥1024 时启用（模板里不写注释：生产构建会把模板注释留进 DOM，老界面 DOM 须与原来一致）
+import { uiNewActive } from '@/composables/uiNew';
 
 const characterStore = useCharacterStore();
 const gameStateStore = useGameStateStore();

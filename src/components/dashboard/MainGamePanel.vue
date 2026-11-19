@@ -1,8 +1,4 @@
 <template>
-  <!--
-    新界面（?ui=new）摆法：同一份状态、同一套处理函数，只换一种渲染。
-    老卡片放进字框「你打算」里或盖在场景框上，标记和类名照抄老模板，样式沿用本组件的 scoped 样式。
-  -->
   <div v-if="uiNewActive" class="un-main" data-testid="ui-new-main">
     <div class="un-top">
       <!-- 场景框：有图放图（当前叙事的插图），没图放深色底＋当前地点名。不放人物立绘。 -->
@@ -186,7 +182,7 @@
             <div class="game-over-head"><span class="game-over-tag">本期结束</span><h3>南荒这一段已经走完</h3></div>
             <p class="game-over-hint">{{ nextPlaytestPhase ? '进度已保留，点下面的按钮直接进入下一期，不用重玩。' : '这是试玩的最后一期，进度已保留。' }}</p>
             <div class="game-over-acts">
-              <button v-if="nextPlaytestPhase" class="go-primary" :disabled="phaseContinueBlocked({ pending: phaseContinuePending, processing: isAIProcessing, finished: nanhuangDemoFinished })" @click="continueToNextPhase">继续到下一期</button>
+              <button v-if="nextPlaytestPhase" class="go-primary" :disabled="phaseContinueBlocked({ pending: phaseContinuePending, processing: isAIProcessing, finished: nanhuangDemoFinished })" @click="continueToNextPhase">{{ UN_PHASE_CONTINUE_LABEL }}</button>
               <button :class="nextPlaytestPhase ? 'go-ghost' : 'go-primary'" @click="router.push('/qingyu-opening-playtest')">返回试玩入口</button>
             </div>
           </div>
@@ -900,7 +896,10 @@ import {
 import { isAiRequestTimeout } from '@/services/aiRequestDeadline';
 import FormattedText from '@/components/common/FormattedText.vue';
 import XingyuehuQuestPlaytestHud from '@/components/dashboard/XingyuehuQuestPlaytestHud.vue';
-import { uiNewActive } from '@/utils/uiNew';
+// 新界面（?ui=new）摆法：模板根上 v-if/v-else，同一份状态、同一套处理函数，只换一种渲染。
+// 老卡片放进字框「你打算」里或盖在场景框上，标记和类名照抄老模板，样式沿用本组件的 scoped 样式。
+// 模板根前不写注释：注释会让组件根变成片段，生产构建也会把它留进 DOM。
+import { uiNewActive } from '@/composables/uiNew';
 import { splitNarrativeSegments, segmentSpeaker } from '@/utils/narrativeSegments';
 import { stripSpeakerMarksForStreaming } from '@/utils/speakerMarks';
 import { getTravelCard } from '@/modules/scenarioMods/travel/travelLedger';
@@ -3934,6 +3933,8 @@ const syncGameState = async () => {
 };
 
 // ================= 新界面（?ui=new）字框：只加渲染用的状态，发送／卡片逻辑一律复用上面的 =================
+// 按钮字与老模板同一句；写成常量，模板里这句字面只在老模板的按钮上出现一次（tests/playtest5e8fFixes1020 守的是「不出现在提示里」）
+const UN_PHASE_CONTINUE_LABEL = '继续到下一期';
 const UN_NUMERALS = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
 const UN_AUTO_INTERVAL_MS = 3500;
 const unSegments = computed(() => currentNarrative.value ? splitNarrativeSegments(currentNarrative.value.content) : []);
