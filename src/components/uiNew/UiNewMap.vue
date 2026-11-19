@@ -11,7 +11,7 @@
       <button v-if="legacy" class="pq xs on" type="button" data-testid="ui-new-panel-close" @click="emit('close')">{{ t('收起') }}</button>
     </div>
     <div class="un-pane">
-      <div class="un-map-body" :class="{ 'no-popup': !legacy }"><GameMapPanel ref="panelRef" /></div>
+      <div class="un-map-body" :class="{ 'no-popup': !legacy }" @touchstart.passive="onTapStart" @touchend.passive="onTapEnd"><GameMapPanel ref="panelRef" /></div>
     </div>
   </section>
 
@@ -47,12 +47,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, ref } from 'vue';
+import { computed, nextTick, onMounted, ref } from 'vue';
 import { useI18n } from '@/i18n';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { locationDescriptionWithCountry } from '@/modules/scenarioMods/travel/locationIds';
 import GameMapPanel from '@/components/dashboard/GameMapPanel.vue';
 import { mapDetail, type MapActionKey } from './mapView';
+import { uiNewPhone } from '@/composables/uiNew';
 
 const emit = defineEmits<{ close: [] }>();
 const { t } = useI18n();
@@ -61,6 +62,35 @@ const gameStateStore = useGameStateStore();
 const panelRef = ref<InstanceType<typeof GameMapPanel> | null>(null);
 const m = computed(() => panelRef.value?.uiNewMap());
 const legacy = ref(false);
+
+// 窄屏：图例默认收起（老面板默认展开、没有对外的开关；在它挂好后点一下它自己的图例标题，玩家照样能点开）
+onMounted(() => {
+  if (!uiNewPhone.value) return;
+  let tries = 0;
+  const fold = () => {
+    const header = document.querySelector<HTMLElement>('[data-testid="ui-new-map"] .map-legend:not(.collapsed) .legend-header');
+    if (header) header.click();
+    else if (document.querySelector('[data-testid="ui-new-map"] .map-legend.collapsed') == null && ++tries < 15) setTimeout(fold, 200);
+  };
+  void nextTick(fold);
+});
+
+// 窄屏：老地图的触摸只管拖动／双指缩放，点地点只认鼠标（touchstart 里 preventDefault，浏览器不再补发鼠标事件）。
+// 这里把「一指轻点（移动 <10px、<500ms）」在画布上补发成一次鼠标按下＋松开，走老面板同一个点选判定。电脑宽不挂。
+let tapFrom: { x: number; y: number; t: number } | null = null;
+const onTapStart = (e: TouchEvent) => {
+  tapFrom = uiNewPhone.value && e.touches.length === 1 ? { x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now() } : null;
+};
+const onTapEnd = (e: TouchEvent) => {
+  const from = tapFrom; tapFrom = null;
+  const touch = e.changedTouches[0];
+  if (!from || !touch || e.touches.length || Date.now() - from.t > 500 || Math.hypot(touch.clientX - from.x, touch.clientY - from.y) > 10) return;
+  const canvas = e.target instanceof HTMLCanvasElement ? e.target : null;
+  if (!canvas) return;
+  const init = { clientX: touch.clientX, clientY: touch.clientY, button: 0, bubbles: true };
+  canvas.dispatchEvent(new MouseEvent('mousedown', init));
+  canvas.dispatchEvent(new MouseEvent('mouseup', init));
+};
 
 const toggleLegacy = async () => {
   legacy.value = !legacy.value;

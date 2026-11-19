@@ -1,5 +1,5 @@
 <template>
-  <div v-if="uiNewActive" class="un-main" data-testid="ui-new-main">
+  <div v-if="uiNewActive" class="un-main" :class="uiNewPhone ? { 'un-tall': !!(currentScene || unDeckActive), 'un-cbdec': unCombatDecide } : undefined" data-testid="ui-new-main">
     <div class="un-top">
       <!-- 场景框：有图放图（当前叙事的插图），没图放深色底＋当前地点名。不放人物立绘。 -->
       <section class="un-scene un-framed" data-testid="ui-new-scene">
@@ -46,7 +46,8 @@
                   <small>{{ unCombat.foes.slice(COMBAT_FOE_MAX).map(foe => foe.status ? `${foe.name}：${foe.status}` : foe.name).join('　') }}</small>
                 </div>
               </div>
-              <div class="un-cb-info">
+              <button v-if="uiNewPhone" type="button" class="un-cb-fold" data-testid="ui-new-combat-fold" :aria-expanded="unCbInfoOpen" @click="unCbInfoOpen = !unCbInfoOpen">{{ unCbInfoOpen ? '收起局势' : '局势 · 我方 · 可用' }}</button>
+              <div class="un-cb-info" :class="uiNewPhone && !unCbInfoOpen ? 'un-folded' : undefined">
                 <p v-if="currentScene.notice" class="un-cb-notice">{{ currentScene.notice }}</p>
                 <p v-if="!currentScene.pending && !currentScene.choice && currentScene.state.status === 'engaged'" class="un-cb-notice">在下方输入本拍目标和打法，预览后再确认。</p>
                 <p v-if="unCombat.ours.length" data-testid="ui-new-combat-ours">我方　{{ unCombat.ours.join('　') }}</p>
@@ -1091,7 +1092,8 @@ import XingyuehuQuestPlaytestHud from '@/components/dashboard/XingyuehuQuestPlay
 // 新界面（?ui=new）摆法：模板根上 v-if/v-else，同一份状态、同一套处理函数，只换一种渲染。
 // 老卡片放进字框「你打算」里或盖在场景框上，标记和类名照抄老模板，样式沿用本组件的 scoped 样式。
 // 模板根前不写注释：注释会让组件根变成片段，生产构建也会把它留进 DOM。
-import { uiNewActive, uiNewReadPosition } from '@/composables/uiNew';
+import { uiNewActive, uiNewPhone, uiNewViewportWidth, uiNewReadPosition } from '@/composables/uiNew';
+import { segmentMaxLenForWidth } from '@/components/uiNew/phoneLayout';
 import { combatView, COMBAT_FOE_MAX, UN_TIER_NAMES } from '@/components/uiNew/combatView';
 import { sceneContractById } from '@/modules/sceneModule/contracts/registry';
 import { runtimeOf } from '@/modules/sceneModule/host/refs';
@@ -4133,7 +4135,8 @@ const syncGameState = async () => {
 const UN_PHASE_CONTINUE_LABEL = '继续到下一期';
 const UN_NUMERALS = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
 const UN_AUTO_INTERVAL_MS = 3500;
-const unSegments = computed(() => currentNarrative.value ? splitNarrativeSegments(currentNarrative.value.content) : []);
+// 窄屏（<1024）每段字数随宽度变；电脑宽仍是默认上限
+const unSegments = computed(() => currentNarrative.value ? splitNarrativeSegments(currentNarrative.value.content, segmentMaxLenForWidth(uiNewViewportWidth.value)) : []);
 /** 当前出到第几段；unAtEnd＝这一手出完（显示「你打算」）。读档进来直接停在末尾。 */
 const unSegIndex = ref(0);
 const unAtEnd = ref(true);
@@ -4151,6 +4154,8 @@ const unCombatModel = computed(() => {
 const unCombatClassic = ref(false);
 watch(() => currentScene.value?.contractId, () => { unCombatClassic.value = false; });
 const unCombat = computed(() => unCombatClassic.value ? null : unCombatModel.value);
+// 窄屏：场景框里的信息区默认收成一条（notice／输入提示仍露出第一行），点「局势」展开
+const unCbInfoOpen = ref(false);
 // 字框里的拍板块：和「你打算」同一时机（这一手读完、不在生成中）
 const unCombatDecide = computed(() => !!unCombat.value && !!currentScene.value && Boolean(currentScene.value.pending || currentScene.value.choice || currentScene.value.state.status === 'decided'));
 const unCurrentSegment = computed(() => unSegments.value[Math.min(unSegIndex.value, unSegments.value.length - 1)] || '');

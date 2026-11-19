@@ -49,7 +49,7 @@
             :class="{ on: item.物品ID === selectedId }"
             :data-item-id="item.物品ID"
             data-testid="ui-new-inv-cell"
-            @click="p.selectItem(item)"
+            @click="pickItem(item)"
           >
             <span class="g" :style="{ borderColor: tierColor(item) }">{{ itemGlyph(item.名称) }}</span>
             <span class="nm">{{ item.名称 }}</span>
@@ -99,6 +99,7 @@ import InventoryPanel from '@/components/dashboard/InventoryPanel.vue';
 import { itemTierColor } from '@/data/itemQuality';
 import { formatTechniqueEffects } from '@/utils/cultivationSpeedCalculator';
 import type { Item } from '@/types/game';
+import { uiNewPhone } from '@/composables/uiNew';
 import { itemGlyph, itemActions, categoryTabs, emptyInventoryText, type InventoryActionKey } from './inventoryView';
 
 const emit = defineEmits<{ close: [] }>();
@@ -116,6 +117,12 @@ const openLegacy = (tab: 'equipment' | 'currency') => {
   if (panelRef.value) panelRef.value.activeTab = tab;
 };
 
+// 窄屏：老面板的 selectItem 在窗口 ≤768 时会弹它自己的手机详情窗；新版只记下选中，说明和按钮在字框里
+const pickItem = (item: Item) => {
+  if (!p.value) return;
+  if (uiNewPhone.value) p.value.selectedItem = item;
+  else p.value.selectItem(item);
+};
 const tabs = computed(() => categoryTabs(p.value?.itemCategories ?? []));
 const tierColor = (item: Item) => itemTierColor(item.品质);
 const money = computed(() => {
