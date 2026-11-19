@@ -495,3 +495,49 @@ body:has(.ui-new-shell) .toast-container {
 .ui-new .un-inv-legacy.headless .items-grid,
 .ui-new .un-inv-legacy.headless .item-details-sidebar { display: none; }
 .ui-new .un-inv-legacy:not(.headless) { position: absolute; inset: 0; overflow: auto; }
+
+/* ================= 存档页（UiNewSaves.vue，照设计稿 pc-10；大框/字框/旧版切换沿用背包页 .un-inv 那套） ================= */
+.ui-new .un-stage-slot > .un-sav-box { grid-area: 2 / 1 / 3 / 3; }
+.ui-new .un-sav-count { align-self: center; background: var(--un-mid); padding: 0 calc(8 * var(--u)); font-size: calc(16 * var(--u)); color: var(--un-sub); letter-spacing: .1em; margin-right: calc(4 * var(--u)); }
+.ui-new .un-sav-main { padding-top: calc(36 * var(--u)); }
+.ui-new .un-sav-error { flex: none; display: flex; align-items: center; gap: 12px; padding: calc(8 * var(--u)) calc(14 * var(--u)); border: 1px solid #a5524a; color: #f0b8b0; font-size: calc(16 * var(--u)); }
+.ui-new .un-sav-error span { flex: 1; }
+.ui-new .un-sav-error button { background: none; border: 0; color: inherit; font-size: calc(20 * var(--u)); cursor: pointer; }
+.ui-new .un-sav-list {
+  flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: calc(12 * var(--u));
+  scrollbar-width: thin; scrollbar-color: var(--un-line2) transparent; padding-right: 4px;
+}
+.ui-new .un-sav-row {
+  flex: none; height: calc(92 * var(--u)); padding: 0 calc(22 * var(--u)) 0 calc(12 * var(--u));
+  display: grid; grid-template-columns: calc(124 * var(--u)) minmax(0, 1.1fr) minmax(0, 1.6fr) minmax(0, .8fr) minmax(0, .8fr) minmax(0, .9fr);
+  align-items: center; gap: calc(20 * var(--u)); text-align: left;
+  border: 1px solid var(--un-line2); background: linear-gradient(#111a3e, #0a0f24);
+  color: var(--un-ink); font-family: var(--un-font-body); font-size: calc(18 * var(--u)); letter-spacing: .08em; cursor: pointer;
+}
+.ui-new .un-sav-row > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ui-new .un-sav-row:hover { border-color: var(--un-line); }
+.ui-new .un-sav-row.on { border-color: var(--un-acc); background: linear-gradient(var(--un-tag-top), var(--un-tag-bot)); box-shadow: inset 0 0 0 3px var(--un-mid), inset 0 0 0 4px var(--un-acc); }
+.ui-new .un-sav-row .g {
+  height: calc(70 * var(--u)); display: flex; align-items: center; justify-content: center; border: 1px solid var(--un-line2);
+  font-family: var(--un-font-title); font-size: calc(34 * var(--u)); color: var(--un-acc); background: radial-gradient(var(--un-on-bot), var(--un-mid));
+}
+.ui-new .un-sav-row.empty .g { border-style: dashed; background: transparent; }
+.ui-new .un-sav-row .nm { font-family: var(--un-font-title); font-size: calc(24 * var(--u)); letter-spacing: .2em; }
+.ui-new .un-sav-row.on .nm { color: var(--un-acc); }
+.ui-new .un-sav-row .nm em { font-style: normal; font-family: var(--un-font-body); font-size: calc(13 * var(--u)); color: var(--un-acc); border: 1px solid currentColor; padding: 0 6px; margin-left: 10px; letter-spacing: .1em; vertical-align: middle; }
+.ui-new .un-sav-row .lv, .ui-new .un-sav-row .who { color: var(--un-sub); }
+.ui-new .un-sav-row .tm { text-align: right; color: var(--un-sub); }
+.ui-new .un-sav-row.empty .nm, .ui-new .un-sav-row.empty > span:not(.g) { color: var(--un-sub); }
+.ui-new .un-sav-box { --un-inv-side-w: 620; }
+.ui-new .un-sav-box .un-inv-side .pq { min-width: calc(100 * var(--u)); }
+.ui-new .un-sav-box .un-inv-side .pq:disabled { opacity: .45; cursor: not-allowed; }
+/* 老存档面板：新版时整块不显示（导入用的隐藏文件框照常工作；确认弹窗走 uiStore 全局弹窗） */
+.ui-new .un-sav .un-inv-legacy.headless .save-panel { display: none; }
+
+/* ================= 人物页补三块：老右栏只留 状态效果（.status-section）、玩家认知与路径（.epistemic-ledger）、战役编年史（星标的 .quest-section） ================= */
+.ui-new .un-char-extra { margin-top: calc(18 * var(--u)); }
+.ui-new .un-char-extra .right-sidebar { background: transparent; border: 0; box-shadow: none; height: auto; zoom: 1.25; }
+.ui-new .un-char-extra .right-sidebar > .sidebar-header,
+.ui-new .un-char-extra .right-sidebar > .no-character { display: none; }
+.ui-new .un-char-extra .right-sidebar > .sidebar-content { overflow: visible; }
+.ui-new .un-char-extra .right-sidebar > .sidebar-content > :not(.status-section):not(.epistemic-ledger):not(.quest-section:has(> .section-header .lucide-star)) { display: none; }

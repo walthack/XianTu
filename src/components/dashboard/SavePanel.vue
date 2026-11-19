@@ -1098,6 +1098,13 @@ onMounted(() => {
   panelBus.on('refresh', () => refreshSaves());
   panelBus.on('save', () => quickSave());
 });
+
+// 新界面存档页（uiNew/UiNewSaves.vue）挂着本面板实例，借这些状态和函数；老界面不读
+defineExpose({
+  loading, loadError, isOnlineMode, savesList, manualSavesCount, activeSlotKey, currentSave, timeBasedSaveEnabled,
+  isUndeletableSave, getDeleteTooltip, refreshSaves, quickSave, createNewSave, overwriteSave, rollbackFromLastConversation,
+  loadSave, deleteSave, exportSingleSave, formatTime,
+})
 </script>
 
 <style scoped>
