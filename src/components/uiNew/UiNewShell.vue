@@ -17,6 +17,8 @@
         <UiNewInventory v-if="panelOpen && route.name === 'Inventory'" @close="backToGame" />
         <!-- 存档：同背包页的办法（大框＋字框），老存档面板挂在里面借逻辑 -->
         <UiNewSaves v-else-if="panelOpen && route.name === 'Save'" @close="backToGame" />
+        <!-- 地图：大框放老地图面板本体，点地点的弹窗内容换到字框 -->
+        <UiNewMap v-else-if="panelOpen && route.name === 'WorldMap'" @close="backToGame" />
         <section v-else-if="panelOpen" class="un-panel un-framed" data-testid="ui-new-panel">
           <i class="un-orn-c tl"></i><i class="un-orn-c tr"></i><i class="un-orn-c bl"></i><i class="un-orn-c br"></i><i class="un-orn-m mb"></i>
           <div class="un-panel-ttl">
@@ -105,6 +107,7 @@ import { uiNewLead } from '@/composables/uiNewLead';
 import RightSidebar from '@/components/dashboard/RightSidebar.vue';
 import UiNewInventory from '@/components/uiNew/UiNewInventory.vue';
 import UiNewSaves from '@/components/uiNew/UiNewSaves.vue';
+import UiNewMap from '@/components/uiNew/UiNewMap.vue';
 import ErrorBoundary from '@/components/common/ErrorBoundary.vue';
 import '@/styles/ui-new.css';
 
