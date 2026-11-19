@@ -1,5 +1,29 @@
 <template>
-  <div class="game-view">
+  <!-- 新界面外壳（只在网址带 ?ui=new 且窗口 ≥1024 时启用，见 src/utils/uiNew.ts） -->
+  <UiNewShell
+    v-if="uiNewActive"
+    :data-ready="isDataReady"
+    :panel-open="isPanelOpen"
+    :panel-title="currentPanelTitle"
+    :panel-actions="currentPanelActions"
+  >
+    <router-view v-if="!uiStore.showCharacterManagement" v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
+    <template #extra>
+      <section v-if="uiStore.showCharacterManagement" class="un-panel un-framed">
+        <div class="un-panel-acts">
+          <button class="pq xs on" type="button" @click="uiStore.closeCharacterManagement()">{{ $t('关闭') }}</button>
+        </div>
+        <div class="un-pane"><div class="un-panel-body">
+          <CharacterManagement @back="uiStore.closeCharacterManagement" />
+        </div></div>
+      </section>
+    </template>
+  </UiNewShell>
+  <div v-else class="game-view">
     <!-- 顶部栏 -->
     <TopBar></TopBar>
 
@@ -156,6 +180,8 @@ import RightSidebar from '@/components/dashboard/RightSidebar.vue'
 import CharacterManagement from '@/components/character-creation/CharacterManagement.vue';
 import ErrorBoundary from '@/components/common/ErrorBoundary.vue';
 import SectMigrationModal from '@/components/dashboard/components/SectMigrationModal.vue';
+import UiNewShell from '@/components/uiNew/UiNewShell.vue';
+import { uiNewActive } from '@/utils/uiNew';
 
 const characterStore = useCharacterStore();
 const gameStateStore = useGameStateStore();

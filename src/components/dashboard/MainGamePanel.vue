@@ -1,5 +1,321 @@
 <template>
-  <div class="main-game-panel">
+  <!--
+    新界面（?ui=new）摆法：同一份状态、同一套处理函数，只换一种渲染。
+    老卡片放进字框「你打算」里或盖在场景框上，标记和类名照抄老模板，样式沿用本组件的 scoped 样式。
+  -->
+  <div v-if="uiNewActive" class="un-main" data-testid="ui-new-main">
+    <div class="un-top">
+      <!-- 场景框：有图放图（当前叙事的插图），没图放深色底＋当前地点名。不放人物立绘。 -->
+      <section class="un-scene un-framed" data-testid="ui-new-scene">
+        <div class="un-pane">
+          <div v-if="unSceneImage" class="un-pic" :style="{ backgroundImage: `url('${unSceneImage}')` }" role="img" aria-label="剧情插图"></div>
+          <div v-else class="un-place">{{ unPlaceName }}</div>
+        </div>
+        <i class="un-orn-c tl"></i><i class="un-orn-c tr"></i><i class="un-orn-c bl"></i><i class="un-orn-c br"></i><i class="un-orn-m mt"></i><i class="un-orn-m mb"></i>
+        <!-- 盖在场景框上：路途卡、试玩 HUD -->
+        <div class="un-over" v-if="!currentScene">
+          <aside v-if="currentTravelCard" class="travel-card" aria-label="路途卡">
+            <strong>{{ currentTravelCard.from }} → {{ currentTravelCard.to }} · {{ currentTravelCard.duration }}</strong>
+            <p>{{ currentTravelCard.summary || currentTravelCard.label }}</p>
+            <p v-if="currentTravelCard.companions?.length">同行：{{ currentTravelCard.companions.join('、') }}</p>
+          </aside>
+          <XingyuehuQuestPlaytestHud />
+        </div>
+        <!-- 场面（战斗）卡：本步不重新设计，整块盖在场景框上 -->
+        <div v-else class="un-over scene-card" data-testid="ui-new-scene-card">
+          <aside v-if="currentTravelCard" class="travel-card" aria-label="路途卡">
+            <strong>{{ currentTravelCard.from }} → {{ currentTravelCard.to }} · {{ currentTravelCard.duration }}</strong>
+            <p>{{ currentTravelCard.summary || currentTravelCard.label }}</p>
+          </aside>
+          <XingyuehuQuestPlaytestHud />
+          <div v-if="sceneTestControls">
+            <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps)=>setSceneTestDice(save,deps,1,sceneTestControls))">测试：固定骰1（验证输局）</button>
+            <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps)=>setSceneTestDice(save,deps,20,sceneTestControls))">测试：固定骰20</button>
+            <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps)=>setSceneTestDice(save,deps,null,sceneTestControls))">恢复随机</button>
+          </div>
+          <SceneEncounterCard :scene="currentScene" :brief="currentSceneBrief" :busy="isAIProcessing" :crystal="currentCrystalAvailable"
+            @confirm="runSceneOperation(confirmSceneAction)" @choice="runSceneOperation(confirmSceneChoice)"
+            @crystal="(mode: 'wound' | 'defense') => runSceneOperation((save,deps) => useNicheCrystal(save,mode,deps))" @edit="runSceneOperation(editSceneAction)" @finish="runSceneOperation(finishScene)" />
+        </div>
+      </section>
+      <!-- 主要角色立绘区：第②步做，本步留空 -->
+      <section class="un-lead" aria-hidden="true"></section>
+    </div>
+
+    <!-- 字框 -->
+    <section
+      class="un-box"
+      :class="{ reading: unReading }"
+      data-testid="turn-status"
+      :data-turn-state="turnState"
+      :data-turn-seq="turnCompleteSeq"
+      @click="unReading && unAdvance()"
+    >
+      <!-- 模型生成中：沿用现有等待／流式状态；流式时不分段，落定后从第一段开始出 -->
+      <div v-if="isAIProcessing" class="un-wait" data-testid="ui-new-waiting">
+        <div class="un-wait-head">
+          <span class="un-dot-pulse"></span>
+          <span>{{ streamingContent ? `${streamingCharCount} ${t('字')}` : t('天道感应中...') }}</span>
+          <span class="sp" style="flex:1"></span>
+          <button class="pq xs" type="button" :title="t('如果长时间无响应，点击此处重置状态')" @click.stop="forceResetAIProcessingState">{{ t('重置') }}</button>
+        </div>
+        <div v-if="uiStore.lastSentUserIntentText" class="un-hint">你的输入：{{ uiStore.lastSentUserIntentText }}</div>
+        <div class="un-wait-text"><div>{{ unStreamingTail }}</div></div>
+      </div>
+
+      <!-- 一段一段出 -->
+      <template v-else-if="unReading">
+        <div v-if="unSpeaker" class="un-who" data-testid="ui-new-speaker">{{ unSpeaker }}</div>
+        <div class="un-say" :class="{ n: !unSpeaker }" data-testid="ui-new-segment">
+          <FormattedText :text="unCurrentSegment" />
+        </div>
+        <div class="un-ctl" @click.stop>
+          <button type="button" data-testid="ui-new-log" @click="unLogOpen = true">{{ t('回看') }}</button>
+          <button type="button" :class="{ on: unAuto }" data-testid="ui-new-auto" @click="unAuto = !unAuto">{{ t('自动') }}</button>
+          <button type="button" data-testid="ui-new-skip" @click="unSkipToChoices">{{ t('跳到选择') }}</button>
+          <span class="un-dots" :aria-label="`第 ${unSegIndex + 1} 段，共 ${unSegments.length} 段`">
+            <i v-for="(_, i) in unSegments" :key="i" :class="{ d: i < unSegIndex, c: i === unSegIndex }"></i>
+          </span>
+          <button type="button" class="un-next" data-testid="ui-new-next" @click="unAdvance">▼</button>
+        </div>
+      </template>
+
+      <!-- 一手出完：你打算 -->
+      <template v-else>
+        <div class="un-who">{{ t('你打算') }}</div>
+        <div class="un-plan" data-testid="ui-new-plan">
+          <section v-if="pendingJudgement" class="judgement-preflight-card">
+            <div class="judgement-preflight-title">行动判定（尚未掷骰） · {{ judgementPromptLabels(pendingJudgement).kind }}</div>
+            <div class="judgement-preflight-action">{{ pendingJudgement.actionText }}</div>
+            <p>{{ pendingJudgement.whyNow }}</p>
+            <div class="judgement-preflight-factors">
+              <span v-for="factor in pendingJudgement.factors" :key="factor.label">{{ factor.label }} {{ factor.value >= 0 ? '+' : '' }}{{ factor.value }}</span>
+              <span>难度 {{ pendingJudgement.difficulty.value }}</span>
+            </div>
+            <small>
+              <template v-if="pendingJudgement.stakes.perfect">完美成功：{{ pendingJudgement.stakes.perfect }}　</template>
+              <template v-if="pendingJudgement.stakes.greatSuccess">大成功：{{ pendingJudgement.stakes.greatSuccess }}　</template>
+              成功：{{ pendingJudgement.stakes.success }}　部分成功：{{ pendingJudgement.stakes.partial }}　失败：{{ pendingJudgement.stakes.failure }}
+              <template v-if="pendingJudgement.stakes.criticalFailure">　大失败：{{ pendingJudgement.stakes.criticalFailure }}</template>
+            </small>
+            <div class="judgement-preflight-actions">
+              <button @click="executePendingJudgement" :disabled="isAIProcessing">确认并掷骰</button>
+              <button v-if="showJudgementTestControls" class="test-great-success-button" @click="executePendingJudgement('great_success')" :disabled="isAIProcessing">大成功（测试）</button>
+              <button @click="changePendingJudgement" :disabled="isAIProcessing">换一种做法</button>
+              <button @click="cancelPendingJudgement" :disabled="isAIProcessing">撤回</button>
+            </div>
+          </section>
+          <section v-else-if="latestJudgement?.status === 'resolved'" class="judgement-result-card">
+            <div class="judgement-preflight-title">本地判定结果 · {{ judgementPromptLabels(latestJudgement).outcome }}</div>
+            <div>{{ latestJudgement.actionText }}</div>
+            <div class="judgement-preflight-factors">
+              <span>骰点 {{ latestJudgement.roll }}</span>
+              <span>总值 {{ latestJudgement.total }}</span>
+              <span>难度 {{ latestJudgement.difficulty.value }}</span>
+              <span>策略 {{ judgementPromptLabels(latestJudgement).canonPolicy }}</span>
+              <span v-if="latestJudgement.testOverride">测试强制 {{ latestJudgement.testOverride }}</span>
+            </div>
+            <small v-if="latestJudgement.appliedEffects.length || latestJudgement.settledEffects?.length">已写入：{{ [...latestJudgement.appliedEffects, ...(latestJudgement.settledEffects || [])].map(describeJudgementEffect).join('、') }}</small>
+            <small v-else>本次没有确定性状态余波。</small>
+          </section>
+
+          <div v-if="actionQueue.pendingActions.length > 0" class="action-queue-display">
+            <div class="queue-header">
+              <span class="queue-title">{{ t('最近操作') }}</span>
+              <button @click="clearActionQueue" class="clear-queue-btn" :title="t('清空记录')">×</button>
+            </div>
+            <div class="queue-actions">
+              <div v-for="(action, index) in actionQueue.pendingActions" :key="action.id" class="queue-action-item">
+                <span class="action-text">{{ action.description }}</span>
+                <div class="action-controls">
+                  <button @click="removeActionFromQueue(index)" class="remove-action-btn" :title="isUndoableAction(action) ? t('撤回并恢复') : t('删除此动作')">×</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <section v-if="keyBeatCard" class="key-beat-card" :class="{ 'is-highlighted': keyBeatHighlight }" data-testid="key-beat-card">
+            <div class="key-beat-title">{{ KEY_BEAT_CARD_TITLE }}</div>
+            <button
+              v-for="option in keyBeatCard.options"
+              :key="`${option.selection.eventId}:${option.selection.actionId}`"
+              class="key-beat-option"
+              data-testid="key-beat-option"
+              :disabled="isAIProcessing"
+              @click="confirmKeyBeatCard(option)"
+            >
+              <span class="key-beat-label">{{ option.label }}</span>
+              <span v-if="option.stepTag || option.judgementTag" class="key-beat-tag">{{ [option.stepTag, option.judgementTag].filter(Boolean).join(' · ') }}</span>
+            </button>
+            <p class="key-beat-hint">{{ KEY_BEAT_CARD_HINT }}</p>
+          </section>
+          <section v-if="branchDecision" class="key-beat-card" data-testid="branch-decision">
+            <div class="key-beat-title">{{ BRANCH_DECISION_TITLE }}</div>
+            <button
+              v-for="(option, index) in branchDecision.options"
+              :key="`${option.eventId}:${option.actionId}`"
+              class="key-beat-option"
+              data-testid="branch-decision-option"
+              :disabled="isAIProcessing"
+              @click="confirmBranchDecision(option)"
+            >
+              <span class="key-beat-label">{{ branchDecision.labels[index] }}</span>
+            </button>
+            <p class="key-beat-hint">{{ BRANCH_DECISION_HINT }}</p>
+          </section>
+          <div v-if="intentHoldMessage" class="intent-hold-message" data-testid="intent-hold-message" role="status">{{ intentHoldMessage }}</div>
+          <div v-if="freeActionReceipts.length" class="free-action-receipt" data-testid="free-action-receipt" role="status">
+            <p v-for="line in freeActionReceipts" :key="line">{{ line }}</p>
+            <button type="button" class="free-action-receipt-dismiss" data-testid="free-action-receipt-dismiss" @click="freeActionReceipts = []">{{ packText('free.receipt.dismiss') }}</button>
+          </div>
+
+          <div v-if="scenarioGameOver" class="game-over-card">
+            <img v-if="scenarioEndingImage && resolveEndingImage(currentNarrative?.image) !== scenarioEndingImage" :src="scenarioEndingImage" :alt="scenarioGameOver.title" class="ending-image" />
+            <div class="game-over-head">
+              <span class="game-over-tag">本局结束<template v-if="scenarioEndingCode"> · 结局 {{ scenarioEndingCode }}</template></span>
+              <h3>{{ scenarioGameOver.title }}</h3>
+            </div>
+            <p class="game-over-hint">这条路走到了尽头。本局结局如下。</p>
+            <p v-for="(fact, index) in scenarioEndingParagraphs" :key="index" class="game-over-hint">{{ fact }}</p>
+            <div class="game-over-acts">
+              <button v-if="canRollback" @click="rollbackToLastConversation" class="go-primary">回到上一轮</button>
+              <button @click="router.push('/')" class="go-ghost">返回角色选择</button>
+            </div>
+          </div>
+          <div v-else-if="nanhuangDemoFinished" class="game-over-card">
+            <div class="game-over-head"><span class="game-over-tag">本期结束</span><h3>南荒这一段已经走完</h3></div>
+            <p class="game-over-hint">{{ nextPlaytestPhase ? '进度已保留，点下面的按钮直接进入下一期，不用重玩。' : '这是试玩的最后一期，进度已保留。' }}</p>
+            <div class="game-over-acts">
+              <button v-if="nextPlaytestPhase" class="go-primary" :disabled="phaseContinueBlocked({ pending: phaseContinuePending, processing: isAIProcessing, finished: nanhuangDemoFinished })" @click="continueToNextPhase">继续到下一期</button>
+              <button :class="nextPlaytestPhase ? 'go-ghost' : 'go-primary'" @click="router.push('/qingyu-opening-playtest')">返回试玩入口</button>
+            </div>
+          </div>
+          <div v-else-if="xingyuehuPlaytestFinished" class="game-over-card">
+            <div class="game-over-head">
+              <span class="game-over-tag">试玩完成</span>
+              <h3>{{ xingyuehuLandingFinished ? '星月湖组织支持这一段已经听清' : '星月湖这一段任务线已经结束' }}</h3>
+            </div>
+            <p class="game-over-hint">{{
+              xingyuehuLandingFinished
+                ? '这是星月湖组织支持的阶段结局，不是整个星月湖故事完结。'
+                : '谢艺的命运、你的介入方式和星月湖的回应都已写入这个隔离存档。'
+            }}</p>
+            <div class="game-over-acts">
+              <button @click="router.push('/xingyuehu-quest-playtest')" class="go-primary">返回试玩入口</button>
+              <button @click="router.push('/')" class="go-ghost">返回角色选择</button>
+            </div>
+          </div>
+
+          <p v-if="crossCountryNotice" class="un-hint" role="status">{{ crossCountryNotice }}</p>
+
+          <!-- 行动选项：显示条件和点击行为照老模板 -->
+          <template v-if="currentNarrative">
+            <div v-if="engineButtonOptions.length" class="un-acts" data-testid="ui-new-engine-options">
+              <button
+                v-for="option in engineButtonOptions"
+                :key="JSON.stringify(option)"
+                @click="branchDecision ? confirmBranchDecision(option) : clickEngineOption(option)"
+                class="un-act"
+                :disabled="isAIProcessing"
+              >
+                <span v-if="showScenarioActionMechanics(option)" class="tag">{{ option.source === 'event_engine' ? t('主线') : option.source === 'exploration_engine' ? t('探索') : option.source === 'open_world_engine' ? t('地方') : option.source === 'baihu_gamble_refusal_engine' ? t('应对') : t('机会') }}</span>
+                <span>{{ option.label }}<small v-if="showScenarioActionMechanics(option)"> · 耗时 {{ 'timeCost' in option ? (option.timeCost ?? 1) : 1 }} 回合<template v-if="'remainingTurns' in option && option.remainingTurns !== undefined"> · 剩余 {{ option.remainingTurns }} 次重要行动</template></small><small v-if="'costHint' in option && option.costHint"> · {{ option.costHint }}</small></span>
+              </button>
+            </div>
+            <div v-if="engineButtonOptions.length" class="un-hint">{{ branchDecision ? BRANCH_DECISION_HINT : qingyuOpeningDemo ? t('可以直接描述行动，也可点按建议填入') : t('点按填入，可修改后发送') }}</div>
+
+            <div v-if="stageDepartureOffer" class="un-acts">
+              <button class="un-act" :disabled="isAIProcessing || stageDeparturePending" @click="departToNextStage">
+                {{ stageDeparturePending ? t('启程中…') : stageDepartureOffer.label }}
+              </button>
+            </div>
+            <div v-else-if="mapEntryReturnOffer" class="un-acts">
+              <button class="un-act" :disabled="isAIProcessing || stageDeparturePending" @click="returnFromMapEntry">
+                {{ stageDeparturePending ? t('启程中…') : stripNarrativeMetaWords(mapEntryReturnOffer.label) }}
+              </button>
+            </div>
+
+            <div
+              v-if="currentNarrative.type !== 'stage_entry' && !scenarioGameOver && uiStore.enableActionOptions && !keyBeatCard && !branchDecision && currentNarrative.actionOptions?.length && scenarioEngineActionOptions.length"
+              class="un-label"
+            >{{ t('其他行动') }}</div>
+            <div v-if="currentNarrative.type !== 'stage_entry' && !scenarioGameOver && uiStore.enableActionOptions && !keyBeatCard && !branchDecision && currentNarrative.actionOptions?.length" class="un-acts" data-testid="ui-new-action-options">
+              <button v-for="(option, index) in currentNarrative.actionOptions" :key="index" class="un-act" @click="selectActionOption(option)">
+                <em>{{ UN_NUMERALS[index] || index + 1 }}</em>{{ option }}
+              </button>
+            </div>
+          </template>
+          <div v-else class="un-hint">{{ t('静待天机变化...') }}</div>
+
+          <!-- 自由输入 + 去做 -->
+          <div class="un-inp">
+            <textarea
+              v-model="inputText"
+              @focus="isInputFocused = true"
+              @blur="isInputFocused = false"
+              @keydown="handleKeyDown"
+              @input="handleInput"
+              :placeholder="scenarioGameOver ? '本局已结束' : playtestFinished ? '本次试玩已结束' : branchDecisionInputLocked ? BRANCH_DECISION_INPUT_PLACEHOLDER : hasActiveCharacter ? t('或者自己写一句……') : t('请先选择角色...')"
+              class="game-input"
+              ref="inputRef"
+              rows="1"
+              wrap="soft"
+              :disabled="!hasActiveCharacter || isAIProcessing || playtestFinished || !!scenarioGameOver || branchDecisionInputLocked"
+              data-testid="game-input"
+            ></textarea>
+            <button
+              type="button"
+              class="pq sm on"
+              data-testid="send-button"
+              :disabled="!inputText.trim() || isAIProcessing || !hasActiveCharacter || playtestFinished || !!scenarioGameOver || branchDecisionInputLocked"
+              @click="sendMessage"
+            >{{ t('去做') }}</button>
+          </div>
+          <div class="un-ctl" style="position:static;align-self:flex-end;margin-top:-4px">
+            <button type="button" data-testid="ui-new-log" @click="unLogOpen = true">{{ t('回看') }}</button>
+            <button v-if="unSegments.length > 1" type="button" @click="unReplay">{{ t('从头再看') }}</button>
+          </div>
+        </div>
+      </template>
+    </section>
+
+    <!-- 回看：这一手完整正文和以前的正文；思维过程、短期记忆、快照回退、世界事件、变更日志也放这里 -->
+    <div v-if="unLogOpen" class="un-modal" data-testid="ui-new-log-modal" @click.self="unLogOpen = false">
+      <div class="un-modal-box un-framed">
+        <i class="un-orn-c tl"></i><i class="un-orn-c tr"></i><i class="un-orn-c bl"></i><i class="un-orn-c br"></i><i class="un-orn-m mb"></i>
+        <div class="un-modal-ttl"><span class="pq on" style="width:auto;min-width:calc(150 * var(--u));height:calc(48 * var(--u));font-size:calc(26 * var(--u))">{{ t('回看') }}</span></div>
+        <button class="pq xs on un-modal-close" type="button" @click="unLogOpen = false">{{ t('收起') }}</button>
+        <div class="un-pane" ref="unLogPaneRef">
+          <div class="un-log-tools">
+            <button v-if="snapshots.length > 0" class="pq xs" type="button" :title="t('回退到上一条对话')" @click="rollbackToLastSnapshot">{{ t('回退') }} {{ snapshots.length }}</button>
+            <button class="pq xs" type="button" :title="t('世界事件')" @click="unLogOpen = false; openEventsPanel()">{{ t('世界事件') }}<template v-if="worldEventCount > 0"> {{ worldEventCount }}</template></button>
+            <button v-if="currentNarrative" class="pq xs" type="button" :disabled="currentNarrativeStateChanges.length === 0" @click="showStateChanges(currentNarrative.stateChanges)">{{ t('变更') }} {{ currentNarrativeStateChanges.length }}</button>
+            <button v-if="showMemorySection" class="pq xs" type="button" :class="{ on: memoryExpanded }" @click="toggleMemory">{{ t('短期记忆') }}</button>
+          </div>
+          <div v-if="showMemorySection && memoryExpanded" class="un-log-entry">
+            <div v-for="(memory, index) in recentMemories" :key="index">{{ memory }}</div>
+            <div v-if="recentMemories.length === 0" class="un-hint">{{ t('脑海中一片清净，尚未留下修行痕迹...') }}</div>
+          </div>
+          <div v-if="thinkingContent || lastThinkingContent" class="un-log-entry">
+            <button class="pq xs" type="button" @click="uiStore.toggleThinkingExpanded()">{{ t('思维过程') }}{{ isThinkingPhase ? ` · ${t('思考中...')}` : '' }}</button>
+            <div v-if="thinkingExpanded" style="margin-top:8px"><FormattedText :text="thinkingContent || lastThinkingContent" /></div>
+          </div>
+          <div v-for="entry in unLogEntries" :key="entry.key" class="un-log-entry" :class="{ current: entry.current }">
+            <div v-if="entry.userIntent" class="un-log-intent">你：{{ entry.userIntent }}</div>
+            <FormattedText :text="entry.text" />
+          </div>
+          <div v-if="currentNarrative" class="un-log-entry current" data-testid="ui-new-log-current">
+            <div class="un-hint">{{ currentNarrative.time }}<template v-if="currentNarrative.type === 'stage_entry'"> · 旅途新章</template></div>
+            <div v-if="currentNarrative.userIntent" class="un-log-intent">你：{{ currentNarrative.userIntent }}</div>
+            <img v-if="currentNarrative.image" :src="resolveEndingImage(currentNarrative.image)" alt="剧情插图" style="display:block;max-width:100%;height:auto;margin:0 auto 1rem;" />
+            <FormattedText :text="currentNarrative.content" />
+            <p v-if="crossCountryNotice" role="status">{{ crossCountryNotice }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-else class="main-game-panel">
     <aside v-if="currentTravelCard" class="travel-card" aria-label="路途卡">
       <strong>{{ currentTravelCard.from }} → {{ currentTravelCard.to }} · {{ currentTravelCard.duration }}</strong>
       <p>{{ currentTravelCard.summary || currentTravelCard.label }}</p>
@@ -552,7 +868,7 @@ import { scheduleBackgroundAudit, yieldBackgroundAudit } from '@/services/backgr
 import { cancelConsistencyBackground, consistencyHostFrom, startConsistencyAfterCommit } from '@/services/consistencyBackground';
 import { BRANCH_DECISION_BLOCKED_NOTICE, BRANCH_DECISION_HINT, BRANCH_DECISION_INPUT_PLACEHOLDER, BRANCH_DECISION_TITLE, branchDecisionAllowsSend, branchDecisionLocksInput, detectBranchDecision, isDormantLockedOption, type BranchDecisionCandidate } from '@/modules/scenarioMods/branchDecision';
 import { getActiveKeyBeatCard, isKeyBeatCardAction, KEY_BEAT_CARD_HINT, KEY_BEAT_CARD_TITLE, KEY_BEAT_CONFIRM_NOTICE, type KeyBeatCardOption } from '@/modules/scenarioMods/keyBeatCards';
-import { ref, onMounted, onActivated, onUnmounted, nextTick, computed, watch, reactive } from 'vue';
+import { ref, onMounted, onActivated, onDeactivated, onUnmounted, nextTick, computed, watch, reactive } from 'vue';
 import {
   Send, Loader2, ChevronDown, ChevronRight, ScrollText, RotateCcw, Shield, BrainCircuit, Bell, History
 } from 'lucide-vue-next';
@@ -584,6 +900,9 @@ import {
 import { isAiRequestTimeout } from '@/services/aiRequestDeadline';
 import FormattedText from '@/components/common/FormattedText.vue';
 import XingyuehuQuestPlaytestHud from '@/components/dashboard/XingyuehuQuestPlaytestHud.vue';
+import { uiNewActive } from '@/utils/uiNew';
+import { splitNarrativeSegments, segmentSpeaker } from '@/utils/narrativeSegments';
+import { stripSpeakerMarksForStreaming } from '@/utils/speakerMarks';
 import { getTravelCard } from '@/modules/scenarioMods/travel/travelLedger';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { getSnapshots } from '@/utils/snapshotManager';
@@ -3613,6 +3932,102 @@ const syncGameState = async () => {
     console.error('[主面板] 游戏状态同步失败:', error);
   }
 };
+
+// ================= 新界面（?ui=new）字框：只加渲染用的状态，发送／卡片逻辑一律复用上面的 =================
+const UN_NUMERALS = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+const UN_AUTO_INTERVAL_MS = 3500;
+const unSegments = computed(() => currentNarrative.value ? splitNarrativeSegments(currentNarrative.value.content) : []);
+/** 当前出到第几段；unAtEnd＝这一手出完（显示「你打算」）。读档进来直接停在末尾。 */
+const unSegIndex = ref(0);
+const unAtEnd = ref(true);
+const unReading = computed(() => uiNewActive.value && !isAIProcessing.value && !unAtEnd.value && unSegIndex.value < unSegments.value.length);
+const unCurrentSegment = computed(() => unSegments.value[Math.min(unSegIndex.value, unSegments.value.length - 1)] || '');
+const unSpeaker = computed(() => segmentSpeaker(unCurrentSegment.value));
+const unAuto = ref(false);
+const unLogOpen = ref(false);
+const unLogPaneRef = ref<HTMLDivElement>();
+const unSceneImage = computed(() => {
+  const image = currentNarrative.value?.image;
+  return image ? resolveEndingImage(image) || '' : '';
+});
+const unPlaceName = computed(() => {
+  const loc = gameStateStore.location as { 描述?: string } | undefined;
+  return String(loc?.描述 || '').split(/[·・\-—]/).filter(Boolean).pop()?.trim() || '';
+});
+const unStreamingTail = computed(() => {
+  const text = stripSpeakerMarksForStreaming(streamingContent.value || '');
+  return text.length > 240 ? `……${text.slice(-240)}` : text;
+});
+const unLogEntries = computed(() => {
+  const history = gameStateStore.narrativeHistory || [];
+  return history.slice(Math.max(0, history.length - 31), -1)
+    .filter(entry => entry && entry.type !== 'user' && entry.type !== 'player')
+    .map((entry, i) => ({
+      key: `${i}:${entry.time}`,
+      current: false,
+      userIntent: entry.userIntent || '',
+      text: stripNarrativeMetaWords(reviewDisplayText(entry).replace(/^【.*?】\s*/, '')),
+    }));
+});
+const unAdvance = () => {
+  if (unSegIndex.value + 1 < unSegments.value.length) unSegIndex.value += 1;
+  else unAtEnd.value = true;
+};
+const unSkipToChoices = () => {
+  unAtEnd.value = true;
+};
+const unReplay = () => {
+  unSegIndex.value = 0;
+  unAtEnd.value = false;
+};
+// 新的一手（发送／启程后正文换了）从第一段开始出；其余变化（读档、切存档、首次挂载）直接停在末尾。
+let unAwaitFresh = false;
+watch(isAIProcessing, processing => {
+  if (processing) { unAwaitFresh = true; return; }
+  setTimeout(() => { unAwaitFresh = false; }, 0);
+});
+watch(stageDeparturePending, pending => { if (pending) unAwaitFresh = true; });
+// 一手的标识只看条数／类型／时间，不看正文：全文副本异步补载会改正文，但还是同一手，段号不动。
+const unNarrativeKey = computed(() => {
+  const n = currentNarrative.value;
+  const history = gameStateStore.narrativeHistory || [];
+  return n ? `${history.length}|${n.type}|${history[history.length - 1]?.time || ''}` : '';
+});
+watch(unNarrativeKey, (key, old) => {
+  const fresh = unAwaitFresh && !!old && !!key;
+  unSegIndex.value = 0;
+  unAtEnd.value = !fresh;
+  if (fresh && !isAIProcessing.value) unAwaitFresh = false;
+}, { immediate: true });
+watch(unSegments, segs => { if (unSegIndex.value >= segs.length) unSegIndex.value = Math.max(0, segs.length - 1); });
+// 自动：每隔几秒出下一段，只存在内存里
+let unAutoTimer: ReturnType<typeof setInterval> | null = null;
+watch(unAuto, on => {
+  if (unAutoTimer) { clearInterval(unAutoTimer); unAutoTimer = null; }
+  if (on) unAutoTimer = setInterval(() => { if (unReading.value && !unLogOpen.value) unAdvance(); }, UN_AUTO_INTERVAL_MS);
+});
+// 空格／回车出下一段（焦点在输入框、按钮上时不抢）
+let unPanelActive = true;
+const unKeydown = (event: KeyboardEvent) => {
+  if (!unPanelActive || !unReading.value || unLogOpen.value) return;
+  if (event.key !== ' ' && event.key !== 'Enter') return;
+  const target = event.target as HTMLElement | null;
+  if (target && (/^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(target.tagName) || target.isContentEditable)) return;
+  event.preventDefault();
+  unAdvance();
+};
+window.addEventListener('keydown', unKeydown);
+onActivated(() => { unPanelActive = true; });
+onDeactivated(() => { unPanelActive = false; unAuto.value = false; });
+onUnmounted(() => {
+  window.removeEventListener('keydown', unKeydown);
+  if (unAutoTimer) clearInterval(unAutoTimer);
+});
+watch(unLogOpen, async open => {
+  if (!open) return;
+  await nextTick();
+  if (unLogPaneRef.value) unLogPaneRef.value.scrollTop = unLogPaneRef.value.scrollHeight;
+});
 
 </script>
 
