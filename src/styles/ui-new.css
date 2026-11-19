@@ -250,7 +250,15 @@
 .ui-new .un-scene { min-height: 0; }
 .ui-new .un-scene .un-pic { position: absolute; inset: calc(9 * var(--u)); border: 1px solid var(--un-line2); background: #111 center / cover no-repeat; filter: saturate(.75) hue-rotate(8deg); box-shadow: inset 0 0 60px rgba(0,0,0,.55); }
 .ui-new .un-scene .un-place { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--un-font-title); font-size: calc(40 * var(--u)); letter-spacing: .3em; color: var(--un-sub); opacity: .75; text-align: center; padding: 0 1em; }
-.ui-new .un-lead { min-height: 0; } /* 主要角色立绘区：第②步做，本步留空 */
+/* 主要角色立绘区：剪影从立绘区底部站起、头顶到场景框上沿，左边略压过场景框右边线（设计稿「从场景框右边探出来」）。
+   只是看的：不接点击；层级低于场景框里的盖层／卡片（.un-over z-index 5），所以卡片按钮不被挡。不挂名牌。 */
+.ui-new .un-lead { min-height: 0; position: relative; pointer-events: none; }
+.ui-new .un-lead-fig { position: absolute; top: 0; bottom: 0; right: 0; left: calc(-56 * var(--u)); z-index: 1; pointer-events: none; }
+.ui-new .un-lead-fig > .un-sil, .ui-new .un-lead-fig > .un-lead-img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.ui-new .un-lead-fig > .un-lead-img { object-fit: contain; object-position: left bottom; }
+.ui-new .un-lead-fig > .un-sil { filter: drop-shadow(0 0 1.5px #cfd8f5) drop-shadow(0 0 18px rgba(150, 170, 240, .4)); }
+.ui-new .un-lead-fade-enter-active, .ui-new .un-lead-fade-leave-active { transition: opacity .35s ease; }
+.ui-new .un-lead-fade-enter-from, .ui-new .un-lead-fade-leave-to { opacity: 0; }
 /* 盖在场景框上的东西（场面卡、路途卡、试玩 HUD） */
 .ui-new .un-over { position: absolute; inset: calc(9 * var(--u)); z-index: 5; overflow: auto; padding: calc(14 * var(--u)); pointer-events: none; display: flex; flex-direction: column; gap: 10px; }
 .ui-new .un-over > * { pointer-events: auto; }
