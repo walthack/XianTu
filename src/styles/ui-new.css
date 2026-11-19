@@ -541,3 +541,45 @@ body:has(.ui-new-shell) .toast-container {
 .ui-new .un-char-extra .right-sidebar > .no-character { display: none; }
 .ui-new .un-char-extra .right-sidebar > .sidebar-content { overflow: visible; }
 .ui-new .un-char-extra .right-sidebar > .sidebar-content > :not(.status-section):not(.epistemic-ledger):not(.quest-section:has(> .section-header .lucide-star)) { display: none; }
+
+/* ================= 地图页（UiNewMap.vue，照设计稿 pc-09 的摆法；大框/字框/旧版切换沿用背包页 .un-inv 那套） ================= */
+.ui-new .un-stage-slot > .un-map-box { grid-area: 2 / 1 / 3 / 3; }
+.ui-new .un-map .un-pane, .ui-new .un-map.legacy .un-pane { overflow: hidden; }
+/* 老地图面板本体铺满大框（画布按容器尺寸算） */
+.ui-new .un-map-body { position: absolute; inset: 0; }
+.ui-new .un-map-body .game-map-panel { height: 100%; background: transparent; }
+/* 新版：老面板点地点弹出的三种小窗不显示，内容在字框里；「旧版地图」时照老样弹 */
+.ui-new .un-map-body.no-popup .location-popup { display: none; }
+.ui-new .un-map-box { --un-inv-side-w: 700; }
+.ui-new .un-map-box .un-inv-side .pq { min-width: calc(110 * var(--u)); }
+.ui-new .un-map-box .un-inv-side .pq:disabled { opacity: .45; cursor: not-allowed; }
+.ui-new .un-map-box .un-inv-say { overflow-y: auto; }
+.ui-new .un-map-body .world-info-header, .ui-new .un-map-body .realm-map-tabs { padding-left: calc(230 * var(--u)); padding-right: calc(200 * var(--u)); }
+.ui-new .un-map-box .un-inv-say p { font-size: calc(21 * var(--u)); line-height: 1.6; }
+.ui-new .un-map-box .un-inv-say small.un-map-head { margin: 0 0 calc(6 * var(--u)); color: var(--un-acc); }
+/* 图例贴底往上长，条目多时会顶到名牌那一排：新版里限高、框内滚 */
+.ui-new .un-map-body.no-popup .map-legend { max-height: calc(100% - 90px); overflow-y: auto; }
+
+/* ================= 标题页（UiNewTitle.vue，照设计稿 pc-11 的摆法：夜色底、左字右月；月亮和山是内联 SVG，程序画的） ================= */
+.ui-new.un-title {
+  position: relative; width: 100%; height: 100vh; height: 100svh; overflow: hidden;
+  background: radial-gradient(ellipse at 72% 30%, var(--un-glow-a), transparent 55%), linear-gradient(var(--un-page-bg), var(--un-deep));
+  color: var(--un-ink); font-family: var(--un-font-body);
+}
+.ui-new .un-title-sky { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.ui-new .un-title-main { position: absolute; left: calc(160 * var(--u)); top: calc(150 * var(--u)); display: flex; flex-direction: column; align-items: flex-start; }
+.ui-new .un-title-name {
+  margin: 0; font-family: var(--un-font-title); font-weight: normal; font-size: calc(150 * var(--u)); line-height: 1.1;
+  letter-spacing: .25em; color: var(--un-ink); text-shadow: 0 0 calc(24 * var(--u)) rgba(182, 192, 222, .55);
+}
+.ui-new .un-title-sub { margin: calc(10 * var(--u)) 0 0; font-size: calc(20 * var(--u)); letter-spacing: .3em; color: var(--un-sub); }
+.ui-new .un-title-rule { position: relative; width: calc(560 * var(--u)); height: 1px; margin: calc(26 * var(--u)) 0 calc(44 * var(--u)); background: var(--un-line2); }
+.ui-new .un-title-rule i { position: absolute; left: 50%; top: 50%; width: calc(14 * var(--u)); height: calc(14 * var(--u)); background: var(--un-acc); transform: translate(-50%, -50%) rotate(45deg); }
+.ui-new .un-title-menu { display: flex; flex-direction: column; gap: calc(26 * var(--u)); }
+.ui-new .un-title-menu .pq { width: calc(276 * var(--u)); height: calc(62 * var(--u)); font-size: calc(26 * var(--u)); }
+.ui-new .un-title-minor { margin-top: calc(34 * var(--u)); display: flex; flex-wrap: wrap; align-items: baseline; gap: calc(22 * var(--u)); font-size: calc(17 * var(--u)); color: var(--un-sub); letter-spacing: .12em; }
+.ui-new .un-title-link { background: none; border: 0; padding: 0; font: inherit; letter-spacing: inherit; color: var(--un-sub); cursor: pointer; }
+.ui-new .un-title-link:hover, .ui-new .un-title-legacy summary:hover { color: var(--un-acc); }
+.ui-new .un-title-legacy summary { cursor: pointer; }
+.ui-new .un-title-legacy[open] { display: flex; flex-wrap: wrap; gap: calc(16 * var(--u)); }
+.ui-new .un-title-foot { position: absolute; left: calc(160 * var(--u)); bottom: calc(40 * var(--u)); display: flex; gap: calc(24 * var(--u)); font-size: calc(15 * var(--u)); color: var(--un-sub); letter-spacing: .15em; }

@@ -479,7 +479,8 @@ const canvasRef = ref<HTMLCanvasElement | null>(null);
 const mapContainerRef = ref<HTMLDivElement | null>(null);
 const mapManager = ref<GameMapManager | null>(null);
 // 冒烟脚本的入口（scripts/lineSmokeHarness.mjs openMapLocationPopup 靠它算地点的屏幕坐标）：正式构建里 script setup 的内部状态不外露，只能经 expose 读到。
-defineExpose({ mapManager });
+// 新界面地图页（?ui=new）借用：取函数而不是直接列出，后面才声明的状态到调用时才读（不影响老界面）。
+defineExpose({ mapManager, uiNewMap: () => ({ selectedLocation, selectedContinent, travelPlayback, mapTravelNotice, selectedTravelRestriction, selectedTravelPreview, travelConfirmation, mapTravelBusy, mapTravelUi, isLoadingRegion, isFactionLocation, getLocationTypeName, travelToSelectedLocation, enterRegionMap, handleResize }) });
 /**
  * 赶路过程（地图移动方案第一步，用户 2026-11-16 批）：「确认前往」落账并存档后，地图把出发地与目的地放进画面，占位标记沿路线走、走过的路留虚线，
  * 上方一行日期字；走完再出抵达提示。这是回放：存档早已到了，演到一半刷新人已在目的地、天数只扣一次。
