@@ -438,3 +438,60 @@ body:has(.ui-new-shell) .toast-container {
 .ui-new .un-panel .un-panel-body .saves-count:not(.online-badge) { background: transparent; border-color: var(--color-border); }
 .ui-new .un-panel .un-panel-body .api-card { background: var(--color-surface); border-color: var(--color-border); }
 .ui-new .un-panel .un-panel-body .api-card:hover { background: var(--color-surface-hover); }
+
+/* ================= 背包页（UiNewInventory.vue，照设计稿 pc-07） ================= */
+/* 大框只盖场景框＋立绘区（上一行），字框留给选中物品；点「旧版背包」时大框照通用功能页盖住上两行 */
+.ui-new .un-stage-slot > .un-inv { grid-area: 1 / 1 / 2 / 2; }
+.ui-new .un-stage-slot > .un-inv.legacy { grid-area: 1 / 1 / 3 / 2; }
+.ui-new .un-stage-slot > .un-inv-box { grid-area: 2 / 1 / 3 / 3; }
+.ui-new .un-inv .un-pane { overflow: hidden; }
+.ui-new .un-inv.legacy .un-pane { overflow: auto; }
+.ui-new .un-inv-main { position: absolute; inset: 0; display: flex; flex-direction: column; padding: calc(24 * var(--u)) calc(30 * var(--u)) calc(20 * var(--u)); gap: calc(16 * var(--u)); }
+.ui-new .un-inv-top { display: flex; align-items: center; gap: calc(16 * var(--u)); flex-wrap: wrap; flex: none; padding-left: calc(150 * var(--u)); }
+.ui-new .un-inv-tabs { display: flex; gap: calc(10 * var(--u)); flex-wrap: wrap; }
+.ui-new .un-inv-tabs .pq:not(.on) { color: var(--un-sub); }
+.ui-new .un-inv-tools { margin-left: auto; display: flex; align-items: center; gap: calc(12 * var(--u)); font-size: calc(16 * var(--u)); color: var(--un-sub); }
+.ui-new .un-inv-search, .ui-new .un-inv-sort {
+  height: calc(34 * var(--u)); background: var(--un-input-bg); border: 1px solid var(--un-line2); color: var(--un-ink);
+  font-family: var(--un-font-body); font-size: calc(16 * var(--u)); padding: 0 calc(10 * var(--u)); outline: none;
+}
+.ui-new .un-inv-search { width: calc(150 * var(--u)); }
+.ui-new .un-inv-search::placeholder { color: var(--un-sub); }
+.ui-new .un-inv-link { background: none; border: 0; padding: 0; color: var(--un-sub); font: inherit; letter-spacing: .1em; cursor: pointer; white-space: nowrap; }
+.ui-new .un-inv-link:hover { color: var(--un-acc); }
+.ui-new .un-inv-grid {
+  flex: 1; min-height: 0; overflow-y: auto; align-content: start;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(calc(150 * var(--u)), 1fr)); gap: calc(12 * var(--u));
+  scrollbar-width: thin; scrollbar-color: var(--un-line2) transparent; padding-right: 4px;
+}
+.ui-new .un-inv-cell {
+  position: relative; height: calc(138 * var(--u)); min-width: 0; padding: 0 calc(8 * var(--u));
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(8 * var(--u));
+  border: 1px solid var(--un-line2); background: linear-gradient(#111a3e, #0a0f24);
+  color: var(--un-ink); font-family: var(--un-font-body); font-size: calc(20 * var(--u)); cursor: pointer;
+}
+.ui-new .un-inv-cell:hover { border-color: var(--un-line); }
+.ui-new .un-inv-cell.on { border-color: var(--un-acc); background: linear-gradient(var(--un-tag-top), var(--un-tag-bot)); box-shadow: inset 0 0 0 3px var(--un-mid), inset 0 0 0 4px var(--un-acc); }
+.ui-new .un-inv-cell .g {
+  width: calc(62 * var(--u)); height: calc(62 * var(--u)); border-radius: 50%; border: 2px solid var(--un-line); flex: none;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--un-font-title); font-size: calc(32 * var(--u)); color: var(--un-acc); background: radial-gradient(var(--un-on-bot), var(--un-mid));
+}
+.ui-new .un-inv-cell .nm { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ui-new .un-inv-cell .n { position: absolute; right: calc(10 * var(--u)); top: calc(7 * var(--u)); font-size: calc(16 * var(--u)); color: var(--un-sub); }
+.ui-new .un-inv-cell .eq { position: absolute; left: calc(8 * var(--u)); top: calc(7 * var(--u)); font-size: calc(13 * var(--u)); color: var(--un-acc); letter-spacing: .1em; }
+.ui-new .un-inv-empty { grid-column: 1 / -1; margin-top: calc(80 * var(--u)); text-align: center; color: var(--un-sub); font-size: calc(22 * var(--u)); letter-spacing: .2em; }
+.ui-new .un-inv-empty small { display: block; margin-top: 8px; font-size: calc(16 * var(--u)); letter-spacing: .1em; }
+/* 字框 */
+.ui-new .un-inv-say { right: calc(var(--un-inv-side-w, 480) * var(--u)); padding-right: calc(30 * var(--u)); }
+.ui-new .un-inv-say p { margin: 0; }
+.ui-new .un-inv-say small { display: block; font-size: calc(18 * var(--u)); color: var(--un-sub); margin-top: calc(6 * var(--u)); letter-spacing: .1em; line-height: 1.6; }
+.ui-new .un-inv-say .un-inv-meta { margin-top: calc(8 * var(--u)); }
+.ui-new .un-inv-side { position: absolute; right: calc(40 * var(--u)); top: 0; bottom: 0; display: flex; align-items: center; gap: calc(14 * var(--u)); }
+.ui-new .un-inv-side .pq { width: auto; min-width: calc(124 * var(--u)); height: calc(58 * var(--u)); }
+/* 老背包面板：新版时只挂着、不占地方（确认弹窗、数量选择是 position:fixed，照样弹得出来） */
+.ui-new .un-inv-legacy.headless { position: absolute; width: 0; height: 0; overflow: hidden; }
+.ui-new .un-inv-legacy.headless .tabs-header,
+.ui-new .un-inv-legacy.headless .items-grid,
+.ui-new .un-inv-legacy.headless .item-details-sidebar { display: none; }
+.ui-new .un-inv-legacy:not(.headless) { position: absolute; inset: 0; overflow: auto; }
