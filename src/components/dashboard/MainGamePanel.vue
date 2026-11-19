@@ -9,7 +9,7 @@
         </div>
         <i class="un-orn-c tl"></i><i class="un-orn-c tr"></i><i class="un-orn-c bl"></i><i class="un-orn-c br"></i><i class="un-orn-m mt"></i><i class="un-orn-m mb"></i>
         <!-- 盖在场景框上：路途卡、试玩 HUD、场面（战斗）卡；需要玩家拍板的卡片（判定、关键抉择、分支、结局）也放这里，字框只留选项和输入 -->
-        <div class="un-over" :class="{ 'scene-card': currentScene || unDeckActive }" :data-testid="currentScene ? 'ui-new-scene-card' : undefined">
+        <div class="un-over" :class="{ 'scene-card': currentScene || unDeckActive, 'un-cb-on': !!unCombat }" :data-testid="currentScene ? 'ui-new-scene-card' : undefined">
           <aside v-if="currentTravelCard" class="travel-card" aria-label="路途卡">
             <strong>{{ currentTravelCard.from }} → {{ currentTravelCard.to }} · {{ currentTravelCard.duration }}</strong>
             <p>{{ currentTravelCard.summary || currentTravelCard.label }}</p>
@@ -17,15 +17,51 @@
           </aside>
           <XingyuehuQuestPlaytestHud />
           <template v-if="currentScene">
-            <!-- 场面（战斗）卡：本步不重新设计 -->
+            <!-- 场面（战斗）卡：新摆法＝对手画在场景框里、要拍板的（预览／抉择／收束）进字框；右上「原样显示」切回老卡整张盖在这里 -->
             <div v-if="sceneTestControls">
               <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps)=>setSceneTestDice(save,deps,1,sceneTestControls))">测试：固定骰1（验证输局）</button>
               <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps)=>setSceneTestDice(save,deps,20,sceneTestControls))">测试：固定骰20</button>
               <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps)=>setSceneTestDice(save,deps,null,sceneTestControls))">恢复随机</button>
             </div>
-            <SceneEncounterCard :scene="currentScene" :brief="currentSceneBrief" :busy="isAIProcessing" :crystal="currentCrystalAvailable"
+            <SceneEncounterCard v-if="!unCombat" :scene="currentScene" :brief="currentSceneBrief" :busy="isAIProcessing" :crystal="currentCrystalAvailable"
               @confirm="runSceneOperation(confirmSceneAction)" @choice="runSceneOperation(confirmSceneChoice)"
               @crystal="(mode: 'wound' | 'defense') => runSceneOperation((save,deps) => useNicheCrystal(save,mode,deps))" @edit="runSceneOperation(editSceneAction)" @finish="runSceneOperation(finishScene)" />
+            <div v-else class="un-cb" data-testid="ui-new-combat">
+              <div class="un-cb-head">
+                <strong>交锋 · 第 {{ unCombat.beat }} 拍</strong>
+                <span>{{ unCombat.objective }}</span>
+              </div>
+              <div class="un-cb-foes" :class="{ many: unCombat.foes.length > 2 }">
+                <div v-for="foe in unCombat.foes.slice(0, COMBAT_FOE_MAX)" :key="foe.id" class="un-cb-foe"
+                  :class="{ third: foe.side === 'third', down: foe.downed, aim: foe.targeted }" :data-party="foe.id" data-testid="ui-new-combat-foe">
+                  <div class="un-cb-plate" :title="foe.name">{{ foe.name }}</div>
+                  <div class="un-cb-st">{{ foe.status }}</div>
+                  <!-- 通用人形剪影（同立绘区披风人形），对手用偏红的暗色；不画脸 -->
+                  <svg class="un-cb-sil" viewBox="0 0 240 460" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+                    <path d="M120 18 C90 18 74 44 74 74 C74 96 84 110 94 118 H146 C156 110 166 96 166 74 C166 44 150 18 120 18Z" />
+                    <path d="M94 108 C68 116 48 136 38 172 C24 240 12 340 4 460 H236 C228 340 216 240 202 172 C192 136 172 116 146 108Z" />
+                  </svg>
+                </div>
+                <div v-if="unCombat.foes.length > COMBAT_FOE_MAX" class="un-cb-more">等 {{ unCombat.foes.length - COMBAT_FOE_MAX }} 人
+                  <small>{{ unCombat.foes.slice(COMBAT_FOE_MAX).map(foe => foe.status ? `${foe.name}：${foe.status}` : foe.name).join('　') }}</small>
+                </div>
+              </div>
+              <div class="un-cb-info">
+                <p v-if="currentScene.notice" class="un-cb-notice">{{ currentScene.notice }}</p>
+                <p v-if="!currentScene.pending && !currentScene.choice && currentScene.state.status === 'engaged'" class="un-cb-notice">在下方输入本拍目标和打法，预览后再确认。</p>
+                <p v-if="unCombat.ours.length" data-testid="ui-new-combat-ours">我方　{{ unCombat.ours.join('　') }}</p>
+                <p v-if="unCombat.others.length"><span v-for="(line, i) in unCombat.others" :key="i" class="un-cb-o">{{ line }}</span></p>
+                <div v-for="bar in unCombat.bars" :key="bar.key" class="scene-progress" :data-testid="`scene-progress-${bar.key}`">
+                  <span>{{ bar.label }}：{{ bar.text }}（{{ bar.step }}/{{ bar.max }}）</span>
+                  <progress :value="bar.step" :max="bar.max"></progress>
+                </div>
+              </div>
+              <div v-if="currentCrystalAvailable" class="un-cb-tools">
+                <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps) => useNicheCrystal(save,'wound',deps))">碎水晶：下一次外伤降一档</button>
+                <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps) => useNicheCrystal(save,'defense',deps))">碎水晶：下一次防御 +2</button>
+              </div>
+            </div>
+            <button v-if="unCombatModel" type="button" class="un-cb-toggle" data-testid="ui-new-combat-toggle" @click="unCombatClassic = !unCombatClassic">{{ unCombatClassic ? '新摆法' : '原样显示' }}</button>
           </template>
           <div v-if="unDeckActive" class="un-deck" data-testid="ui-new-deck">
             <section v-if="pendingJudgement" class="judgement-preflight-card">
@@ -201,6 +237,44 @@
             <i v-for="(_, i) in unSegments" :key="i" :class="{ d: i < unSegIndex, c: i === unSegIndex }"></i>
           </span>
           <button type="button" class="un-next" data-testid="ui-new-next" @click="unAdvance">▼</button>
+        </div>
+      </template>
+
+      <!-- 场面要拍板（预览待确认／抉择待确认／胜负已分待收束）：左边这拍的打法与预览说明，右边数值和按钮；按钮、函数、禁用条件同老卡 -->
+      <template v-else-if="unCombatDecide && currentScene">
+        <div class="un-who">交锋 · 第 {{ currentScene.state.beat }} 拍</div>
+        <div class="un-cbd" data-testid="ui-new-combat-decide">
+          <div class="un-cbd-l">
+            <template v-if="currentScene.pending">
+              <p class="un-cbd-text">{{ currentScene.pending.text }}</p>
+              <p v-for="line in [...new Set(currentScene.pending.preview.targets.map(target => target.previewText || target.clampText || '').filter(Boolean))]" :key="line">{{ line }}</p>
+              <p v-if="currentScene.pending.preview.warnText" class="un-cbd-warn">{{ currentScene.pending.preview.warnText }}</p>
+            </template>
+            <p v-if="currentScene.choice" class="un-cbd-text">{{ currentScene.choice.confirmText }}</p>
+            <p v-if="!currentScene.pending && !currentScene.choice">{{ unCombat?.objective }}</p>
+          </div>
+          <div class="un-cbd-r">
+            <template v-if="currentScene.pending">
+              <div class="un-cbd-goal">目标：{{ currentScene.pending.preview.goal.label || '本拍行动' }}</div>
+              <div class="un-cbd-nums"><span><small>难度</small>{{ currentScene.pending.preview.difficulty }}</span><span><small>加值</small>{{ currentScene.pending.preview.modifier }}</span></div>
+              <div class="un-cbd-odds"><span v-for="(chance, tier) in currentScene.pending.preview.odds" :key="tier">{{ UN_TIER_NAMES[String(tier)] || tier }}：{{ Math.round(chance) }}%</span></div>
+              <div class="un-cbd-acts">
+                <button type="button" class="pq sm on" data-testid="ui-new-combat-confirm" :disabled="isAIProcessing" @click="runSceneOperation(confirmSceneAction)">确认并掷骰</button>
+                <button type="button" class="pq sm" data-testid="ui-new-combat-edit" :disabled="isAIProcessing" @click="runSceneOperation(editSceneAction)">换一种打法</button>
+              </div>
+            </template>
+            <div v-if="currentScene.choice" class="un-cbd-acts">
+              <button type="button" class="pq sm on" data-testid="ui-new-combat-choice" :disabled="isAIProcessing" @click="runSceneOperation(confirmSceneChoice)">确认选择</button>
+              <button type="button" class="pq sm" data-testid="ui-new-combat-withdraw" :disabled="isAIProcessing" @click="runSceneOperation(editSceneAction)">撤回</button>
+            </div>
+            <div v-if="currentScene.state.status === 'decided'" class="un-cbd-acts">
+              <button type="button" class="pq sm on" data-testid="ui-new-combat-finish" :disabled="isAIProcessing" @click="runSceneOperation(finishScene)">继续收束（不再掷骰）</button>
+            </div>
+            <div class="un-ctl un-cbd-ctl">
+              <button type="button" data-testid="ui-new-log" @click="unLogOpen = true">{{ t('回看') }}</button>
+              <button v-if="unSegments.length > 1" type="button" @click="unReplay">{{ t('从头再看') }}</button>
+            </div>
+          </div>
         </div>
       </template>
 
@@ -1018,6 +1092,9 @@ import XingyuehuQuestPlaytestHud from '@/components/dashboard/XingyuehuQuestPlay
 // 老卡片放进字框「你打算」里或盖在场景框上，标记和类名照抄老模板，样式沿用本组件的 scoped 样式。
 // 模板根前不写注释：注释会让组件根变成片段，生产构建也会把它留进 DOM。
 import { uiNewActive, uiNewReadPosition } from '@/composables/uiNew';
+import { combatView, COMBAT_FOE_MAX, UN_TIER_NAMES } from '@/components/uiNew/combatView';
+import { sceneContractById } from '@/modules/sceneModule/contracts/registry';
+import { runtimeOf } from '@/modules/sceneModule/host/refs';
 import { uiNewLead as unLead, useUiNewLead } from '@/composables/uiNewLead';
 import { splitNarrativeSegments, segmentSpeaker } from '@/utils/narrativeSegments';
 import { stripSpeakerMarksForStreaming } from '@/utils/speakerMarks';
@@ -4065,6 +4142,17 @@ const unReading = computed(() => uiNewActive.value && !isAIProcessing.value && !
 const unDeckActive = computed(() => uiNewActive.value && !isAIProcessing.value && !unReading.value && Boolean(
   pendingJudgement.value || latestJudgement.value?.status === 'resolved' || keyBeatCard.value || branchDecision.value
   || scenarioGameOver.value || nanhuangDemoFinished.value || xingyuehuPlaytestFinished.value));
+// 场面卡新摆法：拆好的简报（对手／我方／其余）；合同找不到时为 null，自动退回老卡
+const unCombatModel = computed(() => {
+  const scene = currentScene.value, contract = scene && sceneContractById(scene.contractId);
+  return uiNewActive.value && scene && contract ? combatView(contract, scene, runtimeOf(gameStateStore.toSaveData())) : null;
+});
+/** 「原样显示」：这一场切回老卡整张盖在场景框上；换一场自动回新摆法。 */
+const unCombatClassic = ref(false);
+watch(() => currentScene.value?.contractId, () => { unCombatClassic.value = false; });
+const unCombat = computed(() => unCombatClassic.value ? null : unCombatModel.value);
+// 字框里的拍板块：和「你打算」同一时机（这一手读完、不在生成中）
+const unCombatDecide = computed(() => !!unCombat.value && !!currentScene.value && Boolean(currentScene.value.pending || currentScene.value.choice || currentScene.value.state.status === 'decided'));
 const unCurrentSegment = computed(() => unSegments.value[Math.min(unSegIndex.value, unSegments.value.length - 1)] || '');
 const unSpeaker = computed(() => segmentSpeaker(unCurrentSegment.value));
 // 立绘区主要角色：按这一手正文（带说话人记号）定，结果在 uiNewLead 里，底行「在场」也读它
