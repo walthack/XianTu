@@ -275,6 +275,95 @@
       </template>
     </section>
 
+    <!-- 快捷行动／行动配置（如输入「修炼」时选天数）两个弹窗：原样照抄老模板 -->
+    <!-- 行动选择弹窗 -->
+    <div v-if="showActionModal" class="action-modal-overlay" @click.self="hideActionSelector">
+      <div class="action-modal">
+        <div class="modal-header">
+          <h3>{{ t('快捷行动') }}</h3>
+          <button @click="hideActionSelector" class="close-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="action-grid">
+          <button
+            v-for="action in flatActions"
+            :key="action.name"
+            @click="selectAction(action)"
+            class="quick-action-btn"
+            :class="action.type"
+          >
+            <div class="action-icon">{{ action.icon }}</div>
+            <div class="action-text">{{ action.name }}</div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 行动配置弹窗 -->
+    <div v-if="selectedAction" class="action-config-overlay" @click.self="cancelAction">
+      <div class="action-config-modal">
+        <div class="config-header">
+          <h3>{{ selectedAction.icon }} {{ selectedAction.name }}</h3>
+          <button @click="cancelAction" class="close-btn">×</button>
+        </div>
+        <div class="config-content">
+          <p class="action-description">{{ selectedAction.description }}</p>
+
+          <!-- 时间配置 -->
+          <div v-if="selectedAction.timeRequired" class="config-section">
+            <label class="config-label">{{ t('修炼时间') }}</label>
+            <div class="time-selector">
+              <button
+                v-for="timeOption in timeOptions"
+                :key="timeOption.value"
+                @click="selectedTime = timeOption.value; customTime = 0"
+                class="time-btn"
+                :class="{ active: selectedTime === timeOption.value }"
+              >
+                {{ timeOption.label }}
+              </button>
+            </div>
+            <div class="time-custom">
+              <label>{{ t('自定义：') }}</label>
+              <input
+                v-model.number="customTime"
+                type="number"
+                :min="actionTimeConfig().cultivation.minDays"
+                :max="actionTimeConfig().cultivation.maxDays"
+                class="time-input"
+              /> {{ t('天') }}
+            </div>
+          </div>
+
+          <!-- 其他配置选项 -->
+          <div v-if="selectedAction.options" class="config-section">
+            <label class="config-label">{{ t('选项') }}</label>
+            <div class="action-options">
+              <label
+                v-for="option in selectedAction.options"
+                :key="option.key"
+                class="option-item"
+              >
+                <input
+                  type="radio"
+                  :name="'option-' + selectedAction.name"
+                  :value="option.key"
+                  v-model="selectedOption"
+                />
+                <span>{{ option.label }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="config-actions">
+          <button @click="cancelAction" class="cancel-btn">{{ t('取消') }}</button>
+          <button @click="confirmAction" class="confirm-btn">{{ t('确认') }}</button>
+        </div>
+      </div>
+    </div>
     <!-- 回看：这一手完整正文和以前的正文；思维过程、短期记忆、快照回退、世界事件、变更日志也放这里 -->
     <div v-if="unLogOpen" class="un-modal" data-testid="ui-new-log-modal" @click.self="unLogOpen = false">
       <div class="un-modal-box un-framed">
