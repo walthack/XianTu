@@ -282,7 +282,9 @@
       <!-- 一手出完：你打算 -->
       <template v-else>
         <div class="un-who">{{ t('你打算') }}</div>
-        <div class="un-plan" data-testid="ui-new-plan">
+        <!-- 电脑宽且有「行动选项」时分左右两半：左半主线按钮＋输入框，右半行动选项；其余情形三个包层不占位（display: contents），摆法同原来 -->
+        <div class="un-plan" :class="{ split: unPlanSplit }" data-testid="ui-new-plan">
+          <div class="un-plan-a">
 
           <div v-if="actionQueue.pendingActions.length > 0" class="action-queue-display">
             <div class="queue-header">
@@ -334,19 +336,23 @@
                 {{ stageDeparturePending ? t('启程中…') : stripNarrativeMetaWords(mapEntryReturnOffer.label) }}
               </button>
             </div>
+          </template>
+          <div v-else class="un-hint">{{ t('静待天机变化...') }}</div>
+          </div>
 
+          <div class="un-plan-b" data-testid="ui-new-plan-right">
             <div
-              v-if="currentNarrative.type !== 'stage_entry' && !scenarioGameOver && uiStore.enableActionOptions && !keyBeatCard && !branchDecision && currentNarrative.actionOptions?.length && scenarioEngineActionOptions.length"
+              v-if="unShowActionOptions && scenarioEngineActionOptions.length"
               class="un-label"
             >{{ t('其他行动') }}</div>
-            <div v-if="currentNarrative.type !== 'stage_entry' && !scenarioGameOver && uiStore.enableActionOptions && !keyBeatCard && !branchDecision && currentNarrative.actionOptions?.length" class="un-acts" data-testid="ui-new-action-options">
-              <button v-for="(option, index) in currentNarrative.actionOptions" :key="index" class="un-act" @click="selectActionOption(option)">
+            <div v-if="unShowActionOptions" class="un-acts" data-testid="ui-new-action-options">
+              <button v-for="(option, index) in currentNarrative?.actionOptions" :key="index" class="un-act" @click="selectActionOption(option)">
                 <em>{{ UN_NUMERALS[index] || index + 1 }}</em>{{ option }}
               </button>
             </div>
-          </template>
-          <div v-else class="un-hint">{{ t('静待天机变化...') }}</div>
+          </div>
 
+          <div class="un-plan-c">
           <!-- 自由输入 + 去做 -->
           <div class="un-inp">
             <textarea
@@ -374,6 +380,7 @@
           <div class="un-ctl" style="position:static;align-self:flex-end;margin-top:-4px">
             <button type="button" data-testid="ui-new-log" @click="unLogOpen = true">{{ t('回看') }}</button>
             <button v-if="unSegments.length > 1" type="button" @click="unReplay">{{ t('从头再看') }}</button>
+          </div>
           </div>
         </div>
       </template>
@@ -4140,6 +4147,9 @@ const unSegments = computed(() => currentNarrative.value ? splitNarrativeSegment
 /** 当前出到第几段；unAtEnd＝这一手出完（显示「你打算」）。读档进来直接停在末尾。 */
 const unSegIndex = ref(0);
 const unAtEnd = ref(true);
+// 「你打算」里的行动选项：显示条件照老模板
+const unShowActionOptions = computed(() => Boolean(currentNarrative.value && currentNarrative.value.type !== 'stage_entry' && !scenarioGameOver.value && uiStore.enableActionOptions && !keyBeatCard.value && !branchDecision.value && currentNarrative.value.actionOptions?.length));
+const unPlanSplit = computed(() => !uiNewPhone.value && unShowActionOptions.value);
 const unReading = computed(() => uiNewActive.value && !isAIProcessing.value && !unAtEnd.value && unSegIndex.value < unSegments.value.length);
 // 要玩家拍板的卡片（判定、关键抉择、分支、结局）放在场景框里；和「你打算」同一时机出现（这一手读完、不在生成中）
 const unDeckActive = computed(() => uiNewActive.value && !isAIProcessing.value && !unReading.value && Boolean(
