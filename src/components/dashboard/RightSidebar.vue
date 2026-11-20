@@ -197,7 +197,7 @@
       </div>
 
       <!-- 任务目标（剧情主线 + 即兴目标；含逐拍/回轨/启程） -->
-      <div v-if="(questMain || questGoals.length || lineCompass || questLog.current.length)" class="collapsible-section quest-section">
+      <div v-if="(questMain || questGoals.length || lineCompass || questLog.current.length)" class="collapsible-section quest-section quest-goal-section">
         <div class="section-header" @click="questCollapsed = !questCollapsed">
           <h3 class="section-title">
             <Clock :size="14" class="section-icon" />

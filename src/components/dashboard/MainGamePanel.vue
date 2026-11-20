@@ -10,6 +10,8 @@
         <i class="un-orn-c tl"></i><i class="un-orn-c tr"></i><i class="un-orn-c bl"></i><i class="un-orn-c br"></i><i class="un-orn-m mt"></i><i class="un-orn-m mb"></i>
         <!-- 盖在场景框上：路途卡、试玩 HUD、场面（战斗）卡；需要玩家拍板的卡片（判定、关键抉择、分支、结局）也放这里，字框只留选项和输入 -->
         <div class="un-over" :class="{ 'scene-card': currentScene || unDeckActive, 'un-cb-on': !!unCombat }" :data-testid="currentScene ? 'ui-new-scene-card' : undefined">
+          <!-- 任务追踪：常驻场景框左上角（用户 2026-11-20 15:05）。复用老右栏组件，样式里只留「任务目标」那一块里看的部分；完整内容和操作仍在右列「任务」里。场面、要拍板的卡片出来时让位；手机宽不放 -->
+          <aside v-if="!uiNewPhone && !currentScene && !unDeckActive" class="un-track" data-testid="ui-new-track" aria-label="任务追踪"><ErrorBoundary><RightSidebar /></ErrorBoundary></aside>
           <aside v-if="currentTravelCard" class="travel-card" aria-label="路途卡">
             <strong>{{ currentTravelCard.from }} → {{ currentTravelCard.to }} · {{ currentTravelCard.duration }}</strong>
             <p>{{ currentTravelCard.summary || currentTravelCard.label }}</p>
@@ -1069,6 +1071,8 @@ import {
 import { isAiRequestTimeout } from '@/services/aiRequestDeadline';
 import FormattedText from '@/components/common/FormattedText.vue';
 import XingyuehuQuestPlaytestHud from '@/components/dashboard/XingyuehuQuestPlaytestHud.vue';
+import RightSidebar from '@/components/dashboard/RightSidebar.vue';
+import ErrorBoundary from '@/components/common/ErrorBoundary.vue';
 // 新界面（?ui=new）摆法：模板根上 v-if/v-else，同一份状态、同一套处理函数，只换一种渲染。
 // 老卡片放进字框「你打算」里或盖在场景框上，标记和类名照抄老模板，样式沿用本组件的 scoped 样式。
 // 模板根前不写注释：注释会让组件根变成片段，生产构建也会把它留进 DOM。
