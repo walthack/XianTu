@@ -987,3 +987,6 @@ body:has(.ui-new-shell.un-phone) .toast-container { top: calc(env(safe-area-inse
 .ui-new.un-phone .un-end-say { font-size: max(16px, calc(18 * var(--pk))); flex: none !important; max-height: 30vh; }
 .ui-new.un-phone .un-plan.un-menu-on .un-end-say { display: none; }
 .ui-new.un-phone .un-menu-close { min-height: 44px; min-width: 44px; }
+/* 试玩提示条（用户 2026-11-20 18:31「这些提示不要给」）：章节和眼下这一步已在左上角任务追踪里，新界面不再重复；只留要拍板的两选一、走完后的回顾、继续旅程那一句。手机宽没有左上角那一块，照旧显示 */
+.ui-new:not(.un-phone) .playtest-hud > :not(.choice, .recap, [data-testid="xingyuehu-playtest-continue"]) { display: none; }
+.ui-new:not(.un-phone) .playtest-hud:not(:has(> :is(.choice, .recap, [data-testid="xingyuehu-playtest-continue"]))) { display: none; }
