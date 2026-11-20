@@ -9,13 +9,15 @@ import { useCharacterStore } from '@/stores/characterStore';
 import { computeScenarioPresence } from '@/modules/scenarioMods/storyContext';
 import { getScenarioFocusEvent } from '@/modules/scenarioMods/runtime';
 import { resolveFullBody, resolvePortrait } from '@/modules/contentPacks/assets';
+import { resolveNamedEntityId } from '@/modules/scenarioMods/namedEntities';
 import { pickLeadCharacter, silhouetteKindFor, type LeadPick, type LeadRule, type SilhouetteKind } from '@/components/uiNew/leadCharacter';
+import { packImageUrl } from '@/assets/packImages';
 import { uiNewActive } from './uiNew';
 
 export interface UiNewLead {
   name: string;
   characterId: string;
-  /** 能加载的图片网址；现在恒为空串（走剪影）。 */
+  /** 能加载的图片网址；没登记或文件不在时是空串（走剪影）。 */
   imageUrl: string;
   silhouette: SilhouetteKind;
   rule: LeadRule;
@@ -29,18 +31,19 @@ let basis: LeadRule = 'keep';
 const loadTick = ref(0);
 let loadHooked = false;
 
-/**
- * 图片挂位里的 file（相对 src/assets/）→ 浏览器能加载的网址。
- * 这一步不做：让 src/assets/characters/ 下的图进打包要改打包配置，在等用户点头。将来只改这一处。
- */
-export function leadImageUrl(_file: string): string {
-  return '';
+/** 图片挂位里的 file（相对 src/assets/）→ 浏览器能加载的网址；文件不在仓库里时是空串（走剪影）。 */
+export function leadImageUrl(file: string): string {
+  return packImageUrl(file);
 }
 
-/** 先问图片挂位有没有全身立绘，没有再问半身／头像；都没有（现在一定没有）→ 空串，界面走剪影。 */
-function imageFor(characterId: string): string {
-  if (!characterId) return '';
-  const hit = resolveFullBody({ characterId }) ?? resolvePortrait({ characterId });
+/**
+ * 先问图片挂位有没有全身立绘，没有再问半身／头像；都没有 → 空串，界面走剪影。
+ * 图片挂位按人物总表的 id 登记；剧本里的人物 id 和总表不一定同名（段强：剧本 liuchao.character.duan_qiang，总表 lcq.character.duan_qiang），先按 id、再按名字对到总表。
+ */
+function imageFor(characterId: string, name: string): string {
+  const registryId = resolveNamedEntityId('character', characterId) ?? resolveNamedEntityId('character', name) ?? characterId;
+  if (!registryId) return '';
+  const hit = resolveFullBody({ characterId: registryId }) ?? resolvePortrait({ characterId: registryId });
   return hit ? leadImageUrl(hit.file) : '';
 }
 
@@ -86,7 +89,7 @@ export function useUiNewLead(narrativeText: () => string): void {
       uiNewLead.value = {
         name: pick.name,
         characterId,
-        imageUrl: imageFor(characterId),
+        imageUrl: imageFor(characterId, pick.name),
         silhouette: silhouetteKindFor(character?.gender),
         rule: pick.rule,
         basis,

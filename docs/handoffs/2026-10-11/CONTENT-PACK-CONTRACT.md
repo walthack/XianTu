@@ -528,7 +528,7 @@ manifest `mapEntries` 是 JSON 文件路径数组，每个文件是对象或对�
 
 ## 2026-11-16 图片挂位 assets（立绘、场景图、CG）
 
-给将来的立绘、场景图、CG 留位置，并定好缺图时怎么退回文字。现在一张图都没有，没有包声明这一段，游戏行为不变。**素材根目录是 `src/assets/`**（用户 2026-11-16 定：立绘放 `src/assets/characters/`、场景图放 `src/assets/scenes/`、CG 放 `src/assets/cg/`，与现有的 `src/assets/endings/` 并列；代码里是 `assets.ts` 的 `ASSET_ROOT`／`ASSET_DIRS`）。**界面怎么显示还没接，待定；接入要改构建配置，须先问用户。**
+给将来的立绘、场景图、CG 留位置，并定好缺图时怎么退回文字。现在一张图都没有，没有包声明这一段，游戏行为不变。**素材根目录是 `src/assets/`**（用户 2026-11-16 定：立绘放 `src/assets/characters/`、场景图放 `src/assets/scenes/`、CG 放 `src/assets/cg/`，与现有的 `src/assets/endings/` 并列；代码里是 `assets.ts` 的 `ASSET_ROOT`／`ASSET_DIRS`）。**2026-11-21 起**：打包规则已加（用户同意，只管这三个目录），`src/assets/packImages.ts` 的 `packImageUrl(file)` 把 `file` 换成网址；新界面立绘区已接立绘，场景图和 CG 界面还没接。
 
 - **格式**：manifest 加 `assets: ["assets.json", …]`（文件列表）。每个文件是对象，四个键都可省略：
   ```json
