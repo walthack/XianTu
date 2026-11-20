@@ -4141,6 +4141,8 @@ const unStanding = computed(() => {
   void gameStateStore.narrativeHistory?.length;
   try {
     const save = gameStateStore.toSaveData();
+    // 有场面等着开打时（下一句不管写什么都会被场面接走）也不放，免得「打量某某」被当成出招
+    if (save && hostNeeded(save)) return undefined;
     const presence = save ? computeScenarioPresence(save) : null;
     if (!presence) return undefined;
     const playerName = String(gameStateStore.character?.名字 || '');
