@@ -11,7 +11,7 @@
         <!-- 盖在场景框上：路途卡、试玩 HUD、场面（战斗）卡；需要玩家拍板的卡片（判定、关键抉择、分支、结局）也放这里，字框只留选项和输入 -->
         <div class="un-over" :class="{ 'scene-card': currentScene || unDeckActive, 'un-cb-on': !!unCombat }" :data-testid="currentScene ? 'ui-new-scene-card' : undefined">
           <!-- 任务追踪：常驻场景框左上角（用户 2026-11-20 15:05）。复用老右栏组件，样式里只留「任务目标」那一块里看的部分；完整内容和操作仍在右列「任务」里。场面、要拍板的卡片出来时让位；手机宽不放 -->
-          <aside v-if="!uiNewPhone && !currentScene && !unDeckActive" class="un-track" data-testid="ui-new-track" aria-label="任务追踪"><ErrorBoundary><RightSidebar /></ErrorBoundary></aside>
+          <aside v-if="!uiNewPhone && !currentScene && !unDeckActive" class="un-track" data-testid="ui-new-track" aria-label="任务追踪" role="button" :title="t('点开看任务详情')" @click="unOpenQuest"><ErrorBoundary><RightSidebar /></ErrorBoundary></aside>
           <aside v-if="currentTravelCard" class="travel-card" aria-label="路途卡">
             <strong>{{ currentTravelCard.from }} → {{ currentTravelCard.to }} · {{ currentTravelCard.duration }}</strong>
             <p>{{ currentTravelCard.summary || currentTravelCard.label }}</p>
@@ -1076,7 +1076,7 @@ import ErrorBoundary from '@/components/common/ErrorBoundary.vue';
 // 新界面（?ui=new）摆法：模板根上 v-if/v-else，同一份状态、同一套处理函数，只换一种渲染。
 // 老卡片放进字框「你打算」里或盖在场景框上，标记和类名照抄老模板，样式沿用本组件的 scoped 样式。
 // 模板根前不写注释：注释会让组件根变成片段，生产构建也会把它留进 DOM。
-import { uiNewActive, uiNewPhone, uiNewViewportWidth, uiNewReadPosition } from '@/composables/uiNew';
+import { uiNewActive, uiNewPhone, uiNewViewportWidth, uiNewReadPosition, uiNewQuestOpen } from '@/composables/uiNew';
 import { segmentMaxLenForWidth } from '@/components/uiNew/phoneLayout';
 import { combatView, COMBAT_FOE_MAX, UN_TIER_NAMES } from '@/components/uiNew/combatView';
 import { sceneContractById } from '@/modules/sceneModule/contracts/registry';
@@ -4234,6 +4234,8 @@ const unCbInfoOpen = ref(false);
 const unCombatDecide = computed(() => !!unCombat.value && !!currentScene.value && Boolean(currentScene.value.pending || currentScene.value.choice || currentScene.value.state.status === 'decided'));
 const unCurrentSegment = computed(() => unSegments.value[Math.min(unSegIndex.value, unSegments.value.length - 1)] || '');
 const unSpeaker = computed(() => segmentSpeaker(unCurrentSegment.value));
+// 场景框左上角的任务追踪小块点了打开「任务」页（用户 2026-11-21 06:10：点开后显示更详细的任务内容）
+const unOpenQuest = () => { uiNewQuestOpen.value = true; };
 // 立绘区主要角色：按这一手正文（带说话人记号）定，结果在 uiNewLead 里，底行「在场」也读它
 useUiNewLead(() => currentNarrative.value?.content || '');
 const unAuto = ref(false);

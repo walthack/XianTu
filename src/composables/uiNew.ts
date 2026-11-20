@@ -65,5 +65,8 @@ if (UI_NEW_REQUESTED && typeof document !== 'undefined') {
   });
 }
 
+/** 「任务」页开没开：右列「任务」和场景框左上角的任务追踪小块都能打开它（外壳读、主面板写）。 */
+export const uiNewQuestOpen = ref(false);
+
 /** 字框读到这一手的第几段：主面板随功能页开关重新挂载后接着读。只在内存里，刷新即丢。 */
 export const uiNewReadPosition: { value: { key: string; index: number; atEnd: boolean } | null } = { value: null };
