@@ -308,6 +308,20 @@
 
 /* 「你打算」 */
 .ui-new .un-plan { position: absolute; inset: 0; overflow-y: auto; padding: calc(34 * var(--u)) calc(60 * var(--u)) calc(48 * var(--u)); display: flex; flex-direction: column; gap: calc(12 * var(--u)); }
+.ui-new .un-plan-a, .ui-new .un-plan-b, .ui-new .un-plan-c { display: contents; }
+/* 电脑宽且有行动选项：左半主线按钮＋输入框（输入框贴底），右半行动选项（一列）；两半各自滚动，「回看」放右半右上角 */
+.ui-new .un-plan.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: calc(10 * var(--u)) calc(28 * var(--u)); overflow: hidden; padding: calc(28 * var(--u)) calc(30 * var(--u)) calc(10 * var(--u)) calc(60 * var(--u)); }
+.ui-new .un-plan.split > .un-plan-a, .ui-new .un-plan.split > .un-plan-b, .ui-new .un-plan.split > .un-plan-c { display: flex; flex-direction: column; gap: calc(10 * var(--u)); min-width: 0; min-height: 0; }
+.ui-new .un-plan.split > .un-plan-a, .ui-new .un-plan.split > .un-plan-b { overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--un-line2) transparent; }
+.ui-new .un-plan.split > .un-plan-a { grid-area: 1 / 1; }
+.ui-new .un-plan.split > .un-plan-c { grid-area: 2 / 1; }
+.ui-new .un-plan.split > .un-plan-b { grid-area: 1 / 2 / 3 / 3; border-left: 1px solid var(--un-line2); padding-left: calc(24 * var(--u)); gap: calc(6 * var(--u)); }
+.ui-new .un-plan.split .un-acts { grid-template-columns: minmax(0, 1fr); gap: calc(6 * var(--u)); }
+.ui-new .un-plan.split .un-plan-a > * { flex: none; }
+.ui-new .un-plan.split .un-plan-b > .un-label { line-height: calc(22 * var(--u)); flex: none; }
+.ui-new .un-plan.split .un-plan-b > .un-acts:first-child { margin-top: calc(28 * var(--u)); }
+.ui-new .un-plan.split .un-plan-b .un-act { min-height: calc(38 * var(--u)); padding: calc(3 * var(--u)) calc(16 * var(--u)); font-size: calc(19 * var(--u)); }
+.ui-new .un-plan.split .un-plan-c > .un-ctl { position: absolute !important; top: calc(28 * var(--u)); right: calc(34 * var(--u)); bottom: auto; margin: 0 !important; line-height: calc(22 * var(--u)); }
 .ui-new .un-acts { display: grid; grid-template-columns: 1fr 1fr; gap: calc(12 * var(--u)) calc(22 * var(--u)); }
 .ui-new .un-act {
   min-height: calc(52 * var(--u)); display: flex; align-items: center; gap: calc(14 * var(--u));
@@ -758,7 +772,7 @@ body:has(.ui-new-shell) .toast-container {
 /* 16px 以上：iOS 聚焦输入框不会自动放大页面 */
 .ui-new.un-phone .un-inp textarea { font-size: max(16px, calc(17 * var(--pk))); height: 44px; max-height: 96px; padding: 10px 0; line-height: 1.4; }
 .ui-new.un-phone .un-inp .pq { min-width: 76px; }
-.ui-new.un-phone .un-plan > .un-ctl { position: static; margin-top: 0 !important; }
+.ui-new.un-phone .un-plan > .un-plan-c > .un-ctl { position: static; margin-top: 0 !important; }
 .ui-new.un-phone .un-wait { padding: 26px 16px 12px; }
 .ui-new.un-phone .un-wait .un-wait-head { font-size: 15px; }
 .ui-new.un-phone .un-wait .un-wait-text { font-size: 16px; }
