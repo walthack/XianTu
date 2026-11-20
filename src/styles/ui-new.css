@@ -425,6 +425,28 @@ body:has(.ui-new-shell) .toast-container {
 .ui-new .un-quest-empty { display: block; margin: calc(40 * var(--u)) 0; text-align: center; font-size: calc(22 * var(--u)); letter-spacing: .2em; color: var(--un-sub); }
 .ui-new .un-quest-body:has(.quest-main, .quest-log, .quest-improv, .quest-next-btn, .actor-section) .un-quest-empty { display: none; }
 
+/* 任务追踪：场景框左上角常驻的一小块（用户 2026-11-20 15:05）。老右栏里只留「任务目标」块里看的部分（章节、当前线、这一步、任务日志、个人目标）；
+   按钮（回轨、启程、在地图上查看）、展开项（别处还有事、已完成）、调试提示不放，要看要点去右列「任务」。一行都没有时整块不显示 */
+.ui-new .un-track { align-self: flex-start; max-width: 44%; padding: calc(8 * var(--u)) calc(14 * var(--u)); background: rgba(7, 10, 24, .72); border: 1px solid var(--un-line2); border-left: 2px solid var(--un-acc); font-size: max(13px, calc(17 * var(--u))); line-height: 1.5; color: var(--color-text); }
+.ui-new .un-track:not(:has(.quest-goal-section :is(.quest-chapter, .quest-event, .quest-goal))) { display: none; }
+.ui-new .un-track .right-sidebar { background: transparent; border: 0; box-shadow: none; height: auto; width: auto; min-width: 0; padding: 0; font-size: inherit; font-family: inherit; overflow: visible; }
+.ui-new .un-track .right-sidebar > .sidebar-header,
+.ui-new .un-track .right-sidebar > .sidebar-content > :not(.quest-goal-section),
+.ui-new .un-track .section-header,
+.ui-new .un-track button,
+.ui-new .un-track .quest-line-others,
+.ui-new .un-track .quest-next,
+.ui-new .un-track .quest-error,
+.ui-new .un-track .quest-stall-warn { display: none; }
+.ui-new .un-track .right-sidebar > .sidebar-content { padding: 0; overflow: visible; }
+.ui-new .un-track .right-sidebar .quest-goal-section { margin: 0; padding: 0; background: transparent; border: 0 !important; border-radius: 0; box-shadow: none; backdrop-filter: none; }
+.ui-new .un-track .quest-goal-section .quest-body { display: flex !important; padding: 0; gap: calc(2 * var(--u)); }
+.ui-new .un-track .quest-main, .ui-new .un-track .quest-log, .ui-new .un-track .quest-improv { margin: 0; padding: 0; background: transparent; border: 0; }
+.ui-new .un-track .right-sidebar :is(.quest-chapter, .quest-event, .quest-goal, .quest-more, .quest-improv-label) { font-size: inherit; line-height: 1.5; }
+.ui-new .un-track .right-sidebar .quest-tag { font-size: .7em; }
+.ui-new .un-track .right-sidebar .quest-tag-main { background: transparent; color: var(--un-acc); border: 1px solid currentColor; }
+.ui-new .un-track .right-sidebar .quest-more { padding-left: 1.4em; }
+
 /* 功能页里写死的暖褐、石青（[data-theme='dark'] 下的 scoped 写法，变量覆盖管不到）：只补看得出突兀的几处。多套一层 .un-panel 以压过 scoped 规则 */
 .ui-new .un-panel .un-panel-body .section-header { background: var(--color-surface-light); border-bottom-color: var(--color-border); }
 .ui-new .un-panel .un-panel-body .panel-header,
