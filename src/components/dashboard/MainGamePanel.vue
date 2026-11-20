@@ -2544,9 +2544,10 @@ const onSelectLineAction = (payload?: { eventId?: string; actionId?: string }) =
 const clickEngineOption = (option: ScenarioEngineActionSelection) => {
   const save = gameStateStore.toSaveData();
   const target = save ? crossCountryStoryTravel(save, option as { source?: string; eventId?: string; actionId?: string }) : undefined;
-  if (!target) { selectScenarioEngineAction(option); return; }
+  if (!target) { selectScenarioEngineAction(option); return true; }
   toast.info(crossCountryStoryTravelToast(target));
   void router.push({ path: '/game/world-map', query: { goto: target.mapTargetId } });
+  return false;
 };
 const selectScenarioEngineAction = (option: ScenarioEngineActionSelection) => {
   selectedScenarioEngineAction.value = option;
@@ -4163,6 +4164,13 @@ const unGoExtras = computed<UnMenuItem[]>(() => {
   items.push({ label: t('打开地图'), run: () => { void router.push('/game/world-map'); } });
   return items;
 });
+// 键下的一条点了就直接去做，不再先填进输入框等玩家点「去做」（用户 2026-11-20 14:59）。跨国赶路那条点了是开地图，不发送
+const unDoMenuItem = (item: { label: string; engine?: ScenarioEngineActionSelection }) => {
+  uiNewVerbOpen.value = null;
+  if (item.engine) { if (!clickEngineOption(item.engine)) return; }
+  else selectActionOption(item.label);
+  void sendMessage();
+};
 const unMenuItems = computed<UnMenuItem[]>(() => {
   if (!currentNarrative.value) return [];
   if (branchDecision.value) return engineButtonOptions.value.map(option => ({ label: option.label, run: () => confirmBranchDecision(option as never) }));
@@ -4171,7 +4179,7 @@ const unMenuItems = computed<UnMenuItem[]>(() => {
   const items: UnMenuItem[] = unVerbGroups.value[open].map(item => ({
     label: item.label,
     note: item.engine ? unEngineNote(item.engine) : undefined,
-    run: () => { uiNewVerbOpen.value = null; if (item.engine) clickEngineOption(item.engine); else selectActionOption(item.label); },
+    run: () => unDoMenuItem(item),
   }));
   return open === 'go' ? [...items, ...unGoExtras.value.map(item => ({ ...item, run: () => { uiNewVerbOpen.value = null; item.run(); } }))] : items;
 });

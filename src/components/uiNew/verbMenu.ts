@@ -2,7 +2,7 @@
  * 新界面（?ui=new）右列四个动词键：把这一手能做的事归到键下，不再分「主线／其他行动」。
  * ⚠ 临时口径（用户 2026-11-20 13:41 定方向，14:39 补：察看、交谈就是看当前场景；移动的主动权交给玩家。键名和归法未定）：
  *   · 剧本动作（主线、探索）带现成的 interaction.verb（runtime.ts 从文案推的）：observe→察看，talk→交谈，move→前往，其余→行动。
- *   · 察看、交谈下常驻当前场景的几条（看看四周、在场的每个人），见 sceneStandingLines；点了只是把这句话填进输入框。
+ *   · 察看、交谈下常驻当前场景的几条（看看四周、在场的每个人），见 sceneStandingLines；点了当作玩家自己写的这句话直接发出去。
  *   · 没带 verb 的（模型写的建议、机会、地方动作）按开头的词归类（verbOfText）——只决定排在哪个键下，不参与任何判定。
  *   · 同一个键下不按来源排序、不挂来源标签，免得一眼认出哪条是主线。
  */
@@ -18,7 +18,7 @@ export const VERB_KEYS: ReadonlyArray<{ key: VerbKey; label: string }> = [
 export interface VerbItem<T> {
   /** 按钮上的字 */
   label: string;
-  /** 剧本动作：点了走老的 clickEngineOption；没有就是一句建议，点了填进输入框 */
+  /** 剧本动作：点了走老的 clickEngineOption；没有就是一句建议，点了当自由行动发出去 */
   engine?: T;
 }
 
