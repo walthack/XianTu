@@ -177,7 +177,7 @@ test('任务引导关：与原来一致，不发小请求', () => withQuest(fals
   assert.equal(calls.beat, 0);
 }));
 
-test('小请求超时／坏 JSON：停下保留输入（hold），不结算', () => withQuest(true, async () => {
+test('小请求坏 JSON：停下保留输入（hold），不结算', () => withQuest(true, async () => {
   const { result } = await route(saveAt(S01_03), '我蹲下查看那个受伤军士的伤势。', () => ({ raw: 'not json' }));
   assert.equal(result.kind, 'failed');
   assert.equal(result.hold, true);
@@ -330,14 +330,17 @@ test('小请求超时：配置 timeoutMs=10000、timeoutRetries=1；超时后重
     assert.equal(calls.beat, 2, '超时后重发一次');
     assert.equal(result.kind, 'matched');
     assert.equal(result.reason, 'beat_intent');
-    // 两次都超时：只重发 1 次，之后照旧停下保留输入。
+    // 两次都超时：只重发 1 次，之后当普通自由行动继续（用户 2026-11-20 18:31 定）：不停下、不结算本拍，带非阻断提示。
     const twice = await route(saveAt(S01_03), '我蹲下查看那个受伤军士的伤势。', hang);
     assert.equal(twice.calls.beat, 2);
-    assert.equal(twice.result.kind, 'failed');
-    assert.equal(twice.result.hold, true);
-    // 坏 JSON 不是超时：不重发。
+    assert.equal(twice.result.kind, 'free');
+    assert.equal(twice.result.hold, undefined);
+    assert.equal(twice.result.selection, undefined);
+    assert.equal(twice.result.notice, NI.NATURAL_INTENT_DEGRADED_NOTICE);
+    // 坏 JSON 不是超时：不重发，照旧停下保留输入。
     const bad = await route(saveAt(S01_03), '我蹲下查看那个受伤军士的伤势。', () => ({ raw: 'not json' }));
     assert.equal(bad.calls.beat, 1);
+    assert.equal(bad.result.hold, true);
     // 配置 0＝不重发。
     judge.timeoutRetries = 0;
     const none = await route(saveAt(S01_03), '我蹲下查看那个受伤军士的伤势。', hang);

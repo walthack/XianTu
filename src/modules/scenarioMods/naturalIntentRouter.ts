@@ -915,7 +915,8 @@ async function resolveBeatJudgeOnce(input: NaturalIntentInput, plan: BeatKeyPlan
 
 /**
  * 合并：小请求过了＝按本拍动作结算（via intent），同回合的自由行动票丢弃；
- * 小请求失败（超时／坏 JSON）而大请求也没认出合同动作＝停下保留输入（第 9.4 节第 4 条）；其余照大请求结果。
+ * 小请求超时（重发后仍超时）＝当普通自由行动照大请求结果继续，本拍不结算，只给非阻断提示（work/ASK-USER.md 用户 2026-11-20 18:31 定「甲」）；
+ * 小请求坏 JSON／报错而大请求也没认出合同动作＝停下保留输入（第 9.4 节第 4 条）；其余照大请求结果。
  */
 function mergeBeatVerdict(input: NaturalIntentInput, big: NaturalIntentResult, verdict: BeatVerdict, candidates: readonly NaturalIntentCandidate[]): NaturalIntentResult {
   const awaiting = awaitingResponses(candidates);
@@ -929,6 +930,10 @@ function mergeBeatVerdict(input: NaturalIntentInput, big: NaturalIntentResult, v
       beatIntent: { certainty: verdict.certainty, evidenceLength: verdict.evidenceLength },
       ...(big.freeTextStatusResolution ? { freeTextStatusResolution: big.freeTextStatusResolution } : {}),
     };
+  }
+  if (verdict.kind === 'failed' && verdict.reason === 'timeout' && big.kind === 'free') {
+    noteTicketDiscard('intent', 'beat_judge_timeout');
+    return big.notice ? big : { ...big, notice: NATURAL_INTENT_DEGRADED_NOTICE };
   }
   if (verdict.kind === 'failed' && big.kind !== 'matched' && big.kind !== 'failed' && !big.hold) {
     return { ...onClassifierFailure(`beat_judge_${verdict.reason}`, candidates), freeTextStatusResolution: big.freeTextStatusResolution };
