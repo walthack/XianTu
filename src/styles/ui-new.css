@@ -945,3 +945,22 @@ body:has(.ui-new-shell.un-phone) .toast-container { top: calc(env(safe-area-inse
 }
 /* 「收起」在按钮行里吸在右端，其余按钮从它下面横滑过去：按钮再多也总看得见「收起」 */
 .ui-new.un-phone .un-inv-side > [data-testid="ui-new-panel-close"] { position: sticky; right: 0; z-index: 1; box-shadow: -10px 0 10px var(--un-deep); }
+
+/* 这一手出完：最后一段正文留在字框里（.un-end-say）；动词键点开或有要紧选择时右半弹出一列（.un-plan-b）。 */
+.ui-new .un-end-say { flex: 1 1 auto !important; min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--un-line2) transparent; font-size: calc(23 * var(--u)); line-height: 1.6; letter-spacing: .04em; color: var(--un-ink); padding-right: calc(8 * var(--u)); }
+.ui-new .un-end-say.n { color: var(--un-sub); }
+.ui-new .un-end-say.n .formatted-text { text-indent: 2em; }
+.ui-new .un-end-say .formatted-text { font-size: inherit; line-height: inherit; color: inherit; }
+.ui-new .un-end-say .formatted-text * { color: inherit; font-weight: inherit; }
+.ui-new .un-plan.split.solo > .un-plan-a { padding-right: calc(150 * var(--u)); }
+.ui-new .un-plan .un-plan-b > .un-label { display: flex; align-items: center; gap: calc(14 * var(--u)); color: var(--un-acc); }
+.ui-new .un-menu-close { background: none; border: 0; padding: 0; color: var(--un-sub); font: inherit; letter-spacing: inherit; cursor: pointer; }
+.ui-new .un-menu-close:hover { color: var(--un-acc); }
+.ui-new .un-plan.split .un-plan-b > .un-acts { margin-top: 0 !important; }
+/* 右半开着时「回看」靠到左半的右上角（左上角是名签） */
+.ui-new .un-plan.split:not(.solo) .un-plan-c > .un-ctl { right: calc(50% + 24 * var(--u)); }
+.ui-new .un-plan.split.many:not(.solo) .un-plan-c > .un-ctl { right: calc(60% + 24 * var(--u)); }
+/* 窄屏：选项开着时顶替正文 */
+.ui-new.un-phone .un-end-say { font-size: max(16px, calc(18 * var(--pk))); flex: none !important; max-height: 30vh; }
+.ui-new.un-phone .un-plan.un-menu-on .un-end-say { display: none; }
+.ui-new.un-phone .un-menu-close { min-height: 44px; min-width: 44px; }

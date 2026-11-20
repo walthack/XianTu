@@ -52,14 +52,16 @@
     <!-- 右列：三个动词 + 七项菜单 + 更多 -->
     <nav class="un-cmd" aria-label="新界面菜单">
       <button
-        v-for="verb in VERBS"
-        :key="verb"
+        v-for="verb in VERB_KEYS"
+        :key="verb.key"
         type="button"
         class="pq"
+        :class="{ on: uiNewVerbOpen === verb.key, dim: !uiNewVerbCounts[verb.key] }"
         data-testid="ui-new-verb"
+        :data-count="uiNewVerbCounts[verb.key]"
         :disabled="!dataReady"
-        @click="fillVerb(verb)"
-      >{{ verb }}</button>
+        @click="clickVerb(verb)"
+      >{{ verb.label }}</button>
       <div class="un-rule"></div>
       <button
         v-for="item in MENU"
@@ -111,6 +113,8 @@ import { chatBus } from '@/utils/chatBus';
 import { locationDescriptionWithCountry } from '@/modules/scenarioMods/travel/locationIds';
 import { computeScenarioPresence } from '@/modules/scenarioMods/storyContext';
 import { uiNewLead } from '@/composables/uiNewLead';
+import { uiNewVerbCounts, uiNewVerbOpen } from '@/composables/uiNewVerbs';
+import { VERB_KEYS, type VerbKey } from '@/components/uiNew/verbMenu';
 import { uiNewPhone, uiNewKeyboard } from '@/composables/uiNew';
 import { shortGameTime } from '@/components/uiNew/phoneLayout';
 import RightSidebar from '@/components/dashboard/RightSidebar.vue';
@@ -136,7 +140,6 @@ const uiStore = useUIStore();
 
 type MenuItem = { label: string; path?: string; routeNames?: string[]; quest?: boolean; needsCharacter?: boolean };
 
-const VERBS = ['调查', '观察', '探索'] as const;
 const MENU: MenuItem[] = [
   { label: '人物', path: '/game/character-details', routeNames: ['CharacterDetails'] },
   { label: '背包', path: '/game/inventory', routeNames: ['Inventory'] },
@@ -196,13 +199,17 @@ const clickMore = (item: MenuItem) => {
 // 打开功能页时收起「任务」
 watch(() => route.name, () => { if (route.name !== 'GameMain') questOpen.value = false; });
 
-// 临时做法（第①步）：三个动词只把词填进自由输入框并聚焦，不发送。以后换成真正的动词交互。
-const fillVerb = async (verb: string) => {
+// 三个动词键：键下有事可做就在字框右半开／收那一列；没有就把这个词填进输入框由玩家接着写（不发送）。
+const clickVerb = async (verb: { key: VerbKey; label: string }) => {
   questOpen.value = false;
   moreOpen.value = false;
   if (route.name !== 'GameMain') await router.push('/game');
+  const has = uiNewVerbCounts.value[verb.key] > 0;
+  // 键下没东西时也先置一下：主面板据此把还没出完的正文跳到末尾，随即自己收起
+  uiNewVerbOpen.value = uiNewVerbOpen.value === verb.key ? null : verb.key;
+  if (has) return;
   // 等主面板激活并挂上 chatBus 监听
-  setTimeout(() => { void chatBus.emit('prefill', { text: verb, focus: true }); }, 0);
+  setTimeout(() => { void chatBus.emit('prefill', { text: verb.label, focus: true }); }, 0);
 };
 
 // ---- 底行数据：与 TopBar.vue / RightSidebar.vue 同一份来源 ----

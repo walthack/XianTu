@@ -281,9 +281,9 @@
 
       <!-- 一手出完：你打算 -->
       <template v-else>
-        <div class="un-who">{{ t('你打算') }}</div>
-        <!-- 电脑宽：有「行动选项」时分左右两半（左半主线按钮＋输入框，右半行动选项，超过三条排两列）；没有时不分栏（solo）。窄屏三个包层不占位（display: contents），摆法同原来 -->
-        <div class="un-plan" :class="unPlanSplit ? { split: true, solo: !unShowActionOptions, many: unShowActionOptions && (currentNarrative?.actionOptions?.length ?? 0) > 3 } : undefined" data-testid="ui-new-plan">
+        <div v-if="unEndSpeaker" class="un-who" data-testid="ui-new-speaker">{{ unEndSpeaker }}</div>
+        <!-- 这一手出完：最后一段正文留在字框里占满；右列三个动词键点开、或有要紧的选择（分支抉择、启程）时，右半才弹出一列选项。不分「主线／其他行动」。窄屏不分栏，选项开着时顶替正文 -->
+        <div class="un-plan" :class="[unPlanSplit ? { split: true, solo: !unMenuItems.length, many: unMenuItems.length > 3 } : undefined, { 'un-menu-on': unMenuItems.length > 0 }]" data-testid="ui-new-plan">
           <div class="un-plan-a">
 
           <div v-if="actionQueue.pendingActions.length > 0" class="action-queue-display">
@@ -310,46 +310,18 @@
 
           <p v-if="crossCountryNotice" class="un-hint" role="status">{{ crossCountryNotice }}</p>
 
-          <!-- 行动选项：显示条件和点击行为照老模板 -->
-          <template v-if="currentNarrative">
-            <div v-if="engineButtonOptions.length" class="un-acts" data-testid="ui-new-engine-options">
-              <button
-                v-for="option in engineButtonOptions"
-                :key="JSON.stringify(option)"
-                @click="branchDecision ? confirmBranchDecision(option) : clickEngineOption(option)"
-                class="un-act"
-                :disabled="isAIProcessing"
-              >
-                <span v-if="showScenarioActionMechanics(option)" class="tag">{{ option.source === 'event_engine' ? t('主线') : option.source === 'exploration_engine' ? t('探索') : option.source === 'open_world_engine' ? t('地方') : option.source === 'baihu_gamble_refusal_engine' ? t('应对') : t('机会') }}</span>
-                <span>{{ option.label }}<small v-if="showScenarioActionMechanics(option)"> · 耗时 {{ 'timeCost' in option ? (option.timeCost ?? 1) : 1 }} 回合<template v-if="'remainingTurns' in option && option.remainingTurns !== undefined"> · 剩余 {{ option.remainingTurns }} 次重要行动</template></small><small v-if="'costHint' in option && option.costHint"> · {{ option.costHint }}</small></span>
-              </button>
-            </div>
-            <div v-if="engineButtonOptions.length" class="un-hint">{{ branchDecision ? BRANCH_DECISION_HINT : qingyuOpeningDemo ? t('可以直接描述行动，也可点按建议填入') : t('点按填入，可修改后发送') }}</div>
-
-            <div v-if="stageDepartureOffer" class="un-acts">
-              <button class="un-act" :disabled="isAIProcessing || stageDeparturePending" @click="departToNextStage">
-                {{ stageDeparturePending ? t('启程中…') : stageDepartureOffer.label }}
-              </button>
-            </div>
-            <div v-else-if="mapEntryReturnOffer" class="un-acts">
-              <button class="un-act" :disabled="isAIProcessing || stageDeparturePending" @click="returnFromMapEntry">
-                {{ stageDeparturePending ? t('启程中…') : stripNarrativeMetaWords(mapEntryReturnOffer.label) }}
-              </button>
-            </div>
-          </template>
+          <div v-if="currentNarrative" class="un-end-say" :class="{ n: !unEndSpeaker }" data-testid="ui-new-end-text"><FormattedText :text="unLastSegment" /></div>
           <div v-else class="un-hint">{{ t('静待天机变化...') }}</div>
           </div>
 
           <div class="un-plan-b" data-testid="ui-new-plan-right">
-            <div
-              v-if="unShowActionOptions && scenarioEngineActionOptions.length"
-              class="un-label"
-            >{{ t('其他行动') }}</div>
-            <div v-if="unShowActionOptions" class="un-acts" data-testid="ui-new-action-options">
-              <button v-for="(option, index) in currentNarrative?.actionOptions" :key="index" class="un-act" @click="selectActionOption(option)">
-                <em>{{ UN_NUMERALS[index] || index + 1 }}</em>{{ option }}
+            <div v-if="unMenuItems.length" class="un-label">{{ unMenuTitle }}<button v-if="unMenuClosable" type="button" class="un-menu-close" data-testid="ui-new-menu-close" @click="uiNewVerbOpen = null">{{ t('收起') }}</button></div>
+            <div v-if="unMenuItems.length" class="un-acts" data-testid="ui-new-action-options">
+              <button v-for="(item, index) in unMenuItems" :key="item.label" class="un-act" :disabled="isAIProcessing || item.disabled" @click="item.run()">
+                <em>{{ UN_NUMERALS[index] || index + 1 }}</em><span>{{ item.label }}<small v-if="item.note"> · {{ item.note }}</small></span>
               </button>
             </div>
+            <div v-if="branchDecision" class="un-hint">{{ BRANCH_DECISION_HINT }}</div>
           </div>
 
           <div class="un-plan-c">
@@ -1064,7 +1036,7 @@ import { scheduleBackgroundAudit, yieldBackgroundAudit } from '@/services/backgr
 import { cancelConsistencyBackground, consistencyHostFrom, startConsistencyAfterCommit } from '@/services/consistencyBackground';
 import { BRANCH_DECISION_BLOCKED_NOTICE, BRANCH_DECISION_HINT, BRANCH_DECISION_INPUT_PLACEHOLDER, BRANCH_DECISION_TITLE, branchDecisionAllowsSend, branchDecisionLocksInput, detectBranchDecision, isDormantLockedOption, type BranchDecisionCandidate } from '@/modules/scenarioMods/branchDecision';
 import { getActiveKeyBeatCard, isKeyBeatCardAction, KEY_BEAT_CARD_HINT, KEY_BEAT_CARD_TITLE, KEY_BEAT_CONFIRM_NOTICE, type KeyBeatCardOption } from '@/modules/scenarioMods/keyBeatCards';
-import { ref, onMounted, onActivated, onDeactivated, onUnmounted, nextTick, computed, watch, reactive } from 'vue';
+import { ref, onMounted, onActivated, onDeactivated, onUnmounted, nextTick, computed, watch, reactive, watchEffect } from 'vue';
 import {
   Send, Loader2, ChevronDown, ChevronRight, ScrollText, RotateCcw, Shield, BrainCircuit, Bell, History
 } from 'lucide-vue-next';
@@ -1105,6 +1077,8 @@ import { combatView, COMBAT_FOE_MAX, UN_TIER_NAMES } from '@/components/uiNew/co
 import { sceneContractById } from '@/modules/sceneModule/contracts/registry';
 import { runtimeOf } from '@/modules/sceneModule/host/refs';
 import { uiNewLead as unLead, useUiNewLead } from '@/composables/uiNewLead';
+import { uiNewVerbCounts, uiNewVerbOpen } from '@/composables/uiNewVerbs';
+import { groupVerbItems, VERB_KEYS } from '@/components/uiNew/verbMenu';
 import { splitNarrativeSegments, segmentSpeaker } from '@/utils/narrativeSegments';
 import { stripSpeakerMarksForStreaming } from '@/utils/speakerMarks';
 import { getTravelCard } from '@/modules/scenarioMods/travel/travelLedger';
@@ -4150,6 +4124,49 @@ const unAtEnd = ref(true);
 // 「你打算」里的行动选项：显示条件照老模板
 const unShowActionOptions = computed(() => Boolean(currentNarrative.value && currentNarrative.value.type !== 'stage_entry' && !scenarioGameOver.value && uiStore.enableActionOptions && !keyBeatCard.value && !branchDecision.value && currentNarrative.value.actionOptions?.length));
 const unPlanSplit = computed(() => !uiNewPhone.value);
+// 这一手出完后留在字框里的那段正文（最后一段）和它的名签
+const unLastSegment = computed(() => unSegments.value[unSegments.value.length - 1] || '');
+const unEndSpeaker = computed(() => segmentSpeaker(unLastSegment.value));
+// 右列三个动词键下各有哪些事可做（归法见 verbMenu.ts，临时口径）。分支抉择时三个键下不放东西，选项直接弹在字框右半
+const unVerbGroups = computed(() => groupVerbItems(
+  (branchDecision.value ? [] : engineButtonOptions.value) as ScenarioEngineActionSelection[],
+  unShowActionOptions.value ? currentNarrative.value?.actionOptions || [] : []));
+type UnMenuItem = { label: string; note?: string; disabled?: boolean; run: () => void };
+const unEngineNote = (option: ScenarioEngineActionSelection) => [
+  'remainingTurns' in option && option.remainingTurns !== undefined ? `剩余 ${option.remainingTurns} 次重要行动` : '',
+  'costHint' in option && option.costHint ? String(option.costHint) : '',
+].filter(Boolean).join(' · ') || undefined;
+const unMenuItems = computed<UnMenuItem[]>(() => {
+  if (!currentNarrative.value) return [];
+  if (branchDecision.value) return engineButtonOptions.value.map(option => ({ label: option.label, run: () => confirmBranchDecision(option as never) }));
+  const open = uiNewVerbOpen.value;
+  if (open) return unVerbGroups.value[open].map(item => ({
+    label: item.label,
+    note: item.engine ? unEngineNote(item.engine) : undefined,
+    run: () => { uiNewVerbOpen.value = null; if (item.engine) clickEngineOption(item.engine); else selectActionOption(item.label); },
+  }));
+  // 没点开动词键时，只有要紧的事才弹出来：启程／返回
+  if (stageDepartureOffer.value) return [{ label: stageDeparturePending.value ? t('启程中…') : stageDepartureOffer.value.label, disabled: stageDeparturePending.value, run: () => { void departToNextStage(); } }];
+  if (mapEntryReturnOffer.value) return [{ label: stageDeparturePending.value ? t('启程中…') : stripNarrativeMetaWords(mapEntryReturnOffer.value.label), disabled: stageDeparturePending.value, run: () => { void returnFromMapEntry(); } }];
+  return [];
+});
+const unMenuClosable = computed(() => !branchDecision.value && !!uiNewVerbOpen.value);
+const unMenuTitle = computed(() => branchDecision.value ? t('抉择') : uiNewVerbOpen.value ? VERB_KEYS.find(v => v.key === uiNewVerbOpen.value)?.label || '' : t('眼下'));
+watchEffect(() => {
+  if (!uiNewActive.value) return;
+  const g = unVerbGroups.value;
+  uiNewVerbCounts.value = { look: g.look.length, talk: g.talk.length, act: g.act.length };
+});
+// 点了动词键：正文还没出完就直接跳到末尾；开着的键下没东西了（新的一手、进了场面）就收起
+watch(uiNewVerbOpen, open => {
+  if (!open) return;
+  unAtEnd.value = true;
+  if (!unVerbGroups.value[open].length) uiNewVerbOpen.value = null;
+});
+watch([unVerbGroups, isAIProcessing], () => {
+  const open = uiNewVerbOpen.value;
+  if (open && (isAIProcessing.value || !unVerbGroups.value[open].length)) uiNewVerbOpen.value = null;
+});
 const unReading = computed(() => uiNewActive.value && !isAIProcessing.value && !unAtEnd.value && unSegIndex.value < unSegments.value.length);
 // 要玩家拍板的卡片（判定、关键抉择、分支、结局）放在场景框里；和「你打算」同一时机出现（这一手读完、不在生成中）
 const unDeckActive = computed(() => uiNewActive.value && !isAIProcessing.value && !unReading.value && Boolean(
@@ -4234,6 +4251,8 @@ watch(unNarrativeKey, (key, old) => {
   unAtEnd.value = !fresh;
   if (fresh && !isAIProcessing.value) unAwaitFresh = false;
 }, { immediate: true });
+// 换了一手（发送、读档、切存档）：上一手点开的动词键收起
+watch(unNarrativeKey, () => { uiNewVerbOpen.value = null; });
 watch([unNarrativeKey, unSegIndex, unAtEnd], ([key, index, atEnd]) => {
   uiNewReadPosition.value = key ? { key, index, atEnd } : null;
 });
