@@ -151,6 +151,15 @@ export default (env, argv) => {
           type: 'asset/inline',
         },
         {
+          // 立绘、场景图、CG（用户 2026-11-21 06:10 同意加）：只限这三个目录，图片单独出文件，不内联
+          test: /\.(png|webp|jpe?g)$/i,
+          include: ['characters', 'scenes', 'cg'].map(dir => path.resolve(__dirname, 'src/assets', dir)),
+          type: 'asset/resource',
+          generator: {
+            filename: 'assets/img/[name].[contenthash:8][ext]',
+          },
+        },
+        {
           test: /\.(mp3|ogg|wav|m4a)$/i,
           type: 'asset/resource',
           generator: {
