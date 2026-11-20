@@ -216,6 +216,7 @@
               <div class="quest-chapter"><span class="quest-tag quest-tag-main" :style="{ borderColor: group.color, color: group.color }">{{ group.icon }} {{ group.label }}</span></div>
               <div v-for="entry in group.entries" :key="entry.key" class="quest-log-entry">
                 <div class="quest-event"><span class="quest-mark-main" :style="{ color: group.color }">{{ group.icon }}</span>{{ entry.title }}：{{ entry.objective }}</div>
+                <div v-if="entry.detail" class="quest-more quest-log-detail">{{ entry.detail }}</div>
                 <div v-if="entry.place" class="quest-more">{{ t('地点') }}：{{ entry.place }}</div>
                 <div v-for="(hint, i) in entry.hints" :key="i" class="quest-more quest-log-hint">· {{ hint }}</div>
                 <div v-if="entry.warn" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;">{{ entry.warn }}</div>
@@ -2371,6 +2372,8 @@ const getReputationClass = (): string => {
 .quest-log { margin-bottom: 6px; }
 .quest-log-entry { margin-bottom: 4px; }
 .quest-log-hint { opacity: 0.85; }
+/* 作者写的任务概要：只在新界面的「任务」页显示（ui-new.css 里放出来），老右栏和任务追踪小块不显示 */
+.quest-log-detail { display: none; }
 .quest-log-map { margin-top: 2px; padding: 2px 6px; font-size: 11px; border: 1px solid var(--color-border, #555); background: transparent; color: inherit; border-radius: 4px; cursor: pointer; }
 .quest-next-btn { margin-top: 4px; width: 100%; padding: 5px 8px; font-size: 12px; border: 1px solid var(--color-accent, #d4af37); background: transparent; color: var(--color-accent, #d4af37); border-radius: 4px; cursor: pointer; }
 .quest-next-btn:hover:not(:disabled) { background: rgba(212,175,55,0.15); }

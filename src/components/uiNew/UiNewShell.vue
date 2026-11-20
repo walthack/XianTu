@@ -115,7 +115,7 @@ import { computeScenarioPresence } from '@/modules/scenarioMods/storyContext';
 import { uiNewLead } from '@/composables/uiNewLead';
 import { uiNewVerbCounts, uiNewVerbOpen } from '@/composables/uiNewVerbs';
 import { VERB_KEYS, type VerbKey } from '@/components/uiNew/verbMenu';
-import { uiNewPhone, uiNewKeyboard } from '@/composables/uiNew';
+import { uiNewPhone, uiNewKeyboard, uiNewQuestOpen } from '@/composables/uiNew';
 import { shortGameTime } from '@/components/uiNew/phoneLayout';
 import RightSidebar from '@/components/dashboard/RightSidebar.vue';
 import UiNewInventory from '@/components/uiNew/UiNewInventory.vue';
@@ -163,7 +163,7 @@ const MORE: MenuItem[] = [
 ];
 const VITALS = ['气血', '灵气', '神识'] as const;
 
-const questOpen = ref(false);
+const questOpen = uiNewQuestOpen;
 const moreOpen = ref(false);
 // 窄屏：底行「在场」收成一个小按钮，点一下在底行上方展开一条；右列的七项菜单收进「更多」排在最前（模板里不写注释：开发构建会把注释留进 DOM）
 const hereOpen = ref(false);
