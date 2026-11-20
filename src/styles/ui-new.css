@@ -187,7 +187,7 @@
   grid-row: 1; grid-column: 2;
   position: relative; z-index: 6;
   display: flex; flex-direction: column; align-items: center;
-  gap: calc(13 * var(--u));
+  gap: calc(11 * var(--u));
   min-height: 0; overflow-y: auto; overflow-x: hidden;
   scrollbar-width: none;
 }
@@ -654,7 +654,7 @@ body:has(.ui-new-shell) .toast-container {
 .ui-new .un-cb-info .un-cb-o + .un-cb-o::before { content: '　·　'; color: var(--un-line2); }
 
 /* ================= 窄屏摆法（?ui=new 且窗口 <1024：外壳根上有 .un-phone） =================
- * 从上到下：场景框（约屏高三成）／中间一带（左：三个动词＋更多；右：主要角色剪影）／字框／底行。
+ * 从上到下：场景框（约屏高三成）／中间一带（左：四个动词＋更多；右：主要角色剪影）／字框／底行。
  * 尺寸以 390 宽设计稿（手机-01…05，CSS 像素）为准，乘 --pk 放大：--pk = clamp(1, min(宽/390, 高/844), 1.5)。
  * 竖屏平板（768×1024）同一摆法按 --pk 放大（约 1.2 倍），不居中限宽。横屏手机高度不够时外壳自己纵向滚动。
  * 外壳高度＝可见区域高度 --un-vvh（uiNew.ts 按 visualViewport 写到 <html> 上；没有时退回 100dvh），软键盘弹出时跟着变矮。
@@ -702,14 +702,15 @@ body:has(.ui-new-shell) .toast-container {
 .ui-new.un-phone .un-orn-m.mt { top: -8px; } .ui-new.un-phone .un-orn-m.mb { bottom: -8px; }
 .ui-new.un-phone .un-pane { inset: 5px; }
 
-/* 中间一带左边：三个动词＋更多（外壳右列在窄屏挪到这里；七项菜单收进「更多」） */
+/* 中间一带左边：四个动词排两行两列＋更多（外壳右列在窄屏挪到这里；七项菜单收进「更多」） */
 .ui-new.un-phone .un-cmd {
   position: absolute; grid-row: auto; grid-column: auto;
   left: calc(var(--up-px) + 4px); top: calc(var(--up-pt) + var(--up-scene) + var(--up-gap) + 8px);
   max-height: max(calc(var(--up-mid-min) - 12px), calc(var(--up-h) - var(--up-pt) - var(--up-scene) - var(--up-box) - 2 * var(--up-gap) - 16px - var(--up-bar) - var(--up-pb)));
-  min-height: 0; overflow-y: auto; align-items: flex-start; gap: 6px; z-index: 6;
+  min-height: 0; overflow-y: auto; display: grid; grid-template-columns: auto auto; justify-content: start; align-content: start; gap: 6px; z-index: 6;
 }
-.ui-new.un-phone .un-cmd .pq { width: calc(104 * var(--pk)); height: 44px; font-size: max(17px, calc(21 * var(--pk))); }
+.ui-new.un-phone .un-cmd .pq { width: calc(84 * var(--pk)); height: 44px; font-size: max(17px, calc(19 * var(--pk))); }
+.ui-new.un-phone .un-cmd .mi.more { grid-column: 1 / -1; }
 .ui-new.un-phone .un-cmd .un-rule, .ui-new.un-phone .un-cmd .mi:not(.more) { display: none; }
 .ui-new.un-phone .mi { font-size: max(16px, calc(17 * var(--pk))); width: auto; min-height: 44px; gap: 10px; letter-spacing: .2em; }
 .ui-new.un-phone .mi i { width: 7px; height: 7px; }
