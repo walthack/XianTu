@@ -49,7 +49,7 @@
       </template>
     </div>
 
-    <!-- 右列：三个动词 + 七项菜单 + 更多 -->
+    <!-- 右列：四个动词 + 七项菜单 + 更多 -->
     <nav class="un-cmd" aria-label="新界面菜单">
       <button
         v-for="verb in VERB_KEYS"
@@ -199,7 +199,7 @@ const clickMore = (item: MenuItem) => {
 // 打开功能页时收起「任务」
 watch(() => route.name, () => { if (route.name !== 'GameMain') questOpen.value = false; });
 
-// 三个动词键：键下有事可做就在字框右半开／收那一列；没有就把这个词填进输入框由玩家接着写（不发送）。
+// 四个动词键：键下有事可做就在字框右半开／收那一列；没有就把这个词填进输入框由玩家接着写（不发送）。
 const clickVerb = async (verb: { key: VerbKey; label: string }) => {
   questOpen.value = false;
   moreOpen.value = false;

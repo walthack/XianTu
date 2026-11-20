@@ -282,7 +282,7 @@
       <!-- 一手出完：你打算 -->
       <template v-else>
         <div v-if="unEndSpeaker" class="un-who" data-testid="ui-new-speaker">{{ unEndSpeaker }}</div>
-        <!-- 这一手出完：最后一段正文留在字框里占满；右列三个动词键点开、或有要紧的选择（分支抉择、启程）时，右半才弹出一列选项。不分「主线／其他行动」。窄屏不分栏，选项开着时顶替正文 -->
+        <!-- 这一手出完：最后一段正文留在字框里占满；右列动词键点开、或有分支抉择时，右半才弹出一列选项。不分「主线／其他行动」。窄屏不分栏，选项开着时顶替正文 -->
         <div class="un-plan" :class="[unPlanSplit ? { split: true, solo: !unMenuItems.length, many: unMenuItems.length > 3 } : undefined, { 'un-menu-on': unMenuItems.length > 0 }]" data-testid="ui-new-plan">
           <div class="un-plan-a">
 
@@ -312,6 +312,7 @@
 
           <div v-if="currentNarrative" class="un-end-say" :class="{ n: !unEndSpeaker }" data-testid="ui-new-end-text"><FormattedText :text="unLastSegment" /></div>
           <div v-else class="un-hint">{{ t('静待天机变化...') }}</div>
+          <p v-if="unNothingHere" class="un-hint" role="status" data-testid="ui-new-nothing-here">{{ t('这里眼下没有别的事要办了。') }}</p>
           </div>
 
           <div class="un-plan-b" data-testid="ui-new-plan-right">
@@ -1078,7 +1079,8 @@ import { sceneContractById } from '@/modules/sceneModule/contracts/registry';
 import { runtimeOf } from '@/modules/sceneModule/host/refs';
 import { uiNewLead as unLead, useUiNewLead } from '@/composables/uiNewLead';
 import { uiNewVerbCounts, uiNewVerbOpen } from '@/composables/uiNewVerbs';
-import { groupVerbItems, VERB_KEYS } from '@/components/uiNew/verbMenu';
+import { groupVerbItems, sceneStandingLines, VERB_KEYS } from '@/components/uiNew/verbMenu';
+import { computeScenarioPresence } from '@/modules/scenarioMods/storyContext';
 import { splitNarrativeSegments, segmentSpeaker } from '@/utils/narrativeSegments';
 import { stripSpeakerMarksForStreaming } from '@/utils/speakerMarks';
 import { getTravelCard } from '@/modules/scenarioMods/travel/travelLedger';
@@ -4127,45 +4129,76 @@ const unPlanSplit = computed(() => !uiNewPhone.value);
 // 这一手出完后留在字框里的那段正文（最后一段）和它的名签
 const unLastSegment = computed(() => unSegments.value[unSegments.value.length - 1] || '');
 const unEndSpeaker = computed(() => segmentSpeaker(unLastSegment.value));
-// 右列三个动词键下各有哪些事可做（归法见 verbMenu.ts，临时口径）。分支抉择时三个键下不放东西，选项直接弹在字框右半
+// 右列四个动词键下各有哪些事可做（归法见 verbMenu.ts，临时口径）。分支抉择时键下不放东西，选项直接弹在字框右半
+// 察看、交谈下常驻当前场景的几条（看看四周、在场的每个人；用户 2026-11-20 14:39）：在场口径同底行「在场」。场面、判定、抉择、结局时不放
+const unStanding = computed(() => {
+  if (!currentNarrative.value || scenarioGameOver.value || playtestFinished.value || currentScene.value || pendingJudgement.value || keyBeatCard.value || branchDecision.value) return undefined;
+  void gameStateStore.narrativeHistory?.length;
+  try {
+    const save = gameStateStore.toSaveData();
+    const presence = save ? computeScenarioPresence(save) : null;
+    if (!presence) return undefined;
+    const playerName = String(gameStateStore.character?.名字 || '');
+    return sceneStandingLines([...presence.presentNames].filter(name => name && name !== playerName));
+  } catch {
+    // lcq-allow: 常驻几条只是方便点选，算不出在场就不放，不影响游戏
+    return undefined;
+  }
+});
 const unVerbGroups = computed(() => groupVerbItems(
   (branchDecision.value ? [] : engineButtonOptions.value) as ScenarioEngineActionSelection[],
-  unShowActionOptions.value ? currentNarrative.value?.actionOptions || [] : []));
+  unShowActionOptions.value ? currentNarrative.value?.actionOptions || [] : [],
+  unStanding.value));
 type UnMenuItem = { label: string; note?: string; disabled?: boolean; run: () => void };
 const unEngineNote = (option: ScenarioEngineActionSelection) => [
   'remainingTurns' in option && option.remainingTurns !== undefined ? `剩余 ${option.remainingTurns} 次重要行动` : '',
   'costHint' in option && option.costHint ? String(option.costHint) : '',
 ].filter(Boolean).join(' · ') || undefined;
+// 「前往」键下除了剧本里的赶路动作，还有启程／返回（以前自动弹出，现在收在这里，由玩家自己来点）和「打开地图」
+const unGoExtras = computed<UnMenuItem[]>(() => {
+  if (!currentNarrative.value || currentScene.value || branchDecision.value || scenarioGameOver.value) return [];
+  const items: UnMenuItem[] = [];
+  if (stageDepartureOffer.value) items.push({ label: stageDeparturePending.value ? t('启程中…') : stageDepartureOffer.value.label, disabled: stageDeparturePending.value, run: () => { void departToNextStage(); } });
+  else if (mapEntryReturnOffer.value) items.push({ label: stageDeparturePending.value ? t('启程中…') : stripNarrativeMetaWords(mapEntryReturnOffer.value.label), disabled: stageDeparturePending.value, run: () => { void returnFromMapEntry(); } });
+  items.push({ label: t('打开地图'), run: () => { void router.push('/game/world-map'); } });
+  return items;
+});
 const unMenuItems = computed<UnMenuItem[]>(() => {
   if (!currentNarrative.value) return [];
   if (branchDecision.value) return engineButtonOptions.value.map(option => ({ label: option.label, run: () => confirmBranchDecision(option as never) }));
   const open = uiNewVerbOpen.value;
-  if (open) return unVerbGroups.value[open].map(item => ({
+  if (!open) return [];
+  const items: UnMenuItem[] = unVerbGroups.value[open].map(item => ({
     label: item.label,
     note: item.engine ? unEngineNote(item.engine) : undefined,
     run: () => { uiNewVerbOpen.value = null; if (item.engine) clickEngineOption(item.engine); else selectActionOption(item.label); },
   }));
-  // 没点开动词键时，只有要紧的事才弹出来：启程／返回
-  if (stageDepartureOffer.value) return [{ label: stageDeparturePending.value ? t('启程中…') : stageDepartureOffer.value.label, disabled: stageDeparturePending.value, run: () => { void departToNextStage(); } }];
-  if (mapEntryReturnOffer.value) return [{ label: stageDeparturePending.value ? t('启程中…') : stripNarrativeMetaWords(mapEntryReturnOffer.value.label), disabled: stageDeparturePending.value, run: () => { void returnFromMapEntry(); } }];
-  return [];
+  return open === 'go' ? [...items, ...unGoExtras.value.map(item => ({ ...item, run: () => { uiNewVerbOpen.value = null; item.run(); } }))] : items;
 });
 const unMenuClosable = computed(() => !branchDecision.value && !!uiNewVerbOpen.value);
-const unMenuTitle = computed(() => branchDecision.value ? t('抉择') : uiNewVerbOpen.value ? VERB_KEYS.find(v => v.key === uiNewVerbOpen.value)?.label || '' : t('眼下'));
+const unMenuTitle = computed(() => branchDecision.value ? t('抉择') : VERB_KEYS.find(v => v.key === uiNewVerbOpen.value)?.label || '');
+const unVerbCounts = computed(() => {
+  const g = unVerbGroups.value;
+  return { look: g.look.length, talk: g.talk.length, act: g.act.length, go: g.go.length + unGoExtras.value.length };
+});
+// 不直接催玩家走：这里剧本上没有别的事可做、而有路可走时，只在正文下面说一句，走不走、往哪走由玩家自己到「前往」里定
+const unNothingHere = computed(() => !branchDecision.value && !!unStanding.value
+  && !engineButtonOptions.value.some(option => (option as { interaction?: { verb?: string } }).interaction?.verb !== 'move')
+  && (unVerbGroups.value.go.some(item => item.engine) || !!stageDepartureOffer.value || !!mapEntryReturnOffer.value));
 watchEffect(() => {
   if (!uiNewActive.value) return;
-  const g = unVerbGroups.value;
-  uiNewVerbCounts.value = { look: g.look.length, talk: g.talk.length, act: g.act.length };
+  uiNewVerbCounts.value = unVerbCounts.value;
 });
-// 点了动词键：正文还没出完就直接跳到末尾；开着的键下没东西了（新的一手、进了场面）就收起
+// 点了动词键：正文还没出完就直接跳到末尾；开着的键下没东西了（新的一手、进了场面）就收起。「前往」下只有「打开地图」时不列出来，直接开地图
 watch(uiNewVerbOpen, open => {
   if (!open) return;
   unAtEnd.value = true;
-  if (!unVerbGroups.value[open].length) uiNewVerbOpen.value = null;
+  if (!unVerbCounts.value[open]) uiNewVerbOpen.value = null;
+  else if (open === 'go' && unMenuItems.value.length === 1 && !unVerbGroups.value.go.length && !stageDepartureOffer.value && !mapEntryReturnOffer.value) unMenuItems.value[0].run();
 });
-watch([unVerbGroups, isAIProcessing], () => {
+watch([unVerbCounts, isAIProcessing], () => {
   const open = uiNewVerbOpen.value;
-  if (open && (isAIProcessing.value || !unVerbGroups.value[open].length)) uiNewVerbOpen.value = null;
+  if (open && (isAIProcessing.value || !unVerbCounts.value[open])) uiNewVerbOpen.value = null;
 });
 const unReading = computed(() => uiNewActive.value && !isAIProcessing.value && !unAtEnd.value && unSegIndex.value < unSegments.value.length);
 // 要玩家拍板的卡片（判定、关键抉择、分支、结局）放在场景框里；和「你打算」同一时机出现（这一手读完、不在生成中）
