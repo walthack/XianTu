@@ -1,6 +1,6 @@
 /**
  * 图片挂位（catalog.assets，2026-11-16）：立绘／场景图／CG 的解析与缺图回落。纯函数，不读 DOM、不发请求。
- * file 是相对素材根目录 src/assets/ 的路径（用户 2026-11-16 定：立绘 characters/、场景图 scenes/、CG cg/，各一个子目录）；界面显示尚未接。所有函数的第二参数可传合成数据，默认读 CONTENT_PACKS.assets。
+ * file 是相对素材根目录 src/assets/ 的路径（用户 2026-11-16 定：立绘 characters/、场景图 scenes/、CG cg/，各一个子目录）；file 换成网址见 src/assets/packImages.ts。所有函数的第二参数可传合成数据，默认读 CONTENT_PACKS.assets。
  * 没有图（返回 null／[]）时界面只走文字：立绘只显示名牌，CG 不挡拍。
  */
 import {CONTENT_PACKS} from './index';
