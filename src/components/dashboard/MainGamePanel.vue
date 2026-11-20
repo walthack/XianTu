@@ -282,8 +282,8 @@
       <!-- 一手出完：你打算 -->
       <template v-else>
         <div class="un-who">{{ t('你打算') }}</div>
-        <!-- 电脑宽且有「行动选项」时分左右两半：左半主线按钮＋输入框，右半行动选项；其余情形三个包层不占位（display: contents），摆法同原来 -->
-        <div class="un-plan" :class="{ split: unPlanSplit }" data-testid="ui-new-plan">
+        <!-- 电脑宽：有「行动选项」时分左右两半（左半主线按钮＋输入框，右半行动选项，超过三条排两列）；没有时不分栏（solo）。窄屏三个包层不占位（display: contents），摆法同原来 -->
+        <div class="un-plan" :class="unPlanSplit ? { split: true, solo: !unShowActionOptions, many: unShowActionOptions && (currentNarrative?.actionOptions?.length ?? 0) > 3 } : undefined" data-testid="ui-new-plan">
           <div class="un-plan-a">
 
           <div v-if="actionQueue.pendingActions.length > 0" class="action-queue-display">
@@ -4149,7 +4149,7 @@ const unSegIndex = ref(0);
 const unAtEnd = ref(true);
 // 「你打算」里的行动选项：显示条件照老模板
 const unShowActionOptions = computed(() => Boolean(currentNarrative.value && currentNarrative.value.type !== 'stage_entry' && !scenarioGameOver.value && uiStore.enableActionOptions && !keyBeatCard.value && !branchDecision.value && currentNarrative.value.actionOptions?.length));
-const unPlanSplit = computed(() => !uiNewPhone.value && unShowActionOptions.value);
+const unPlanSplit = computed(() => !uiNewPhone.value);
 const unReading = computed(() => uiNewActive.value && !isAIProcessing.value && !unAtEnd.value && unSegIndex.value < unSegments.value.length);
 // 要玩家拍板的卡片（判定、关键抉择、分支、结局）放在场景框里；和「你打算」同一时机出现（这一手读完、不在生成中）
 const unDeckActive = computed(() => uiNewActive.value && !isAIProcessing.value && !unReading.value && Boolean(
