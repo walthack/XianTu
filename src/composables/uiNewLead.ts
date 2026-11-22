@@ -1,6 +1,6 @@
 /**
  * 新界面（?ui=new）立绘区的「主要角色」：MainGamePanel 里算，底行「在场」读同一份把他排第一。
- * 定法见 src/components/uiNew/leadCharacter.ts（⚠ 临时规则，用户未定）。
+ * 定法见 src/components/uiNew/leadCharacter.ts（一手最多换一次，跟这一手主要说话的人走）。
  * 只记在内存里（和字框读到第几段同样做法），不写存档；读档（characterStore.loadGame／loadGameById）后清掉重新定。
  */
 import { ref, watchEffect } from 'vue';
@@ -21,7 +21,7 @@ export interface UiNewLead {
   imageUrl: string;
   silhouette: SilhouetteKind;
   rule: LeadRule;
-  /** 这一场最初是按哪条规则定的（a／b／c／d；之后 keep 不改它），给人工核对用。 */
+  /** 现在这个人最初是按哪条规则定的（a／b／c／d／e；之后 keep 不改它），给人工核对用。 */
   basis: LeadRule;
 }
 

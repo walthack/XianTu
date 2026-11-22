@@ -1,4 +1,4 @@
-// 新界面立绘区「主要角色」定法（临时规则，用户未定）：keep / a / b / c / d / 无人在场，以及剪影按性别选。
+// 新界面立绘区「主要角色」定法（一手最多换一次）：a / b / c / keep / d / e / 无人在场，以及剪影按性别选。
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { loadTs } from './loadTs.mjs';
@@ -8,48 +8,61 @@ const { pickLeadCharacter, speakersInOrder, silhouetteKindFor } = await loadTs('
 const base = { eventId: 'e1', presentNames: [], eventCharacterNames: [], narrativeText: '', playerName: '我', previous: null };
 const pick = (over) => pickLeadCharacter({ ...base, ...over });
 
-test('1. 事件没变、上一次的还在场 → 不换（即使别人先说话）', () => {
-  const r = pick({
-    presentNames: ['凝羽', '谢艺'], narrativeText: '〈谢艺〉“走。”',
-    previous: { eventId: 'e1', name: '凝羽', rule: 'c' },
-  });
-  assert.deepEqual(r, { eventId: 'e1', name: '凝羽', rule: 'keep' });
+test('在场为空（或只有主角）→ 没有', () => {
+  assert.equal(pick({ presentNames: [], previous: { eventId: 'e1', name: '凝羽', rule: 'a' } }), null);
+  assert.equal(pick({ presentNames: ['我'], eventCharacterNames: ['凝羽'], narrativeText: '〈凝羽〉“在。”' }), null);
 });
 
-test('1. 事件没变但上一次的不在场 → 重新定', () => {
+test('a. 在场（不算主角）只有一个 → 就是他', () => {
+  assert.deepEqual(pick({ presentNames: ['我', '凝羽'] }), { eventId: 'e1', name: '凝羽', rule: 'a' });
   const r = pick({ presentNames: ['谢艺'], previous: { eventId: 'e1', name: '凝羽', rule: 'a' } });
   assert.deepEqual(r, { eventId: 'e1', name: '谢艺', rule: 'a' });
 });
 
-test('2a. 在场（不算主角）只有一个 → 就是他', () => {
-  assert.deepEqual(pick({ presentNames: ['我', '凝羽'] }), { eventId: 'e1', name: '凝羽', rule: 'a' });
-});
-
-test('2b. 事件牵涉的人（不算主角）只有一个且在场 → 就是他，优先于说话人', () => {
-  const r = pick({ presentNames: ['凝羽', '谢艺'], eventCharacterNames: ['我', '谢艺'], narrativeText: '〈凝羽〉“嗯。”' });
+test('b. 事件牵涉的人（不算主角）只有一个且在场 → 就是他，不跟说话人换', () => {
+  const r = pick({ presentNames: ['凝羽', '谢艺'], eventCharacterNames: ['我', '谢艺'], narrativeText: '〈凝羽〉“嗯。”〈凝羽〉“走。”' });
   assert.deepEqual(r, { eventId: 'e1', name: '谢艺', rule: 'b' });
 });
 
-test('2b 不成立（牵涉的人不在场／不止一个／取不到）→ 往下走', () => {
-  assert.equal(pick({ presentNames: ['凝羽', '谢艺'], eventCharacterNames: ['段强'] }), null);
-  assert.equal(pick({ presentNames: ['凝羽', '谢艺'], eventCharacterNames: ['凝羽', '谢艺'] }), null);
-  assert.equal(pick({ presentNames: ['凝羽', '谢艺'] }), null);
-});
-
-test('2c. 第一个说话的、在场的人；不在场的说话人和主角跳过', () => {
-  const r = pick({ presentNames: ['凝羽', '谢艺'], narrativeText: '〈我〉“谁？”〈段强〉“我。”他走开。〈谢艺〉“别动。”〈凝羽〉“好。”' });
+test('c. 这一手说话句数最多的在场的人；不在场的说话人和主角不算', () => {
+  const r = pick({ presentNames: ['凝羽', '谢艺'], narrativeText: '〈我〉“谁？”〈我〉“说。”〈段强〉“我。”〈段强〉“是我。”〈凝羽〉“好。”〈谢艺〉“别动。”〈谢艺〉“走。”' });
   assert.deepEqual(r, { eventId: 'e1', name: '谢艺', rule: 'c' });
 });
 
-test('2d. 换了事件、定不了 → 沿用上一次的（还在场）；不在场 → 没有', () => {
-  const prev = { eventId: 'e0', name: '凝羽', rule: 'a' };
-  assert.deepEqual(pick({ presentNames: ['凝羽', '谢艺'], previous: prev }), { eventId: 'e1', name: '凝羽', rule: 'd' });
-  assert.equal(pick({ presentNames: ['谢艺', '段强'], previous: prev }), null);
+test('c. 上一次的人还在场但这一手别人说得多 → 换人（一手换一次）', () => {
+  const r = pick({
+    presentNames: ['凝羽', '谢艺'], narrativeText: '〈凝羽〉“嗯。”〈谢艺〉“走。”〈谢艺〉“快。”',
+    previous: { eventId: 'e1', name: '凝羽', rule: 'c' },
+  });
+  assert.deepEqual(r, { eventId: 'e1', name: '谢艺', rule: 'c' });
 });
 
-test('3. 在场为空（或只有主角）→ 没有', () => {
-  assert.equal(pick({ presentNames: [], previous: { eventId: 'e1', name: '凝羽', rule: 'a' } }), null);
-  assert.equal(pick({ presentNames: ['我'], eventCharacterNames: ['凝羽'], narrativeText: '〈凝羽〉“在。”' }), null);
+test('c. 来回对话句数并列：上一次的人在并列里 → 不换；不在 → 取先开口的', () => {
+  const text = '〈谢艺〉“走。”〈凝羽〉“不。”〈谢艺〉“走！”〈凝羽〉“不。”';
+  const kept = pick({ presentNames: ['凝羽', '谢艺', '段强'], narrativeText: text, previous: { eventId: 'e1', name: '凝羽', rule: 'c' } });
+  assert.deepEqual(kept, { eventId: 'e1', name: '凝羽', rule: 'c' });
+  const first = pick({ presentNames: ['凝羽', '谢艺', '段强'], narrativeText: text, previous: { eventId: 'e1', name: '段强', rule: 'c' } });
+  assert.deepEqual(first, { eventId: 'e1', name: '谢艺', rule: 'c' });
+});
+
+test('keep／d. 这一手没有在场的人说话 → 沿用上一次的（还在场）', () => {
+  const same = pick({ presentNames: ['凝羽', '谢艺'], narrativeText: '风停了。', previous: { eventId: 'e1', name: '谢艺', rule: 'c' } });
+  assert.deepEqual(same, { eventId: 'e1', name: '谢艺', rule: 'keep' });
+  const moved = pick({ presentNames: ['凝羽', '谢艺'], previous: { eventId: 'e0', name: '谢艺', rule: 'a' } });
+  assert.deepEqual(moved, { eventId: 'e1', name: '谢艺', rule: 'd' });
+});
+
+test('e. 都定不了 → 在场名单里排第一的人，不空着', () => {
+  assert.deepEqual(pick({ presentNames: ['我', '凝羽', '谢艺'] }), { eventId: 'e1', name: '凝羽', rule: 'e' });
+  assert.deepEqual(pick({ presentNames: ['凝羽', '谢艺'], eventCharacterNames: ['凝羽', '谢艺'] }), { eventId: 'e1', name: '凝羽', rule: 'e' });
+  const gone = pick({ presentNames: ['谢艺', '段强'], previous: { eventId: 'e0', name: '凝羽', rule: 'a' } });
+  assert.deepEqual(gone, { eventId: 'e1', name: '谢艺', rule: 'e' });
+});
+
+test('同一份输入反复算（界面会重算）结果不变', () => {
+  const input = { presentNames: ['凝羽', '谢艺'], narrativeText: '〈谢艺〉“走。”〈凝羽〉“不。”' };
+  const first = pick(input);
+  assert.deepEqual(pick({ ...input, previous: first }), first);
 });
 
 test('说话人按先后去重；写坏的记号不算', () => {
