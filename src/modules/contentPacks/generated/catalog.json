@@ -1,5 +1,5 @@
 {
-  "version": "919ed740eab0f7c6",
+  "version": "2583f31f745b54e0",
   "contracts": [
     {
       "meta": {
@@ -33232,7 +33232,410 @@
     }
   ],
   "assets": {
-    "portraits": [],
+    "portraits": [
+      {
+        "characterId": "lcq.character.yue_shuang",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/lcq.character.yue_shuang/full__default.webp"
+      },
+      {
+        "characterId": "lcq.character.yue_shuang",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/lcq.character.yue_shuang/full__pose2.webp"
+      },
+      {
+        "characterId": "lcq.character.dai_jixue",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/lcq.character.dai_jixue/full__default.webp"
+      },
+      {
+        "characterId": "lcq.character.dai_jixue",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/lcq.character.dai_jixue/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.ning_yu",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.ning_yu/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.ning_yu",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.ning_yu/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.ning_yu",
+        "kind": "full",
+        "outfitId": "pose3",
+        "file": "characters/liuchao.character.ning_yu/full__pose3.webp"
+      },
+      {
+        "characterId": "liuchao.character.su_li",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.su_li/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.su_li",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.su_li/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.xiao_zi",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.xiao_zi/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.xiao_zi",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.xiao_zi/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.xiao_zi",
+        "kind": "full",
+        "outfitId": "pose3",
+        "file": "characters/liuchao.character.xiao_zi/full__pose3.webp"
+      },
+      {
+        "characterId": "liuchao.character.le_mingzhu",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.le_mingzhu/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.le_mingzhu",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.le_mingzhu/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.qi_yu_xian",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.qi_yu_xian/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.qi_yu_xian",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.qi_yu_xian/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.yun_dan_liu",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.yun_dan_liu/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.yun_dan_liu",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.yun_dan_liu/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.yun_dan_liu",
+        "kind": "full",
+        "outfitId": "pose3",
+        "file": "characters/liuchao.character.yun_dan_liu/full__pose3.webp"
+      },
+      {
+        "characterId": "liuchao.character.yun_ru_yao",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.yun_ru_yao/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.yun_ru_yao",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.yun_ru_yao/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.su_daji",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.su_daji/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.su_daji",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.su_daji/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.su_daji",
+        "kind": "full",
+        "outfitId": "pose3",
+        "file": "characters/liuchao.character.su_daji/full__pose3.webp"
+      },
+      {
+        "characterId": "liuchao.character.meng_niang",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.meng_niang/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.meng_niang",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.meng_niang/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.shen_wan_ying",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.shen_wan_ying/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.shen_wan_ying",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.shen_wan_ying/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.zhuo_yunjun",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.zhuo_yunjun/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.zhuo_yunjun",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.zhuo_yunjun/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.jing_li",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.jing_li/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.jing_li",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.jing_li/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.li_shi_shi",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.li_shi_shi/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.li_shi_shi",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.li_shi_shi/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.ruan_xiang_lin",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.ruan_xiang_lin/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.ruan_xiang_lin",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.ruan_xiang_lin/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.ruan_xiang_ning",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.ruan_xiang_ning/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.ruan_xiang_ning",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.ruan_xiang_ning/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.xiao_ling_er",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.xiao_ling_er/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.xiao_ling_er",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.xiao_ling_er/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.jian_yu_ji",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.jian_yu_ji/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.jian_yu_ji",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.jian_yu_ji/full__pose2.webp"
+      },
+      {
+        "characterId": "canon.character.6ec7e21839",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/canon.character.6ec7e21839/full__default.webp"
+      },
+      {
+        "characterId": "canon.character.6ec7e21839",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/canon.character.6ec7e21839/full__pose2.webp"
+      },
+      {
+        "characterId": "canon.character.886a02fef4",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/canon.character.886a02fef4/full__default.webp"
+      },
+      {
+        "characterId": "canon.character.886a02fef4",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/canon.character.886a02fef4/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.pan_jinlian",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.pan_jinlian/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.pan_jinlian",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.pan_jinlian/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.yin_fulan",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.yin_fulan/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.yin_fulan",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.yin_fulan/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.zhao_feiyan",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.zhao_feiyan/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.zhao_feiyan",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.zhao_feiyan/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.zhao_he_de",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.zhao_he_de/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.zhao_he_de",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.zhao_he_de/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.lv_zhi",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.lv_zhi/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.lv_zhi",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.lv_zhi/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.cheng_guang",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.cheng_guang/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.cheng_guang",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.cheng_guang/full__pose2.webp"
+      },
+      {
+        "characterId": "lyg.character.np033",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/lyg.character.np033/full__default.webp"
+      },
+      {
+        "characterId": "lyg.character.np033",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/lyg.character.np033/full__pose2.webp"
+      },
+      {
+        "characterId": "liuchao.character.yang_yuhuan",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.yang_yuhuan/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.yang_yuhuan",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.yang_yuhuan/full__pose2.webp"
+      },
+      {
+        "characterId": "canon.character.81d313b84d",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/canon.character.81d313b84d/full__default.webp"
+      },
+      {
+        "characterId": "canon.character.81d313b84d",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/canon.character.81d313b84d/full__pose2.webp"
+      },
+      {
+        "characterId": "canon.character.81d313b84d",
+        "kind": "full",
+        "outfitId": "pose3",
+        "file": "characters/canon.character.81d313b84d/full__pose3.webp"
+      },
+      {
+        "characterId": "liuchao.character.bai_nichang",
+        "kind": "full",
+        "outfitId": "default",
+        "file": "characters/liuchao.character.bai_nichang/full__default.webp"
+      },
+      {
+        "characterId": "liuchao.character.bai_nichang",
+        "kind": "full",
+        "outfitId": "pose2",
+        "file": "characters/liuchao.character.bai_nichang/full__pose2.webp"
+      }
+    ],
     "scenes": [],
     "cg": []
   },
