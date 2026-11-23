@@ -62,9 +62,9 @@ test('不在可重试集合里的状态（400/401/403/404/422）只请求一次�
   });
 });
 
-test('在可重试集合里的状态（408/409/425/429/500/502/503/504）会重试，第二次成功就返回结果', async () => {
+test('在可重试集合里的状态（408/409/425/429/500/502/503/504/529）会重试，第二次成功就返回结果', async () => {
   await withNumbers(FAST, async () => {
-    for (const status of [408, 409, 425, 429, 500, 502, 503, 504]) {
+    for (const status of [408, 409, 425, 429, 500, 502, 503, 504, 529]) {
       const stub = stubAxios([axiosFailure(status), okReply(`ok-${status}`)]);
       try { assert.equal(await quiet(() => call()), `ok-${status}`); } finally { stub.restore(); }
       assert.equal(stub.calls, 2, `HTTP ${status} 应重试一次`);

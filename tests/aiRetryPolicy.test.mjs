@@ -111,7 +111,7 @@ test('AiHttpError：保留 message 格式，带 status 与解析好的 retryAfte
 
 test('可重试 HTTP 状态集合来自配置：集合内重试，其余（含 400/401/403/404/422）不重试', () => {
   const c = cfg();
-  for (const status of [408, 409, 425, 429, 500, 502, 503, 504]) {
+  for (const status of [408, 409, 425, 429, 500, 502, 503, 504, 529]) {
     assert.deepEqual(policy.classifyAiError(new policy.AiHttpError('x', { status }), c), { retry: true, reason: 'status', status });
   }
   for (const status of [400, 401, 402, 403, 404, 413, 422]) {
