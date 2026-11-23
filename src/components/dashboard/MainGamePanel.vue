@@ -315,6 +315,7 @@
           <div v-if="currentNarrative" class="un-end-say" :class="{ n: !unEndSpeaker }" data-testid="ui-new-end-text"><FormattedText :text="unLastSegment" /></div>
           <div v-else class="un-hint">{{ t('静待天机变化...') }}</div>
           <p v-if="unNothingHere" class="un-hint" role="status" data-testid="ui-new-nothing-here">{{ t('这里眼下没有别的事要办了。') }}</p>
+          <p v-if="unFightPending" class="un-hint" role="status" data-testid="ui-new-fight-pending">{{ t('对方已经逼到眼前，这一手躲不开了。') }}</p>
           </div>
 
           <div class="un-plan-b" data-testid="ui-new-plan-right">
@@ -4150,6 +4151,18 @@ const unStanding = computed(() => {
   } catch {
     // lcq-allow: 常驻几条只是方便点选，算不出在场就不放，不影响游戏
     return undefined;
+  }
+});
+// 有场面等着开打、还没开打时（这时察看、交谈下是空的），在正文下面说一句（用户 2026-11-24「按推荐」）。界面上的字，不是模型写的
+const unFightPending = computed(() => {
+  if (!uiNewActive.value || !currentNarrative.value || scenarioGameOver.value || playtestFinished.value || currentScene.value || pendingJudgement.value || keyBeatCard.value || branchDecision.value) return false;
+  void gameStateStore.narrativeHistory?.length;
+  try {
+    const save = gameStateStore.toSaveData();
+    return Boolean(save && hostNeeded(save));
+  } catch {
+    // lcq-allow: 只是一句提示，算不出就不显示，不影响游戏
+    return false;
   }
 });
 const unVerbGroups = computed(() => groupVerbItems(

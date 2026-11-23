@@ -411,11 +411,11 @@
         </div>
       </div>
 
-      <div v-if="chronicleEntries.length" class="collapsible-section quest-section">
+      <div v-if="chronicleEntries.length || recapEntries.length" class="collapsible-section quest-section">
         <div class="section-header" @click="chronicleCollapsed = !chronicleCollapsed">
           <h3 class="section-title">
             <Star :size="14" class="section-icon gold" />
-            <span>{{ t('战役编年史') }}</span>
+            <span>{{ uiNewActive ? t('前情') : t('战役编年史') }}</span>
           </h3>
           <button class="collapse-toggle" :class="{ 'collapsed': chronicleCollapsed }">
             <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
@@ -424,6 +424,7 @@
           </button>
         </div>
         <div v-show="!chronicleCollapsed" class="quest-body">
+          <p v-for="(line, i) in recapEntries" :key="'recap-' + i" class="quest-recap" data-testid="quest-recap">{{ line }}</p>
           <div v-for="entry in chronicleEntries" :key="entry.id" class="quest-event">
             <span class="quest-mark-main">{{ entry.mark }}</span>
             <span>{{ entry.title }}<template v-if="entry.detail">：{{ entry.detail }}</template></span>
@@ -480,6 +481,7 @@ import { atTrainingCap, breakthroughHint, canBreakthrough } from '@/modules/scen
 import { locationFromPosition } from '@/modules/scenarioMods/travel/travelLedger';
 import { characterBeatsAt } from '@/modules/scenarioMods/characterQuests';
 import { prefillChat } from '@/utils/chatBus';
+import { uiNewActive } from '@/composables/uiNew';
 import { formatQuestCompass, questCompassPhrases, questCompassPresentIds, questStallHint, resolveScenarioEventNarrative, storyChapterTitle } from '@/modules/scenarioMods/eventNarrativeView';
 import { detectBranchDecision } from '@/modules/scenarioMods/branchDecision';
 import { returnToCanonAnchor } from '@/modules/scenarioMods/divergenceControl';
@@ -888,6 +890,17 @@ const chronicleEntries = computed(() => {
       title: playerFacingText(String(item.title), id => chronicleEventName(rt, id)),
       detail: typeof item.detail === 'string' ? playerFacingText(item.detail, id => chronicleEventName(rt, id)) : '',
     }));
+});
+
+// 新界面「前情」（用户 2026-11-24「按推荐」：前因和概要先试用存档里的记忆）：只放长期记忆（总结过的那一栏），只换掉内部用词，不改写。老界面不放。
+// 中期记忆不放：拿真玩过的档看过，是一手一条的流水，一场架会连着占好几条，还夹着「尚未结算」这类话
+const recapEntries = computed(() => {
+  if (!uiNewActive.value) return [] as string[];
+  const rt: any = (gameStateStore.worldState as any)?.剧本模组;
+  const lines = (list: unknown) => (Array.isArray(list) ? list : [])
+    .filter((item): item is string => typeof item === 'string' && !!item.trim())
+    .map(item => playerFacingText(item.trim(), id => chronicleEventName(rt, id)));
+  return lines(gameStateStore.memory?.长期记忆);
 });
 
 // 自动计算当前年龄（基于出生日期）
@@ -2374,6 +2387,7 @@ const getReputationClass = (): string => {
 .quest-log-hint { opacity: 0.85; }
 /* 作者写的任务概要：只在新界面的「任务」页显示（ui-new.css 里放出来），老右栏和任务追踪小块不显示 */
 .quest-log-detail { display: none; }
+.quest-recap { margin: 0 0 6px; line-height: 1.6; }
 .quest-log-map { margin-top: 2px; padding: 2px 6px; font-size: 11px; border: 1px solid var(--color-border, #555); background: transparent; color: inherit; border-radius: 4px; cursor: pointer; }
 .quest-next-btn { margin-top: 4px; width: 100%; padding: 5px 8px; font-size: 12px; border: 1px solid var(--color-accent, #d4af37); background: transparent; color: var(--color-accent, #d4af37); border-radius: 4px; cursor: pointer; }
 .quest-next-btn:hover:not(:disabled) { background: rgba(212,175,55,0.15); }
