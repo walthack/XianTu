@@ -1,4 +1,4 @@
-// 新界面立绘区「主要角色」定法（一手最多换一次）：a / b / c / keep / d / e / 无人在场，以及剪影按性别选。
+// 新界面立绘区「主要角色」定法（一手最多换一次）：a / b / c / keep / d / 定不出时空着 / 无人在场，以及剪影按性别选。
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { loadTs } from './loadTs.mjs';
@@ -52,11 +52,10 @@ test('keep／d. 这一手没有在场的人说话 → 沿用上一次的（还�
   assert.deepEqual(moved, { eventId: 'e1', name: '谢艺', rule: 'd' });
 });
 
-test('e. 都定不了 → 在场名单里排第一的人，不空着', () => {
-  assert.deepEqual(pick({ presentNames: ['我', '凝羽', '谢艺'] }), { eventId: 'e1', name: '凝羽', rule: 'e' });
-  assert.deepEqual(pick({ presentNames: ['凝羽', '谢艺'], eventCharacterNames: ['凝羽', '谢艺'] }), { eventId: 'e1', name: '凝羽', rule: 'e' });
-  const gone = pick({ presentNames: ['谢艺', '段强'], previous: { eventId: 'e0', name: '凝羽', rule: 'a' } });
-  assert.deepEqual(gone, { eventId: 'e1', name: '谢艺', rule: 'e' });
+test('e. 都定不了 → 没有（先空着）', () => {
+  assert.equal(pick({ presentNames: ['我', '凝羽', '谢艺'] }), null);
+  assert.equal(pick({ presentNames: ['凝羽', '谢艺'], eventCharacterNames: ['凝羽', '谢艺'] }), null);
+  assert.equal(pick({ presentNames: ['谢艺', '段强'], previous: { eventId: 'e0', name: '凝羽', rule: 'a' } }), null);
 });
 
 test('同一份输入反复算（界面会重算）结果不变', () => {

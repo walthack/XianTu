@@ -319,6 +319,8 @@
 .ui-new .un-plan.split > .un-plan-a, .ui-new .un-plan.split > .un-plan-b { overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--un-line2) transparent; }
 .ui-new .un-plan.split > .un-plan-a { grid-area: 2 / 1; }
 .ui-new .un-plan.split > .un-plan-a > * { flex: none; }
+/* 正文下面的一句提示（没有别的事要办、对方已逼到眼前）：不带段落默认的上下留白，少占正文的地方 */
+.ui-new .un-plan.split > .un-plan-a > p.un-hint { margin: 0; }
 .ui-new .un-plan.split > .un-plan-c { grid-area: 3 / 1; }
 .ui-new .un-plan.split > .un-plan-b { grid-area: 1 / 2 / 4 / 3; border-left: 1px solid var(--un-line2); padding-left: calc(24 * var(--u)); gap: calc(8 * var(--u)); }
 .ui-new .un-plan.split.solo > .un-plan-b { display: none; }
@@ -427,7 +429,7 @@ body:has(.ui-new-shell) .toast-container {
 .ui-new .un-quest-body .quest-log-detail { display: block; opacity: .85; }
 .ui-new .un-quest-body .right-sidebar { background: transparent; border: 0; box-shadow: none; height: auto; }
 .ui-new .un-quest-empty { display: block; margin: calc(40 * var(--u)) 0; text-align: center; font-size: calc(22 * var(--u)); letter-spacing: .2em; color: var(--un-sub); }
-.ui-new .un-quest-body:has(.quest-main, .quest-log, .quest-improv, .quest-next-btn, .actor-section) .un-quest-empty { display: none; }
+.ui-new .un-quest-body:has(.quest-main, .quest-log, .quest-improv, .quest-next-btn, .actor-section, .quest-recap) .un-quest-empty { display: none; }
 
 /* 任务追踪：场景框左上角常驻的一小块（用户 2026-11-20 15:05）。老右栏里只留「任务目标」块里看的部分（章节、当前线、这一步、任务日志、个人目标）；
    按钮（回轨、启程、在地图上查看）、展开项（别处还有事、已完成）、调试提示不放，要看要点去右列「任务」。一行都没有时整块不显示 */

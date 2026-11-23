@@ -8,12 +8,12 @@
  *    b. 这个事件牵涉的人（不算主角）只有一个，且他在场 → 就是他（这一拍的主角，不跟说话人换）；
  *    c. 这一手正文里说话句数最多的在场的人（说话人记号〈名字〉）；上一次的人并列最多 → 不换，否则并列取先开口的；
  *    keep／d. 这一手没有在场的人说话 → 沿用上一次的（事件没变记 keep，换了事件记 d），只要他还在场；
- *    e. 都定不了 → 在场名单里排第一的人（不空着）。
+ *    e. 都定不了 → 「没有」，先空着（用户 2026-11-24「按推荐」：定不出立绘时先空着）。
  * 「在场」由调用方按 computeScenarioPresence 的口径给出；非剧本存档调用方直接当「没有」。
  */
 import { parseSpeakerMarks } from '@/utils/speakerMarks';
 
-export type LeadRule = 'keep' | 'a' | 'b' | 'c' | 'd' | 'e';
+export type LeadRule = 'keep' | 'a' | 'b' | 'c' | 'd';
 
 export interface LeadPick {
   eventId: string;
@@ -70,7 +70,7 @@ export function pickLeadCharacter(input: LeadInput): LeadPick | null {
   if (previous && isPresent(previous.name)) {
     return { eventId, name: previous.name, rule: previous.eventId === eventId ? 'keep' : 'd' };
   }
-  return { eventId, name: present[0], rule: 'e' };
+  return null;
 }
 
 /** 剪影的三种通用人形；按角色资料的性别选，没有或认不出 → 不分性别的披风人形。 */
