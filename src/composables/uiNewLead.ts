@@ -21,7 +21,7 @@ export interface UiNewLead {
   imageUrl: string;
   silhouette: SilhouetteKind;
   rule: LeadRule;
-  /** 现在这个人最初是按哪条规则定的（a／b／c／d／e；之后 keep 不改它），给人工核对用。 */
+  /** 现在这个人最初是按哪条规则定的（a／b／c／d；之后 keep 不改它），给人工核对用。 */
   basis: LeadRule;
 }
 
