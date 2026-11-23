@@ -16,15 +16,21 @@ const A=await loadTs('../src/modules/contentPacks/assets.ts');
 const XZ='liuchao.character.xiao_zi',EV='lcq.event.s02_04',EV2='lcq.event.s04_01';
 
 // ── 现状 ──
-test('现状：真实 catalog 的 assets 是三个空数组，解析函数全部返回 null／[]',()=>{
- assert.deepStrictEqual(P.CONTENT_PACKS.assets,{portraits:[],scenes:[],cg:[]});
+test('现状：真实 catalog 登记了立绘（全是全身 full，31 人 67 张，每人都有 default），场景图和 CG 还是空的',()=>{
+ const {portraits,scenes,cg}=P.CONTENT_PACKS.assets;
+ assert.deepStrictEqual([scenes,cg],[[],[]]);
+ assert.equal(portraits.length,67);
+ assert.ok(portraits.every(p=>p.kind==='full'&&p.file===`characters/${p.characterId}/full__${p.outfitId}.webp`));
+ const ids=[...new Set(portraits.map(p=>p.characterId))];
+ assert.equal(ids.length,31);
+ for(const id of ids)assert.equal(A.resolveFullBody({characterId:id})?.outfitId,'default',id);
+ assert.equal(A.resolveFullBody({characterId:XZ})?.file,`characters/${XZ}/full__default.webp`);
+ assert.equal(A.resolveFullBody({characterId:XZ,outfitId:'travel'})?.outfitId,'default');
  assert.equal(A.resolvePortrait({characterId:XZ}),null);
- assert.equal(A.resolvePortrait({characterId:XZ,outfitId:'travel',expression:'joy'}),null);
- assert.equal(A.resolveFullBody({characterId:XZ}),null);
  assert.equal(A.resolveAvatar(XZ),null);
+ assert.equal(A.resolveFullBody({characterId:'lcq.character.duan_qiang'}),null);
  assert.equal(A.resolveScene({sceneType:'city',variant:'night'}),null);
  assert.deepStrictEqual(A.resolveCg(EV),[]);
- assert.equal(A.nextPortraitFallback({characterId:XZ},'x.webp'),null);
  assert.equal(A.nextSceneFallback({sceneType:'city'},'x.webp'),null);
 });
 
