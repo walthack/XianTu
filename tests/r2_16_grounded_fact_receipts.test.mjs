@@ -10,6 +10,8 @@ const REVEAL_EVENT_ID = 'lcq.event.s04_03';
 const GROUNDED_CLAIM = '武二郎与苏荔联手击杀九名鬼王峒武士';
 
 const runtimeOf = save => save.世界.状态.剧本模组;
+// Q26 版一（用户 2026-11-24 批）：数字检查只记不拦，命中看 numberHits。
+const flagged = result => !result.valid || Boolean(result.numberHits?.length);
 
 function fixture(stage) {
   return {
@@ -96,27 +98,27 @@ test('engine snapshots an exact fact only after its matching local action and ou
   assert.match(prompt, /renderGuard\.rejectUngroundedHandoffLosses=true/);
   assert.match(prompt, /renderGuard\.groundedHandoffLossClaims=\["武二郎与苏荔联手击杀九名鬼王峒武士"\]/);
   assert.equal(
-    validateNarrativePerformance(`${GROUNDED_CLAIM}。`, '继续', prompt).valid,
-    true,
+    flagged(validateNarrativePerformance(`${GROUNDED_CLAIM}。`, '继续', prompt)),
+    false,
     'the exact engine receipt may be rendered',
   );
   assert.equal(
-    validateNarrativePerformance('武二郎独自击杀九名鬼王峒武士。', '继续', prompt).valid,
-    false,
+    flagged(validateNarrativePerformance('武二郎独自击杀九名鬼王峒武士。', '继续', prompt)),
+    true,
     'the same quantity cannot be moved to a different claim',
   );
   assert.equal(
-    validateNarrativePerformance(`${GROUNDED_CLAIM}，另有三名商队伙计死亡。`, '继续', prompt).valid,
-    false,
+    flagged(validateNarrativePerformance(`${GROUNDED_CLAIM}，另有三名商队伙计死亡。`, '继续', prompt)),
+    true,
     'a grounded clause cannot launder an additional invented loss',
   );
   assert.equal(
-    validateNarrativePerformance(
+    flagged(validateNarrativePerformance(
       `${GROUNDED_CLAIM}。不远处草席下盖着两具尸体。`,
       '继续',
       prompt,
-    ).valid,
-    false,
+    )),
+    true,
     'a grounded enemy-loss receipt cannot launder an exact corpse count for another side',
   );
 });
