@@ -14,7 +14,9 @@ export type PackPortrait=
 /** variant 为 null＝该类型的默认图。 */
 export interface PackScene {sceneType:string;variant:string|null;file:string}
 export interface PackCg {eventId:string;seq:number;file:string}
-export interface PackAssets {portraits:PackPortrait[];scenes:PackScene[];cg:PackCg[]}
+/** 地点（或区内节点）用哪几类场景图，按先后试；locationId 是地点总表的主 id。 */
+export interface PackLocationScene {locationId:string;sceneTypes:string[]}
+export interface PackAssets {portraits:PackPortrait[];scenes:PackScene[];cg:PackCg[];locationScenes?:PackLocationScene[]}
 
 export type PortraitFallback='exact'|'outfitNeutral'|'defaultNeutral'|'avatar';
 export interface PortraitRequest {characterId:string;outfitId?:string;expression?:PortraitExpression}
@@ -68,6 +70,18 @@ export function sceneCandidates(req:SceneRequest,assets:PackAssets=packAssets())
 export function resolveScene(req:SceneRequest,assets:PackAssets=packAssets()):PackScene|null {return sceneCandidates(req,assets)[0]??null;}
 export function nextSceneFallback(req:SceneRequest,failedFile:string,assets:PackAssets=packAssets()):PackScene|null {
  const chain=sceneCandidates(req,assets),i=chain.findIndex(c=>c.file===failedFile);return i<0?null:chain[i+1]??null;
+}
+
+/**
+ * 某个地点的场景图候选，按先后试：locationIds 里先写的先查（界面传「区内节点、地点」），用第一个登记过的。
+ * 白天：各类型的默认图，按 sceneTypes 的顺序。夜里：先各类型的 night 图（有才算），再各类型的默认图。
+ * 例：五原城登记 [loc_wuyuan, street]，夜里是 street__night → loc_wuyuan → street。没登记的地点返回 []（界面只写地点名）。
+ */
+export function locationSceneCandidates(req:{locationIds:(string|undefined)[];night?:boolean},assets:PackAssets=packAssets()):PackScene[] {
+ const entry=req.locationIds.map(id=>id?assets.locationScenes?.find(x=>x.locationId===id):undefined).find(Boolean);
+ if(!entry)return [];
+ const pick=(v:string|null)=>entry.sceneTypes.map(t=>assets.scenes.find(s=>s.sceneType===t&&s.variant===v)).filter((s):s is PackScene=>!!s);
+ return [...(req.night?pick('night'):[]),...pick(null)];
 }
 
 /** 该事件的全部 CG，按 seq 升序；没有就 []（走文字，不挡拍）。 */

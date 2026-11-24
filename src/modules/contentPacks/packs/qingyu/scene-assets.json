@@ -1,0 +1,800 @@
+{
+ "note": "2026-11-25 登记：第一批场景图 37 张（16 类白天、6 张夜图、15 张地点单图）和「地点 → 场景类型」。sceneTypes 按先后试；没列的地点场景框只写地点名。图片文件不进仓库，见 src/assets/scenes/README.md。对照表和没对上的地点见用户工作目录的「2026-11-25-地点场景图对照表.md」。",
+ "scenes": [
+  {
+   "sceneType": "street",
+   "file": "scenes/street.webp"
+  },
+  {
+   "sceneType": "city_gate",
+   "file": "scenes/city_gate.webp"
+  },
+  {
+   "sceneType": "warehouse",
+   "file": "scenes/warehouse.webp"
+  },
+  {
+   "sceneType": "inn",
+   "file": "scenes/inn.webp"
+  },
+  {
+   "sceneType": "palace",
+   "file": "scenes/palace.webp"
+  },
+  {
+   "sceneType": "yamen",
+   "file": "scenes/yamen.webp"
+  },
+  {
+   "sceneType": "barracks",
+   "file": "scenes/barracks.webp"
+  },
+  {
+   "sceneType": "grassland",
+   "file": "scenes/grassland.webp"
+  },
+  {
+   "sceneType": "forest",
+   "file": "scenes/forest.webp"
+  },
+  {
+   "sceneType": "desert",
+   "file": "scenes/desert.webp"
+  },
+  {
+   "sceneType": "river_ferry",
+   "file": "scenes/river_ferry.webp"
+  },
+  {
+   "sceneType": "ship",
+   "file": "scenes/ship.webp"
+  },
+  {
+   "sceneType": "cavern",
+   "file": "scenes/cavern.webp"
+  },
+  {
+   "sceneType": "temple",
+   "file": "scenes/temple.webp"
+  },
+  {
+   "sceneType": "chamber",
+   "file": "scenes/chamber.webp"
+  },
+  {
+   "sceneType": "prison",
+   "file": "scenes/prison.webp"
+  },
+  {
+   "sceneType": "street",
+   "variant": "night",
+   "file": "scenes/street__night.webp"
+  },
+  {
+   "sceneType": "inn",
+   "variant": "night",
+   "file": "scenes/inn__night.webp"
+  },
+  {
+   "sceneType": "palace",
+   "variant": "night",
+   "file": "scenes/palace__night.webp"
+  },
+  {
+   "sceneType": "barracks",
+   "variant": "night",
+   "file": "scenes/barracks__night.webp"
+  },
+  {
+   "sceneType": "forest",
+   "variant": "night",
+   "file": "scenes/forest__night.webp"
+  },
+  {
+   "sceneType": "chamber",
+   "variant": "night",
+   "file": "scenes/chamber__night.webp"
+  },
+  {
+   "sceneType": "loc_wuyuan",
+   "file": "scenes/loc_wuyuan.webp"
+  },
+  {
+   "sceneType": "loc_baihu",
+   "file": "scenes/loc_baihu.webp"
+  },
+  {
+   "sceneType": "loc_huamiao",
+   "file": "scenes/loc_huamiao.webp"
+  },
+  {
+   "sceneType": "loc_jiangzhou",
+   "file": "scenes/loc_jiangzhou.webp"
+  },
+  {
+   "sceneType": "loc_jiankang",
+   "file": "scenes/loc_jiankang.webp"
+  },
+  {
+   "sceneType": "loc_luoyang",
+   "file": "scenes/loc_luoyang.webp"
+  },
+  {
+   "sceneType": "loc_changan",
+   "file": "scenes/loc_changan.webp"
+  },
+  {
+   "sceneType": "loc_linan",
+   "file": "scenes/loc_linan.webp"
+  },
+  {
+   "sceneType": "loc_guiwang",
+   "file": "scenes/loc_guiwang.webp"
+  },
+  {
+   "sceneType": "loc_biyu",
+   "file": "scenes/loc_biyu.webp"
+  },
+  {
+   "sceneType": "loc_sea_temple",
+   "file": "scenes/loc_sea_temple.webp"
+  },
+  {
+   "sceneType": "loc_changqiu",
+   "file": "scenes/loc_changqiu.webp"
+  },
+  {
+   "sceneType": "loc_taiquan",
+   "file": "scenes/loc_taiquan.webp"
+  },
+  {
+   "sceneType": "loc_grassland",
+   "file": "scenes/loc_grassland.webp"
+  },
+  {
+   "sceneType": "loc_baiyi",
+   "file": "scenes/loc_baiyi.webp"
+  }
+ ],
+ "locationScenes": [
+  {
+   "locationId": "liuchao.location.wuyuan",
+   "sceneTypes": [
+    "loc_wuyuan",
+    "street"
+   ]
+  },
+  {
+   "locationId": "lcq.zone.wuyuan.settlement",
+   "sceneTypes": [
+    "loc_wuyuan",
+    "street"
+   ]
+  },
+  {
+   "locationId": "lcq.zone.wuyuan.market",
+   "sceneTypes": [
+    "loc_wuyuan",
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.baihu_shang_guan",
+   "sceneTypes": [
+    "loc_baihu",
+    "warehouse"
+   ]
+  },
+  {
+   "locationId": "lcq.zone.wuyuan.baihu_front_street",
+   "sceneTypes": [
+    "loc_baihu",
+    "warehouse"
+   ]
+  },
+  {
+   "locationId": "lcq.zone.wuyuan.baihu_gate",
+   "sceneTypes": [
+    "loc_baihu",
+    "warehouse"
+   ]
+  },
+  {
+   "locationId": "lcq.zone.wuyuan.baihu_compound",
+   "sceneTypes": [
+    "loc_baihu",
+    "warehouse"
+   ]
+  },
+  {
+   "locationId": "lcq.location.huamiao_village",
+   "sceneTypes": [
+    "loc_huamiao",
+    "forest"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.jiangzhou",
+   "sceneTypes": [
+    "loc_jiangzhou",
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.jiankang",
+   "sceneTypes": [
+    "loc_jiankang",
+    "street"
+   ]
+  },
+  {
+   "locationId": "lyl.location.luoyang",
+   "sceneTypes": [
+    "loc_luoyang",
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.changan",
+   "sceneTypes": [
+    "loc_changan",
+    "street"
+   ]
+  },
+  {
+   "locationId": "lyg.location.changan",
+   "sceneTypes": [
+    "loc_changan",
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.lin_an",
+   "sceneTypes": [
+    "loc_linan",
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.linan_city",
+   "sceneTypes": [
+    "loc_linan",
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.gui_wang_dong",
+   "sceneTypes": [
+    "loc_guiwang",
+    "cavern"
+   ]
+  },
+  {
+   "locationId": "lcq.location.guiwang_outer_post",
+   "sceneTypes": [
+    "loc_guiwang",
+    "cavern"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.biyu_village",
+   "sceneTypes": [
+    "loc_biyu"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.sea_temple",
+   "sceneTypes": [
+    "loc_sea_temple"
+   ]
+  },
+  {
+   "locationId": "lyl.location.changqiu_palace",
+   "sceneTypes": [
+    "loc_changqiu",
+    "palace"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.taiquan",
+   "sceneTypes": [
+    "loc_taiquan"
+   ]
+  },
+  {
+   "locationId": "lcq.location.grassland",
+   "sceneTypes": [
+    "loc_grassland",
+    "grassland"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.baiyi",
+   "sceneTypes": [
+    "loc_baiyi",
+    "forest"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.bai_yi_valley",
+   "sceneTypes": [
+    "loc_baiyi",
+    "forest"
+   ]
+  },
+  {
+   "locationId": "lcq.zone.wuyuan.baihu_hall",
+   "sceneTypes": [
+    "warehouse"
+   ]
+  },
+  {
+   "locationId": "lcq.zone.wuyuan.water_prison",
+   "sceneTypes": [
+    "prison"
+   ]
+  },
+  {
+   "locationId": "lcq.zone.wuyuan.pastry_shop",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.yun_shi_shop",
+   "sceneTypes": [
+    "warehouse"
+   ]
+  },
+  {
+   "locationId": "lcq.location.guiwang_inn",
+   "sceneTypes": [
+    "inn"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.xiongerpu",
+   "sceneTypes": [
+    "inn"
+   ]
+  },
+  {
+   "locationId": "lyg.location.liuxianping",
+   "sceneTypes": [
+    "inn"
+   ]
+  },
+  {
+   "locationId": "lyg.location.yanglu_menyuan",
+   "sceneTypes": [
+    "inn"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.gui_wang_gong",
+   "sceneTypes": [
+    "cavern"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.gui_wang_gong.jingshen_tai",
+   "sceneTypes": [
+    "cavern"
+   ]
+  },
+  {
+   "locationId": "lcq.location.nanhuang_camp",
+   "sceneTypes": [
+    "forest"
+   ]
+  },
+  {
+   "locationId": "lcq.location.nanhuang_route",
+   "sceneTypes": [
+    "forest"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.shan_jian",
+   "sceneTypes": [
+    "forest"
+   ]
+  },
+  {
+   "locationId": "lcq.location.giant_vine",
+   "sceneTypes": [
+    "forest"
+   ]
+  },
+  {
+   "locationId": "lcq.location.turtle_road_ruins",
+   "sceneTypes": [
+    "forest"
+   ]
+  },
+  {
+   "locationId": "nh.black_shoal",
+   "sceneTypes": [
+    "forest"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.shangyang_mountain",
+   "sceneTypes": [
+    "forest"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.qishan",
+   "sceneTypes": [
+    "forest"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.bailuojiang",
+   "sceneTypes": [
+    "river_ferry"
+   ]
+  },
+  {
+   "locationId": "lcq.location.bailongjiang_kou",
+   "sceneTypes": [
+    "river_ferry"
+   ]
+  },
+  {
+   "locationId": "lyg.location.weishui",
+   "sceneTypes": [
+    "river_ferry"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.hanguguan",
+   "sceneTypes": [
+    "city_gate"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.yique",
+   "sceneTypes": [
+    "city_gate"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.zhuoguang",
+   "sceneTypes": [
+    "city_gate"
+   ]
+  },
+  {
+   "locationId": "lyg.location.liangzhou",
+   "sceneTypes": [
+    "desert"
+   ]
+  },
+  {
+   "locationId": "lyl.location.nangong",
+   "sceneTypes": [
+    "palace"
+   ]
+  },
+  {
+   "locationId": "lyl.location.zhaoyang_palace",
+   "sceneTypes": [
+    "palace"
+   ]
+  },
+  {
+   "locationId": "lyl.location.xianqian_dian",
+   "sceneTypes": [
+    "palace"
+   ]
+  },
+  {
+   "locationId": "lyg.location.daming_palace",
+   "sceneTypes": [
+    "palace"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.yongan_palace",
+   "sceneTypes": [
+    "palace"
+   ]
+  },
+  {
+   "locationId": "lyg.location.bolu_wangfu",
+   "sceneTypes": [
+    "yamen"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.shangguan_li_hufu",
+   "sceneTypes": [
+    "yamen"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.jin_fu",
+   "sceneTypes": [
+    "yamen"
+   ]
+  },
+  {
+   "locationId": "lyg.location.wuyang_houfu",
+   "sceneTypes": [
+    "yamen"
+   ]
+  },
+  {
+   "locationId": "lyg.location.wuyang_mansion",
+   "sceneTypes": [
+    "yamen"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.jiaoxi_di",
+   "sceneTypes": [
+    "yamen"
+   ]
+  },
+  {
+   "locationId": "lcq.location.shuai_zhang",
+   "sceneTypes": [
+    "barracks"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.jinming_zhai",
+   "sceneTypes": [
+    "barracks"
+   ]
+  },
+  {
+   "locationId": "lyl.location.yulin_camp",
+   "sceneTypes": [
+    "barracks"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.xingyue_lake",
+   "sceneTypes": [
+    "barracks"
+   ]
+  },
+  {
+   "locationId": "lyl.location.shangshenguan",
+   "sceneTypes": [
+    "temple"
+   ]
+  },
+  {
+   "locationId": "lyg.location.shangshenguan",
+   "sceneTypes": [
+    "temple"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.guang_ming_guan",
+   "sceneTypes": [
+    "temple"
+   ]
+  },
+  {
+   "locationId": "lyg.location.daciensi",
+   "sceneTypes": [
+    "temple"
+   ]
+  },
+  {
+   "locationId": "lcq.location.taiyi_temple",
+   "sceneTypes": [
+    "temple"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.mingqing_temple",
+   "sceneTypes": [
+    "temple"
+   ]
+  },
+  {
+   "locationId": "lyg.location.qinglongsi",
+   "sceneTypes": [
+    "temple"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.longchi",
+   "sceneTypes": [
+    "temple"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.zengxi_guan",
+   "sceneTypes": [
+    "temple"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.jiankang_yuji_xiang",
+   "sceneTypes": [
+    "chamber"
+   ]
+  },
+  {
+   "locationId": "lyg.location.xuanping_fang",
+   "sceneTypes": [
+    "chamber"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.wudu_manor",
+   "sceneTypes": [
+    "chamber"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.beisi_yard",
+   "sceneTypes": [
+    "prison"
+   ]
+  },
+  {
+   "locationId": "lyg.location.yongning_fang",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.yong",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.shangjun",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.linchuan",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.lintao",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.dantu",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.nanjun",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.hezhou",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.xianyang",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.rongzhou",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.baijun",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.guangyang",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.mingzhou",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.qingzhou",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.yongzhou",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.qingyuan_jin",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.zhuyajun",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.jingzhou_jin",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.junzhou",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.chenzhou",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.yongzhou_jin",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.yongcheng",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.longchuan",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.yiyang",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.ningzhou",
+   "sceneTypes": [
+    "street"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.wudu",
+   "sceneTypes": [
+    "street"
+   ]
+  }
+ ]
+}

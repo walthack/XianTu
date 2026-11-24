@@ -1,5 +1,5 @@
 // 图片挂位（assets，2026-11-16）：立绘 portraits／场景图 scenes／CG cg 三类，只建机制，不放真图。
-// manifest.assets 是文件列表，每个文件是对象 {note?,portraits?,scenes?,cg?}；条目与文件顶层的 note 只给作者看，编译时剥掉。
+// manifest.assets 是文件列表，每个文件是对象 {note?,portraits?,scenes?,cg?,locationScenes?}；条目与文件顶层的 note 只给作者看，编译时剥掉。
 // 编译期只校验数据形状与引用（人物总表、事件），不检查图片文件是否存在（素材根目录是 src/assets/，立绘 characters/、场景图 scenes/、CG cg/；运行时另有回落，见 src/modules/contentPacks/assets.ts）。
 import {join} from 'node:path';
 import {createJiti} from 'jiti';
@@ -13,7 +13,7 @@ const ident=v=>typeof v==='string'&&/^[a-z0-9_-]+$/.test(v);
 export const PORTRAIT_KINDS=['bust','full','avatar'];
 export const PORTRAIT_EXPRESSIONS=['neutral','joy','anger','sorrow','surprise','shy'];
 /** catalog 里的空段（没有包声明时）。 */
-export const emptyAssets=()=>({portraits:[],scenes:[],cg:[]});
+export const emptyAssets=()=>({portraits:[],scenes:[],cg:[],locationScenes:[]});
 /** 归属扫描只看对外 id 引用：立绘的 characterId、CG 的 eventId；其余字段（sceneType、服装、表情、文件路径）是本段自己的取值，不进通用扫描。 */
 export const scannedAssetRefs=v=>object(v)?{portraits:(Array.isArray(v.portraits)?v.portraits:[]).map(x=>x?.characterId),cg:(Array.isArray(v.cg)?v.cg:[]).map(x=>x?.eventId)}:v;
 
@@ -22,13 +22,14 @@ const fileOk=f=>typeof f==='string'&&!f.startsWith('/')&&!f.includes('..')&&!f.i
 /** raw: [{packId,value}]（value 是 assets 文件的原始内容）；events: 本次编译的全部事件 id。返回 catalog.assets。 */
 export async function compileAssets(raw,{events}){
  const out=emptyAssets();
+ let locationIds;const isLocation=async id=>(locationIds||=new Set((await createJiti(import.meta.url,{interopDefault:true,alias:{'@':join(root,'src')}}).import(join(root,'src/modules/scenarioMods/namedEntities.ts'))).namedEntityEntries('location').map(e=>e.id))).has(id);
  let characterIds;const isCharacter=async id=>(characterIds||=new Set((await createJiti(import.meta.url,{interopDefault:true,alias:{'@':join(root,'src')}}).import(join(root,'src/modules/scenarioMods/namedEntities.ts'))).namedEntityEntries('character').map(e=>e.id))).has(id);
  const owners=new Map(),files=new Map();
  const claim=(map,key,label,packId)=>{if(map.has(key))fail(map.get(key)===packId?`${label}: duplicate`:`${label} defined by both ${map.get(key)} and ${packId}`);map.set(key,packId);};
  const checkFile=(at,x,packId)=>{if(!fileOk(x.file))fail(`${at}: file must be a relative path without leading /, .., \\ or empty segments, ending in .png/.webp/.jpg/.jpeg`);claim(files,x.file,`asset file ${x.file}`,packId);};
  const list=(packId,v,k)=>{if(v[k]===undefined)return [];if(!Array.isArray(v[k]))fail(`${packId}.assets.${k}: expected array`);return v[k];};
  for(const {packId,value:v} of raw){
-  if(!onlyKeys(v,['note','portraits','scenes','cg'])||!noteOk(v))fail(`${packId}.assets: expected object with note/portraits/scenes/cg`);
+  if(!onlyKeys(v,['note','portraits','scenes','cg','locationScenes'])||!noteOk(v))fail(`${packId}.assets: expected object with note/portraits/scenes/cg/locationScenes`);
   for(const x of list(packId,v,'portraits')){const at=`asset portrait ${x?.characterId}`;
    if(!onlyKeys(x,['characterId','kind','outfitId','expression','file','note'])||!noteOk(x)||typeof x.characterId!=='string'||!x.characterId)fail(`${at}: invalid fields`);
    if(!(await isCharacter(x.characterId)))fail(`${at}: unknown character`);
@@ -53,6 +54,14 @@ export async function compileAssets(raw,{events}){
    if(!Number.isSafeInteger(x.seq)||x.seq<1)fail(`${at}: seq must be a positive integer`);
    claim(owners,`cg\u0000${x.eventId}\u0000${x.seq}`,at,packId);
    checkFile(at,x,packId);out.cg.push({eventId:x.eventId,seq:x.seq,file:x.file});}
+  // 地点 → 场景类型（2026-11-25）：locationId 须是地点总表的主 id（区内节点也在总表里）；sceneTypes 按先后试，每个都须有登记的默认图（全部包读完后查）。
+  for(const x of list(packId,v,'locationScenes')){const at=`asset locationScene ${x?.locationId}`;
+   if(!onlyKeys(x,['locationId','sceneTypes','note'])||!noteOk(x)||typeof x.locationId!=='string'||!x.locationId)fail(`${at}: invalid fields`);
+   if(!(await isLocation(x.locationId)))fail(`${at}: unknown location`);
+   if(!Array.isArray(x.sceneTypes)||!x.sceneTypes.length||!x.sceneTypes.every(ident)||new Set(x.sceneTypes).size!==x.sceneTypes.length)fail(`${at}: sceneTypes must be a non-empty list of distinct [a-z0-9_-]+`);
+   claim(owners,`locationScene\u0000${x.locationId}`,at,packId);
+   out.locationScenes.push({locationId:x.locationId,sceneTypes:[...x.sceneTypes]});}
  }
+ for(const x of out.locationScenes)for(const t of x.sceneTypes)if(!out.scenes.some(s=>s.sceneType===t&&s.variant===null))fail(`asset locationScene ${x.locationId}: sceneType ${t} has no default scene`);
  return out;
 }

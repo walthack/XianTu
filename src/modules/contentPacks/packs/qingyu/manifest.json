@@ -59,5 +59,8 @@
   ],
   "contractRevisions": [
     "contract-revisions.json"
+  ],
+  "assets": [
+    "scene-assets.json"
   ]
 }

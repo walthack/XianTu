@@ -16,9 +16,12 @@ const A=await loadTs('../src/modules/contentPacks/assets.ts');
 const XZ='liuchao.character.xiao_zi',EV='lcq.event.s02_04',EV2='lcq.event.s04_01';
 
 // ── 现状 ──
-test('现状：真实 catalog 登记了立绘（全是全身 full，31 人 67 张，每人都有 default），场景图和 CG 还是空的',()=>{
+test('现状：真实 catalog 登记了立绘（全是全身 full，31 人 67 张，每人都有 default）和第一批场景图 37 张，CG 还是空的',()=>{
  const {portraits,scenes,cg}=P.CONTENT_PACKS.assets;
- assert.deepStrictEqual([scenes,cg],[[],[]]);
+ assert.deepStrictEqual(cg,[]);
+ assert.equal(scenes.length,37);
+ assert.ok(scenes.every(s=>s.file===`scenes/${s.sceneType}${s.variant?`__${s.variant}`:''}.webp`));
+ assert.deepStrictEqual(scenes.filter(s=>s.variant).map(s=>`${s.sceneType}/${s.variant}`),['street/night','inn/night','palace/night','barracks/night','forest/night','chamber/night']);
  assert.equal(portraits.length,67);
  assert.ok(portraits.every(p=>p.kind==='full'&&p.file===`characters/${p.characterId}/full__${p.outfitId}.webp`));
  const ids=[...new Set(portraits.map(p=>p.characterId))];
@@ -67,15 +70,16 @@ test('合成包：三类编译通过，默认值补齐成显式值，note 剥掉
    {characterId:XZ,kind:'full',outfitId:'default',file:'characters/liuchao.character.xiao_zi/full__default.jpg'},
    {characterId:XZ,kind:'avatar',file:'characters/liuchao.character.xiao_zi/avatar.jpeg'}],
   scenes:[{sceneType:'city',variant:null,file:'scenes/city.webp'},{sceneType:'city',variant:'night',file:'scenes/city__night.webp'}],
-  cg:[{eventId:EV,seq:2,file:'cg/test.a/lcq.event.s02_04__2.webp'},{eventId:EV,seq:1,file:'cg/test.a/lcq.event.s02_04__1.webp'}]});
+  cg:[{eventId:EV,seq:2,file:'cg/test.a/lcq.event.s02_04__2.webp'},{eventId:EV,seq:1,file:'cg/test.a/lcq.event.s02_04__1.webp'}],
+  locationScenes:[]});
  assert.ok(Object.keys(c).indexOf('assets')>Object.keys(c).indexOf('contractRevisions'));
  // 编译产物直接喂给解析函数
  assert.deepStrictEqual(A.resolveCg(EV,c.assets).map(x=>x.seq),[1,2]);
  assert.equal(A.resolvePortrait({characterId:XZ,outfitId:'travel',expression:'joy'},c.assets).fallback,'exact');
 });
 test('合成包：不声明时 assets 是三个空数组；文件里三段都可省略',async()=>{
- assert.deepStrictEqual((await compile({a:{id:'test.a'}})).assets,{portraits:[],scenes:[],cg:[]});
- assert.deepStrictEqual((await compile({a:pack('test.a',{note:'空'})})).assets,{portraits:[],scenes:[],cg:[]});
+ assert.deepStrictEqual((await compile({a:{id:'test.a'}})).assets,{portraits:[],scenes:[],cg:[],locationScenes:[]});
+ assert.deepStrictEqual((await compile({a:pack('test.a',{note:'空'})})).assets,{portraits:[],scenes:[],cg:[],locationScenes:[]});
 });
 
 // ── 编译期反例 ──
@@ -206,6 +210,51 @@ test('场景回落：指定变体 → 该类型默认 → null；nextSceneFallba
  assert.equal(A.nextSceneFallback({sceneType:'city',variant:'night'},'city_night.webp',FULL).file,'city.webp');
  assert.equal(A.nextSceneFallback({sceneType:'city',variant:'night'},'city.webp',FULL),null);
  assert.equal(A.nextSceneFallback({sceneType:'town',variant:'night'},'town_night.webp',FULL),null);
+});
+// ── 地点 → 场景类型（locationScenes，2026-11-25）──
+const WY='liuchao.location.wuyuan',BH='liuchao.location.baihu_shang_guan',PRISON='lcq.zone.wuyuan.water_prison';
+const LS={portraits:[],cg:[],
+ scenes:[{sceneType:'loc_wuyuan',variant:null,file:'loc_wuyuan.webp'},{sceneType:'street',variant:null,file:'street.webp'},{sceneType:'street',variant:'night',file:'street__night.webp'},{sceneType:'prison',variant:null,file:'prison.webp'}],
+ locationScenes:[{locationId:WY,sceneTypes:['loc_wuyuan','street']},{locationId:PRISON,sceneTypes:['prison']}]};
+const files=(req,a=LS)=>A.locationSceneCandidates(req,a).map(s=>s.file);
+test('地点场景图：白天按 sceneTypes 先后；夜里先夜图再白天的；先写的 id 先查；没登记返回 []',()=>{
+ assert.deepStrictEqual(files({locationIds:[WY]}),['loc_wuyuan.webp','street.webp']);
+ assert.deepStrictEqual(files({locationIds:[WY],night:true}),['street__night.webp','loc_wuyuan.webp','street.webp']);
+ assert.deepStrictEqual(files({locationIds:[PRISON,WY],night:true}),['prison.webp'],'区内节点登记了就用节点的，没有夜图用白天的');
+ assert.deepStrictEqual(files({locationIds:[undefined,'lcq.zone.wuyuan.market',WY]}),['loc_wuyuan.webp','street.webp'],'节点没登记退到地点');
+ assert.deepStrictEqual(files({locationIds:[BH]}),[]);
+ assert.deepStrictEqual(files({locationIds:[WY]},{portraits:[],scenes:[],cg:[]}),[],'旧 catalog 没有 locationScenes 段');
+});
+test('合成包：locationScenes 编译通过，note 剥掉；不认识的地点、没有默认图的类型、重复、空列表都报错',async()=>{
+ const scenes=[{sceneType:'street',file:'scenes/street.webp'},{sceneType:'inn',variant:'night',file:'scenes/inn__night.webp'}];
+ const c=await compile({a:pack('test.a',{scenes,locationScenes:[{locationId:WY,sceneTypes:['street'],note:'先垫底'}]})});
+ assert.deepStrictEqual(c.assets.locationScenes,[{locationId:WY,sceneTypes:['street']}]);
+ await R({scenes,locationScenes:[{locationId:'liuchao.location.__missing__',sceneTypes:['street']}]},/asset locationScene liuchao\.location\.__missing__: unknown location/);
+ await R({scenes,locationScenes:[{locationId:'五原城',sceneTypes:['street']}]},/unknown location/);
+ await R({scenes,locationScenes:[{locationId:WY,sceneTypes:['inn']}]},/sceneType inn has no default scene/);
+ await R({scenes,locationScenes:[{locationId:WY,sceneTypes:['town']}]},/sceneType town has no default scene/);
+ await R({scenes,locationScenes:[{locationId:WY,sceneTypes:[]}]},/sceneTypes must be a non-empty list/);
+ await R({scenes,locationScenes:[{locationId:WY,sceneTypes:['street','street']}]},/sceneTypes must be a non-empty list/);
+ await R({scenes,locationScenes:[{locationId:WY,sceneTypes:['street']},{locationId:WY,sceneTypes:['street']}]},/asset locationScene liuchao\.location\.wuyuan: duplicate/);
+ await R({scenes,locationScenes:[{locationId:WY,sceneTypes:['street'],file:'x.webp'}]},/invalid fields/);
+});
+test('现状：真实登记里每个地点都在总表、每个类型都有默认图；按存档位置和钟点取图',async()=>{
+ const U=await loadTs('../src/composables/uiNewScene.ts');
+ const {locationScenes,scenes}=P.CONTENT_PACKS.assets;
+ assert.equal(locationScenes.length,103);
+ for(const x of locationScenes)for(const t of x.sceneTypes)assert.ok(scenes.some(s=>s.sceneType===t&&s.variant===null),`${x.locationId}/${t}`);
+ const save=(描述,小时,extra={})=>({角色:{位置:{描述,...extra}},元数据:{时间:{年:220,月:1,日:1,小时,分钟:0}}});
+ const wy={locationId:WY};
+ assert.deepStrictEqual(U.locationSceneFiles(save('中州·五原',10,wy)),['scenes/loc_wuyuan.webp','scenes/street.webp']);
+ assert.deepStrictEqual(U.locationSceneFiles(save('中州·五原',19,wy)),['scenes/loc_wuyuan.webp','scenes/street.webp'],'黄昏算白天');
+ assert.deepStrictEqual(U.locationSceneFiles(save('中州·五原',21,wy)),['scenes/street__night.webp','scenes/loc_wuyuan.webp','scenes/street.webp']);
+ assert.deepStrictEqual(U.locationSceneFiles(save('中州·五原',3,wy)),['scenes/street__night.webp','scenes/loc_wuyuan.webp','scenes/street.webp']);
+ assert.deepStrictEqual(U.locationSceneFiles(save('中州·五原·白湖商馆水牢',10,wy)),['scenes/prison.webp'],'区内节点先于地点');
+ assert.deepStrictEqual(U.locationSceneFiles(save('南荒·白夷族',10,{locationId:'nh.baiyi'})),['scenes/loc_baiyi.webp','scenes/forest.webp'],'别名 id 也认');
+ assert.deepStrictEqual(U.locationSceneFiles(save('南荒·花苗寨',22,{locationId:'lcq.location.huamiao_village'})),['scenes/forest__night.webp','scenes/loc_huamiao.webp','scenes/forest.webp']);
+ assert.deepStrictEqual(U.locationSceneFiles(save('南荒·蛇彝村',10,{locationId:'lcq.location.sheyi_village'})),[],'没对上的地点不给图');
+ assert.deepStrictEqual(U.locationSceneFiles(save('不知道在哪',10)),[]);
+ assert.deepStrictEqual(U.locationSceneFiles(null),[]);
 });
 test('CG：该事件全部条目按 seq 升序，不改原数组；没有返回 []',()=>{
  const before=JSON.stringify(FULL.cg);

@@ -528,7 +528,7 @@ manifest `mapEntries` 是 JSON 文件路径数组，每个文件是对象或对�
 
 ## 2026-11-16 图片挂位 assets（立绘、场景图、CG）
 
-给将来的立绘、场景图、CG 留位置，并定好缺图时怎么退回文字。现在一张图都没有，没有包声明这一段，游戏行为不变。**素材根目录是 `src/assets/`**（用户 2026-11-16 定：立绘放 `src/assets/characters/`、场景图放 `src/assets/scenes/`、CG 放 `src/assets/cg/`，与现有的 `src/assets/endings/` 并列；代码里是 `assets.ts` 的 `ASSET_ROOT`／`ASSET_DIRS`）。**2026-11-21 起**：打包规则已加（用户同意，只管这三个目录），`src/assets/packImages.ts` 的 `packImageUrl(file)` 把 `file` 换成网址；新界面立绘区已接立绘，场景图和 CG 界面还没接。
+给将来的立绘、场景图、CG 留位置，并定好缺图时怎么退回文字。现在一张图都没有，没有包声明这一段，游戏行为不变。**素材根目录是 `src/assets/`**（用户 2026-11-16 定：立绘放 `src/assets/characters/`、场景图放 `src/assets/scenes/`、CG 放 `src/assets/cg/`，与现有的 `src/assets/endings/` 并列；代码里是 `assets.ts` 的 `ASSET_ROOT`／`ASSET_DIRS`）。**2026-11-21 起**：打包规则已加（用户同意，只管这三个目录），`src/assets/packImages.ts` 的 `packImageUrl(file)` 把 `file` 换成网址；新界面立绘区已接立绘。**2026-11-25 起**：新界面场景框已接场景图（按地点，见下面 `locationScenes`），CG 界面还没接。
 
 - **格式**：manifest 加 `assets: ["assets.json", …]`（文件列表）。每个文件是对象，四个键都可省略：
   ```json
@@ -540,10 +540,11 @@ manifest `mapEntries` 是 JSON 文件路径数组，每个文件是对象或对�
   - 立绘 `portraits`：`characterId` 须是人物总表里的角色 id（整串比对，名字和别名不算）。`kind` 是 `bust`（半身）、`full`（全身）或 `avatar`（头像）。`outfitId` 省略即 `default`，头像不许写。`expression` 只有半身能写，取 `neutral`／`joy`／`anger`／`sorrow`／`surprise`／`shy`，省略即 `neutral`。同一个角色＋种类＋服装＋表情全部包里只能有一条。
   - 场景图 `scenes`：`sceneType` 必填；`variant` 省略表示这一类的默认图。同一个类型＋变体全部包里只能有一条。
   - CG `cg`：`eventId` 须是存在的事件；`seq` 是正整数；同一个事件＋序号全部包里只能有一条。引用别的包里的事件要写 `dependsOn`（和其它段一样）。
+  - 地点用哪类场景图 `locationScenes`（2026-11-25）：`{"locationId": "liuchao.location.wuyuan", "sceneTypes": ["loc_wuyuan", "street"]}`。`locationId` 须是地点总表里的主 id（别名不算；五原、南荒的区内节点也在总表里，可以单独登记）。`sceneTypes` 是按先后试的类型列表，不许空、不许重复，每个类型都必须有登记的默认图。同一个地点全部包里只能有一条。
   - `sceneType`、`variant`、`outfitId` 只许小写字母、数字、下划线、连字符。
   - `file` 是相对素材根目录的路径：不许以 `/` 开头，不许含 `..`、`\`、空段；扩展名只许 `.png`、`.webp`、`.jpg`、`.jpeg`（小写）。同一个文件全部包里只能声明一次。**编译时不检查文件是否存在。**
   - 每条都可写 `note`，编译时剥掉；别的键报错。
-- **编译结果**：catalog 末尾多一段 `assets: {portraits, scenes, cg}`，省略的值补成显式值（半身补齐服装和表情，全身补齐服装，场景没写变体时 `variant` 为 `null`）。没有包声明时是三个空数组。编译代码在 `scripts/content-pack-assets.mjs`。
+- **编译结果**：catalog 末尾多一段 `assets: {portraits, scenes, cg}`，省略的值补成显式值（半身补齐服装和表情，全身补齐服装，场景没写变体时 `variant` 为 `null`）。没有包声明时是空数组（`locationScenes` 也是）。编译代码在 `scripts/content-pack-assets.mjs`。
 - **文件名约定**（建议，编译不强制；路径从 `src/assets/` 起算）：
   - 半身 `characters/<角色id>/bust__<服装>__<表情>.<扩展名>`
   - 全身 `characters/<角色id>/full__<服装>.<扩展名>`
@@ -555,6 +556,7 @@ manifest `mapEntries` 是 JSON 文件路径数组，每个文件是对象或对�
   - 全身 `resolveFullBody`：指定服装 → `default` → 没有。
   - 头像 `resolveAvatar`：只找头像，不拿半身图顶替。
   - 场景 `resolveScene`：指定变体 → 这一类的默认图 → 没有。
+  - 地点的场景图 `locationSceneCandidates`：传「区内节点 id、地点 id」，用第一个登记过的。白天按 `sceneTypes` 的先后取各类型的默认图；夜里（游戏钟点 20 点到 5 点）先取各类型的 `night` 图（有才算），再取默认图。没登记的地点返回空，场景框只写地点名。界面入口是 `src/composables/uiNewScene.ts`；这一手叙事自带插图时仍先放插图。
   - CG `resolveCg`：这个事件的全部 CG，按序号排好；没有就是空列表，照常走文字，不挡剧情。
   - 图片加载失败（比如文件不存在）时，`nextPortraitFallback`／`nextSceneFallback` 给出回落链上的下一张，没有就返回空。
 - 测试：`tests/packAssets.test.mjs`。
