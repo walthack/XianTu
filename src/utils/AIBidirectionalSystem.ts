@@ -43,6 +43,7 @@ import { affinityCapFor } from '@/modules/scenarioMods/affinityCaps';
 import { focusedNpcNamesFromState } from '@/modules/scenarioMods/presence';
 import { toast } from './toast';
 import { logEvent } from '@/modules/diagnostics/log';
+import { recordNumberGateHits } from '@/modules/diagnostics/numberGateLog';
 import { pickId, summarizeError } from '@/modules/diagnostics/errorSummary';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { readAuditLog } from '@/modules/scenarioMods/backgroundAuditCore';
@@ -93,6 +94,7 @@ import {
   getScenarioFocusEvent, previewWangZheStayEnding,
   getCurrentStoryExplorationActions,
   getCurrentStoryEventActions,
+  getCurrentContractStep,
   acknowledgeStageEntryPresentation,
   acknowledgeStoryBeatHandoff,
   advanceScenarioRuntime,
@@ -1792,7 +1794,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
             console.warn('[角色表演门禁] 长请求预算已用尽，不再重写');
           } else {
           options?.onProgressUpdate?.('角色表演门禁：重写正文…');
-          const retryInput = `${finalUserInput}\n\n${performanceRetryInstruction(performance.issues, performance.offendingSentences)}`;
+          const retryInput = `${finalUserInput}\n\n${performanceRetryInstruction(performance.issues)}`;
           console.warn(hardViolation ? '[叙事硬门禁] 命中，自动重写一次：' : '[角色表演门禁] 非分步正文退回重写：', performance.issues);
           const retryRaw = tavernHelper
             ? await tavernHelper.generate({
@@ -1855,7 +1857,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
           gmResponse.tavern_commands = [];
           gmResponse.action_options = [];
           console.error('[叙事硬门禁] 最终落稿违规，已丢弃正文与伴随指令：', finalPerformance.issues);
-        }
+        } else recordNumberGateHits(finalPerformance.numberHits, { site: 'turn', generationId, step: getCurrentContractStep(saveData) });
       }
 
       if (shouldAbort()) {
@@ -2536,7 +2538,7 @@ ${stripSpeakerMarks(step1Text)}
         gmResponse!.tavern_commands = [];
         gmResponse!.action_options = [];
         console.error('[叙事硬门禁] 开局优化后落稿违规，已丢弃正文与伴随指令：', finalInitialPerformance.issues);
-      }
+      } else recordNumberGateHits(finalInitialPerformance.numberHits, { site: 'opening' });
 
       // 流式传输完成后调用回调
       if (useStreaming && options?.onStreamComplete) {

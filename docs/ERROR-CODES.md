@@ -66,6 +66,7 @@
 | LCQ-NAR-008 | warn | aiBidirectional | 文本优化失败，沿用原文 | 开启了 text_optimization 功能，但优化请求失败或抛错，返回未优化的原文 | 看 detail.error；检查 text_optimization 的 API 分配；不影响回合 | 否 |
 | LCQ-NAR-009 | warn | promptLayers | 私密层因角色现算年龄不满 18 未开 | 入口（输入命中或拍子 scene.intimate）、在场、好感都满足，但现算年龄（当前游戏年−有效出生年，characterResolver.gateAgeNow）不满 prompt-layers.json 的 private.minAdultAge；storyContext 不发私密内容，改发 minorNowConstraint 一句（docs/COMPLIANCE-REQUIREMENTS.md A 节） | 看 detail.characterId 与 detail.ageNow；核对角色总表出生年与 catalog.timeline.characterDebuts；同一角色同一游戏年本会话只记一次 | 否 |
 | LCQ-NAR-010 | info | characterResolver | 角色总表缺出生年，私密门按已满 18 处理 | 总表人物 staticProfile.birthYear 缺值（不设「缺出生年关门」，用户 2026-11-10 定）；canon:build 的 audit-c01-ages 缺值报告应同时列出 | 看 detail.characterId；在 mod-kit/character-birth-years.json 补出生年后跑 npm run canon:build | 否 |
+| LCQ-NAR-011 | info | narrativeSource | 正文数字检查字面命中（只记录，不改写、不重写正文） | 旧链路回合正文或开局正文里有句子字面命中「数词＋军事／伤亡／财货损失用词」（narrativePerformanceGuard 的两条数字检查；Q26 版一，用户 2026-11-24 批：原为硬门禁，现只记不拦） | 看 detail.eventId、detail.actionId（哪一拍）、detail.rules 与 detail.sentences（命中的原句，一行一句）；用于统计正文里实际出现的数字、查前后是否打架；不影响回合 | 否 |
 | LCQ-NET-001 | error | aiService | AI 请求等待首个响应超时（first_byte） | 请求发出后迟迟没有首个响应字节（网络慢、服务端排队、API 地址错） | 看 requestId/turnId 对应的请求；检查 API 地址与网络；可手动重试 | 否 |
 | LCQ-NET-002 | error | aiService | AI 请求总耗时超时（total） | 整次请求超过总耗时上限（含回合预算耗尽） | 看 detail.stage；检查模型响应速度或调大超时；后台任务超时降为 warn | 否 |
 | LCQ-NET-003 | error | aiService | AI 正文流空闲超时（idle） | 流式正文开始后长时间没有新内容 | 多为服务端卡住或网络中断；手动重试，必要时换模型/代理 | 否 |

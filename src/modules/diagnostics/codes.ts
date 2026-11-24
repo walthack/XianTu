@@ -183,6 +183,7 @@ export const ERROR_CODES = {
   'LCQ-NAR-008': spec('warn', 'aiBidirectional', '文本优化失败，沿用原文'),
   'LCQ-NAR-009': spec('warn', 'promptLayers', '私密层因角色现算年龄不满 18 未开'),
   'LCQ-NAR-010': spec('info', 'characterResolver', '角色总表缺出生年，私密门按已满 18 处理'),
+  'LCQ-NAR-011': spec('info', 'narrativeSource', '正文数字检查字面命中（只记录，不改写、不重写正文）'),
 
   'LCQ-UI-001': spec('error', 'window', '页面未捕获异常（window error）'),
   'LCQ-UI-002': spec('error', 'window', '未处理的 Promise 拒绝（unhandledrejection）'),
