@@ -1,10 +1,10 @@
 <template>
   <div v-if="uiNewActive" class="un-main" :class="uiNewPhone ? { 'un-tall': !!(currentScene || unDeckActive), 'un-cbdec': unCombatDecide } : undefined" data-testid="ui-new-main">
     <div class="un-top">
-      <!-- 场景框：有图放图（当前叙事的插图），没图放深色底＋当前地点名。不放人物立绘。 -->
+      <!-- 场景框：有图放图（当前叙事的插图；没有插图时放所在地点的场景图），都没有放深色底＋当前地点名。不放人物立绘。 -->
       <section class="un-scene un-framed" data-testid="ui-new-scene">
         <div class="un-pane">
-          <div v-if="unSceneImage" class="un-pic" :style="{ backgroundImage: `url('${unSceneImage}')` }" role="img" aria-label="剧情插图"></div>
+          <div v-if="unSceneImage" class="un-pic" :style="{ backgroundImage: `url('${unSceneImage}')` }" role="img" aria-label="场景图"></div>
           <div v-else class="un-place">{{ unPlaceName }}</div>
         </div>
         <i class="un-orn-c tl"></i><i class="un-orn-c tr"></i><i class="un-orn-c bl"></i><i class="un-orn-c br"></i><i class="un-orn-m mt"></i><i class="un-orn-m mb"></i>
@@ -1089,6 +1089,7 @@ import { computeScenarioPresence } from '@/modules/scenarioMods/storyContext';
 import { splitNarrativeSegments, segmentSpeaker } from '@/utils/narrativeSegments';
 import { stripSpeakerMarksForStreaming } from '@/utils/speakerMarks';
 import { getTravelCard } from '@/modules/scenarioMods/travel/travelLedger';
+import { locationSceneImageUrl } from '@/composables/uiNewScene';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { getSnapshots } from '@/utils/snapshotManager';
 import { lastConversationMatchesActive } from '@/utils/lastConversationGuard';
@@ -4256,7 +4257,9 @@ const unLogOpen = ref(false);
 const unLogPaneRef = ref<HTMLDivElement>();
 const unSceneImage = computed(() => {
   const image = currentNarrative.value?.image;
-  return image ? resolveEndingImage(image) || '' : '';
+  if (image) return resolveEndingImage(image) || '';
+  // 这一手没有插图：放玩家所在地点的场景图（没登记或没有图片文件时为空，框里只写地点名）
+  return uiNewActive.value ? locationSceneImageUrl(gameStateStore.toSaveData()) : '';
 });
 const unPlaceName = computed(() => {
   const loc = gameStateStore.location as { 描述?: string } | undefined;

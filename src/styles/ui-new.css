@@ -248,7 +248,8 @@
 }
 .ui-new .un-top { grid-row: 1; grid-column: 1; display: grid; grid-template-columns: minmax(0, 3.2fr) minmax(0, 1fr); column-gap: var(--un-gap-x); min-height: 0; position: relative; }
 .ui-new .un-scene { min-height: 0; }
-.ui-new .un-scene .un-pic { position: absolute; inset: calc(9 * var(--u)); border: 1px solid var(--un-line2); background: #111 center / cover no-repeat; filter: saturate(.75) hue-rotate(8deg); box-shadow: inset 0 0 60px rgba(0,0,0,.55); }
+.ui-new .un-scene .un-pic { position: absolute; inset: calc(9 * var(--u)); border: 1px solid var(--un-line2); background: #111 center / cover no-repeat; box-shadow: inset 0 0 60px rgba(0,0,0,.55); }
+/* 2026-11-25：原来这里有 filter: saturate(.75) hue-rotate(8deg)（配色「夜」时压图用）。场景图和立绘是同一套画法，压了以后和立绘对不上，关掉了。 */
 .ui-new .un-scene .un-place { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--un-font-title); font-size: calc(40 * var(--u)); letter-spacing: .3em; color: var(--un-sub); opacity: .75; text-align: center; padding: 0 1em; }
 /* 主要角色立绘区：剪影从立绘区底部站起、头顶到场景框上沿，左边略压过场景框右边线（设计稿「从场景框右边探出来」）。
    只是看的：不接点击；层级低于场景框里的盖层／卡片（.un-over z-index 5），所以卡片按钮不被挡。不挂名牌。 */
@@ -264,6 +265,8 @@
 .ui-new .un-over { position: absolute; inset: calc(9 * var(--u)); z-index: 5; overflow: auto; padding: calc(14 * var(--u)); pointer-events: none; display: flex; flex-direction: column; gap: 10px; }
 .ui-new .un-over > * { pointer-events: auto; }
 .ui-new .un-over.scene-card { background: rgba(7, 10, 24, .88); pointer-events: auto; }
+/* 路途卡直接压在场景图上：白天的图亮，垫一块深色底才看得清（和任务追踪小块同一种底） */
+.ui-new .un-over > .travel-card { align-self: flex-start; max-width: 80%; padding: calc(8 * var(--u)) calc(14 * var(--u)); background: rgba(7, 10, 24, .72); border: 1px solid var(--un-line2); }
 
 /* 字框 */
 .ui-new .un-box {
