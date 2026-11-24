@@ -855,7 +855,8 @@ const reqCount = cur => { const list = (cur?.requests || []).filter(k => k !== '
 // 每手的诊断日志（--real）：从页面诊断日志自己的 IndexedDB（lcq-log／logs，不是存档接口）取本手开始后新增的这几种码，只取 code 与 detail。
 // LCQ-SAV-065 在 sendMessage 收尾（终存档之后）才写，比 isAIProcessing 撤下晚：先等输入区 data-turn-state 离开 processing（回合账结清），
 // 再按 diagnostics.flushMs 批量落库多等一会，之后隔 600ms 读一次、条数不再变就收（最多读 5 次）。旧包没有 LCQ-SAV-065、或库打不开，都按取不到处理（diag 为空数组或 null）。
-const DIAG_CODES = ['LCQ-SAV-053', 'LCQ-SAV-054', 'LCQ-SAV-062', 'LCQ-SAV-065'];
+// LCQ-NAR-011：正文数字检查命中（只记不拦，Q26 版一），detail 里带哪一拍和命中的原句。
+const DIAG_CODES = ['LCQ-SAV-053', 'LCQ-SAV-054', 'LCQ-SAV-062', 'LCQ-SAV-065', 'LCQ-NAR-011'];
 async function readDiag(page, sinceMs) {
   await page.waitForFunction(() => document.querySelector('[data-testid="turn-status"]')?.dataset.turnState !== 'processing', null, { timeout: 60_000, polling: 200 }).catch(() => null);
   await page.waitForTimeout(800);
@@ -1184,6 +1185,7 @@ if (REAL) {
   // LCQ-SAV-065 按 detail.reason 计数；取不到诊断日志的手（旧包／库打不开）单独计。
   realOut.stall = { reasons: {}, entries: 0, handsWithoutDiag: real.hands.filter(h => !Array.isArray(h.diag)).length };
   for (const h of real.hands) for (const e of h.diag || []) if (e.code === 'LCQ-SAV-065') { realOut.stall.entries++; const k = e.detail?.reason ?? '?'; realOut.stall.reasons[k] = (realOut.stall.reasons[k] || 0) + 1; }
+  realOut.numberGate = real.hands.flatMap(h => (h.diag || []).filter(e => e.code === 'LCQ-NAR-011').map(e => ({ hand: h.hand, beat: h.beat, count: e.detail?.count ?? null, rules: e.detail?.rules ?? [], sentences: String(e.detail?.sentences ?? '').split('\n').filter(Boolean) })));
   if (LOOSE) { const l = real.hands.filter(h => h.loose); realOut.loose = { hands: l.length, moved: l.filter(h => h.moved).length, judged: l.filter(h => h.judged).length, judgedMoved: l.filter(h => h.judged && h.moved).length, notMoved: l.filter(h => !h.moved).map(h => ({ hand: h.hand, beat: h.beat, typed: h.typed, judged: h.judged, nodeMoved: h.nodeMoved })) }; }
 }
 const result = { baseUrl, real: realOut, maxHands: MAX_HANDS ?? undefined, side: sideOut, qin: QIN ? qin : undefined, from: FROM, until: UNTIL, startHow, outcome, ms, stall: STALL, expectedStages: EXPECTED_STAGES, visited: stages.map(s => s.id), stages, total, stuck, diffs, cOnly, scenes, overlays, anomalies, festival, pageErrors };
@@ -1197,6 +1199,7 @@ if (REAL) {
   console.log(`[真实模型] 「已替换为安全叙述」${realOut.safeReplaced} 手，「行动没能识别」${realOut.unrecognized} 手；存档接口：读配置 ${storageRef.configGet}，替身读 ${storageRef.stubbedRead}，拦下写 ${storageRef.blockedWrite.length}${storageRef.blockedWrite.length ? ` ${JSON.stringify([...new Set(storageRef.blockedWrite)])}` : ''}`);
 }
 if (REAL) console.log(`[没推进原因] LCQ-SAV-065 共 ${realOut.stall.entries} 条：${Object.entries(realOut.stall.reasons).map(([k, n]) => `${k} ${n}`).join('、') || '无'}；取不到诊断日志 ${realOut.stall.handsWithoutDiag} 手`);
+if (REAL) console.log(`[数字检查] LCQ-NAR-011 共 ${realOut.numberGate.length} 条、${realOut.numberGate.reduce((n, e) => n + e.sentences.length, 0)} 句${realOut.numberGate.map(e => `\n  手${e.hand} ${e.beat}：${e.sentences.map(t => t.slice(0, 120)).join('｜')}`).join('')}`);
 if (REAL) for (const [k, g] of Object.entries(realOut.profile)) console.log(`[请求画像] ${k}：${g.count} 次，失败 ${g.failed}，中位 ${(g.medianMs / 1000).toFixed(1)}s／最长 ${(g.maxMs / 1000).toFixed(1)}s；${JSON.stringify(g.params)}；HTTP ${JSON.stringify(g.status)}`);
 if (REAL) console.log(`[真实模型] 主叙事回包里的 action_time：${JSON.stringify(realOut.actionTime)}`);
 if (REAL && NAIVE) { const nv = realOut.hands.filter(h => h.naive); console.log(`[真实模型] 人不在场探测 ${nv.length} 手：发了主叙事 ${nv.filter(h => h.narrMs.length).length}；手后位置变了 ${nv.filter(h => h.location !== h.locationBefore).length}；本手就推进 ${nv.filter(h => h.moved).length}`); }
