@@ -255,8 +255,9 @@
 /* 主要角色立绘区：场景框里靠右的一栏，剪影从底部站起、头顶到场景框上沿，站在场景图前面（2026-11-26 前是在场景框右边另起一栏）。
    只是看的：不接点击；层级低于场景框里的盖层／卡片（.un-over z-index 5），所以卡片按钮不被挡。不挂名牌。 */
 .ui-new .un-lead { min-height: 0; position: relative; pointer-events: none; grid-row: 1; grid-column: 2; }
-/* 上、右、下收进场景框的内线（框线 3px＋内缩 9u＋内线 1px），立绘不压框线和角花 */
-.ui-new .un-lead-fig { position: absolute; top: calc(9 * var(--u) + 4px); bottom: calc(9 * var(--u) + 4px); right: calc(9 * var(--u) + 4px); left: calc(-56 * var(--u)); z-index: 1; pointer-events: none; }
+/* 上、下收进场景框的内线（框线 3px＋内缩 9u＋内线 1px），立绘不压框线和角花。
+   2026-11-26（用户原话「立绘可以考虑往中间一个身位」）：整块往左挪 200u（约一个人的肩宽），不再贴着右内线。 */
+.ui-new .un-lead-fig { --un-lead-shift: calc(200 * var(--u)); position: absolute; top: calc(9 * var(--u) + 4px); bottom: calc(9 * var(--u) + 4px); right: calc(9 * var(--u) + 4px + var(--un-lead-shift)); left: calc(-56 * var(--u) - var(--un-lead-shift)); z-index: 1; pointer-events: none; }
 .ui-new .un-lead-fig > .un-sil, .ui-new .un-lead-fig > .un-lead-img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 /* 立绘文件统一成 987×1400、脸在左右正中（2026-11-24 起的这批）：铺满立绘区的高，左右多出来的裁掉，脸留在正中 */
 .ui-new .un-lead-fig > .un-lead-img { object-fit: cover; object-position: center top; }
