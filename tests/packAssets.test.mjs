@@ -16,12 +16,12 @@ const A=await loadTs('../src/modules/contentPacks/assets.ts');
 const XZ='liuchao.character.xiao_zi',EV='lcq.event.s02_04',EV2='lcq.event.s04_01';
 
 // ── 现状 ──
-test('现状：真实 catalog 登记了立绘（全是全身 full，31 人 67 张，每人都有 default）和第一批场景图 37 张，CG 还是空的',()=>{
+test('现状：真实 catalog 登记了立绘（全是全身 full，31 人 67 张，每人都有 default）和场景图 46 张（第一批 37、南荒第二批 9），CG 还是空的',()=>{
  const {portraits,scenes,cg}=P.CONTENT_PACKS.assets;
  assert.deepStrictEqual(cg,[]);
- assert.equal(scenes.length,37);
+ assert.equal(scenes.length,46);
  assert.ok(scenes.every(s=>s.file===`scenes/${s.sceneType}${s.variant?`__${s.variant}`:''}.webp`));
- assert.deepStrictEqual(scenes.filter(s=>s.variant).map(s=>`${s.sceneType}/${s.variant}`),['street/night','inn/night','palace/night','barracks/night','forest/night','chamber/night']);
+ assert.deepStrictEqual(scenes.filter(s=>s.variant).map(s=>`${s.sceneType}/${s.variant}`),['street/night','inn/night','palace/night','barracks/night','forest/night','chamber/night','loc_caravan_camp/night','loc_sheyi/night']);
  assert.equal(portraits.length,67);
  assert.ok(portraits.every(p=>p.kind==='full'&&p.file===`characters/${p.characterId}/full__${p.outfitId}.webp`));
  const ids=[...new Set(portraits.map(p=>p.characterId))];
@@ -241,18 +241,23 @@ test('合成包：locationScenes 编译通过，note 剥掉；不认识的地点
 test('现状：真实登记里每个地点都在总表、每个类型都有默认图；按存档位置和钟点取图',async()=>{
  const U=await loadTs('../src/composables/uiNewScene.ts');
  const {locationScenes,scenes}=P.CONTENT_PACKS.assets;
- assert.equal(locationScenes.length,103);
+ assert.equal(locationScenes.length,110);
  for(const x of locationScenes)for(const t of x.sceneTypes)assert.ok(scenes.some(s=>s.sceneType===t&&s.variant===null),`${x.locationId}/${t}`);
  const save=(描述,小时,extra={})=>({角色:{位置:{描述,...extra}},元数据:{时间:{年:220,月:1,日:1,小时,分钟:0}}});
  const wy={locationId:WY};
  assert.deepStrictEqual(U.locationSceneFiles(save('中州·五原',10,wy)),['scenes/loc_wuyuan.webp','scenes/street.webp']);
  assert.deepStrictEqual(U.locationSceneFiles(save('中州·五原',19,wy)),['scenes/loc_wuyuan.webp','scenes/street.webp'],'黄昏算白天');
  assert.deepStrictEqual(U.locationSceneFiles(save('中州·五原',21,wy)),['scenes/street__night.webp','scenes/loc_wuyuan.webp','scenes/street.webp']);
+ // 南荒第二批：蛇彝村有自己的夜图，排在山林夜图前面；铁索桥没有，夜里退回山林夜图
+ const sy={locationId:'lcq.location.sheyi_village'},br={locationId:'nh.iron_bridge'};
+ assert.deepStrictEqual(U.locationSceneFiles(save('南荒·蛇彝村',10,sy)),['scenes/loc_sheyi.webp','scenes/forest.webp']);
+ assert.deepStrictEqual(U.locationSceneFiles(save('南荒·蛇彝村',23,sy)),['scenes/loc_sheyi__night.webp','scenes/forest__night.webp','scenes/loc_sheyi.webp','scenes/forest.webp']);
+ assert.deepStrictEqual(U.locationSceneFiles(save('南荒·铁索桥',23,br)),['scenes/forest__night.webp','scenes/loc_iron_bridge.webp','scenes/forest.webp']);
  assert.deepStrictEqual(U.locationSceneFiles(save('中州·五原',3,wy)),['scenes/street__night.webp','scenes/loc_wuyuan.webp','scenes/street.webp']);
  assert.deepStrictEqual(U.locationSceneFiles(save('中州·五原·白湖商馆水牢',10,wy)),['scenes/prison.webp'],'区内节点先于地点');
  assert.deepStrictEqual(U.locationSceneFiles(save('南荒·白夷族',10,{locationId:'nh.baiyi'})),['scenes/loc_baiyi.webp','scenes/forest.webp'],'别名 id 也认');
  assert.deepStrictEqual(U.locationSceneFiles(save('南荒·花苗寨',22,{locationId:'lcq.location.huamiao_village'})),['scenes/forest__night.webp','scenes/loc_huamiao.webp','scenes/forest.webp']);
- assert.deepStrictEqual(U.locationSceneFiles(save('南荒·蛇彝村',10,{locationId:'lcq.location.sheyi_village'})),[],'没对上的地点不给图');
+ assert.deepStrictEqual(U.locationSceneFiles(save('苍澜镇',10,{locationId:'liuchao.location.canglan'})),[],'没对上的地点不给图');
  assert.deepStrictEqual(U.locationSceneFiles(save('不知道在哪',10)),[]);
  assert.deepStrictEqual(U.locationSceneFiles(null),[]);
 });
