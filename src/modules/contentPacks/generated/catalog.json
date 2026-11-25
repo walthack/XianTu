@@ -1,5 +1,5 @@
 {
-  "version": "5a5743ca0dc9dd0a",
+  "version": "0122405a1179f72f",
   "contracts": [
     {
       "meta": {
@@ -33821,6 +33821,51 @@
         "sceneType": "loc_baiyi",
         "variant": null,
         "file": "scenes/loc_baiyi.webp"
+      },
+      {
+        "sceneType": "loc_iron_bridge",
+        "variant": null,
+        "file": "scenes/loc_iron_bridge.webp"
+      },
+      {
+        "sceneType": "loc_caravan_camp",
+        "variant": null,
+        "file": "scenes/loc_caravan_camp.webp"
+      },
+      {
+        "sceneType": "loc_zixi",
+        "variant": null,
+        "file": "scenes/loc_zixi.webp"
+      },
+      {
+        "sceneType": "loc_sheyi",
+        "variant": null,
+        "file": "scenes/loc_sheyi.webp"
+      },
+      {
+        "sceneType": "loc_south_valley",
+        "variant": null,
+        "file": "scenes/loc_south_valley.webp"
+      },
+      {
+        "sceneType": "loc_sandong_camp",
+        "variant": null,
+        "file": "scenes/loc_sandong_camp.webp"
+      },
+      {
+        "sceneType": "loc_yeao",
+        "variant": null,
+        "file": "scenes/loc_yeao.webp"
+      },
+      {
+        "sceneType": "loc_caravan_camp",
+        "variant": "night",
+        "file": "scenes/loc_caravan_camp__night.webp"
+      },
+      {
+        "sceneType": "loc_sheyi",
+        "variant": "night",
+        "file": "scenes/loc_sheyi__night.webp"
       }
     ],
     "cg": [],
@@ -33987,6 +34032,55 @@
         "locationId": "liuchao.location.bai_yi_valley",
         "sceneTypes": [
           "loc_baiyi",
+          "forest"
+        ]
+      },
+      {
+        "locationId": "nh.iron_bridge",
+        "sceneTypes": [
+          "loc_iron_bridge",
+          "forest"
+        ]
+      },
+      {
+        "locationId": "nh.caravan_camp",
+        "sceneTypes": [
+          "loc_caravan_camp",
+          "forest"
+        ]
+      },
+      {
+        "locationId": "nh.zixi",
+        "sceneTypes": [
+          "loc_zixi",
+          "forest"
+        ]
+      },
+      {
+        "locationId": "lcq.location.sheyi_village",
+        "sceneTypes": [
+          "loc_sheyi",
+          "forest"
+        ]
+      },
+      {
+        "locationId": "liuchao.location.south_wild_valley",
+        "sceneTypes": [
+          "loc_south_valley",
+          "forest"
+        ]
+      },
+      {
+        "locationId": "lcq.location.nanhuang_departure_camp",
+        "sceneTypes": [
+          "loc_sandong_camp",
+          "forest"
+        ]
+      },
+      {
+        "locationId": "lcq.location.yeao_village",
+        "sceneTypes": [
+          "loc_yeao",
           "forest"
         ]
       },

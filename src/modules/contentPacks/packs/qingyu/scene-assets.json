@@ -1,5 +1,5 @@
 {
- "note": "2026-11-25 登记：第一批场景图 37 张（16 类白天、6 张夜图、15 张地点单图）和「地点 → 场景类型」。sceneTypes 按先后试；没列的地点场景框只写地点名。图片文件不进仓库，见 src/assets/scenes/README.md。对照表和没对上的地点见用户工作目录的「2026-11-25-地点场景图对照表.md」。",
+ "note": "2026-11-25 登记：场景图 46 张（第一批 37 张：16 类白天、6 张夜图、15 张地点单图；第二批南荒主线 9 张：7 张地点单图、蛇彝村和商队宿处各 1 张单图夜图）和「地点 → 场景类型」。sceneTypes 按先后试；没列的地点场景框只写地点名。图片文件不进仓库，见 src/assets/scenes/README.md。对照表和没对上的地点见用户工作目录的「2026-11-25-地点场景图对照表.md」。",
  "scenes": [
   {
    "sceneType": "street",
@@ -154,6 +154,44 @@
   {
    "sceneType": "loc_baiyi",
    "file": "scenes/loc_baiyi.webp"
+  },
+  {
+   "sceneType": "loc_iron_bridge",
+   "file": "scenes/loc_iron_bridge.webp"
+  },
+  {
+   "sceneType": "loc_caravan_camp",
+   "file": "scenes/loc_caravan_camp.webp"
+  },
+  {
+   "sceneType": "loc_zixi",
+   "file": "scenes/loc_zixi.webp"
+  },
+  {
+   "sceneType": "loc_sheyi",
+   "file": "scenes/loc_sheyi.webp"
+  },
+  {
+   "sceneType": "loc_south_valley",
+   "file": "scenes/loc_south_valley.webp"
+  },
+  {
+   "sceneType": "loc_sandong_camp",
+   "file": "scenes/loc_sandong_camp.webp"
+  },
+  {
+   "sceneType": "loc_yeao",
+   "file": "scenes/loc_yeao.webp"
+  },
+  {
+   "sceneType": "loc_caravan_camp",
+   "variant": "night",
+   "file": "scenes/loc_caravan_camp__night.webp"
+  },
+  {
+   "sceneType": "loc_sheyi",
+   "variant": "night",
+   "file": "scenes/loc_sheyi__night.webp"
   }
  ],
  "locationScenes": [
@@ -319,6 +357,55 @@
    "locationId": "liuchao.location.bai_yi_valley",
    "sceneTypes": [
     "loc_baiyi",
+    "forest"
+   ]
+  },
+  {
+   "locationId": "nh.iron_bridge",
+   "sceneTypes": [
+    "loc_iron_bridge",
+    "forest"
+   ]
+  },
+  {
+   "locationId": "nh.caravan_camp",
+   "sceneTypes": [
+    "loc_caravan_camp",
+    "forest"
+   ]
+  },
+  {
+   "locationId": "nh.zixi",
+   "sceneTypes": [
+    "loc_zixi",
+    "forest"
+   ]
+  },
+  {
+   "locationId": "lcq.location.sheyi_village",
+   "sceneTypes": [
+    "loc_sheyi",
+    "forest"
+   ]
+  },
+  {
+   "locationId": "liuchao.location.south_wild_valley",
+   "sceneTypes": [
+    "loc_south_valley",
+    "forest"
+   ]
+  },
+  {
+   "locationId": "lcq.location.nanhuang_departure_camp",
+   "sceneTypes": [
+    "loc_sandong_camp",
+    "forest"
+   ]
+  },
+  {
+   "locationId": "lcq.location.yeao_village",
+   "sceneTypes": [
+    "loc_yeao",
     "forest"
    ]
   },
