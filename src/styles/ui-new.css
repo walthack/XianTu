@@ -270,6 +270,10 @@
 .ui-new .un-over.scene-card { background: rgba(7, 10, 24, .88); pointer-events: auto; }
 /* 路途卡直接压在场景图上：白天的图亮，垫一块深色底才看得清（和任务追踪小块同一种底） */
 .ui-new .un-over > .travel-card { align-self: flex-start; max-width: 61%; padding: calc(8 * var(--u)) calc(14 * var(--u)); background: rgba(7, 10, 24, .72); border: 1px solid var(--un-line2); }
+/* 2026-11-26（总策划代定 04:27）：有立绘时路途卡最宽只到立绘区左边，不压立绘（留 4u）；窄电脑宽（1024×768）原来会盖进去约 40px。
+   立绘区左边 = 场景框宽 − 右栏宽 − 56u − 200u（见 .un-lead-fig），右栏宽 = (场景框宽 − 18u) / 4.2（见 .un-top）；
+   换算到盖层内容宽（场景框宽 − 46u）就是 76.19% − 244u。手机宽不走这条。 */
+.ui-new:not(.un-phone) .un-top:has(.un-lead-fig) .un-over > .travel-card { max-width: min(61%, calc(76.19% - 244 * var(--u))); }
 
 /* 字框 */
 .ui-new .un-box {
