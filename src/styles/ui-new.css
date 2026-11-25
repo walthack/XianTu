@@ -247,14 +247,16 @@
   min-height: 0; height: 100%;
 }
 .ui-new .un-top { grid-row: 1; grid-column: 1; display: grid; grid-template-columns: minmax(0, 3.2fr) minmax(0, 1fr); column-gap: var(--un-gap-x); min-height: 0; position: relative; }
-.ui-new .un-scene { min-height: 0; }
+/* 2026-11-26（用户原话「背景做小了」）：场景框横跨整行，一直到右列按键左边；立绘区还是右边那一栏，站在场景图前面。 */
+.ui-new .un-scene { min-height: 0; grid-row: 1; grid-column: 1 / -1; }
 .ui-new .un-scene .un-pic { position: absolute; inset: calc(9 * var(--u)); border: 1px solid var(--un-line2); background: #111 center / cover no-repeat; box-shadow: inset 0 0 60px rgba(0,0,0,.55); }
 /* 2026-11-25：原来这里有 filter: saturate(.75) hue-rotate(8deg)（配色「夜」时压图用）。场景图和立绘是同一套画法，压了以后和立绘对不上，关掉了。 */
 .ui-new .un-scene .un-place { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--un-font-title); font-size: calc(40 * var(--u)); letter-spacing: .3em; color: var(--un-sub); opacity: .75; text-align: center; padding: 0 1em; }
-/* 主要角色立绘区：剪影从立绘区底部站起、头顶到场景框上沿，左边略压过场景框右边线（设计稿「从场景框右边探出来」）。
+/* 主要角色立绘区：场景框里靠右的一栏，剪影从底部站起、头顶到场景框上沿，站在场景图前面（2026-11-26 前是在场景框右边另起一栏）。
    只是看的：不接点击；层级低于场景框里的盖层／卡片（.un-over z-index 5），所以卡片按钮不被挡。不挂名牌。 */
-.ui-new .un-lead { min-height: 0; position: relative; pointer-events: none; }
-.ui-new .un-lead-fig { position: absolute; top: 0; bottom: 0; right: 0; left: calc(-56 * var(--u)); z-index: 1; pointer-events: none; }
+.ui-new .un-lead { min-height: 0; position: relative; pointer-events: none; grid-row: 1; grid-column: 2; }
+/* 上、右、下收进场景框的内线（框线 3px＋内缩 9u＋内线 1px），立绘不压框线和角花 */
+.ui-new .un-lead-fig { position: absolute; top: calc(9 * var(--u) + 4px); bottom: calc(9 * var(--u) + 4px); right: calc(9 * var(--u) + 4px); left: calc(-56 * var(--u)); z-index: 1; pointer-events: none; }
 .ui-new .un-lead-fig > .un-sil, .ui-new .un-lead-fig > .un-lead-img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 /* 立绘文件统一成 987×1400、脸在左右正中（2026-11-24 起的这批）：铺满立绘区的高，左右多出来的裁掉，脸留在正中 */
 .ui-new .un-lead-fig > .un-lead-img { object-fit: cover; object-position: center top; }
@@ -266,7 +268,7 @@
 .ui-new .un-over > * { pointer-events: auto; }
 .ui-new .un-over.scene-card { background: rgba(7, 10, 24, .88); pointer-events: auto; }
 /* 路途卡直接压在场景图上：白天的图亮，垫一块深色底才看得清（和任务追踪小块同一种底） */
-.ui-new .un-over > .travel-card { align-self: flex-start; max-width: 80%; padding: calc(8 * var(--u)) calc(14 * var(--u)); background: rgba(7, 10, 24, .72); border: 1px solid var(--un-line2); }
+.ui-new .un-over > .travel-card { align-self: flex-start; max-width: 61%; padding: calc(8 * var(--u)) calc(14 * var(--u)); background: rgba(7, 10, 24, .72); border: 1px solid var(--un-line2); }
 
 /* 字框 */
 .ui-new .un-box {
@@ -437,7 +439,7 @@ body:has(.ui-new-shell) .toast-container {
 
 /* 任务追踪：场景框左上角常驻的一小块（用户 2026-11-20 15:05）。老右栏里只留「任务目标」块里看的部分（章节、当前线、这一步、任务日志、个人目标）；
    按钮（回轨、启程、在地图上查看）、展开项（别处还有事、已完成）、调试提示不放，要看要点去右列「任务」。一行都没有时整块不显示 */
-.ui-new .un-track { cursor: pointer; align-self: flex-start; max-width: 44%; padding: calc(8 * var(--u)) calc(14 * var(--u)); background: rgba(7, 10, 24, .72); border: 1px solid var(--un-line2); border-left: 2px solid var(--un-acc); font-size: max(13px, calc(17 * var(--u))); line-height: 1.5; color: var(--color-text); }
+.ui-new .un-track { cursor: pointer; align-self: flex-start; max-width: 34%; padding: calc(8 * var(--u)) calc(14 * var(--u)); background: rgba(7, 10, 24, .72); border: 1px solid var(--un-line2); border-left: 2px solid var(--un-acc); font-size: max(13px, calc(17 * var(--u))); line-height: 1.5; color: var(--color-text); }
 .ui-new .un-track:not(:has(.quest-goal-section :is(.quest-chapter, .quest-event, .quest-goal))) { display: none; }
 .ui-new .un-track .right-sidebar { background: transparent; border: 0; box-shadow: none; height: auto; width: auto; min-width: 0; padding: 0; font-size: inherit; font-family: inherit; overflow: visible; }
 .ui-new .un-track .right-sidebar > .sidebar-header,
@@ -830,7 +832,7 @@ body:has(.ui-new-shell) .toast-container {
 .ui-new.un-phone .un-deck .key-beat-hint { font-size: 13px; }
 .ui-new.un-phone .un-deck .game-over-card h3 { font-size: 20px; }
 .ui-new.un-phone .un-deck .game-over-hint { font-size: 15px; }
-.ui-new.un-phone .travel-card { font-size: 14px; }
+.ui-new.un-phone .travel-card { font-size: 14px; max-width: 80%; }
 
 /* 回看弹层 */
 .ui-new.un-phone .un-modal { position: fixed; top: var(--un-vvt, 0px); height: var(--up-h); padding: var(--up-pt) var(--up-pr) calc(var(--up-pb) + 8px) var(--up-px); }
