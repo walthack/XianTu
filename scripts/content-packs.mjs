@@ -318,9 +318,16 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   const tally=catalog.nationLines.filter(x=>x.countsTowardClosedLines).length,lineIds=new Set(catalog.nationLines.map(x=>x.lineId));
   unique(compassConditions,x=>x?.id,'compass condition');
   for(const x of compassConditions){const at=`compass condition ${x?.id}`;
+   // noOtherLineEventsSince（汉线「下首阳山」卡片，2026-11-27）：sinceEventId 完成之后，编年史里的事件都在它那一关或 lineIds 的线里；sinceEventId 是否已知事件在 validateWithTs 里查
+   if(object(x)&&x.kind==='noOtherLineEventsSince'){
+    if(Object.keys(x).some(k=>!['id','kind','sinceEventId','lineIds'].includes(k)))fail(`${at}: invalid fields`);
+    if(x.id==='anyLineClosed')fail(`${at}: anyLineClosed is reserved`);
+    if(!str(x.sinceEventId))fail(`${at}: sinceEventId must be a non-empty string`);
+    if(!Array.isArray(x.lineIds)||!x.lineIds.length||x.lineIds.some(id=>!lineIds.has(id))||new Set(x.lineIds).size!==x.lineIds.length)fail(`${at}: lineIds must be a non-empty list of distinct nation lines`);
+    continue;}
    if(!object(x)||Object.keys(x).some(k=>!['id','kind','min','unlessLineClosedByWorldEvent'].includes(k)))fail(`${at}: invalid fields`);
    if(x.id==='anyLineClosed')fail(`${at}: anyLineClosed is reserved`);
-   if(x.kind!=='closedLinesAtLeast')fail(`${at}: kind must be closedLinesAtLeast`);
+   if(x.kind!=='closedLinesAtLeast')fail(`${at}: kind must be closedLinesAtLeast or noOtherLineEventsSince`);
    const min=typeof x.min==='string'?x.min.split('.').reduce((o,k)=>o?.[k],numbers):x.min;
    if(!Number.isSafeInteger(min)||min<1||min>tally)fail(`${at}: min ${typeof x.min==='string'?`${x.min}=${String(min)}`:String(min)} must be an integer from 1 to ${tally} (lines counted toward closed lines)`);
    if(x.unlessLineClosedByWorldEvent!==undefined&&!lineIds.has(x.unlessLineClosedByWorldEvent))fail(`${at}: unlessLineClosedByWorldEvent: unknown nation line ${x.unlessLineClosedByWorldEvent}`);}
@@ -389,6 +396,7 @@ async function checkEntityTemplates(label,value){
 async function validateWithTs(catalog,{stages,events,baseEvents,sourceRoot},{validateContracts=true}={}){
  // G1：done.* 与下一步表 eventId 的已知事件＝这次编译出的事件表（内置关套 overlay、含人物线投影，加包内关），不经运行时 knownEventIds()（它读磁盘上的 catalog 与 mod-kit 实体索引，M2）；新线的包单次编译即可通过
  const knownEventIds=new Set(events.keys());
+ for(const x of catalog.compassConditions)if(x.kind==='noOtherLineEventsSince'&&!knownEventIds.has(x.sinceEventId))fail(`compass condition ${x.id}: sinceEventId: unknown event ${x.sinceEventId}`);
  if(validateContracts){const jiti=tsLoader();const {lintContract}=await jiti.import(join(root,'src/modules/sceneModule/lint.ts'));const {validateScenarioMod}=await jiti.import(join(root,'src/modules/scenarioMods/validator.ts'));for(const stage of [...catalog.stages,...catalog.overlays.map(o=>stages.get(o.stageId))]){const v=validateScenarioMod(stage,{knownEventIds});if(!v.valid)fail(`invalid stage/overlay ${stage.manifest?.id}: ${JSON.stringify(v.issues)}`);}
  for(const c of catalog.contracts)for(const patch of Object.values(c.meta.hook.completionSceneByOutcome||{}))for(const actionId of [c.meta.hook.actionId,...(c.meta.hook.compatibleActionIds||[])]){const stage=structuredClone([...stages.values()].find(s=>s.scenario.events.some(e=>e.id===c.meta.hook.eventId)));let event=stage.scenario.events.find(e=>e.id===c.meta.hook.eventId);if(actionId!==c.meta.hook.actionId){const base=structuredClone(baseEvents.get(event.id));stage.scenario.events[stage.scenario.events.findIndex(e=>e.id===event.id)]=base;event=base;}const action=event.playerCompletionContract.actions.find(a=>a.id===actionId);Object.assign(action,patch);const v=validateScenarioMod(stage,{knownEventIds});if(!v.valid)fail(`invalid completion override ${c.meta.id}/${actionId}: ${JSON.stringify(v.issues)}`);}
  const book=JSON.parse(await readFile(join(sourceRoot,'src/modules/sceneModule/contracts/statuses.json'),'utf8'));unique([...book,...catalog.statuses],x=>x.id,'catalog status');for(const c of [...catalog.contracts,...catalog.drafts]){const report=lintContract({...c,statuses:[...(c.statuses||[]),...book,...catalog.statuses]});if(report.errors.length)fail(`${c.meta.id}: ${report.errors.join('; ')}`);}}

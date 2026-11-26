@@ -18,7 +18,10 @@ export interface NationLine {
 
 /** 参数化派生条件 compass.<id>（阶段 2a，各包 manifest.compassConditions）：已收束的计入线数 ≥ min；min 是整数或数值权威路径（运行时现读，热改有效）；
  * unlessLineClosedByWorldEvent：该线已被世界事件关闭时恒为 false（先判这一条、后计数）。 */
-export interface CompassCondition { id: string; kind: 'closedLinesAtLeast'; min: number | string; unlessLineClosedByWorldEvent?: string }
+export interface ClosedLinesCompassCondition { id: string; kind: 'closedLinesAtLeast'; min: number | string; unlessLineClosedByWorldEvent?: string }
+/** sinceEventId 已完成，且它之后编年史里的事件都在它那一关或 lineIds 的线里（别的线、不属任何国家线的关都算去了别处）（汉线「下首阳山」卡片：出阵后还没去别处，总策划 2026-11-27 04:58 代定）。 */
+export interface NoOtherLineEventsCompassCondition { id: string; kind: 'noOtherLineEventsSince'; sinceEventId: string; lineIds: string[] }
+export type CompassCondition = ClosedLinesCompassCondition | NoOtherLineEventsCompassCondition;
 
 /** 按 order 排好的国家线（右栏「别处」的显示顺序同此）。 */
 export const NATION_LINES: readonly NationLine[] = (raw as unknown as { nationLines: NationLine[] }).nationLines;

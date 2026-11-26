@@ -26,5 +26,8 @@
   ],
   "lineCriticalEvents": [
     "line-critical-events.json"
+  ],
+  "compassConditions": [
+    "compass-conditions.json"
   ]
 }
