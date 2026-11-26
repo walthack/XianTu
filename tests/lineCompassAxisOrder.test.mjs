@@ -493,7 +493,7 @@ test('唐 五线补全 T1–T24（2026-10-28）：默认路线从汉线收束起
     assert.ok(tang.some(x => x.id === s.eventId), `${s.id}：${s.eventId} 在默认路线上`);
   }
   assert.deepEqual(table.steps.map(s => s.eventId?.split('.').pop()), ['tang_liuxianping_arrive', 'tang_liuxianping_arrive', 'tang_liuxianping_xiangshi',
-    'changgan_fanseng_hunt', 's03_01', 'yuanzheng_globe', 'changgan_interlude_03_beat', 'song_tongwen', 'tang_secret_treaty_signed',
+    'changgan_fanseng_hunt', 's03_01', 'yuanzheng_globe', 'yuanzheng_globe', 'changgan_interlude_03_beat', 'song_tongwen', 'tang_secret_treaty_signed',
     'honglusi_treaty_announced', 'zhoufei_conspiracy', 'buddhist_conspiracy_11_beat'], '番僧挪到进长安之前；各步按原著序');
   assert.equal(texts['lineCompass.tang.step.tang_d7_publish'], '在长安城里留意朝廷动静');
   // ③ 逐拍走：焦点＝本线表里的拍时当前线是唐；无焦点时带文案的步按表序出现、不回跳

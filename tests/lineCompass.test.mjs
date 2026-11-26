@@ -62,9 +62,9 @@ test('下一步表：7 条国家线、写入剧情策划定稿 63 条（R-8 合�
   const steps = table.lines.flatMap(l => l.steps.map(step => ({ lineId: l.lineId, ...step })));
   assert.ok(!steps.some(step => step.draft), '定稿后不留【待剧情策划】占位');
   const hinted = steps.filter(step => step.hintKey);
-  assert.equal(hinted.length, 59, '定稿 63 条，R-8 删掉 5 行同文的「见过」版，R-15 删掉南荒 nh_leave_for_jin，唐 T20 补 tang_d7_publish「在长安城里留意朝廷动静」，fix86-1 给 nh_yun_guide_road 补「跟着商队往前走」');
+  assert.equal(hinted.length, 60, '入场四档给唐线加 tang_envoys_reunion_outside「元日去大明宫外看看」（2026-11-27）；此前 59：定稿 63 条，R-8 删掉 5 行同文的「见过」版，R-15 删掉南荒 nh_leave_for_jin，唐 T20 补 tang_d7_publish「在长安城里留意朝廷动静」，fix86-1 给 nh_yun_guide_road 补「跟着商队往前走」');
   const perLine = Object.fromEntries(table.lines.map(l => [l.lineId, l.steps.filter(step => step.hintKey).length]));
-  assert.deepEqual(perLine, { nanhuang: 11, jin: 8, song: 10, han: 9, tang: 7, qin: 8, taiquan: 6 });
+  assert.deepEqual(perLine, { nanhuang: 11, jin: 8, song: 10, han: 9, tang: 8, qin: 8, taiquan: 6 });
   for (const step of hinted) {
     assert.equal(step.hintKey, `lineCompass.${step.lineId}.step.${step.id}`);
     assert.ok([...texts[step.hintKey]].length <= numbers.GAME_NUMBERS.story.lineCompass.hint.maxChars, step.hintKey);

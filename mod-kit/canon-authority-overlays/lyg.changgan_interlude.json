@@ -423,6 +423,160 @@
         "liuchao.character.cheng_zongyang",
         "liuchao.character.an_le_gong_zhu"
       ]
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.events[id=lyg.event.honglusi_amends]",
+      "afterKey": "objective",
+      "beforeKey": "playerCompletionContract",
+      "entries": {
+        "narrativeVariants": [
+          {
+            "when": [
+              {
+                "path": "identity.liuchao.identity.han.tang_envoy",
+                "operator": "neq",
+                "value": true
+              },
+              {
+                "path": "done.lyg.event.s02_09",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "replacesCanonRail": true,
+            "description": "【占位·待剧情策划】有舞阳侯、无汉使档：鸿胪寺这一拍不按汉使礼遇演，也不按「两样都没有」演；正文待补。",
+            "axisBeat": "【占位·待剧情策划】有舞阳侯、无汉使档：鸿胪寺一拍正文待补。",
+            "objective": "【占位·待剧情策划】有舞阳侯、无汉使档：鸿胪寺一拍待补"
+          },
+          {
+            "when": [
+              {
+                "path": "identity.liuchao.identity.han.tang_envoy",
+                "operator": "neq",
+                "value": true
+              },
+              {
+                "path": "identity.liuchao.identity.song.yuanwailang",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "replacesCanonRail": true,
+            "description": "【占位·待剧情策划】宋职档：鸿胪寺接待宋使团；正文待补。",
+            "axisBeat": "【占位·待剧情策划】宋职档：鸿胪寺接待宋使团，正文待补。",
+            "objective": "【占位·待剧情策划】宋职档：鸿胪寺接待宋使团，待补"
+          },
+          {
+            "when": [
+              {
+                "path": "identity.liuchao.identity.han.tang_envoy",
+                "operator": "neq",
+                "value": true
+              },
+              {
+                "path": "identity.liuchao.identity.song.baochao_zhushi",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "replacesCanonRail": true,
+            "description": "【占位·待剧情策划】宋职档：鸿胪寺接待宋使团；正文待补。",
+            "axisBeat": "【占位·待剧情策划】宋职档：鸿胪寺接待宋使团，正文待补。",
+            "objective": "【占位·待剧情策划】宋职档：鸿胪寺接待宋使团，待补"
+          },
+          {
+            "when": [
+              {
+                "path": "identity.liuchao.identity.han.tang_envoy",
+                "operator": "neq",
+                "value": true
+              }
+            ],
+            "replacesCanonRail": true,
+            "description": "【占位·待剧情策划】两样都没有档：没有使节身份可致歉，这一拍不演；跳过方式待定。",
+            "axisBeat": "【占位·待剧情策划】两样都没有档：鸿胪寺一拍不演，跳过方式待定。",
+            "objective": "【占位·待剧情策划】两样都没有档：鸿胪寺一拍不演，待定"
+          }
+        ]
+      }
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.events[id=lyg.event.yuanzheng_globe]",
+      "afterKey": "objective",
+      "beforeKey": "playerCompletionContract",
+      "entries": {
+        "narrativeVariants": [
+          {
+            "when": [
+              {
+                "path": "identity.liuchao.identity.han.tang_envoy",
+                "operator": "neq",
+                "value": true
+              },
+              {
+                "path": "done.lyg.event.s02_09",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "replacesCanonRail": true,
+            "description": "【占位·待剧情策划】有舞阳侯、无汉使档：元正朝会不按汉使照原著入朝，也不按「两样都没有」演；正文待补。",
+            "axisBeat": "【占位·待剧情策划】有舞阳侯、无汉使档：元正朝会一拍正文待补。",
+            "objective": "【占位·待剧情策划】有舞阳侯、无汉使档：元正朝会一拍待补"
+          },
+          {
+            "when": [
+              {
+                "path": "identity.liuchao.identity.han.tang_envoy",
+                "operator": "neq",
+                "value": true
+              },
+              {
+                "path": "identity.liuchao.identity.song.yuanwailang",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "replacesCanonRail": true,
+            "description": "【占位·待剧情策划】宋职档：随童贯的宋使团赴大明宫元正朝会；正文待补。",
+            "axisBeat": "【占位·待剧情策划】宋职档：随童贯的宋使团入朝，正文待补。",
+            "objective": "【占位·待剧情策划】宋职档：随童贯的宋使团入朝，待补"
+          },
+          {
+            "when": [
+              {
+                "path": "identity.liuchao.identity.han.tang_envoy",
+                "operator": "neq",
+                "value": true
+              },
+              {
+                "path": "identity.liuchao.identity.song.baochao_zhushi",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "replacesCanonRail": true,
+            "description": "【占位·待剧情策划】宋职档：随童贯的宋使团赴大明宫元正朝会；正文待补。",
+            "axisBeat": "【占位·待剧情策划】宋职档：随童贯的宋使团入朝，正文待补。",
+            "objective": "【占位·待剧情策划】宋职档：随童贯的宋使团入朝，待补"
+          },
+          {
+            "when": [
+              {
+                "path": "identity.liuchao.identity.han.tang_envoy",
+                "operator": "neq",
+                "value": true
+              }
+            ],
+            "replacesCanonRail": true,
+            "description": "【占位·待剧情策划】两样都没有档：以商会东家身份在大明宫外旁观元正朝会、事后听闻；正文待补。",
+            "axisBeat": "【占位·待剧情策划】两样都没有档：在宫外旁观、事后听闻，正文待补。",
+            "objective": "【占位·待剧情策划】两样都没有档：在宫外旁观元正朝会，待补"
+          }
+        ]
+      }
     }
   ]
 }

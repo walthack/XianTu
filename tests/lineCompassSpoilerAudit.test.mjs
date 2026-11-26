@@ -107,7 +107,7 @@ test('R-8：5 对同文变体已合并——「见过」那一行连同文案键
       seen.add(sig);
     }
   }
-  assert.equal(table.lines.flatMap(l => l.steps).filter(s => s.hintKey).length, 59, 'R-8 后 58，R-15 再删南荒 nh_leave_for_jin 一条，五线补全·唐 T20 给 tang_d7_publish 补一条（剧情策划唐稿定文案），fix86-1 给 nh_yun_guide_road 补「跟着商队往前走」');
+  assert.equal(table.lines.flatMap(l => l.steps).filter(s => s.hintKey).length, 60, '入场四档给唐线加「元日去大明宫外看看」一步（2026-11-27）；此前 59：R-8 后 58，R-15 再删南荒 nh_leave_for_jin 一条，五线补全·唐 T20 给 tang_d7_publish 补一条（剧情策划唐稿定文案），fix86-1 给 nh_yun_guide_road 补「跟着商队往前走」');
   const road = texts['lineCompass.nanhuang.step.nh_yun_guide_road'];
   assert.equal(road, '跟着商队往前走');
   assert.equal([...road].length, 7);
