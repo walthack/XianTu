@@ -21959,7 +21959,7 @@
                     {
                       "when": [
                         {
-                          "path": "done.lyg.event.han_succession_10_beat",
+                          "path": "done.lyg.event.s02_09",
                           "operator": "eq",
                           "value": false
                         }

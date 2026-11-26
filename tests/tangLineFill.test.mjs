@@ -165,10 +165,14 @@ test('唐线补全：新建四拍 axisId 待补轴、critical、人物地点在�
   // 镇上相士带上袁天罡：完成后相识账记 encountered，「进长安，先找个宅子住下」那步的 when 才成立
   assert.ok(stageOf(CB).scenario.events.find(e => e.id === lyg('tang_liuxianping_xiangshi')).relatedCharacterIds.includes('liuchao.character.yuan_tiangang'));
   const t1 = stageOf(CB).scenario.events.find(e => e.id === lyg('tang_liuxianping_arrive'));
-  const rt = done => ({ chronicle: done.map((id, i) => ({ id: `chronicle.lyg.han_succession.${id}`, type: 'event', stageId: 'lyg.han_succession', sequence: i + 1 })) });
-  const han = view.resolveScenarioEventNarrative(t1, {}, undefined, rt([lyg('han_succession_10_beat')]));
-  assert.match(han.description, /多留一日/);
+  // 读点＝武帝秘境 s02_09（用户 2026-11-27 03:51 定：入唐卡片、留仙坪正文、朝会三处统一读它，不再读汉末「审问汪臻」）
+  assert.deepEqual(t1.narrativeVariants.map(v => v.when), [[{ path: 'done.lyg.event.s02_09', operator: 'eq', value: false }]]);
+  const rt = done => ({ chronicle: done.map(([stageId, id], i) => ({ id: `chronicle.${stageId}.${id}`, type: 'event', stageId, sequence: i + 1 })) });
+  const han = view.resolveScenarioEventNarrative(t1, {}, undefined, rt([['lyg.mijing_rumen', lyg('s02_09')]]));
+  assert.match(han.description, /多留一日/, '已完成武帝秘境（含有舞阳侯、无汉使）不走行商初到');
   assert.match(han.description, /周飞/);
+  const edictOnly = view.resolveScenarioEventNarrative(t1, {}, undefined, rt([['lyg.han_succession', lyg('han_succession_10_beat')]]));
+  assert.match(edictOnly.description, /行商身份/, '只审过汪臻、没完成武帝秘境：不再算走过汉');
   const merchant = view.resolveScenarioEventNarrative(t1, {}, undefined, rt([]));
   assert.match(merchant.description, /行商身份/);
   assert.match(merchant.objective, /江湖人/);
