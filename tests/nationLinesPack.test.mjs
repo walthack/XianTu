@@ -144,14 +144,21 @@ test('compile: compassConditions shape, reserved id, kind, min (integer or numbe
   // 阈值路径 story.lineCompass.qinEntry.minClosedLines＝3：计入线只有两条时编不过（原 numbersRegistry「不得超过计入线数」）
   await withPacks(cond([ok],[...counted(2),{lineId:'test.off',order:9,regions:['test.off'],countsTowardClosedLines:false}]),async compile=>assert.rejects(compile,/min story\.lineCompass\.qinEntry\.minClosedLines=3 must be an integer from 1 to 2/));
   await withPacks(cond([{...ok,unlessLineClosedByWorldEvent:'saiwai'}]),async compile=>assert.rejects(compile,/unlessLineClosedByWorldEvent: unknown nation line saiwai/));
+  // noOtherLineEventsSince（汉线「下首阳山」卡片，2026-11-27）：字段、lineIds 须是本次编译的国家线且不重复
+  const since={id:'test.since',kind:'noOtherLineEventsSince',sinceEventId:'lcq.event.s05b_wuer_suli_depart',lineIds:['test.l1']};
+  await withPacks(cond([{...since,sinceEventId:'test.no_such_event'}]),async compile=>assert.rejects(compile,/compass condition test\.since: sinceEventId: unknown event test\.no_such_event/));
+  await withPacks(cond([since]),async compile=>assert.deepEqual((await compile()).compassConditions,[since]));
+  await withPacks(cond([{...since,min:1}]),async compile=>assert.rejects(compile,/compass condition test\.since: invalid fields/));
+  await withPacks(cond([{...since,sinceEventId:''}]),async compile=>assert.rejects(compile,/sinceEventId must be a non-empty string/));
+  for(const lineIds of [undefined,[],['saiwai'],['test.l1','test.l1']])await withPacks(cond([{...since,lineIds}]),async compile=>assert.rejects(compile,/compass condition test\.since: lineIds must be a non-empty list of distinct nation lines/,String(lineIds)));
 });
 
 test('repo: qin pack declares compass.qinEntryReady (baked into old saves) and the qin map entry still reads it', async () => {
   const packs=await loadTs('../src/modules/contentPacks/index.ts');
   const ledger=await loadTs('../src/modules/scenarioMods/ledgerConditions.ts');
-  assert.deepEqual(packs.COMPASS_CONDITIONS.map(c=>c.id),['qinEntryReady']);
+  assert.deepEqual(packs.COMPASS_CONDITIONS.map(c=>c.id),['qinEntryReady','hanStillAtShouyang']);
   assert.deepEqual(packs.COMPASS_CONDITIONS[0],{id:'qinEntryReady',kind:'closedLinesAtLeast',min:'story.lineCompass.qinEntry.minClosedLines',unlessLineClosedByWorldEvent:'qin'});
-  assert.deepEqual([...ledger.COMPASS_DERIVED_IDS],['anyLineClosed','qinEntryReady']);
+  assert.deepEqual([...ledger.COMPASS_DERIVED_IDS],['anyLineClosed','qinEntryReady','hanStillAtShouyang']);
   assert.equal(packs.CONTENT_PACKS.mapEntries.find(e=>e.id==='qin').readyPath,'compass.qinEntryReady');
   assert.deepEqual([...nation.CLOSURE_TALLY_LINE_IDS],EXPECTED_TALLY);
   assert.deepEqual(nation.FAILURE_CLOSURE_EVENTS,Object.fromEntries(EXPECTED_TALLY.map(id=>[id,[]])));

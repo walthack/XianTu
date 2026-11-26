@@ -210,7 +210,7 @@ test('3 注册：国家线清单与顺序、地区映射、计入收束、二级
   assert.equal(FQ.resolveFixedQuestObjective({ id: EV('inquire'), objective: '原目标' }), '原目标');
 
   const LD = await M('modules/scenarioMods/ledgerConditions.ts');
-  assert.deepEqual([...LD.COMPASS_DERIVED_IDS], ['anyLineClosed', 'qinEntryReady', 'zzTestReady']);
+  assert.deepEqual([...LD.COMPASS_DERIVED_IDS], ['anyLineClosed', 'qinEntryReady', 'hanStillAtShouyang', 'zzTestReady']);
   const WE = await M('modules/scenarioMods/worldEvents.ts');
   assert.deepEqual(WE.WORLD_EVENTS.map(w => w.id), ['heimohaiFestival', 'zzTestWorld']);
   const P = await M('modules/contentPacks/index.ts');

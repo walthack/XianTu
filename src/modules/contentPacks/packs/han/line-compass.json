@@ -33,10 +33,15 @@
               "path": "done.lyl.event.xiaoyingzhou_cement_truce",
               "operator": "eq",
               "value": true
+            },
+            {
+              "path": "compass.hanStillAtShouyang",
+              "operator": "eq",
+              "value": true
             }
           ],
           "hintKey": "lineCompass.han.step.han_enter_from_taiquan_wudu",
-          "note": "H1 下首阳赴舞都（五线补全·汉 2026-10-28，afterfall rail 718，排在云如瑶私奔之前）；走过太泉、知道舞都（lyl:22524、22610、22620；R-7 已核 cement_truce＝丰乐楼交易，lyl:9799）"
+          "note": "H1 下首阳赴舞都（五线补全·汉 2026-10-28，afterfall rail 718，排在云如瑶私奔之前）；走过太泉、知道舞都（lyl:22524、22610、22620；R-7 已核 cement_truce＝丰乐楼交易，lyl:9799）；「下首阳山」只在出阵后还没去别处时出：compass.hanStillAtShouyang＝已出阵且之后完成的事件都在出阵那一关或汉线里（用户 2026-11-27 03:51 定条件，总策划 04:58 代定替代口径，不新建首阳山地点），不成立时落到下面不点首阳山的两版"
         },
         {
           "id": "han_enter_from_taiquan",
@@ -46,10 +51,15 @@
               "path": "done.lyl.event.taiquan_portal_exit",
               "operator": "eq",
               "value": true
+            },
+            {
+              "path": "compass.hanStillAtShouyang",
+              "operator": "eq",
+              "value": true
             }
           ],
           "hintKey": "lineCompass.han.step.han_enter_from_taiquan",
-          "note": "H1；走过太泉、不知道舞都"
+          "note": "H1；走过太泉、不知道舞都；「下首阳山」只在出阵后还没去别处时出：compass.hanStillAtShouyang＝已出阵且之后完成的事件都在出阵那一关或汉线里（用户 2026-11-27 03:51 定条件，总策划 04:58 代定替代口径，不新建首阳山地点），不成立时落到下面不点首阳山的两版"
         },
         {
           "id": "han_enter_border_wudu",

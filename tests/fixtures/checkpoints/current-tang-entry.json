@@ -29276,6 +29276,21 @@
                   "backfilled": false
                 }
               },
+              "playerIdentities": {
+                "liuchao.identity.han.tang_envoy": {
+                  "identityId": "liuchao.identity.han.tang_envoy",
+                  "status": "active",
+                  "acquiredAtEventId": "lyg.event.han_succession_10_beat",
+                  "history": [
+                    {
+                      "eventId": "lyg.event.han_succession_10_beat",
+                      "op": "grant",
+                      "atStageId": "lyg.han_succession",
+                      "atWorldTurn": 11
+                    }
+                  ]
+                }
+              },
               "departedCast": [
                 "lcq.character.duan_qiang",
                 "lcq.character.wang_zhe",

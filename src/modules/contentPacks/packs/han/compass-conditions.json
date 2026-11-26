@@ -1,0 +1,10 @@
+[
+  {
+    "id": "hanStillAtShouyang",
+    "kind": "noOtherLineEventsSince",
+    "sinceEventId": "lyl.event.taiquan_portal_exit",
+    "lineIds": [
+      "han"
+    ]
+  }
+]

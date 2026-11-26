@@ -410,7 +410,7 @@ export function validateAgainstRegistry(tree: unknown, mode: RegistryMode = 'col
   // 交叉：当前线卡（右栏线入口复用分析 2026-10-27 §5.1）。定性词须为非空字符串（地区→线映射已移到各线包 nationLines，内容包编译期校验，秦线 PR C）
   // 包声明的 compass.<id> 阈值引用数值权威路径时（阶段 2a，秦入口 story.lineCompass.qinEntry.minClosedLines）：不得超过计入线数（计入线由各线包 countsTowardClosedLines 派生，同 NATION_LINE_IDS）
   for (const condition of COMPASS_CONDITIONS) {
-    if (typeof condition.min !== 'string') continue;
+    if (condition.kind !== 'closedLinesAtLeast' || typeof condition.min !== 'string') continue;
     const threshold = atPath(tree, condition.min);
     if (typeof threshold === 'number' && threshold > CLOSURE_TALLY_LINE_IDS.length) errors.push(`${condition.min} 不得超过计入线数`);
   }

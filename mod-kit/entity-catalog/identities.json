@@ -16,6 +16,19 @@
       "stageVariants": {}
     },
     {
+      "id": "liuchao.identity.han.tang_envoy",
+      "aliases": [
+        "汉使"
+      ],
+      "definition": {
+        "id": "liuchao.identity.han.tang_envoy",
+        "name": "汉使",
+        "kind": "office",
+        "lineId": "han"
+      },
+      "stageVariants": {}
+    },
+    {
       "id": "liuchao.identity.jin.panjiang_shaozhu",
       "aliases": [
         "盘江程氏少主"
@@ -25,6 +38,32 @@
         "name": "盘江程氏少主",
         "kind": "merchant",
         "lineId": "jin"
+      },
+      "stageVariants": {}
+    },
+    {
+      "id": "liuchao.identity.song.yuanwailang",
+      "aliases": [
+        "屯田司员外郎"
+      ],
+      "definition": {
+        "id": "liuchao.identity.song.yuanwailang",
+        "name": "屯田司员外郎",
+        "kind": "office",
+        "lineId": "song"
+      },
+      "stageVariants": {}
+    },
+    {
+      "id": "liuchao.identity.song.baochao_zhushi",
+      "aliases": [
+        "宝钞局主事"
+      ],
+      "definition": {
+        "id": "liuchao.identity.song.baochao_zhushi",
+        "name": "宝钞局主事",
+        "kind": "office",
+        "lineId": "song"
       },
       "stageVariants": {}
     }

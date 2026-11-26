@@ -1,5 +1,5 @@
 {
-  "version": "0122405a1179f72f",
+  "version": "609067813e93a245",
   "contracts": [
     {
       "meta": {
@@ -30968,6 +30968,7 @@
     "lineCompass.tang.step.tang_entry_from_han": "从舞都动身，往长安去",
     "lineCompass.tang.step.tang_entry": "去唐国看看",
     "lineCompass.tang.step.tang_changan_yangyuhuan": "进长安，先找个宅子住下",
+    "lineCompass.tang.step.tang_envoys_reunion_outside": "元日去大明宫外看看",
     "lineCompass.tang.step.tang_envoys_reunion": "去大明宫赴元正朝会",
     "lineCompass.tang.step.tang_d7_secret_treaty": "在长安城里打听打听",
     "lineCompass.tang.step.tang_d7_publish": "在长安城里留意朝廷动静",
@@ -32139,10 +32140,15 @@
                 "path": "done.lyl.event.xiaoyingzhou_cement_truce",
                 "operator": "eq",
                 "value": true
+              },
+              {
+                "path": "compass.hanStillAtShouyang",
+                "operator": "eq",
+                "value": true
               }
             ],
             "hintKey": "lineCompass.han.step.han_enter_from_taiquan_wudu",
-            "note": "H1 下首阳赴舞都（五线补全·汉 2026-10-28，afterfall rail 718，排在云如瑶私奔之前）；走过太泉、知道舞都（lyl:22524、22610、22620；R-7 已核 cement_truce＝丰乐楼交易，lyl:9799）"
+            "note": "H1 下首阳赴舞都（五线补全·汉 2026-10-28，afterfall rail 718，排在云如瑶私奔之前）；走过太泉、知道舞都（lyl:22524、22610、22620；R-7 已核 cement_truce＝丰乐楼交易，lyl:9799）；「下首阳山」只在出阵后还没去别处时出：compass.hanStillAtShouyang＝已出阵且之后完成的事件都在出阵那一关或汉线里（用户 2026-11-27 03:51 定条件，总策划 04:58 代定替代口径，不新建首阳山地点），不成立时落到下面不点首阳山的两版"
           },
           {
             "id": "han_enter_from_taiquan",
@@ -32152,10 +32158,15 @@
                 "path": "done.lyl.event.taiquan_portal_exit",
                 "operator": "eq",
                 "value": true
+              },
+              {
+                "path": "compass.hanStillAtShouyang",
+                "operator": "eq",
+                "value": true
               }
             ],
             "hintKey": "lineCompass.han.step.han_enter_from_taiquan",
-            "note": "H1；走过太泉、不知道舞都"
+            "note": "H1；走过太泉、不知道舞都；「下首阳山」只在出阵后还没去别处时出：compass.hanStillAtShouyang＝已出阵且之后完成的事件都在出阵那一关或汉线里（用户 2026-11-27 03:51 定条件，总策划 04:58 代定替代口径，不新建首阳山地点），不成立时落到下面不点首阳山的两版"
           },
           {
             "id": "han_enter_border_wudu",
@@ -32314,6 +32325,48 @@
             "note": "lyg:10009"
           },
           {
+            "id": "tang_envoys_reunion_outside",
+            "eventId": "lyg.event.yuanzheng_globe",
+            "when": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lyg.event.shixiang_s11",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lyg.event.honglusi_amends",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "path": "identity.liuchao.identity.han.tang_envoy",
+                "operator": "neq",
+                "value": true
+              },
+              {
+                "path": "done.lyg.event.s02_09",
+                "operator": "eq",
+                "value": false
+              },
+              {
+                "path": "identity.liuchao.identity.song.yuanwailang",
+                "operator": "neq",
+                "value": true
+              },
+              {
+                "path": "identity.liuchao.identity.song.baochao_zhushi",
+                "operator": "neq",
+                "value": true
+              }
+            ],
+            "hintKey": "lineCompass.tang.step.tang_envoys_reunion_outside",
+            "note": "T8 入场四档·两样都没有档（无汉使、没完成武帝秘境、无宋职）：以商会东家身份宫外旁观，卡面「元日去大明宫外看看」（用户 2026-11-26 19:56 定）。排在 tang_envoys_reunion 之前，同一事件；其余三档落到下一步的现文案"
+          },
+          {
             "id": "tang_envoys_reunion",
             "eventId": "lyg.event.yuanzheng_globe",
             "when": [
@@ -32333,7 +32386,7 @@
               }
             ],
             "hintKey": "lineCompass.tang.step.tang_envoys_reunion",
-            "note": "T8（五线补全·唐 2026-10-28）：改挂默认路线 changgan_interlude「佛门暗潮与元正朝会」章的元正朝会（1102），不再挂隔离关 s13，until 缺省＝它完成；lyg:13678–13686。Q1（跳过汉线、无汉使身份时怎么进鸿胪寺致歉与朝会）待用户拍板，现按原著汉使版，分档未实现"
+            "note": "T8（五线补全·唐 2026-10-28）：改挂默认路线 changgan_interlude「佛门暗潮与元正朝会」章的元正朝会（1102），不再挂隔离关 s13，until 缺省＝它完成；lyg:13678–13686。Q1 入场四档（用户 2026-11-26 19:56、11-27 03:51 定）骨架已接：汉使读 identity.liuchao.identity.han.tang_envoy（写在 han_succession_10_beat），两拍的非汉使三档变体位在 lyg.changgan_interlude overlay，正文仍是占位；本步卡面汉使、有舞阳侯无汉使、宋职三档共用"
           },
           {
             "id": "tang_zhao_nan_war_jinnang",
@@ -33167,6 +33220,14 @@
       "kind": "closedLinesAtLeast",
       "min": "story.lineCompass.qinEntry.minClosedLines",
       "unlessLineClosedByWorldEvent": "qin"
+    },
+    {
+      "id": "hanStillAtShouyang",
+      "kind": "noOtherLineEventsSince",
+      "sinceEventId": "lyl.event.taiquan_portal_exit",
+      "lineIds": [
+        "han"
+      ]
     }
   ],
   "contractRevisions": [

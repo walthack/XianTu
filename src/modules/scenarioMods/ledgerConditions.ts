@@ -19,7 +19,8 @@ import { deadlineState } from './progressDeadlines';
 import { lineUnlockLedgerValue } from './lineUnlock';
 import { SECONDARY_LINES, secondaryLineUnlockOptions } from './secondaryLines';
 import { resolveNumberRef } from '../sceneModule/numbers';
-import { CLOSURE_TALLY_LINE_IDS, COMPASS_CONDITIONS } from '../contentPacks';
+import { CLOSURE_TALLY_LINE_IDS, COMPASS_CONDITIONS, NATION_LINE_OF_REGION } from '../contentPacks';
+import { STAGE_REGION } from './reputationLedger';
 
 export type LedgerPathKind = 'identity' | 'done' | 'line' | 'acq' | 'knows' | 'item' | 'party' | 'deadline' | 'unlock' | 'compass';
 
@@ -28,7 +29,8 @@ export type LedgerPathKind = 'identity' | 'done' | 'line' | 'acq' | 'knows' | 'i
  * anyLineClosed＝计入线 CLOSURE_TALLY_LINE_IDS（各线包 countsTowardClosedLines，现为南荒／晋／宋／汉／唐；太泉、秦不算）里任一条 lineClosed（收束唯一读取点）。
  * 其余 id 由各包 manifest.compassConditions 声明（阶段 2a）：秦线知情拍读的 qinEntryReady 由秦包声明为 closedLinesAtLeast（计数达到配置阈值）；knownWhen 读 Q-1 done。
  * closedWhen 只许 done.*（validator 拦），lineClosed 按编年史判，不回读账本条件，不会成环。
- * 保留 id anyLineClosed 之后接包声明的 id，现值仍为 ['anyLineClosed','qinEntryReady']（旧档事件 conditions 里烘焙了 compass.qinEntryReady，秦包必须一直声明它）。
+ * 保留 id anyLineClosed 之后接包声明的 id，现值为 ['anyLineClosed','qinEntryReady','hanStillAtShouyang']（旧档事件 conditions 里烘焙了 compass.qinEntryReady，秦包必须一直声明它；
+ * hanStillAtShouyang 由汉包声明为 noOtherLineEventsSince，只给「下首阳山」两张入口卡读）。
  */
 export const COMPASS_DERIVED_IDS: readonly string[] = ['anyLineClosed', ...COMPASS_CONDITIONS.map(condition => condition.id)];
 
@@ -130,10 +132,31 @@ function anyNationLineClosed(runtime: unknown): boolean {
   return CLOSURE_TALLY_LINE_IDS.some(lineId => lineClosed(lineId, runtime));
 }
 
+/**
+ * 包声明的 compass.<id>（noOtherLineEventsSince）：sinceEventId 已完成，且编年史里排在它后面的事件要么仍在 sinceEventId 那一关，要么所在关属于 lineIds 里的线
+ * （关 → 线同 lineCompass.lineOfStage；不属任何国家线的关也算「别处」）。sinceEventId 已完成但编年史尚未落账（同回合空档）时后面没有事件，成立。
+ */
+function noOtherLineEventsSince(sinceEventId: string, lineIds: readonly string[], runtime: unknown): boolean {
+  if (!completedEventSet(runtime).has(sinceEventId)) return false;
+  const chronicle = [...((asRecord<{ chronicle?: Array<{ id?: unknown; type?: unknown; stageId?: unknown; sequence?: unknown }> }>(runtime)?.chronicle) || [])]
+    .filter(entry => entry?.type === 'event')
+    .sort((a, b) => (Number(a.sequence) || 0) - (Number(b.sequence) || 0));
+  const at = chronicle.findIndex(entry => typeof entry.id === 'string' && entry.id.endsWith(`.${sinceEventId}`));
+  if (at < 0) return true;
+  const sinceStageId = chronicle[at].stageId;
+  return chronicle.slice(at + 1).every(entry => {
+    if (entry.stageId === sinceStageId) return true;
+    const region = typeof entry.stageId === 'string' ? STAGE_REGION[entry.stageId] : undefined;
+    const lineId = region ? NATION_LINE_OF_REGION[region] : undefined;
+    return lineId !== undefined && lineIds.includes(lineId);
+  });
+}
+
 /** 包声明的 compass.<id>（closedLinesAtLeast）：先判 unlessLineClosedByWorldEvent，再计数（顺序同原 qinEntryReady；lineClosed 有调试日志副作用）。min 现读数值权威，热改有效。 */
 function compassConditionHolds(id: string, runtime: unknown, save?: unknown): boolean | undefined {
   const condition = COMPASS_CONDITIONS.find(c => c.id === id);
   if (!condition) return undefined;
+  if (condition.kind === 'noOtherLineEventsSince') return noOtherLineEventsSince(condition.sinceEventId, condition.lineIds, runtime);
   if (condition.unlessLineClosedByWorldEvent !== undefined && lineClosedByWorldEvent(save, runtime, condition.unlessLineClosedByWorldEvent)) return false;
   return nationClosedLineCount(runtime) >= resolveNumberRef(condition.min);
 }
