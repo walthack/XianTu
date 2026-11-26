@@ -706,8 +706,8 @@
           "actions": [
             {
               "id": "verify_envoy_privileges",
-              "label": "核对使节礼遇",
-              "actionText": "我让段文楚把恢复的出入与居停礼遇逐项说清，避免口头致歉替代实际安排。",
+              "label": "核对鸿胪寺的礼遇",
+              "actionText": "我请鸿胪寺把出入与居停的礼遇逐项说清，不让口头上的话替代实际安排。",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
@@ -719,8 +719,8 @@
             },
             {
               "id": "accept_new_year_court_access",
-              "label": "确认元正朝会资格",
-              "actionText": "我接受补救安排，并确认自己将以汉使身份参加元正朝会。",
+              "label": "确认元正朝会安排",
+              "actionText": "我确认自己元正朝会那天的安排，并把它与鸿胪寺给出的礼遇一并记下。",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
@@ -850,8 +850,8 @@
           "actions": [
             {
               "id": "test_globe_knowledge",
-              "label": "核验地球仪知识",
-              "actionText": "我用不暴露自身来历的问题核验徐君房对地球仪与地理的理解。",
+              "label": "核对地球仪知识",
+              "actionText": "我用不暴露自身来历的办法，核对徐君房对地球仪与地理的理解。",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",

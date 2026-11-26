@@ -58,8 +58,8 @@ const EVENTS = [
     axisId: 'yange.73.1', axisSeq: 1097, axisAnchor: '六朝燕歌行·#73·第673章·双燕',
     axisBeat: '段文楚登门致歉，恢复使节礼遇并确认程宗扬可参加元正朝会。',
     actions: [
-      action('verify_envoy_privileges', '核对使节礼遇', '我让段文楚把恢复的出入与居停礼遇逐项说清，避免口头致歉替代实际安排。', { kind: 'prepare', grantsPreparation: 'envoy_privileges_verified' }),
-      action('accept_new_year_court_access', '确认元正朝会资格', '我接受补救安排，并确认自己将以汉使身份参加元正朝会。', { requiresPreparation: ['envoy_privileges_verified'] }),
+      action('verify_envoy_privileges', '核对鸿胪寺的礼遇', '我请鸿胪寺把出入与居停的礼遇逐项说清，不让口头上的话替代实际安排。', { kind: 'prepare', grantsPreparation: 'envoy_privileges_verified' }),
+      action('accept_new_year_court_access', '确认元正朝会安排', '我确认自己元正朝会那天的安排，并把它与鸿胪寺给出的礼遇一并记下。', { requiresPreparation: ['envoy_privileges_verified'] }),
     ],
   },
   {
@@ -84,7 +84,7 @@ const EVENTS = [
     axisId: 'yange.77.1', axisSeq: 1102, axisAnchor: 'yange.76.1+yange.77.1',
     axisBeat: '徐君房在元正朝会展示地球仪并自称秦国使者。',
     actions: [
-      action('test_globe_knowledge', '核验地球仪知识', '我用不暴露自身来历的问题核验徐君房对地球仪与地理的理解。', { kind: 'prepare', grantsPreparation: 'globe_claim_tested' }),
+      action('test_globe_knowledge', '核对地球仪知识', '我用不暴露自身来历的办法，核对徐君房对地球仪与地理的理解。', { kind: 'prepare', grantsPreparation: 'globe_claim_tested' }),
       action('record_qin_envoy_claim', '记录秦使说辞', '我把徐君房自称秦使的说法与朝会反应分别记下，暂不替唐廷确认其身份。', { requiresPreparation: ['globe_claim_tested'] }),
     ],
   },
