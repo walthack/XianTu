@@ -502,6 +502,36 @@
       }
     },
     {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.honglusi_amends].playerCompletionContract.actions[id=verify_honglusi_courtesy].label",
+      "from": "核对恢复的礼遇",
+      "to": "核对鸿胪寺的礼遇"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.honglusi_amends].playerCompletionContract.actions[id=verify_honglusi_courtesy].actionText",
+      "from": "我让段文楚把鸿胪寺恢复的出入与居停礼遇逐项说清，不接受口头致歉替代实际安排。",
+      "to": "我请鸿胪寺把出入与居停的礼遇逐项说清，不让口头上的话替代实际安排。"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.honglusi_amends].playerCompletionContract.actions[id=confirm_yuanzheng_eligibility].label",
+      "from": "确认元正朝会资格",
+      "to": "确认元正朝会安排"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.honglusi_amends].playerCompletionContract.actions[id=confirm_yuanzheng_eligibility].actionText",
+      "from": "我确认自己将以汉使身份参加元正朝会，并把这项资格与已恢复的礼遇一并记下。",
+      "to": "我确认自己元正朝会那天的安排，并把它与鸿胪寺给出的礼遇一并记下。"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.honglusi_amends].playerCompletionContract.actions[id=confirm_yuanzheng_eligibility].outcomeText.success",
+      "from": "你已确认鸿胪寺恢复的礼遇与元正朝会资格；事件完成真值由本地引擎落账。",
+      "to": "你已确认鸿胪寺的礼遇与元正朝会的安排；事件完成真值由本地引擎落账。"
+    },
+    {
       "op": "insertKeys",
       "path": "scenario.events[id=lyg.event.yuanzheng_globe]",
       "afterKey": "objective",
@@ -577,6 +607,24 @@
           }
         ]
       }
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.yuanzheng_globe].playerCompletionContract.actions[id=test_xu_junfang_globe].label",
+      "from": "核验地球仪知识",
+      "to": "核对地球仪知识"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.yuanzheng_globe].playerCompletionContract.actions[id=test_xu_junfang_globe].actionText",
+      "from": "我用不暴露自身来历的问题核验徐君房对地球仪与地理的理解。",
+      "to": "我用不暴露自身来历的办法，核对徐君房对地球仪与地理的理解。"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.yuanzheng_globe].playerCompletionContract.actions[id=record_qin_envoy_rhetoric].outcomeText.success",
+      "from": "你已在元正朝会核验徐君房的地球仪知识与秦使说辞；事件完成真值由本地引擎落账。",
+      "to": "你已核对徐君房的地球仪知识与秦使说辞；事件完成真值由本地引擎落账。"
     }
   ]
 }

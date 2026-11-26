@@ -91,3 +91,14 @@ test('线卡：两样都没有档出「元日去大明宫外看看」，其余�
   assert.equal(pick(rt([AMENDS], active(BC))), 'tang_envoys_reunion');
   assert.equal(pick(rt([])), undefined, '鸿胪寺一拍没完成：两步都还没轮到');
 });
+
+test('两拍的行动按钮是各档通用的说法：不写汉使、致歉、恢复，也不写人在殿上（总策划 2026-11-27 05:35 代定）', () => {
+  for (const id of ['honglusi_amends', 'yuanzheng_globe']) {
+    const { actions } = CI.scenario.events.find(e => e.id === lyg(id)).playerCompletionContract;
+    for (const a of actions) {
+      for (const text of [a.label, a.actionText, a.outcomeText.success]) {
+        assert.doesNotMatch(text, /汉使|致歉|恢复|资格|在元正朝会/, `${id}:${a.id}「${text}」`);
+      }
+    }
+  }
+});
