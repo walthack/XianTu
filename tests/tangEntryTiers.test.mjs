@@ -102,3 +102,26 @@ test('两拍的行动按钮是各档通用的说法：不写汉使、致歉、�
     }
   }
 });
+
+test('隔离关 lyg.shixiang_ambush 里这两拍的孪生事件，按钮和主线两拍说法一致（总策划 2026-11-27 06:02 代定）', () => {
+  const SA = JSON.parse(fs.readFileSync('src/modules/scenarioMods/builtins/data/lyg.shixiang_ambush.json', 'utf8'));
+  const actionsOf = (doc, id) => doc.scenario.events.find(e => e.id === lyg(id)).playerCompletionContract.actions;
+  const TWINS = [
+    ['shixiang_s11', 'verify_envoy_privileges', 'honglusi_amends', 'verify_honglusi_courtesy'],
+    ['shixiang_s11', 'accept_new_year_court_access', 'honglusi_amends', 'confirm_yuanzheng_eligibility'],
+    ['shixiang_s13', 'test_globe_knowledge', 'yuanzheng_globe', 'test_xu_junfang_globe'],
+  ];
+  for (const [twinEvent, twinAction, mainEvent, mainAction] of TWINS) {
+    const twin = actionsOf(SA, twinEvent).find(a => a.id === twinAction);
+    const main = actionsOf(CI, mainEvent).find(a => a.id === mainAction);
+    assert.equal(twin.label, main.label, `${twinEvent}:${twinAction} 名称`);
+    assert.equal(twin.actionText, main.actionText, `${twinEvent}:${twinAction} 文案`);
+  }
+  for (const id of ['shixiang_s11', 'shixiang_s13']) {
+    for (const a of actionsOf(SA, id)) {
+      for (const text of [a.label, a.actionText, a.outcomeText.success]) {
+        assert.doesNotMatch(text, /汉使|致歉|恢复|资格|在元正朝会/, `${id}:${a.id}「${text}」`);
+      }
+    }
+  }
+});
