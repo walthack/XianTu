@@ -2488,6 +2488,7 @@ const LINE_COMPASS_PLACE_SLOT = '{地点}';
  *   有这种步时模板须在 texts、含 {地点}；传了 places（eventId → 地点显示名，content-packs 编译时从各关事件 locationId 求得）时，代入后的句子同样守字数与定性词；
  * - travelHint 步（fix5939-2）：只能是 true，须同时有 eventId 与 hintKey，传了 places 时文案须含该事件地点名，否则 invalid_travel_hint；
  * - draft 步的文案（若有）须以【待剧情策划】开头，运行时一律跳过。
+ * - keys（支线钥匙 PR-A）：数组；每把 { id, labelKey, when }，id 步内唯一，labelKey 须在 texts，when 非空、只许账本路径（同 when，可含 anyOf 组）。
  * - lineId 须在 nationLineIds 里（缺省 NATION_LINE_IDS；内容包编译时传这次编译出的 catalog.nationLines，不用磁盘上的旧 catalog，秦线 PR C／M2）。
  * - step.eventId 与 done.* 查 knownEvents（缺省运行时 knownEventIds()；内容包编译时传这次编译出的事件表，新线包关的事件单次编译即可通过，G1／M2）。
  */
@@ -2562,7 +2563,7 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
     line.steps.forEach((step, si) => {
       const sp = `${at}.steps[${si}]`;
       if (!isRecord(step)) { add(sp, 'invalid_type', `${sp} must be an object.`); return; }
-      for (const key of Object.keys(step)) if (!['id', 'eventId', 'when', 'until', 'hintKey', 'travelHint', 'draft', 'pending', 'note'].includes(key)) add(`${sp}.${key}`, 'unknown_field', `Unknown field "${key}".`);
+      for (const key of Object.keys(step)) if (!['id', 'eventId', 'when', 'until', 'hintKey', 'travelHint', 'draft', 'pending', 'keys', 'note'].includes(key)) add(`${sp}.${key}`, 'unknown_field', `Unknown field "${key}".`);
       if (validateId(step.id, `${sp}.id`, add)) {
         if (seenSteps.has(step.id)) add(`${sp}.id`, 'duplicate_id', `Duplicate step id "${step.id}".`);
         seenSteps.add(step.id);
@@ -2579,6 +2580,24 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
       }
       conditions(step.when, `${sp}.when`, pending ? pendingLedger : ledger);
       conditions(step.until, `${sp}.until`, pending ? pendingLedger : ledger);
+      if (step.keys !== undefined) {
+        if (!Array.isArray(step.keys)) add(`${sp}.keys`, 'invalid_type', `${sp}.keys must be an array.`);
+        else {
+          const seenKeys = new Set<string>();
+          step.keys.forEach((key, ki) => {
+            const kp = `${sp}.keys[${ki}]`;
+            if (!isRecord(key)) { add(kp, 'invalid_type', `${kp} must be an object.`); return; }
+            for (const field of Object.keys(key)) if (!['id', 'labelKey', 'when'].includes(field)) add(`${kp}.${field}`, 'unknown_field', `Unknown field "${field}".`);
+            if (validateId(key.id, `${kp}.id`, add)) {
+              if (seenKeys.has(key.id)) add(`${kp}.id`, 'duplicate_id', `Duplicate key id "${key.id}".`);
+              seenKeys.add(key.id);
+            }
+            if (typeof key.labelKey !== 'string' || !isNonEmptyString(texts[key.labelKey])) add(`${kp}.labelKey`, 'missing_text', `Key label text "${String(key.labelKey)}" is missing.`);
+            if (!Array.isArray(key.when) || !key.when.length) add(`${kp}.when`, 'invalid_type', 'A key needs a non-empty when array.');
+            else conditions(key.when, `${kp}.when`, pending ? pendingLedger : ledger);
+          });
+        }
+      }
       // 只有 eventId 的正式步：通用句「回到{地点}看看」
       if (step.hintKey === undefined && !pending && step.draft !== true && typeof step.eventId === 'string') {
         if (!returnTemplateChecked) {
