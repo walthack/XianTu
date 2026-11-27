@@ -242,7 +242,7 @@
                 <div class="quest-chapter"><span class="quest-tag quest-tag-main">{{ t('当前线') }}</span>{{ lineCompass.current.name }}</div>
                 <div v-if="lineCompass.current.step" class="quest-event"><span class="quest-mark-main">◆</span>{{ lineCompass.current.step }}</div>
                 <!-- 这道门认的钥匙（支线钥匙 PR-A）：有的打 ✓，没有的归「还差」、灰显（同锁定缺项句）；框架字读 texts -->
-                <div v-if="lineCompass.current.keys.length" class="quest-more quest-line-keys">
+                <div v-if="lineCompass.current.keys?.length" class="quest-more quest-line-keys">
                   <template v-if="lineCompass.current.keys.some(k => k.held)">{{ lineKeysText('held') }}<span v-for="key in lineCompass.current.keys.filter(k => k.held)" :key="key.id">✓{{ key.label }} </span></template>
                   <span v-if="lineCompass.current.keys.some(k => !k.held)" class="quest-locked">{{ lineKeysText('missing') }}<span v-for="key in lineCompass.current.keys.filter(k => !k.held)" :key="key.id">{{ key.label }} </span></span>
                 </div>
@@ -585,6 +585,8 @@ const beginWorldEvent = async (card: { id: string; actionId: string }) => {
   } catch (error) { worldEventError.value[card.id] = String(error); logError('LCQ-UI-007', error); }
   finally { worldEventSaving.value[card.id] = false; }
 };
+// 线卡钥匙行的框架字（「可用：」「还差：」），文案在 texts。
+const lineKeysText = (key: 'held' | 'missing') => CONTENT_PACKS.texts[`lineCompass.keys.${key}`] || '';
 const lineCompass = computed(() => {
   if (!showLineCompass()) return null;
   const rt: any = epistemicRuntime.value;
@@ -622,8 +624,6 @@ type CharacterBeatRow = { name: string; objective: string; beatId?: string; even
 const openLineBeat = ref<string | undefined>();
 const toggleLineBeat = (beatId?: string) => { openLineBeat.value = openLineBeat.value === beatId ? undefined : beatId; };
 const lineLogText = (key: 'respond' | 'skip') => CONTENT_PACKS.texts[`text.line_log.${key}`] || key;
-// 线卡钥匙行的框架字（「可用：」「还差：」），文案在 texts。
-const lineKeysText = (key: 'held' | 'missing') => CONTENT_PACKS.texts[`lineCompass.keys.${key}`] || '';
 const selectLineAction = (eventId: string | undefined, actionId: string) => { void panelBus.emit('select-line-action', { eventId, actionId }); };
 // 任务日志（story.quest.enabled；questLog.ts）：只读存档，开关关时为空。
 const questGuideOn = computed(() => questGuideEnabled(gameStateStore.toSaveData()));

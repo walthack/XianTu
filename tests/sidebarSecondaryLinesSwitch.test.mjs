@@ -73,7 +73,8 @@ test('右栏：availableLines 先问开关、整块 v-if 跟随列表；人物�
   const vue = fs.readFileSync('src/components/dashboard/RightSidebar.vue', 'utf8');
   const block = vue.slice(vue.indexOf('const availableLines = computed('), vue.indexOf('const characterBeats = computed('));
   assert.match(block, /^const availableLines = computed\(\(\) => \{\n  if \(!showSecondaryLines\(\)\) return \[\];/);
-  assert.match(block, /sidebarAvailableLines\(rt, gameStateStore\.toSaveData\(\), questAtLocationId\(rt\), event, \(\) => visibleQuestObjective\(rt, event\)\)/);
+  // 支线钥匙 PR-A（2026-11-28）：变体求值要存档，同一份快照传给列表与目标（toSaveData 仍只调一次，仍在开关之后）
+  assert.match(block, /const save = gameStateStore\.toSaveData\(\);\n  return sidebarAvailableLines\(rt, save, questAtLocationId\(rt\), event, \(\) => visibleQuestObjective\(rt, event, save\)\)/);
   assert.match(vue, /<div v-if="availableLines\.length" class="collapsible-section quest-section">/);
   const beats = vue.slice(vue.indexOf('const characterBeats = computed('), vue.indexOf('const questMain = computed('));
   const main = vue.slice(vue.indexOf('const questMain = computed('));

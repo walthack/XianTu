@@ -124,8 +124,8 @@ export interface LineCompassCard {
   step: string;
   /** focus＝焦点事件所在的线；recent＝编年史里最近推进过的线 */
   source: 'focus' | 'recent';
-  /** 当前步认的钥匙：label＝短语，held＝玩家现在有没有；当前步没写 keys（或没有当前步）为空数组 */
-  keys: Array<{ id: string; label: string; held: boolean }>;
+  /** 当前步认的钥匙：label＝短语，held＝玩家现在有没有；当前步没有可出的钥匙时不带这个字段（线卡回放 golden 按重构前形状比对，不加空数组） */
+  keys?: Array<{ id: string; label: string; held: boolean }>;
 }
 
 export interface LineCompassOther {
@@ -296,7 +296,7 @@ export function lineCompassView(save: unknown, input: LineCompassInput): LineCom
       const label = text(line, key.labelKey);
       return label ? [{ id: key.id, label, held: holds(key.when) }] : [];
     });
-    card = { lineId: line.lineId, name: nameOf(line), step: stepText, source, keys };
+    card = { lineId: line.lineId, name: nameOf(line), step: stepText, source, ...(keys.length ? { keys } : {}) };
   }
 
   const others = open.filter(line => line !== current).map((line): LineCompassOther => {

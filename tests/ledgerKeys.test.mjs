@@ -231,7 +231,8 @@ test('线卡钥匙：当前步有 keys 时逐把给 label 与 held（传存档�
   ]);
   const closer = cardOf(compassSave({ relations: { 王哲: { 角色ID: WANGZHE, 好感度: 70 } }, acquired: {} }), keyTable(KEYS));
   assert.deepEqual(closer.keys.map(k => [k.id, k.held]), [['charm', false], ['tube', false], ['friend', true]]);
-  assert.deepEqual(cardOf(compassSave(), keyTable(undefined)).keys, []);
+  assert.equal('keys' in cardOf(compassSave(), keyTable(undefined)), false, '没有钥匙时不带字段（回放 golden 按重构前形状比对）');
+  assert.equal('keys' in cardOf(compassSave(), keyTable([{ ...KEYS[0], labelKey: 'k.none' }])), false, '钥匙都缺文案时同样不带');
 });
 
 test('线卡钥匙：缺文案键记 LCQ-PCK-005，这一把不出，其余照出', () => {
@@ -260,7 +261,7 @@ test('validateLineCompassTable：keys 的 id 步内唯一、labelKey 在 texts�
 test('右栏：当前线卡下一步句子下列钥匙行，有的打 ✓、没有的归「还差」灰显；框架字读 texts', async () => {
   const vue = await readFile(new URL('../src/components/dashboard/RightSidebar.vue', import.meta.url), 'utf8');
   const card = vue.slice(vue.indexOf('<div v-if="lineCompass" class="quest-line-card">'), vue.indexOf('<template v-if="lineCompass.others.length">'));
-  assert.ok(card.indexOf('lineCompass.current.step') < card.indexOf('lineCompass.current.keys.length'), '钥匙行在下一步句子下面');
+  assert.ok(card.indexOf('lineCompass.current.step') < card.indexOf('lineCompass.current.keys?.length'), '钥匙行在下一步句子下面');
   assert.match(card, /✓\{\{ key\.label \}\}/);
   assert.match(card, /class="quest-locked">\{\{ lineKeysText\('missing'\) \}\}/);
   assert.doesNotMatch(card, /可用：|还差：/, '框架字不写死在组件里');

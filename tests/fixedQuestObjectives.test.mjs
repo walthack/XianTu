@@ -73,7 +73,8 @@ test('玩家消费面不再读取三级表的 reviewSummary', () => {
     assert.doesNotMatch(source, /node\.reviewSummary|beat\.reviewSummary/);
     assert.doesNotMatch(source, /node\.text|beat\.text/);
   }
-  assert.match(sidebar, /visibleQuestObjective\(rt, event\)/);
+  // 支线钥匙 PR-A（2026-11-28）：末位多传存档快照，供变体读 item.*.held / attr.* / favor.*
+  assert.match(sidebar, /visibleQuestObjective\(rt, event, (save|live)\)/);
   assert.match(sidebar, /resolveScenarioEventNarrative\(event, rt\.flags/);
 });
 
