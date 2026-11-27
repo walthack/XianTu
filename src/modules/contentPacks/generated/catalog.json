@@ -1,5 +1,5 @@
 {
-  "version": "6fcf622f2c315a49",
+  "version": "d90fdf57a85802e1",
   "contracts": [
     {
       "meta": {
@@ -32357,9 +32357,9 @@
                 "value": true
               },
               {
-                "path": "done.lyg.event.s02_09",
-                "operator": "eq",
-                "value": false
+                "path": "identity.liuchao.identity.han.marquis_wuyang",
+                "operator": "neq",
+                "value": true
               },
               {
                 "path": "identity.liuchao.identity.song.yuanwailang",

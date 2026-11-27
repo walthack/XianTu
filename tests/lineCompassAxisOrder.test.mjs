@@ -15,6 +15,7 @@ const compass = await loadTs('../src/modules/scenarioMods/lineCompass.ts');
 const { CANON_RAIL_PROFILES, DEFAULT_LINE_QUARANTINED_STAGE_IDS } = await loadTs('../src/modules/scenarioMods/canonRail.ts');
 const { questCompassPhrases } = await loadTs('../src/modules/scenarioMods/eventNarrativeView.ts');
 const packs = await loadTs('../src/modules/contentPacks/index.ts');
+const { syncPlayerIdentities } = await loadTs('../src/modules/scenarioMods/identityLedger.ts');
 const texts = packs.CONTENT_PACKS.texts;
 const places = packs.CONTENT_PACKS.lineCompassPlaces;
 
@@ -92,13 +93,15 @@ function routeTo(stageId) {
   }
   return done;
 }
-const saveOf = (modId, done, acq = {}) => ({
-  角色: { 属性: { 境界: { 名称: '生象', 阶段: '初期' } } },
-  世界: { 状态: { 剧本模组: {
+const saveOf = (modId, done, acq = {}) => {
+  const runtime = {
     modId, events: [], completedEventIds: [], flags: {}, acquaintances: acq,
     chronicle: done.map((id, i) => ({ id: `chronicle.${eventOf.get(id).stageId}.${id}`, type: 'event', stageId: eventOf.get(id).stageId, title: '', sequence: i + 1 })),
-  } } },
-});
+  };
+  // 身份账和游戏里一样按已完成事件同步（受封写舞阳侯、出使诏写汉使）；入唐分档读的是身份账，不读事件完成
+  syncPlayerIdentities(runtime);
+  return { 角色: { 属性: { 境界: { 名称: '生象', 阶段: '初期' } } }, 世界: { 状态: { 剧本模组: runtime } } };
+};
 const pointer = (modId, eventId, atLocationId) => (eventId
   ? questCompassPhrases(eventOf.get(eventId), { canon: stages.get(modId).canon, opening: stages.get(modId).scenario.opening }, atLocationId).join(' · ')
   : '');

@@ -149,14 +149,19 @@ test('唐 R-11／R-12（总策划定）→ 五线补全·唐 T20（2026-10-28）
   assert.ok(ids.indexOf('tang_d7_publish') < ids.indexOf('tang_shifang_public_enemy') && ids.indexOf('tang_shifang_public_enemy') < ids.indexOf('tang_ganlu_zhuhuan'));
   assert.ok(!tang.steps.some(step => step.eventId === 'lyg.event.honglusi_amends'), '第673章鸿胪寺补救不再当后面的锚');
   const ENVOYS = texts['lineCompass.tang.step.tang_envoys_reunion'];
-  const at = ids => view(saveOf({ modId: 'lyg.changgan_interlude', done: ids.map(id => [eventStage.get(id), id]) }), undefined).current;
-  // 入场四档（2026-11-27）：默认路线先走完汉线，武帝秘境 s02_09 已完成 → 沿用「去大明宫赴元正朝会」；无汉使、没完成武帝秘境、无宋职 → 「元日去大明宫外看看」
+  const at = (ids, playerIdentities = {}) => {
+    const save = saveOf({ modId: 'lyg.changgan_interlude', done: ids.map(id => [eventStage.get(id), id]) });
+    save.世界.状态.剧本模组.playerIdentities = playerIdentities;
+    return view(save, undefined).current;
+  };
+  // 入场四档（2026-11-27；11-28 起舞阳侯读身份账）：身份账有舞阳侯 → 沿用「去大明宫赴元正朝会」；无汉使、无舞阳侯、无宋职 → 「元日去大明宫外看看」（只完成武帝秘境 s02_09 不算）
   const base = ['lcq.event.sudaji_south_pact', 'lyg.event.s02_09', 'lyg.event.s03_01', 'lyg.event.changgan_fanseng_hunt'];
+  const MARQUIS = { 'liuchao.identity.han.marquis_wuyang': { identityId: 'liuchao.identity.han.marquis_wuyang', status: 'active', acquiredAtEventId: 'e', history: [] } };
   for (const opener of ['lyg.event.honglusi_amends', 'lyg.event.shixiang_s11']) {
-    const card = at([...base, opener]);
+    const card = at([...base, opener], MARQUIS);
     assert.equal(card?.lineId, 'tang', opener);
     assert.equal(card.step, ENVOYS, `${opener} 之后：元正朝会不再被兜底跳过`);
-    assert.equal(at([...base.filter(id => id !== 'lyg.event.s02_09'), opener]).step, texts['lineCompass.tang.step.tang_envoys_reunion_outside'], `${opener} 之后、两样都没有档`);
+    assert.equal(at([...base, opener]).step, texts['lineCompass.tang.step.tang_envoys_reunion_outside'], `${opener} 之后、两样都没有档`);
   }
   assert.notEqual(at([...base, 'lyg.event.honglusi_amends', 'lyg.event.yuanzheng_globe']).step, ENVOYS, '朝会过了就不再显示');
 });

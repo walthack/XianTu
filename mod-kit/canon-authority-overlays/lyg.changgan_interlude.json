@@ -439,7 +439,7 @@
                 "value": true
               },
               {
-                "path": "done.lyg.event.s02_09",
+                "path": "identity.liuchao.identity.han.marquis_wuyang",
                 "operator": "eq",
                 "value": true
               }
@@ -546,7 +546,7 @@
                 "value": true
               },
               {
-                "path": "done.lyg.event.s02_09",
+                "path": "identity.liuchao.identity.han.marquis_wuyang",
                 "operator": "eq",
                 "value": true
               }

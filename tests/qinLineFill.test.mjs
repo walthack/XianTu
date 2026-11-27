@@ -92,11 +92,13 @@ test('秦：18 个事件独立轴段，critical 全上 rail，Q2 五拍未实现
   for (const suffix of ['act3_choose','act3_trade_route','act3_baiqi','raid_branch','close_overthrow']) assert.ok(!mod.scenario.events.some(e => e.id === id(suffix)));
 });
 
-test('秦：汉使入口只读身份，不以受封事件冒认持有；知情拍统一口信、不从晋身份推断商号', async () => {
+test('秦：汉使入口只读身份账——受封那一拍写入舞阳侯后才出，只完成武帝秘境不算；知情拍统一口信、不从晋身份推断商号', async () => {
   const view = await loadTs('../src/modules/scenarioMods/eventNarrativeView.ts');
+  const entry = (stageId, eventId) => ({ id: `chronicle.${stageId}.${eventId}`, stageId, type: 'event', sequence: 1 });
   for (const held of [false, true]) {
-    let save = start({ playerIdentities: held ? { 'liuchao.identity.han.marquis_wuyang': { status: 'active' } } : {},
-      chronicle: [{ id: 'chronicle.lyg.dingtao_beijing.lyg.event.han_marquis_wuyang_enfeoff', stageId: 'lyg.dingtao_beijing', type: 'event', sequence: 1 }] });
+    // 身份由规则表在受封那一拍写入（2026-11-28），存档里不预置；没受封的档只有武帝秘境完成
+    let save = start({ playerIdentities: {},
+      chronicle: [held ? entry('lyg.dingtao_beijing', 'lyg.event.han_marquis_wuyang_enfeoff') : entry('lyg.mijing_rumen', 'lyg.event.s02_09')] });
     save = complete(save, id('hook_fangshi_rumor'));
     save = complete(save, id('enter_xianyang'));
     assert.equal(save.世界.状态.剧本模组.activeEventIds.includes(id('entry_envoy')), held);
