@@ -1,6 +1,6 @@
 // 唐 Q1 入场四档骨架（05-唐 §1；用户 2026-11-26 19:56、11-27 03:51 定；总策划 11-27 04:58 代定先搭骨架）：
 // 汉使（identity han.tang_envoy，写在 han_succession_10_beat）→ 默认文案＋Canon Rail；
-// 有舞阳侯、无汉使（done s02_09）→ 宋职（song.yuanwailang / song.baochao_zhushi）→ 两样都没有，这三档是变体位，正文仍是占位。
+// 有舞阳侯、无汉使（identity han.marquis_wuyang，写在受封那一拍；用户 2026-11-28 02:44 定入唐身份按新稿改，不再读 done s02_09）→ 宋职（song.yuanwailang / song.baochao_zhushi）→ 两样都没有，这三档是变体位，正文仍是占位。
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
@@ -16,6 +16,8 @@ const packs = await loadTs('../src/modules/contentPacks/index.ts');
 const CI = JSON.parse(fs.readFileSync('src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json', 'utf8'));
 const lyg = id => `lyg.event.${id}`;
 const ENVOY = 'liuchao.identity.han.tang_envoy';
+const MARQUIS = 'liuchao.identity.han.marquis_wuyang';
+const ENFEOFF = lyg('han_marquis_wuyang_enfeoff');
 const [YW, BC] = ['liuchao.identity.song.yuanwailang', 'liuchao.identity.song.baochao_zhushi'];
 const EDICT = lyg('han_succession_10_beat');
 const MIJING = ['lyg.mijing_rumen', lyg('s02_09')];
@@ -27,7 +29,15 @@ const rt = (done, playerIdentities = {}) => ({
 const PLACEHOLDER = /^【占位·待剧情策划】/;
 
 test('汉使身份写在出使诏那一拍（han_succession_10_beat），记进身份账 playerIdentities', () => {
-  assert.deepEqual(rules.playerLedgerRules().identityGrants, [{ eventId: EDICT, identityId: ENVOY }]);
+  assert.deepEqual(rules.playerLedgerRules().identityGrants, [{ eventId: ENFEOFF, identityId: MARQUIS }, { eventId: EDICT, identityId: ENVOY }]);
+  // 舞阳侯身份写在受封那一拍；只完成武帝秘境不算
+  const enfeoffed = rt([['lyg.dingtao_beijing', ENFEOFF], MIJING]);
+  ledger.syncPlayerIdentities(enfeoffed);
+  assert.equal(enfeoffed.playerIdentities[MARQUIS].status, 'active');
+  assert.equal(enfeoffed.playerIdentities[ENVOY], undefined);
+  const mijingOnly = rt([MIJING]);
+  ledger.syncPlayerIdentities(mijingOnly);
+  assert.equal(mijingOnly.playerIdentities[MARQUIS], undefined);
   assert.deepEqual(rules.playerIdentityDefs().find(d => d.id === ENVOY), { id: ENVOY, name: '汉使', kind: 'office', lineId: 'han' });
   const before = rt([MIJING]);
   assert.equal(ledger.syncPlayerIdentities(before), 0);
@@ -64,10 +74,12 @@ for (const id of ['honglusi_amends', 'yuanzheng_globe']) {
     assert.equal(tier(rt([MIJING, ['lyg.han_succession', EDICT]], envoy)), 'envoy');
     assert.equal(tier(rt([MIJING], { ...envoy, ...active(YW) })), 'envoy', '同时有汉使与宋职＝原著状态');
     // 有舞阳侯、无汉使：优先于宋职档与「都没有」档
-    assert.equal(tier(rt([MIJING])), '有舞阳侯、无汉使');
-    assert.equal(tier(rt([MIJING], active(BC))), '有舞阳侯、无汉使');
-    assert.equal(tier(rt([MIJING], { [ENVOY]: { ...envoy[ENVOY], status: 'revoked' } })), '有舞阳侯、无汉使', '汉使被撤销后不算持有');
-    // 宋职：无汉使、没完成武帝秘境，员外郎或宝钞局主事任一
+    const marquis = active(MARQUIS);
+    assert.equal(tier(rt([], marquis)), '有舞阳侯、无汉使');
+    assert.equal(tier(rt([], { ...marquis, ...active(BC) })), '有舞阳侯、无汉使');
+    assert.equal(tier(rt([], { ...marquis, [ENVOY]: { ...envoy[ENVOY], status: 'revoked' } })), '有舞阳侯、无汉使', '汉使被撤销后不算持有');
+    assert.equal(tier(rt([MIJING])), '两样都没有', '只完成武帝秘境、身份账没有舞阳侯：不算这一档');
+    // 宋职：无汉使、无舞阳侯，员外郎或宝钞局主事任一
     assert.equal(tier(rt([], active(YW))), '宋职');
     assert.equal(tier(rt([], active(BC))), '宋职');
     // 两样都没有
@@ -86,7 +98,8 @@ test('线卡：两样都没有档出「元日去大明宫外看看」，其余�
   const pick = runtime => steps.slice(i, i + 2).find(s => compass.lineCompassConditionsHold(s.when, c => cond.evaluateLedgerCondition(c, runtime) === true))?.id;
   assert.equal(pick(rt([AMENDS])), 'tang_envoys_reunion_outside');
   assert.equal(pick(rt([AMENDS], active(ENVOY))), 'tang_envoys_reunion');
-  assert.equal(pick(rt([MIJING, AMENDS])), 'tang_envoys_reunion');
+  assert.equal(pick(rt([AMENDS], active(MARQUIS))), 'tang_envoys_reunion');
+  assert.equal(pick(rt([MIJING, AMENDS])), 'tang_envoys_reunion_outside', '只完成武帝秘境不算舞阳侯');
   assert.equal(pick(rt([AMENDS], active(YW))), 'tang_envoys_reunion');
   assert.equal(pick(rt([AMENDS], active(BC))), 'tang_envoys_reunion');
   assert.equal(pick(rt([])), undefined, '鸿胪寺一拍没完成：两步都还没轮到');

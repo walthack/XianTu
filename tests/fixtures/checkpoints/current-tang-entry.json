@@ -29299,6 +29299,19 @@
                 }
               },
               "playerIdentities": {
+                "liuchao.identity.han.marquis_wuyang": {
+                  "identityId": "liuchao.identity.han.marquis_wuyang",
+                  "status": "active",
+                  "acquiredAtEventId": "lyg.event.han_marquis_wuyang_enfeoff",
+                  "history": [
+                    {
+                      "eventId": "lyg.event.han_marquis_wuyang_enfeoff",
+                      "op": "grant",
+                      "atStageId": "lyg.dingtao_beijing",
+                      "atWorldTurn": 27
+                    }
+                  ]
+                },
                 "liuchao.identity.han.tang_envoy": {
                   "identityId": "liuchao.identity.han.tang_envoy",
                   "status": "active",

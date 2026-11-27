@@ -86,9 +86,9 @@
               "value": true
             },
             {
-              "path": "done.lyg.event.s02_09",
-              "operator": "eq",
-              "value": false
+              "path": "identity.liuchao.identity.han.marquis_wuyang",
+              "operator": "neq",
+              "value": true
             },
             {
               "path": "identity.liuchao.identity.song.yuanwailang",
