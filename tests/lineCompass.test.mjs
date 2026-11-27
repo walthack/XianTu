@@ -355,3 +355,16 @@ test('fix5939-2 validator：travelHint 只能是 true、须有 eventId 与 hintK
   assert.ok(codes({ hintKey: 'k', travelHint: true }).includes('invalid_travel_hint'), '缺 eventId');
   assert.ok(codes({ eventId: KILL_WU, hintKey: 'k', travelHnt: true }).includes('unknown_field'), '未知字段仍报');
 });
+
+test('太泉入口（支线钥匙样板 H8 的「人」那一把）：萧遥逸在队走宋版入口并标可用，不在队走王哲版并标还差', () => {
+  const S12 = 'lcq.stage_12_jiangzhou_counterwar', RESCUE = 'lcq.event.s12_10_rescue_xiao', ENTERED = 'lyl.event.taiquan_sacred_fruit_05';
+  const flags = { 'line.song.outcome': 'resolved' };
+  const cardOf = done => view(saveOf({ modId: TQ, done: [[S02, WANGZHE], [S07, JIN_ANCHOR], ...done, [TQ, ENTERED]], flags }), 'lyl.event.taiquan_sacred_fruit_06').current;
+  const withXiao = cardOf([[S12, RESCUE]]);
+  assert.equal(withXiao.lineId, 'taiquan');
+  assert.equal(withXiao.step, texts['lineCompass.taiquan.step.tq_entry_fruit']);
+  assert.deepEqual(withXiao.keys, [{ id: 'xiao_in_party', label: '萧遥逸带伤随队', held: true }]);
+  const without = cardOf([]);
+  assert.equal(without.step, texts['lineCompass.taiquan.step.tq_entry_wangzhe']);
+  assert.deepEqual(without.keys, [{ id: 'xiao_in_party', label: '萧遥逸带伤随队', held: false }]);
+});

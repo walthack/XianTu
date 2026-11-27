@@ -1,5 +1,5 @@
 {
-  "version": "5bfcfc0c8a2df4ec",
+  "version": "ea12dfd537752ace",
   "contracts": [
     {
       "meta": {
@@ -30966,6 +30966,7 @@
     "lineCompass.taiquan.step.tq_chiyang_fruit": "往古阵深处走走",
     "lineCompass.taiquan.step.tq_xuanyuan_mijing": "去古阵西部找那块红石",
     "lineCompass.taiquan.step.tq_exit_to_han": "找条路出古阵",
+    "lineCompass.taiquan.key.xiao_in_party": "萧遥逸带伤随队",
     "lineCompass.tang.name": "唐国",
     "lineCompass.tang.step.tang_entry_from_han": "从舞都动身，往长安去",
     "lineCompass.tang.step.tang_entry": "去唐国看看",
@@ -32620,13 +32621,26 @@
                 "value": true
               },
               {
-                "path": "done.lcq.event.s12_10_rescue_xiao",
+                "path": "party.liuchao.character.xiao_yao_yi",
                 "operator": "eq",
                 "value": true
               }
             ],
+            "keys": [
+              {
+                "id": "xiao_in_party",
+                "labelKey": "lineCompass.taiquan.key.xiao_in_party",
+                "when": [
+                  {
+                    "path": "party.liuchao.character.xiao_yao_yi",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
             "hintKey": "lineCompass.taiquan.step.tq_entry_fruit",
-            "note": "宋版入口（P-15；lcq:42253–42258）"
+            "note": "宋版入口（P-15；lcq:42253–42258）；2026-11-28 起读萧遥逸在队（支线钥匙样板 H8 的「人」那一把，熊谷钥匙那一把等发放拍）"
           },
           {
             "id": "tq_entry_wangzhe",
@@ -32636,6 +32650,19 @@
                 "path": "unlock.taiquan",
                 "operator": "eq",
                 "value": true
+              }
+            ],
+            "keys": [
+              {
+                "id": "xiao_in_party",
+                "labelKey": "lineCompass.taiquan.key.xiao_in_party",
+                "when": [
+                  {
+                    "path": "party.liuchao.character.xiao_yao_yi",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
               }
             ],
             "hintKey": "lineCompass.taiquan.step.tq_entry_wangzhe",
