@@ -68,7 +68,7 @@ async function childMain(files) {
     const ev = R.getScenarioFocusEvent(adv);
     let objective = '';
     if (ev) {
-      const view = L.NV.resolveScenarioEventNarrative(ev, adv.flags || {}, adv.divergences, adv);
+      const view = L.NV.resolveScenarioEventNarrative(ev, adv.flags || {}, adv.divergences, adv, save);
       const atAdv = L.TL.locationFromPosition(String(save.角色?.位置?.描述 || ''), adv.canon?.locations).locationId;
       objective = L.NV.formatQuestCompass(view, adv, atAdv, present) || String(view.objective || '').trim();
     }

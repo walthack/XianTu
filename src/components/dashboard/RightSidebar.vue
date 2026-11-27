@@ -539,9 +539,10 @@ const compassPresentIds = computed(() => {
     世界: { 状态: gameStateStore.worldState },
   }, recent);
 });
-const visibleQuestObjective = (rt: any, event: any): string => {
+// save：调用方手上的存档快照，变体条件读 item.*.held / attr.* / favor.* 用（不另取，toSaveData 是深拷贝）。
+const visibleQuestObjective = (rt: any, event: any, save?: unknown): string => {
   if (!event) return '';
-  const view = resolveScenarioEventNarrative(event, rt.flags || {}, rt.divergences, rt);
+  const view = resolveScenarioEventNarrative(event, rt.flags || {}, rt.divergences, rt, save);
   return formatQuestCompass(view, rt, questAtLocationId(rt), compassPresentIds.value) || String(view.objective || '').trim();
 };
 // 「可投的门路」：二级线入口＋支线，列表组装在 sidebarLineEntries.ts。
@@ -551,7 +552,8 @@ const availableLines = computed(() => {
   const rt: any = epistemicRuntime.value;
   if (!rt || typeof rt !== 'object') return [];
   const event = currentQuestEvent(rt);
-  return sidebarAvailableLines(rt, gameStateStore.toSaveData(), questAtLocationId(rt), event, () => visibleQuestObjective(rt, event));
+  const save = gameStateStore.toSaveData();
+  return sidebarAvailableLines(rt, save, questAtLocationId(rt), event, () => visibleQuestObjective(rt, event, save));
 });
 // 当前线卡（lineCompass.ts）：显示开关 ui.rightSidebar.showLineCompass（默认 true，用户 2026-10-27 08:57 定改完后不再隐藏）；关时先返回，不取存档快照。
 // fallback＝原主线指南针的「去X · 见Y」（questCompassPhrases），没有当前线时卡片显示它（总策划定，避免玩家什么提示都没有）；
@@ -583,9 +585,10 @@ const lineCompass = computed(() => {
   const rt: any = epistemicRuntime.value;
   if (!rt || typeof rt !== 'object') return null;
   const event = currentQuestEvent(rt);
-  const view = event ? resolveScenarioEventNarrative(event, rt.flags || {}, rt.divergences, rt) : null;
+  const save = gameStateStore.toSaveData();
+  const view = event ? resolveScenarioEventNarrative(event, rt.flags || {}, rt.divergences, rt, save) : null;
   const at = questAtLocationId(rt);
-  const result = lineCompassView(gameStateStore.toSaveData(), {
+  const result = lineCompassView(save, {
     focusEventId: event?.id,
     atLocationId: at,
     compassPointer: () => questCompassPhrases(view, rt, at, compassPresentIds.value).join(' · '),
@@ -603,7 +606,7 @@ const characterBeats = computed((): CharacterBeatRow[] => {
   const rt: any = (live ? (advanceScenarioRuntime(live).saveData as any)?.世界?.状态?.剧本模组 : undefined) || epistemicRuntime.value;
   if (!rt || typeof rt !== 'object') return [];
   const event = currentQuestEvent(rt);
-  const objective = visibleQuestObjective(rt, event);
+  const objective = visibleQuestObjective(rt, event, live);
   const view = questLineView(gameStateStore.toSaveData());
   // 角色归宿（人物线已收束）与正等回应的人物拍不依赖当前拍，始终可见（任务引导开关都一样）。
   const waiting = view.character.filter(beat => beat.actions.length);
@@ -645,13 +648,13 @@ const questMain = computed(() => {
   // 与主叙事/flag guard 共用同一个运行时锚点，避免 UI 单独从 activeEventIds 选出资料事件。
   const anchor = getScenarioFocusEvent(rt);
   const activeEvents = anchor ? [anchor] : [];
+  const save = gameStateStore.toSaveData();
   const events = activeEvents.slice(0, 1).map((e: any) => {
-    const view = resolveScenarioEventNarrative(e, rt.flags || {}, rt.divergences, rt);
+    const view = resolveScenarioEventNarrative(e, rt.flags || {}, rt.divergences, rt, save);
     return formatQuestCompass(view, rt, questAtLocationId(rt), compassPresentIds.value) || view.objective || view.name;
   }).filter(Boolean);
   const moreCount = Math.max(0, activeEvents.length - 1);
   const ready = rt.nextStageReadyId && rt.nextStageReadyId === rt.nextStageId;
-  const save = gameStateStore.toSaveData();
   const departure = ready && save ? getStageDepartureOffer(save) : null;
   if (departure?.label && !events.length) events.push(departure.label);
   const mapEntryReturn = save ? getMapEntryReturnOffer(save) : null;
@@ -670,7 +673,7 @@ const questMain = computed(() => {
   const canReturn = signal?.level === 'medium' || signal?.level === 'high' || stalled;
   // 玩家可见的推进引导：停滞数轮且这一拍有可点的主线动作时出现（非调试信息）。
   const mainAction = anchor ? sidebarStoryActions().find((a: any) => a.eventId === anchor.id) : undefined;
-  const anchorView = anchor ? resolveScenarioEventNarrative(anchor, rt.flags || {}, rt.divergences, rt) : null;
+  const anchorView = anchor ? resolveScenarioEventNarrative(anchor, rt.flags || {}, rt.divergences, rt, save) : null;
   // 任务模式（story.quest 开）：不出「主线 · 行动」按钮提示（玩家看任务日志、直接说做法；空转提示由 questLog 分级放出）。
   const stallHint = questGuideOn.value ? '' : questStallHint(stallTurns, mainAction?.label, anchorView?.objective);
   return {

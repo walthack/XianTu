@@ -103,6 +103,15 @@ export function firstItemReceipt(runtime: unknown, id: string): ScenarioInventor
 }
 
 /**
+ * item.<id>.held 的数据源（支线钥匙 PR-A，用户 2026-11-28 批）：现在背包里有（任一成员 角色.背包.物品[itemId].数量 > 0），不看回执。
+ * 组展开同 item.<id>。没拿到存档（没传 save，或占位存档没有 角色）→ undefined＝条件不成立，口径同 unlock.*。
+ */
+export function itemHeldNow(save: unknown, id: string): boolean | undefined {
+  if (!save || typeof save !== 'object' || !(save as { 角色?: unknown }).角色) return undefined;
+  return itemReadIds(id).some(itemId => heldQuantity(save as SaveData, itemId) > 0);
+}
+
+/**
  * 读档窄回填（§2.3 / Q5，幂等）：唯一道具组成员当前在背包里（数量>0）却没有任何回执的，补一条回填回执
  * （transferId=backfill:<itemId>，sourceEventId=actionId=backfill）。规则表为空时不动存档。
  * 不改 ScenarioInventoryTransferReceipt 类型；失败记 LCQ-SAV-025 backfill_failed，不抛、不写半截。返回补的条数。

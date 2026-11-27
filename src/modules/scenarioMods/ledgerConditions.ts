@@ -4,6 +4,8 @@ import { lineClosedByWorldEvent } from './worldEvents';
  * identity.* / done.* / line.*.outcome / acq.* / knows.player.*，道具来路 item.*（补充设计稿 2026-10-26 §2.4），在队 party.*（同稿 §3.4，数据源 partyLedger.ts），进度期限 deadline.*（同稿 §4.5，数据源 progressDeadlines.ts），
  * 整线解锁 unlock.<lineId>（太泉解锁设计稿 2026-10-27 §4，数据源 lineUnlock.ts；要读存档里的境界，只有传了 save 的调用方读得到，否则为 undefined），
  * 派生读取点 compass.<id>（右栏线入口复用分析 2026-10-27 §6 R-3，总策划定；数据源＝收束唯一读取点 lineClosed：line.*.outcome，规则表无本线规则时退回 closedWhen）。
+ * 支线钥匙（PR-A，用户 2026-11-28 批）：物 item.<id>.held（现在背包里有）、属性 attr.<key>（魅力／心性／悟性／根骨＝先天六司＋后天六司，境界＝九级级数）、
+ * 好感 favor.<characterId>（数字）与 favor.<characterId>.tier（好感档 id）。三样都读存档：没传 save 读成 undefined，任何 operator 都不成立。
  * 只读不写；读不到的账本一律当空。不是本模块的前缀交还原 flags 逻辑。
  * narrativeVariants.when 走 evaluateLedgerCondition；activation/completion 等由 runtime.ts 的 resolveConditionValue 委托 resolveLedgerPath（T4，
  * 用户 2026-10-25 23:24 批），那里 gt/gte/lt/lte 只比数字，相识等级比较只在变体里可用（validator 拦）。
@@ -13,16 +15,33 @@ import { orderedDoneEventIds } from './playerLedgerRules';
 import type { PlayerIdentityLedger } from './identityLedger';
 import { lineClosed, nationClosedLineCount, readLineOutcome } from './lineOutcomes';
 import { isAcquaintanceKind, rankOf, type AcquaintanceLedger } from './acquaintanceLedger';
-import { firstItemReceipt } from './itemProvenance';
+import { firstItemReceipt, itemHeldNow } from './itemProvenance';
+import { relationshipOf } from './ledger/affinityIdentity';
+import { assistLevelOf } from '../sceneModule/assist';
+import { levelOf } from '../../utils/realmUtils';
 import { isInParty } from './partyLedger';
 import { deadlineState } from './progressDeadlines';
 import { lineUnlockLedgerValue } from './lineUnlock';
 import { SECONDARY_LINES, secondaryLineUnlockOptions } from './secondaryLines';
-import { resolveNumberRef } from '../sceneModule/numbers';
+import { GAME_NUMBERS, resolveNumberRef } from '../sceneModule/numbers';
 import { CLOSURE_TALLY_LINE_IDS, COMPASS_CONDITIONS, NATION_LINE_OF_REGION } from '../contentPacks';
 import { STAGE_REGION } from './reputationLedger';
 
-export type LedgerPathKind = 'identity' | 'done' | 'line' | 'acq' | 'knows' | 'item' | 'party' | 'deadline' | 'unlock' | 'compass';
+export type LedgerPathKind = 'identity' | 'done' | 'line' | 'acq' | 'knows' | 'item' | 'party' | 'deadline' | 'unlock' | 'compass' | 'attr' | 'favor';
+
+/**
+ * attr.<key> 只许这五项（用户 2026-11-28 只批了这几项；灵性、气运等不开）：四项六司读 角色.身份.先天六司 + 角色.身份.后天六司 的同名项之和
+ * （同判定引擎 judgementPreflight 的口径，不含面板上现算的装备／天赋加成），realm＝levelOf(角色.属性.境界)（同 lineUnlock.ts）。
+ */
+export const ATTR_KEYS = { charm: '魅力', temperament: '心性', comprehension: '悟性', root_bone: '根骨', realm: '境界' } as const;
+export type AttrKey = keyof typeof ATTR_KEYS;
+const isAttrKey = (key: string): key is AttrKey => Object.prototype.hasOwnProperty.call(ATTR_KEYS, key);
+
+/** 好感档 id，按区间下限从低到高（numbers-progress affinity.tiers）；favor.<id>.tier 的 gt/gte/lt/lte 按这里的先后比较。 */
+export function affinityTierIds(): string[] {
+  const tiers = GAME_NUMBERS.affinity.tiers as unknown as Record<string, [number, number]>;
+  return Object.entries(tiers).sort((a, b) => a[1][0] - b[1][0]).map(([id]) => id);
+}
 
 /**
  * 派生读取点 compass.<id>（R-3，总策划定）：现算，不落存档。
@@ -38,8 +57,8 @@ export interface ParsedLedgerPath {
   kind: LedgerPathKind;
   /** identityId / eventId / lineId / characterId / propositionId / 道具组 id 或 itemId / 期限 id / 整线解锁配置键；格式不对时为空串 */
   id: string;
-  /** identity：active＝是否持有，status / from＝子读取；item：active＝是否得过，from＝最早回执的 sourceEventId */
-  field?: 'active' | 'status' | 'from';
+  /** identity：active＝是否持有，status / from＝子读取；item：active＝是否得过，from＝最早回执的 sourceEventId，held＝现在背包里有；favor：tier＝好感档（缺省＝好感数值） */
+  field?: 'active' | 'status' | 'from' | 'held' | 'tier';
   /** 前缀属于本模块但形状不对（如 line.<id> 缺 .outcome、knows.<非 player>、deadline.<id>.state 锁存键） */
   invalid?: boolean;
 }
@@ -56,9 +75,11 @@ export const LEDGER_OPERATORS: Record<LedgerPathKind, readonly ScenarioCondition
   deadline: ['eq', 'neq', 'exists'],
   unlock: ['eq', 'neq'],
   compass: ['eq', 'neq'],
+  attr: ['eq', 'neq', 'gt', 'gte', 'lt', 'lte'],
+  favor: ['eq', 'neq', 'gt', 'gte', 'lt', 'lte'],
 };
 
-/** item.<id>（是否得过）恒为 boolean，只有 eq / neq；exists 只给 item.<id>.from。 */
+/** item.<id>（是否得过）与 item.<id>.held（现在持有）恒为 boolean，只有 eq / neq；exists 只给 item.<id>.from。 */
 const ITEM_OBTAINED_OPERATORS: readonly ScenarioConditionOperator[] = ['eq', 'neq'];
 
 /** 该路径实际可用的 operator（validator 与求值共用）。 */
@@ -67,6 +88,9 @@ export function ledgerOperatorsOf(parsed: ParsedLedgerPath): readonly ScenarioCo
 }
 
 const RANK_OPERATORS = new Set<ScenarioConditionOperator>(['gt', 'gte', 'lt', 'lte']);
+
+/** 读存档的钥匙路径：没读到（没传 save、没有记录）时一律不成立，neq 也不成立（runtime.ts 那条路的 neq 例外，见 validator）。 */
+const isSaveKeyPath = (parsed: ParsedLedgerPath): boolean => parsed.kind === 'attr' || parsed.kind === 'favor' || (parsed.kind === 'item' && parsed.field === 'held');
 
 /** 不是账本前缀返回 undefined。 */
 export function parseLedgerPath(path: string): ParsedLedgerPath | undefined {
@@ -92,7 +116,19 @@ export function parseLedgerPath(path: string): ParsedLedgerPath | undefined {
   }
   if (path.startsWith('item.')) {
     const tail = rest('item.');
-    return tail.endsWith('.from') ? { kind: 'item', id: tail.slice(0, -'.from'.length), field: 'from' } : { kind: 'item', id: tail, field: 'active' };
+    // itemId 自身含点号：只认末段 .from / .held（实体索引里没有末段叫 from / held 的 itemId，2026-11-28 查过）
+    for (const field of ['from', 'held'] as const) {
+      if (tail.endsWith(`.${field}`)) return { kind: 'item', id: tail.slice(0, -field.length - 1), field };
+    }
+    return { kind: 'item', id: tail, field: 'active' };
+  }
+  if (path.startsWith('attr.')) {
+    const key = rest('attr.');
+    return isAttrKey(key) ? { kind: 'attr', id: key } : { kind: 'attr', id: '', invalid: true };
+  }
+  if (path.startsWith('favor.')) {
+    const tail = rest('favor.');
+    return tail.endsWith('.tier') ? { kind: 'favor', id: tail.slice(0, -'.tier'.length), field: 'tier' } : { kind: 'favor', id: tail };
   }
   if (path.startsWith('party.')) return { kind: 'party', id: rest('party.') };
   if (path.startsWith('deadline.')) {
@@ -186,7 +222,8 @@ function readPath(parsed: ParsedLedgerPath, runtime: unknown, save?: unknown): u
       return Object.values(asRecord<NonNullable<LedgerRuntime['playerKnowledge']>>(rt.playerKnowledge) || {})
         .some(fact => fact?.status === 'confirmed' && (fact.propositionId === parsed.id || fact.factId === parsed.id));
     case 'item': {
-      // 只看回执（含读档回填）；没得过：item.<id> 为 false，.from 为 undefined
+      // .held 只看背包现存（要存档）；其余只看回执（含读档回填）；没得过：item.<id> 为 false，.from 为 undefined
+      if (parsed.field === 'held') return itemHeldNow(save, parsed.id);
       const receipt = firstItemReceipt(runtime, parsed.id);
       return parsed.field === 'from' ? receipt?.sourceEventId : receipt !== undefined;
     }
@@ -204,10 +241,37 @@ function readPath(parsed: ParsedLedgerPath, runtime: unknown, save?: unknown): u
     case 'compass':
       // 只读收束档与编年史（closedWhen 只许 done.*），不新增存档字段
       return parsed.id === 'anyLineClosed' ? anyNationLineClosed(runtime) : compassConditionHolds(parsed.id, runtime, save);
+    case 'attr':
+      return readAttr(save, parsed.id as AttrKey);
+    case 'favor':
+      return readFavor(save, parsed.id, parsed.field === 'tier');
   }
 }
 
-/** 解析五类路径；不是本模块的前缀返回 { handled:false }。rankCompare＝gt/gte/lt/lte 按相识等级比较。save 只有 unlock.* 用（读境界）。 */
+type KeySave = { 角色?: { 身份?: { 先天六司?: Record<string, unknown>; 后天六司?: Record<string, unknown> }; 属性?: { 境界?: unknown } }; 社交?: { 关系?: Record<string, unknown> } };
+
+/** attr.<key>：没存档（或占位存档没有 角色）、先天六司读不出该项、境界名不认识 → undefined。后天六司缺项按 0。 */
+function readAttr(save: unknown, key: AttrKey): number | undefined {
+  const role = asRecord<KeySave>(save)?.角色;
+  if (!role) return undefined;
+  if (key === 'realm') return levelOf(role.属性?.境界) ?? undefined;
+  const name = ATTR_KEYS[key];
+  const innate = Number(role.身份?.先天六司?.[name]);
+  if (!Number.isFinite(innate)) return undefined;
+  const acquired = Number(role.身份?.后天六司?.[name]);
+  return innate + (Number.isFinite(acquired) ? acquired : 0);
+}
+
+/** favor.<characterId>：社交.关系 里 角色ID 等于它的唯一记录的 好感度（relationshipOf）；没存档、没记录、好感度不是数 → undefined。.tier＝好感档 id（assistLevelOf）。 */
+function readFavor(save: unknown, characterId: string, tier: boolean): number | string | undefined {
+  const record = asRecord<KeySave>(save) ? relationshipOf(save as KeySave, characterId) : undefined;
+  if (!record) return undefined;
+  const value = Number(record.profile.好感度);
+  if (!Number.isFinite(value)) return undefined;
+  return tier ? assistLevelOf(value).tier : value;
+}
+
+/** 解析五类路径；不是本模块的前缀返回 { handled:false }。rankCompare＝gt/gte/lt/lte 按相识等级比较。save 给 unlock.*、item.*.held、attr.*、favor.* 用。 */
 export function resolveLedgerPath(path: string, runtime: unknown, save?: unknown): { handled: boolean; value?: unknown; rankCompare?: boolean } {
   const parsed = parseLedgerPath(path);
   if (!parsed) return { handled: false };
@@ -218,13 +282,15 @@ export function resolveLedgerPath(path: string, runtime: unknown, save?: unknown
 /**
  * undefined＝不是本模块的路径，交给原逻辑。
  * 账本路径在没有 runtime、路径形状不对或 operator 不支持时一律不命中（false），不回落 flags。
- * save 只有 unlock.* 用（读境界）：变体求值不传，unlock.* 恒不成立；右栏当前线卡的下一步表（lineCompass.ts）传存档求值。
+ * save 给 unlock.*、item.*.held、attr.*、favor.* 用（读存档）：没传时这几样恒不成立；变体求值（eventNarrativeView）与右栏当前线卡的下一步表（lineCompass.ts）都传存档。
+ * attr.* / favor.<id> 的 gt/gte/lt/lte 按数字比；favor.<id>.tier 按好感档先后比（value 须是档 id）。
  */
 export function evaluateLedgerCondition(condition: ScenarioCondition, runtime?: unknown, save?: unknown): boolean | undefined {
   const parsed = parseLedgerPath(condition?.path);
   if (!parsed) return undefined;
   if (!runtime || parsed.invalid || !parsed.id || !ledgerOperatorsOf(parsed).includes(condition.operator)) return false;
   const { value: actual, rankCompare } = resolveLedgerPath(condition.path, runtime, save);
+  if (isSaveKeyPath(parsed)) return compareSaveKey(parsed, condition, actual);
   if (condition.operator === 'exists') return actual !== undefined;
   if (condition.operator === 'eq') return actual === condition.value;
   if (condition.operator === 'neq') return actual !== condition.value;
@@ -235,4 +301,23 @@ export function evaluateLedgerCondition(condition: ScenarioCondition, runtime?: 
   if (condition.operator === 'gte') return left >= right;
   if (condition.operator === 'lt') return left < right;
   return left <= right;
+}
+
+/** item.*.held / attr.* / favor.* 的比较：读不到为不成立；favor.<id>.tier 的大小比较按档位先后，其余大小比较只比数字。 */
+function compareSaveKey(parsed: ParsedLedgerPath, condition: ScenarioCondition, actual: unknown): boolean {
+  if (actual === undefined) return false;
+  if (condition.operator === 'eq') return actual === condition.value;
+  if (condition.operator === 'neq') return actual !== condition.value;
+  let left: unknown = actual, right: unknown = condition.value;
+  if (parsed.kind === 'favor' && parsed.field === 'tier') {
+    const order = affinityTierIds();
+    left = order.indexOf(actual as string);
+    right = typeof condition.value === 'string' ? order.indexOf(condition.value) : -1;
+    if ((left as number) < 0 || (right as number) < 0) return false;
+  }
+  if (typeof left !== 'number' || typeof right !== 'number') return false;
+  if (condition.operator === 'gt') return left > right;
+  if (condition.operator === 'gte') return left >= right;
+  if (condition.operator === 'lt') return left < right;
+  return condition.operator === 'lte' && left <= right;
 }

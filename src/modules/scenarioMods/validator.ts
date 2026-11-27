@@ -11,7 +11,7 @@ import { validateCharacterStats } from './characterStatsMerge';
 import { resolveReconcileBranchId } from './divergenceLedger';
 import { NPC_ACTION_LIBRARY } from './npcDecisionCore';
 import { effectProblems } from './effectTags';
-import { ledgerOperatorsOf, parseLedgerPath, type ParsedLedgerPath } from './ledgerConditions';
+import { affinityTierIds, ledgerOperatorsOf, parseLedgerPath, type ParsedLedgerPath } from './ledgerConditions';
 import { PLAYER_IDENTITY_STATUSES } from './identityLedger';
 import { DEADLINE_STATES } from './progressDeadlines';
 import { lineOutcomeTiers } from './lineOutcomes';
@@ -846,7 +846,7 @@ export function validateScenarioMod(input: unknown, options: { knownEventIds?: R
         }
       }
       forEachRecord(entity.narrativeVariants, `${entity.__path}.narrativeVariants`, (variant, variantPath) => {
-        // 变体求值（eventNarrativeView → evaluateLedgerCondition）拿不到存档，unlock.* 永远读成 undefined、永远不成立，故不许（2026-10-27）
+        // 变体不许 unlock.*（2026-10-27 定；2026-11-28 变体求值已传存档，item.*.held / attr.* / favor.* 可用，unlock.* 按用户意见仍不放开）
         validateConditions(variant.when, `${variantPath}.when`, add, { refs: ledgerRefs, variant: true });
         optionalBoolean(variant.replacesCanonRail, `${variantPath}.replacesCanonRail`, add);
         optionalString(variant.name, `${variantPath}.name`, add);
@@ -2345,7 +2345,7 @@ interface LedgerConditionRef { parsed: ParsedLedgerPath; path: string }
  */
 interface LedgerScope { refs: LedgerConditionRef[]; variant?: boolean; unlockSite?: boolean }
 
-/** evaluateScenarioCondition 的 gt/gte/lt/lte 只比数字，相识等级比较只在变体里可用。 */
+/** evaluateScenarioCondition 的 gt/gte/lt/lte 只比数字，相识等级、好感档的先后比较只在变体（与线卡表）里可用；attr.* / favor.<id> 是数字，各处都可比。 */
 const RANK_OPERATORS_VARIANT_ONLY = new Set(['gt', 'gte', 'lt', 'lte']);
 
 /**
@@ -2367,7 +2367,8 @@ function validateLedgerCondition(condition: ScenarioCondition, itemPath: string,
     add(`${itemPath}.path`, 'ledger_unlock_site', 'unlock.* is only allowed in event conditions and chapter activation (narrativeVariants.when cannot read the save, so it would never hold).');
     return;
   }
-  if (!ledger.variant && RANK_OPERATORS_VARIANT_ONLY.has(condition.operator)) {
+  const numeric = parsed.kind === 'attr' || (parsed.kind === 'favor' && parsed.field !== 'tier');
+  if (!ledger.variant && !numeric && RANK_OPERATORS_VARIANT_ONLY.has(condition.operator)) {
     add(`${itemPath}.operator`, 'ledger_rank_variant_only', `Rank comparison "${condition.operator}" on ${parsed.kind}.* is only allowed in narrativeVariants.when; use eq/neq/exists here.`);
     return;
   }
@@ -2377,6 +2378,8 @@ function validateLedgerCondition(condition: ScenarioCondition, itemPath: string,
       : parsed.kind === 'line' ? lineOutcomeTiers().includes(value as string)
         : parsed.kind === 'identity' && parsed.field === 'status' ? (PLAYER_IDENTITY_STATUSES as readonly unknown[]).includes(value)
           : parsed.kind === 'deadline' ? (DEADLINE_STATES as readonly unknown[]).includes(value)
+          : numeric ? typeof value === 'number' && Number.isFinite(value)
+          : parsed.kind === 'favor' ? affinityTierIds().includes(value as string)
           : (parsed.kind === 'identity' || parsed.kind === 'item') && parsed.field === 'from' ? typeof value === 'string' && value.length > 0
             : typeof value === 'boolean';
     if (!ok) add(`${itemPath}.value`, 'invalid_value', `Invalid comparison value for ${parsed.kind}.* path.`);
@@ -2403,7 +2406,7 @@ function checkLedgerRefs(refs: LedgerConditionRef[], eventIds: Set<string>, char
     if (kind === 'done' && !eventIds.has(id) && !knownEvents.has(id)) add(path, 'missing_reference', `Unknown event id "${id}".`);
     if (kind === 'identity' && !identityIds.has(id)) add(path, 'missing_reference', `Unknown identity id "${id}".`);
     if (kind === 'line' && !lineIds.has(id)) add(path, 'missing_reference', `Unknown line id "${id}".`);
-    if (kind === 'acq' && !characterIds.has(id) && getRegistryNamesById(id).length === 0) add(path, 'missing_reference', `Unknown character id "${id}".`);
+    if ((kind === 'acq' || kind === 'favor') && !characterIds.has(id) && getRegistryNamesById(id).length === 0) add(path, 'missing_reference', `Unknown character id "${id}".`);
     if (kind === 'item' && !itemGroupIds.has(id) && !itemIds.has(id) && !indexItemIds.has(id)) add(path, 'missing_reference', `Unknown item or item group id "${id}".`);
     if (kind === 'party' && !indexCharacterIds.has(id)) add(path, 'missing_reference', `Unknown character id "${id}" (party.* needs entity index kind=character).`);
     if (kind === 'deadline' && !deadlineIds.has(id)) add(path, 'missing_reference', `Unknown progress deadline id "${id}" (deadline.* needs player-ledger-rules progressDeadlines).`);
@@ -2507,7 +2510,7 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
     for (const ref of scope.refs.slice(before)) ref.path = fix(ref.path);
     if (!isRecord(c) || typeof c.path !== 'string') return;
     const parsed = parseLedgerPath(c.path);
-    if (!parsed) add(`${itemPath}.path`, 'ledger_only', `lineCompass conditions only accept ledger paths (done.* / line.* / acq.* / identity.* / knows.player.* / item.* / party.* / deadline.* / unlock.* / compass.*), got "${c.path}".`);
+    if (!parsed) add(`${itemPath}.path`, 'ledger_only', `lineCompass conditions only accept ledger paths (done.* / line.* / acq.* / identity.* / knows.player.* / item.* / party.* / deadline.* / unlock.* / compass.* / attr.* / favor.*), got "${c.path}".`);
     else if (opts.noCompass && parsed.kind === 'compass') add(`${itemPath}.path`, 'compass_in_closed_when', 'closedWhen cannot read compass.* (compass.anyLineClosed is derived from closedWhen).');
     else if (opts.noCompass && parsed.kind !== 'done') add(`${itemPath}.path`, 'closed_when_done_only', `closedWhen lists closing events and only accepts done.* (judged by the chronicle in lineClosed), got "${c.path}".`);
   };
