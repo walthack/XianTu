@@ -363,8 +363,10 @@ test('太泉入口（支线钥匙样板 H8 的「人」那一把）：萧遥逸�
   const withXiao = cardOf([[S12, RESCUE]]);
   assert.equal(withXiao.lineId, 'taiquan');
   assert.equal(withXiao.step, texts['lineCompass.taiquan.step.tq_entry_fruit']);
-  assert.deepEqual(withXiao.keys, [{ id: 'xiao_in_party', label: '萧遥逸带伤随队', held: true }]);
+  assert.deepEqual(withXiao.keys, [{ id: 'xiao_in_party', label: '萧遥逸带伤随队', held: true }, { id: 'xionggu_key', label: '岳鹏举留下的钥匙', held: false }]);
+  const withBoth = view({ ...saveOf({ modId: TQ, done: [[S02, WANGZHE], [S07, JIN_ANCHOR], [S12, RESCUE], [TQ, ENTERED]], flags }), 角色: { 属性: { 境界: { 名称: '坐照', 阶段: '初期' } }, 背包: { 物品: { 'lyl.item.np025': { 数量: 1 } } } } }, 'lyl.event.taiquan_sacred_fruit_06').current;
+  assert.deepEqual(withBoth.keys.map(k => k.held), [true, true], '钥匙读背包现存');
   const without = cardOf([]);
   assert.equal(without.step, texts['lineCompass.taiquan.step.tq_entry_wangzhe']);
-  assert.deepEqual(without.keys, [{ id: 'xiao_in_party', label: '萧遥逸带伤随队', held: false }]);
+  assert.deepEqual(without.keys, [{ id: 'xiao_in_party', label: '萧遥逸带伤随队', held: false }, { id: 'xionggu_key', label: '岳鹏举留下的钥匙', held: false }]);
 });

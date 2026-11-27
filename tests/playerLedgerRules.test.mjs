@@ -13,7 +13,7 @@ const rules = (patch = {}) => ({ version: 1, identityGrants: [], identityRevokes
 
 test('仓库秦线收束规则、汉使写入规则与身份定义通过校验', async () => {
   const { playerLedgerRules, playerIdentityDefs, validatePlayerLedgerRules } = await modPromise;
-  assert.deepEqual(playerLedgerRules(), { ...playerLedgerRules(), identityGrants: [{ eventId: 'lyg.event.han_succession_10_beat', identityId: 'liuchao.identity.han.tang_envoy' }], identityRevokes: [], lineOutcomes: [{ eventId: 'liuchao.event.qin_close_default', lineId: 'qin', outcome: 'unresolved' }], itemGroups: [], partyJoins: [{ eventId: 'lcq.event.s12_10_rescue_xiao', characterId: 'liuchao.character.xiao_yao_yi' }], partyLeaves: [], partyOpenings: [] });
+  assert.deepEqual(playerLedgerRules(), { ...playerLedgerRules(), identityGrants: [{ eventId: 'lyg.event.han_succession_10_beat', identityId: 'liuchao.identity.han.tang_envoy' }], identityRevokes: [], lineOutcomes: [{ eventId: 'liuchao.event.qin_close_default', lineId: 'qin', outcome: 'unresolved' }], itemGroups: [], partyJoins: [{ eventId: 'lcq.event.sudaji_south_pact', characterId: 'liuchao.character.ning_yu' }, { eventId: 'lcq.event.xieyi_entrustment', characterId: 'liuchao.character.xiao_zi' }, { eventId: 'lcq.event.s12_10_rescue_xiao', characterId: 'liuchao.character.xiao_yao_yi' }], partyLeaves: [{ eventId: 'lcq.event.shanghou_cures_ice_gu', characterId: 'liuchao.character.ning_yu' }], partyOpenings: [] });
   assert.deepEqual(playerIdentityDefs().map(d => d.id), ['liuchao.identity.han.marquis_wuyang', 'liuchao.identity.han.tang_envoy', 'liuchao.identity.jin.panjiang_shaozhu', 'liuchao.identity.song.yuanwailang', 'liuchao.identity.song.baochao_zhushi']);
   assert.deepEqual(validatePlayerLedgerRules(playerLedgerRules()), []);
   // 六条判档线都能被实体索引认出且可写收束档

@@ -17,9 +17,13 @@
   ],
   "itemGroups": [],
   "partyJoins": [
+    { "eventId": "lcq.event.sudaji_south_pact", "characterId": "liuchao.character.ning_yu" },
+    { "eventId": "lcq.event.xieyi_entrustment", "characterId": "liuchao.character.xiao_zi" },
     { "eventId": "lcq.event.s12_10_rescue_xiao", "characterId": "liuchao.character.xiao_yao_yi" }
   ],
-  "partyLeaves": [],
+  "partyLeaves": [
+    { "eventId": "lcq.event.shanghou_cures_ice_gu", "characterId": "liuchao.character.ning_yu" }
+  ],
   "partyOpenings": [],
   "progressTicks": [],
   "progressDeadlines": []

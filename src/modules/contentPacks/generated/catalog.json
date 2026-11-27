@@ -1,5 +1,5 @@
 {
-  "version": "ea12dfd537752ace",
+  "version": "6fcf622f2c315a49",
   "contracts": [
     {
       "meta": {
@@ -30967,6 +30967,7 @@
     "lineCompass.taiquan.step.tq_xuanyuan_mijing": "去古阵西部找那块红石",
     "lineCompass.taiquan.step.tq_exit_to_han": "找条路出古阵",
     "lineCompass.taiquan.key.xiao_in_party": "萧遥逸带伤随队",
+    "lineCompass.taiquan.key.xionggu_key": "岳鹏举留下的钥匙",
     "lineCompass.tang.name": "唐国",
     "lineCompass.tang.step.tang_entry_from_han": "从舞都动身，往长安去",
     "lineCompass.tang.step.tang_entry": "去唐国看看",
@@ -31315,9 +31316,14 @@
                 "path": "party.liuchao.character.ning_yu",
                 "operator": "eq",
                 "value": true
+              },
+              {
+                "path": "done.lcq.event.s04_05",
+                "operator": "eq",
+                "value": true
               }
             ],
-            "note": "条件必经，凝羽在队时走"
+            "note": "条件必经，凝羽在队时走；前一拍 s04_05 过了才轮到（2026-11-28 在队名单填表后这一步开始生效，补上时机）"
           },
           {
             "id": "nh_baiyi_enter",
@@ -32637,6 +32643,17 @@
                     "value": true
                   }
                 ]
+              },
+              {
+                "id": "xionggu_key",
+                "labelKey": "lineCompass.taiquan.key.xionggu_key",
+                "when": [
+                  {
+                    "path": "item.lyl.item.np025.held",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
               }
             ],
             "hintKey": "lineCompass.taiquan.step.tq_entry_fruit",
@@ -32659,6 +32676,17 @@
                 "when": [
                   {
                     "path": "party.liuchao.character.xiao_yao_yi",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "id": "xionggu_key",
+                "labelKey": "lineCompass.taiquan.key.xionggu_key",
+                "when": [
+                  {
+                    "path": "item.lyl.item.np025.held",
                     "operator": "eq",
                     "value": true
                   }
