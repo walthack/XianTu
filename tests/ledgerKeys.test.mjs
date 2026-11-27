@@ -185,6 +185,7 @@ test('validator：新路径在变体／conditions／completion 可用；拒绝�
     c('unlock.taiquan', 'eq', true),
   ], name: '坏' }];
   bad.scenario.events[0].conditions = [c(`favor.${NPC}.tier`, 'gte', 'close')];
+  bad.scenario.events[0].completion = [c(`favor.${NPC}`, 'neq', 0), c('attr.charm', 'neq', 3), c(`item.${ITEM}.held`, 'neq', true)];
   const issues = validateScenarioMod(bad).issues;
   const codeAt = i => issues.filter(x => x.path.startsWith(`scenario.events[0].narrativeVariants[0].when[${i}]`)).map(x => x.code);
   assert.deepEqual(codeAt(0), ['invalid_path'], '灵性不开');
@@ -198,6 +199,7 @@ test('validator：新路径在变体／conditions／completion 可用；拒绝�
   assert.deepEqual(codeAt(8), ['invalid_value'], 'held 比较值须是布尔');
   assert.deepEqual(codeAt(9), ['missing_reference'], 'favor 人物须存在');
   assert.deepEqual(codeAt(10), ['ledger_unlock_site'], 'unlock.* 仍不进变体');
+  assert.deepEqual(issues.filter(x => x.path.startsWith('scenario.events[0].completion')).map(x => x.code), ['ledger_neq_variant_only', 'ledger_neq_variant_only'], 'attr / favor 的 neq 只在变体和线卡表（runtime 读不到时 neq 会成立）；held 的 neq 照常');
   assert.deepEqual(issues.filter(x => x.path.startsWith('scenario.events[0].conditions')).map(x => x.code), ['ledger_rank_variant_only'], '好感档先后比较只在变体（runtime 只比数字）');
 });
 

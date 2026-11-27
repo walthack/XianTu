@@ -799,7 +799,7 @@ class AIBidirectionalSystemClass {
     const settledRuntime = (preview?.settled as any)?.世界?.状态?.剧本模组;
     const settledEvent = settledRuntime?.events?.find((item: any) => item.id === eventId);
     let approvedSettledFact = card?.fixedFacts?.length ? card.fixedFacts.join('；') : preview?.progress.completed && settledEvent
-      ? localModuleGuardNarrative(undefined, true, resolveScenarioEventNarrative(settledEvent, settledRuntime.flags || {}, settledRuntime.divergences, settledRuntime, preview?.settled).description) : undefined;
+      ? localModuleGuardNarrative(undefined, true, resolveScenarioEventNarrative(settledEvent, settledRuntime.flags || {}, settledRuntime.divergences, settledRuntime).description) : undefined;
     // 完成整拍时，作者已批准的伤亡/安排要进入结果材料；不能只有通用“执行了目标”。
     if (approvedSettledFact) approvedSettledFact = approvedSettledFact.split(/[；。]/).filter(fact => isDisclosureFactAllowed(fact, settledRuntime || runtime || {})).join('；');
     if (compiled && approvedSettledFact) compiled.packet.settledOutcome = approvedSettledFact;

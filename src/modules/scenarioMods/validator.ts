@@ -2372,6 +2372,11 @@ function validateLedgerCondition(condition: ScenarioCondition, itemPath: string,
     add(`${itemPath}.operator`, 'ledger_rank_variant_only', `Rank comparison "${condition.operator}" on ${parsed.kind}.* is only allowed in narrativeVariants.when; use eq/neq/exists here.`);
     return;
   }
+  // attr.* / favor.*：conditions / completion 等走 runtime.ts 求值，那里读不到（undefined）时 neq 会成立，和变体、线卡表（读不到一律不成立）相反，故这些位置不许 neq
+  if (!ledger.variant && (parsed.kind === 'attr' || parsed.kind === 'favor') && condition.operator === 'neq') {
+    add(`${itemPath}.operator`, 'ledger_neq_variant_only', `"neq" on ${parsed.kind}.* is only allowed in narrativeVariants.when and line-compass tables (an unreadable value would pass here); use eq/gt/gte/lt/lte.`);
+    return;
+  }
   if (condition.operator !== 'exists') {
     const value = condition.value;
     const ok = parsed.kind === 'acq' ? isAcquaintanceKind(value)
