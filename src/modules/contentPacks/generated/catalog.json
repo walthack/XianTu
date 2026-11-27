@@ -1,5 +1,5 @@
 {
-  "version": "609067813e93a245",
+  "version": "5bfcfc0c8a2df4ec",
   "contracts": [
     {
       "meta": {
@@ -30391,6 +30391,8 @@
     "line.taiquan.entry.song.key": "岳鹏举把太泉的钥匙藏在云涛观迷楼里，暗号是「太泉熊谷一四七五」——那地方进得去。",
     "line.taiquan.entry.wangzhe": "「等你的修为突破六阳后，往苍澜的太泉古阵去一趟。」师帅交代的事，总得走这一趟。到了苍澜镇，再找个认路的向导。",
     "lineCompass.step.returnTo": "回到{地点}看看",
+    "lineCompass.keys.held": "可用：",
+    "lineCompass.keys.missing": "还差：",
     "scene.defense.part.self": "本人",
     "scene.defense.part.contract": "自身防御",
     "scene.defense.part.level": "境界差",

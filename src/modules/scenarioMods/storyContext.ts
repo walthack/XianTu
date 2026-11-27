@@ -898,7 +898,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
 
   const eventSection = activeEvents.length
     ? activeEvents.map(rawEvent => {
-        const event = resolveScenarioEventNarrative(rawEvent, runtime.flags || {}, runtime.divergences, runtime);
+        const event = resolveScenarioEventNarrative(rawEvent, runtime.flags || {}, runtime.divergences, runtime, saveData);
         const context = [
           namesForIds(event.relatedCharacterIds, characters),
           namesForIds(event.relatedFactionIds, factions),
@@ -926,7 +926,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
           : '';
         // 分歧文案已经替代原事件结果时，旧 Canon Rail 合同（例如“谢艺之死”）
         // 不得继续注入并与分歧事实打架；分歧 variant 的 axisBeat 就是本拍合同。
-        const contract = narrativeVariantReplacesCanonRail(rawEvent, runtime.flags || {}, runtime.divergences, runtime)
+        const contract = narrativeVariantReplacesCanonRail(rawEvent, runtime.flags || {}, runtime.divergences, runtime, saveData)
           ? undefined
           : getCanonRailContract(canonRail, event.id);
         const forbiddenLine = contract?.forbiddenInCanon?.length

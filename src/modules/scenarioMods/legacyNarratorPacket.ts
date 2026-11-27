@@ -312,7 +312,7 @@ export function readLocalMemoryCapsule(saveData: SaveData, selection?: ScenarioE
   const recent = ((saveData as any)?.社交?.记忆?.短期记忆 || []).slice(-1).join('\n');
   const card = selection ? stepScene(runtime, selection.eventId, selection.actionId) : undefined;
   const currentObjective = playerFacingFact(card ? card.sceneObjective || (card as any).label : focusObjective(saveData, runtime, focus));
-  const view = focus ? resolveScenarioEventNarrative(focus, runtime.flags || {}, runtime.divergences, runtime) : null;
+  const view = focus ? resolveScenarioEventNarrative(focus, runtime.flags || {}, runtime.divergences, runtime, saveData) : null;
   const completed = runtime.completedEventIds?.includes(focus?.id) || runtime.eventActionStates?.[focus?.id]?.readyAtTurn !== undefined;
   const facts = uniqueFacts([
     ...(card?.fixedFacts?.length ? [] : [playerFacingFact(selection?.outcomeText)]),

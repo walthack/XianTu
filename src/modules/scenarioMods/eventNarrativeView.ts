@@ -39,9 +39,9 @@ function flagValue(flags: Record<string, unknown>, path: string): unknown {
   return cur === undefined ? flags[key] : cur;
 }
 
-/** 账本路径（identity./done./line./acq./knows./party.）先交 ledgerConditions；不传 runtime 时不命中。 */
-function matches(condition: ScenarioCondition, flags: Record<string, unknown>, runtime?: unknown): boolean {
-  const ledger = evaluateLedgerCondition(condition, runtime);
+/** 账本路径（identity./done./line./acq./knows./party.）先交 ledgerConditions；不传 runtime 时不命中。save 给 item.*.held / attr.* / favor.* 读存档，不传时这几样不命中。 */
+function matches(condition: ScenarioCondition, flags: Record<string, unknown>, runtime?: unknown, save?: unknown): boolean {
+  const ledger = evaluateLedgerCondition(condition, runtime, save);
   if (ledger !== undefined) return ledger;
   const actual = flagValue(flags, condition.path);
   if (condition.operator === 'eq') return actual === condition.value;
@@ -81,9 +81,10 @@ function resolveScenarioEventNarrativeRaw(
   flags: Record<string, unknown>,
   divergences?: ScenarioDivergence[],
   runtime?: unknown,
+  save?: unknown,
 ): ScenarioModEvent {
   const first = compatNarrativeVariants(event.id)?.find(item => item.priority === 'before-event-variants'
-    && item.when.every(condition => matches(condition, flags, runtime)));
+    && item.when.every(condition => matches(condition, flags, runtime, save)));
   if (first) {
     const { when, priority, ...rewrite } = first;
     return { ...event, ...rewrite, ...(rewrite.relatedFactionIds ? { relatedFactionIds: [...rewrite.relatedFactionIds] } : {}) };
@@ -91,7 +92,7 @@ function resolveScenarioEventNarrativeRaw(
   const compatibilityVariants = fillInCompatVariants(event.id);
   // 新版内置关卡的数据是权威；兼容层只填补老存档快照缺失的 variants，不能反向覆盖新数据。
   const variants = event.narrativeVariants?.length ? event.narrativeVariants : compatibilityVariants;
-  const variant = variants?.find(item => item.when.every(condition => matches(condition, flags, runtime)));
+  const variant = variants?.find(item => item.when.every(condition => matches(condition, flags, runtime, save)));
   if (variant) return { ...event, ...variant };
   const divergence = relatedDivergence(event, divergences);
   if (divergence) return projectFromDivergence(event, divergence);
@@ -100,8 +101,9 @@ function resolveScenarioEventNarrativeRaw(
 }
 
 /** 页面与叙事共享称呼出口；投影副本，不改合同哈希或存档里的事件真值。 */
-export function resolveScenarioEventNarrative(event: ScenarioModEvent, flags: Record<string, unknown>, divergences?: ScenarioDivergence[], runtime?: Parameters<typeof projectNamingText>[1]): ScenarioModEvent {
-  const view = resolveScenarioEventNarrativeRaw(event, flags, divergences, runtime);
+/** save（可选末位）：手上有存档的调用方传进来，变体条件才读得到 item.*.held / attr.* / favor.*。 */
+export function resolveScenarioEventNarrative(event: ScenarioModEvent, flags: Record<string, unknown>, divergences?: ScenarioDivergence[], runtime?: Parameters<typeof projectNamingText>[1], save?: unknown): ScenarioModEvent {
+  const view = resolveScenarioEventNarrativeRaw(event, flags, divergences, runtime, save);
   if (!runtime) return view;
   return { ...view, name: projectNamingText(view.name, runtime), description: projectNamingText(view.description || '', runtime, 'narration'), objective: projectNamingText(view.objective || '', runtime), axisBeat: projectNamingText(view.axisBeat || '', runtime, 'narration') };
 }
@@ -279,11 +281,12 @@ export function narrativeVariantReplacesCanonRail(
   flags: Record<string, unknown>,
   divergences?: ScenarioDivergence[],
   runtime?: unknown,
+  save?: unknown,
 ): boolean {
   const compatibilityVariants = fillInCompatVariants(event.id);
   const variants = event.narrativeVariants?.length ? event.narrativeVariants : compatibilityVariants;
   const explicitReplacement = variants?.some(item => item.replacesCanonRail === true
-    && item.when.every(condition => matches(condition, flags, runtime))) ?? false;
+    && item.when.every(condition => matches(condition, flags, runtime, save))) ?? false;
   return explicitReplacement || Boolean(relatedDivergence(event, divergences));
 }
 

@@ -111,7 +111,7 @@ export function secondaryLineEntryView(
       const value = text(part);
       if (!value) return plain;
       hintLines.push(value);
-    } else if (part.when.every(c => evaluateLedgerCondition(c, runtime) === true)) {
+    } else if (part.when.every(c => evaluateLedgerCondition(c, runtime, save) === true)) {
       const value = text(part.key);
       if (value) hintLines.push(value);
     }

@@ -19,6 +19,8 @@ import { lineClosedByWorldEvent } from './worldEvents';
  *   表里没有可用的一步、而当前线是焦点事件所在的线 → 也用「去X · 见Y」（焦点事件就是这条线眼下这一拍）。
  * - 判定只读跨关账（编年史、相识账、身份账、line.*／期限 flags），不读 rt.completedEventIds，不新增存档字段（§5.3）。
  * - 条件求值传存档（evaluateLedgerCondition 第三参），unlock.* 读得到；不是账本路径的条件一律不成立（validator 已拦）。
+ * - 钥匙（支线钥匙 PR-A，用户 2026-11-28 批）：步可写 keys——这道门认哪些钥匙（人 party.*、物 item.*.held、属性 attr.*、好感 favor.*），
+ *   卡片只给当前步的钥匙，每把一句短语＋有没有（held＝when 全满足）；缺文案键同上记 LCQ-PCK-005，这一把不出。只提示，不挡步（门本身仍由 when 判）。
  * 表在内容包 line-compass.json（schema 见 LineCompassTable），文案在 texts，编译期由 validator.validateLineCompassTable 校验。
  */
 import { CONTENT_PACKS } from '../contentPacks';
@@ -80,8 +82,16 @@ export interface LineCompassStep {
   draft?: true;
   /** 待建：仓库还没有对应剧情事件（eventId／条件里的 done.* 可为尚无的 id），本次不新建；运行时跳过，不进玩家可见，note 写缺什么 */
   pending?: true;
+  /** 这道门认的钥匙（线卡单步下面列一行小字）；id 步内唯一，labelKey 是 texts 里的短语键，when 全满足＝有这把钥匙（只许账本路径，可含 anyOf 组） */
+  keys?: LineCompassKey[];
   /** 制作备注，不进玩家可见 */
   note?: string;
+}
+
+export interface LineCompassKey {
+  id: string;
+  labelKey: string;
+  when: LineCompassCondition[];
 }
 
 export interface LineCompassLine {
@@ -114,6 +124,8 @@ export interface LineCompassCard {
   step: string;
   /** focus＝焦点事件所在的线；recent＝编年史里最近推进过的线 */
   source: 'focus' | 'recent';
+  /** 当前步认的钥匙：label＝短语，held＝玩家现在有没有；当前步没有可出的钥匙时不带这个字段（线卡回放 golden 按重构前形状比对，不加空数组） */
+  keys?: Array<{ id: string; label: string; held: boolean }>;
 }
 
 export interface LineCompassOther {
@@ -280,7 +292,11 @@ export function lineCompassView(save: unknown, input: LineCompassInput): LineCom
     }
     // 占位标记的句子永不显示（draft 已跳过，这里兜底手误）
     if (stepText.includes(LINE_COMPASS_DRAFT_MARK)) stepText = '';
-    card = { lineId: line.lineId, name: nameOf(line), step: stepText, source };
+    const keys = (step?.keys ?? []).flatMap(key => {
+      const label = text(line, key.labelKey);
+      return label ? [{ id: key.id, label, held: holds(key.when) }] : [];
+    });
+    card = { lineId: line.lineId, name: nameOf(line), step: stepText, source, ...(keys.length ? { keys } : {}) };
   }
 
   const others = open.filter(line => line !== current).map((line): LineCompassOther => {

@@ -11,7 +11,7 @@ import { validateCharacterStats } from './characterStatsMerge';
 import { resolveReconcileBranchId } from './divergenceLedger';
 import { NPC_ACTION_LIBRARY } from './npcDecisionCore';
 import { effectProblems } from './effectTags';
-import { ledgerOperatorsOf, parseLedgerPath, type ParsedLedgerPath } from './ledgerConditions';
+import { affinityTierIds, ledgerOperatorsOf, parseLedgerPath, type ParsedLedgerPath } from './ledgerConditions';
 import { PLAYER_IDENTITY_STATUSES } from './identityLedger';
 import { DEADLINE_STATES } from './progressDeadlines';
 import { lineOutcomeTiers } from './lineOutcomes';
@@ -846,7 +846,7 @@ export function validateScenarioMod(input: unknown, options: { knownEventIds?: R
         }
       }
       forEachRecord(entity.narrativeVariants, `${entity.__path}.narrativeVariants`, (variant, variantPath) => {
-        // 变体求值（eventNarrativeView → evaluateLedgerCondition）拿不到存档，unlock.* 永远读成 undefined、永远不成立，故不许（2026-10-27）
+        // 变体不许 unlock.*（2026-10-27 定；2026-11-28 变体求值已传存档，item.*.held / attr.* / favor.* 可用，unlock.* 按用户意见仍不放开）
         validateConditions(variant.when, `${variantPath}.when`, add, { refs: ledgerRefs, variant: true });
         optionalBoolean(variant.replacesCanonRail, `${variantPath}.replacesCanonRail`, add);
         optionalString(variant.name, `${variantPath}.name`, add);
@@ -2345,7 +2345,7 @@ interface LedgerConditionRef { parsed: ParsedLedgerPath; path: string }
  */
 interface LedgerScope { refs: LedgerConditionRef[]; variant?: boolean; unlockSite?: boolean }
 
-/** evaluateScenarioCondition 的 gt/gte/lt/lte 只比数字，相识等级比较只在变体里可用。 */
+/** evaluateScenarioCondition 的 gt/gte/lt/lte 只比数字，相识等级、好感档的先后比较只在变体（与线卡表）里可用；attr.* / favor.<id> 是数字，各处都可比。 */
 const RANK_OPERATORS_VARIANT_ONLY = new Set(['gt', 'gte', 'lt', 'lte']);
 
 /**
@@ -2367,8 +2367,14 @@ function validateLedgerCondition(condition: ScenarioCondition, itemPath: string,
     add(`${itemPath}.path`, 'ledger_unlock_site', 'unlock.* is only allowed in event conditions and chapter activation (narrativeVariants.when cannot read the save, so it would never hold).');
     return;
   }
-  if (!ledger.variant && RANK_OPERATORS_VARIANT_ONLY.has(condition.operator)) {
+  const numeric = parsed.kind === 'attr' || (parsed.kind === 'favor' && parsed.field !== 'tier');
+  if (!ledger.variant && !numeric && RANK_OPERATORS_VARIANT_ONLY.has(condition.operator)) {
     add(`${itemPath}.operator`, 'ledger_rank_variant_only', `Rank comparison "${condition.operator}" on ${parsed.kind}.* is only allowed in narrativeVariants.when; use eq/neq/exists here.`);
+    return;
+  }
+  // attr.* / favor.*：conditions / completion 等走 runtime.ts 求值，那里读不到（undefined）时 neq 会成立，和变体、线卡表（读不到一律不成立）相反，故这些位置不许 neq
+  if (!ledger.variant && (parsed.kind === 'attr' || parsed.kind === 'favor') && condition.operator === 'neq') {
+    add(`${itemPath}.operator`, 'ledger_neq_variant_only', `"neq" on ${parsed.kind}.* is only allowed in narrativeVariants.when and line-compass tables (an unreadable value would pass here); use eq/gt/gte/lt/lte.`);
     return;
   }
   if (condition.operator !== 'exists') {
@@ -2377,6 +2383,8 @@ function validateLedgerCondition(condition: ScenarioCondition, itemPath: string,
       : parsed.kind === 'line' ? lineOutcomeTiers().includes(value as string)
         : parsed.kind === 'identity' && parsed.field === 'status' ? (PLAYER_IDENTITY_STATUSES as readonly unknown[]).includes(value)
           : parsed.kind === 'deadline' ? (DEADLINE_STATES as readonly unknown[]).includes(value)
+          : numeric ? typeof value === 'number' && Number.isFinite(value)
+          : parsed.kind === 'favor' ? affinityTierIds().includes(value as string)
           : (parsed.kind === 'identity' || parsed.kind === 'item') && parsed.field === 'from' ? typeof value === 'string' && value.length > 0
             : typeof value === 'boolean';
     if (!ok) add(`${itemPath}.value`, 'invalid_value', `Invalid comparison value for ${parsed.kind}.* path.`);
@@ -2403,7 +2411,7 @@ function checkLedgerRefs(refs: LedgerConditionRef[], eventIds: Set<string>, char
     if (kind === 'done' && !eventIds.has(id) && !knownEvents.has(id)) add(path, 'missing_reference', `Unknown event id "${id}".`);
     if (kind === 'identity' && !identityIds.has(id)) add(path, 'missing_reference', `Unknown identity id "${id}".`);
     if (kind === 'line' && !lineIds.has(id)) add(path, 'missing_reference', `Unknown line id "${id}".`);
-    if (kind === 'acq' && !characterIds.has(id) && getRegistryNamesById(id).length === 0) add(path, 'missing_reference', `Unknown character id "${id}".`);
+    if ((kind === 'acq' || kind === 'favor') && !characterIds.has(id) && getRegistryNamesById(id).length === 0) add(path, 'missing_reference', `Unknown character id "${id}".`);
     if (kind === 'item' && !itemGroupIds.has(id) && !itemIds.has(id) && !indexItemIds.has(id)) add(path, 'missing_reference', `Unknown item or item group id "${id}".`);
     if (kind === 'party' && !indexCharacterIds.has(id)) add(path, 'missing_reference', `Unknown character id "${id}" (party.* needs entity index kind=character).`);
     if (kind === 'deadline' && !deadlineIds.has(id)) add(path, 'missing_reference', `Unknown progress deadline id "${id}" (deadline.* needs player-ledger-rules progressDeadlines).`);
@@ -2485,6 +2493,7 @@ const LINE_COMPASS_PLACE_SLOT = '{地点}';
  *   有这种步时模板须在 texts、含 {地点}；传了 places（eventId → 地点显示名，content-packs 编译时从各关事件 locationId 求得）时，代入后的句子同样守字数与定性词；
  * - travelHint 步（fix5939-2）：只能是 true，须同时有 eventId 与 hintKey，传了 places 时文案须含该事件地点名，否则 invalid_travel_hint；
  * - draft 步的文案（若有）须以【待剧情策划】开头，运行时一律跳过。
+ * - keys（支线钥匙 PR-A）：数组；每把 { id, labelKey, when }，id 步内唯一，labelKey 须在 texts，when 非空、只许账本路径（同 when，可含 anyOf 组）。
  * - lineId 须在 nationLineIds 里（缺省 NATION_LINE_IDS；内容包编译时传这次编译出的 catalog.nationLines，不用磁盘上的旧 catalog，秦线 PR C／M2）。
  * - step.eventId 与 done.* 查 knownEvents（缺省运行时 knownEventIds()；内容包编译时传这次编译出的事件表，新线包关的事件单次编译即可通过，G1／M2）。
  */
@@ -2507,7 +2516,7 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
     for (const ref of scope.refs.slice(before)) ref.path = fix(ref.path);
     if (!isRecord(c) || typeof c.path !== 'string') return;
     const parsed = parseLedgerPath(c.path);
-    if (!parsed) add(`${itemPath}.path`, 'ledger_only', `lineCompass conditions only accept ledger paths (done.* / line.* / acq.* / identity.* / knows.player.* / item.* / party.* / deadline.* / unlock.* / compass.*), got "${c.path}".`);
+    if (!parsed) add(`${itemPath}.path`, 'ledger_only', `lineCompass conditions only accept ledger paths (done.* / line.* / acq.* / identity.* / knows.player.* / item.* / party.* / deadline.* / unlock.* / compass.* / attr.* / favor.*), got "${c.path}".`);
     else if (opts.noCompass && parsed.kind === 'compass') add(`${itemPath}.path`, 'compass_in_closed_when', 'closedWhen cannot read compass.* (compass.anyLineClosed is derived from closedWhen).');
     else if (opts.noCompass && parsed.kind !== 'done') add(`${itemPath}.path`, 'closed_when_done_only', `closedWhen lists closing events and only accepts done.* (judged by the chronicle in lineClosed), got "${c.path}".`);
   };
@@ -2559,7 +2568,7 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
     line.steps.forEach((step, si) => {
       const sp = `${at}.steps[${si}]`;
       if (!isRecord(step)) { add(sp, 'invalid_type', `${sp} must be an object.`); return; }
-      for (const key of Object.keys(step)) if (!['id', 'eventId', 'when', 'until', 'hintKey', 'travelHint', 'draft', 'pending', 'note'].includes(key)) add(`${sp}.${key}`, 'unknown_field', `Unknown field "${key}".`);
+      for (const key of Object.keys(step)) if (!['id', 'eventId', 'when', 'until', 'hintKey', 'travelHint', 'draft', 'pending', 'keys', 'note'].includes(key)) add(`${sp}.${key}`, 'unknown_field', `Unknown field "${key}".`);
       if (validateId(step.id, `${sp}.id`, add)) {
         if (seenSteps.has(step.id)) add(`${sp}.id`, 'duplicate_id', `Duplicate step id "${step.id}".`);
         seenSteps.add(step.id);
@@ -2576,6 +2585,24 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
       }
       conditions(step.when, `${sp}.when`, pending ? pendingLedger : ledger);
       conditions(step.until, `${sp}.until`, pending ? pendingLedger : ledger);
+      if (step.keys !== undefined) {
+        if (!Array.isArray(step.keys)) add(`${sp}.keys`, 'invalid_type', `${sp}.keys must be an array.`);
+        else {
+          const seenKeys = new Set<string>();
+          step.keys.forEach((key, ki) => {
+            const kp = `${sp}.keys[${ki}]`;
+            if (!isRecord(key)) { add(kp, 'invalid_type', `${kp} must be an object.`); return; }
+            for (const field of Object.keys(key)) if (!['id', 'labelKey', 'when'].includes(field)) add(`${kp}.${field}`, 'unknown_field', `Unknown field "${field}".`);
+            if (validateId(key.id, `${kp}.id`, add)) {
+              if (seenKeys.has(key.id)) add(`${kp}.id`, 'duplicate_id', `Duplicate key id "${key.id}".`);
+              seenKeys.add(key.id);
+            }
+            if (typeof key.labelKey !== 'string' || !isNonEmptyString(texts[key.labelKey])) add(`${kp}.labelKey`, 'missing_text', `Key label text "${String(key.labelKey)}" is missing.`);
+            if (!Array.isArray(key.when) || !key.when.length) add(`${kp}.when`, 'invalid_type', 'A key needs a non-empty when array.');
+            else conditions(key.when, `${kp}.when`, pending ? pendingLedger : ledger);
+          });
+        }
+      }
       // 只有 eventId 的正式步：通用句「回到{地点}看看」
       if (step.hintKey === undefined && !pending && step.draft !== true && typeof step.eventId === 'string') {
         if (!returnTemplateChecked) {
