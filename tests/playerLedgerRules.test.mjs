@@ -13,7 +13,7 @@ const rules = (patch = {}) => ({ version: 1, identityGrants: [], identityRevokes
 
 test('仓库秦线收束规则、汉使写入规则与身份定义通过校验', async () => {
   const { playerLedgerRules, playerIdentityDefs, validatePlayerLedgerRules } = await modPromise;
-  assert.deepEqual(playerLedgerRules(), { ...playerLedgerRules(), identityGrants: [{ eventId: 'lyg.event.han_succession_10_beat', identityId: 'liuchao.identity.han.tang_envoy' }], identityRevokes: [], lineOutcomes: [{ eventId: 'liuchao.event.qin_close_default', lineId: 'qin', outcome: 'unresolved' }], itemGroups: [], partyJoins: [], partyLeaves: [], partyOpenings: [] });
+  assert.deepEqual(playerLedgerRules(), { ...playerLedgerRules(), identityGrants: [{ eventId: 'lyg.event.han_succession_10_beat', identityId: 'liuchao.identity.han.tang_envoy' }], identityRevokes: [], lineOutcomes: [{ eventId: 'liuchao.event.qin_close_default', lineId: 'qin', outcome: 'unresolved' }], itemGroups: [], partyJoins: [{ eventId: 'lcq.event.s12_10_rescue_xiao', characterId: 'liuchao.character.xiao_yao_yi' }], partyLeaves: [], partyOpenings: [] });
   assert.deepEqual(playerIdentityDefs().map(d => d.id), ['liuchao.identity.han.marquis_wuyang', 'liuchao.identity.han.tang_envoy', 'liuchao.identity.jin.panjiang_shaozhu', 'liuchao.identity.song.yuanwailang', 'liuchao.identity.song.baochao_zhushi']);
   assert.deepEqual(validatePlayerLedgerRules(playerLedgerRules()), []);
   // 六条判档线都能被实体索引认出且可写收束档
@@ -187,9 +187,11 @@ test('在队规则：未知 eventId/characterId/whenReceiptId/stageId、主角�
       { stageId: 'lcq.stage_99', characterIds: [NING_YU] },
       { stageId: 'lcq.stage_01', characterIds: [HERO] },
       { stageId: 'lcq.stage_01', characterIds: [NING_YU] },
+      { stageId: 'lcq.stage_02', characterIds: [NING_YU, NING_YU, NING_YU, NING_YU] },
     ],
   }), { identities: [] });
   const has = (re) => assert.ok(errors.some(e => re.test(e)), `缺少报错 ${re}：${errors.join(' | ')}`);
+  has(/开局在队 lcq\.stage_02：人数超过队伍上限 story\.party\.maxSize（3）/);
   has(/入队规则 lcq\.event\.no_such_event → liuchao\.character\.ning_yu：eventId 未知/);
   has(/入队规则 .* → liuchao\.character\.no_such_person：characterId 未知（实体索引 kind=character）/);
   has(/入队规则 .* → liuchao\.character\.cheng_zongyang：主角不能写进在队规则/);
@@ -198,7 +200,7 @@ test('在队规则：未知 eventId/characterId/whenReceiptId/stageId、主角�
   has(/开局在队 lcq\.stage_99：stageId 未知/);
   has(/开局在队 lcq\.stage_01：主角不能写进在队规则/);
   has(/开局在队 lcq\.stage_01：同一关只能有一份开局名单/);
-  assert.equal(errors.length, 8, errors.join(' | '));
+  assert.equal(errors.length, 9, errors.join(' | '));
 });
 
 test('进度期限：合法规则通过；缺键按 [] 处理；非数组报错；limits 键须正好是期限 id 集合', async () => {

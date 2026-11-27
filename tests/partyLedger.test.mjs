@@ -15,6 +15,7 @@ const loaded = (async () => {
 })();
 
 const NING_YU = 'liuchao.character.ning_yu';
+const XIAO = 'liuchao.character.xiao_yao_yi';
 const ALLY = 'test.character.ally';
 const OTHER = 'test.character.other';
 const PROLOGUE = 'lcq.stage_01';
@@ -39,10 +40,39 @@ async function withRules(rulesTable, fn) {
   try { return await fn(); } finally { rules.setPlayerLedgerRulesForTest(undefined); }
 }
 
-test('仓库规则表在队三键首版为空', async () => {
-  const { rules } = await loaded;
+test('仓库规则表：只有萧遥逸一条入队（救下后随队，用户 2026-11-28 06:43 定），离队与开局名单仍为空', async () => {
+  const { rules, party } = await loaded;
   const repo = rules.playerLedgerRules();
-  assert.deepEqual([repo.partyJoins, repo.partyLeaves, repo.partyOpenings], [[], [], []]);
+  assert.deepEqual(repo.partyJoins, [{ eventId: 'lcq.event.s12_10_rescue_xiao', characterId: XIAO }]);
+  assert.deepEqual([repo.partyLeaves, repo.partyOpenings], [[], []]);
+  const S12 = 'lcq.stage_12_jiangzhou_counterwar';
+  assert.equal(party.isInParty(runtimeOf({ stageId: S12, doneIds: ['lcq.event.s12_09_x'], eventIds: ['lcq.event.s12_09_x'] }), XIAO), false, '没救下不在队');
+  assert.equal(party.isInParty(runtimeOf({ stageId: S12, doneIds: ['lcq.event.s12_10_rescue_xiao'] }), XIAO), true);
+});
+
+test('队伍上限 story.party.maxSize＝3：队满后入队的排候补读成不在队，有人离队或离场后按入队先后补上', async () => {
+  const { party, ledger } = await loaded;
+  const numbers = await loadTs('../src/modules/sceneModule/numbers.ts');
+  assert.equal(numbers.GAME_NUMBERS.story.party.maxSize, 3);
+  const [A, B, C, D, E] = ['a', 'b', 'c', 'd', 'e'].map(n => `test.character.${n}`);
+  const join = (n, characterId) => ({ eventId: `test.event.join_${n}`, characterId });
+  const rulesTable = table({
+    partyJoins: [join('a', A), join('b', B), join('c', C), join('d', D), join('e', E)],
+    partyLeaves: [{ eventId: 'test.event.leave_b', characterId: B }, { eventId: 'test.event.leave_d', characterId: D }],
+  });
+  const roster = (doneIds, extra = {}) => [...party.partyRoster(runtimeOf({ doneIds, ...extra }), rulesTable)];
+  const joins = ['a', 'b', 'c', 'd', 'e'].map(n => `test.event.join_${n}`);
+  assert.deepEqual(roster(joins.slice(0, 3)), [A, B, C]);
+  assert.deepEqual(roster(joins), [A, B, C], '第 4、5 人排候补');
+  assert.deepEqual(roster([...joins, 'test.event.leave_b']), [A, C, D], '空出一位，先入队的候补补上');
+  assert.deepEqual(roster([...joins, 'test.event.leave_d']), [A, B, C], '候补自己离队，不占位');
+  assert.deepEqual(roster([...joins, 'test.event.leave_d', 'test.event.leave_b']), [A, C, E]);
+  assert.deepEqual(roster(joins, { departedCast: [A, { id: D }] }), [B, C, E], '离场的在队者空出位置，离场的候补不补');
+  await withRules(rulesTable, () => {
+    const runtime = runtimeOf({ doneIds: joins });
+    assert.equal(ledger.evaluateLedgerCondition(inParty(C), runtime), true);
+    assert.equal(ledger.evaluateLedgerCondition(inParty(D), runtime), false, '候补读成不在队');
+  });
 });
 
 test('规则表为空时 party.* 恒为 false', async () => {

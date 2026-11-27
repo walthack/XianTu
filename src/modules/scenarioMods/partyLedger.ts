@@ -4,9 +4,12 @@
  *   whenReceiptId 用路径回执区分玩家选择，如凝羽离队/留队；同一事件先离后入）→ 去掉 runtime.departedCast（死亡或永久离场）。
  * - 不加存档字段：每次读取从编年史推导（orderedDoneEventIds），任何先后顺序都得到确定结果；规则只读 mod-kit/player-ledger-rules.json，首版为空。
  * - 启发式同行名单（travelLedger 的 currentTravelCompanions、locationLoot 的 presentCompanionIds）只用于演出，这里不读。
+ * - 人数上限（用户 2026-11-28 定，story.party.maxSize，不算主角）：队满时新入队的人排进候补，有人离队或离场后按入队先后补上；
+ *   候补读成「不在队」。进线时由玩家换人的界面尚未做。
  * - 推导失败按「不在队」处理（偏保守，倾向锁节点），记 LCQ-SAV-026；读取频繁，同一 reason 只记一次。
  */
 import { orderedDoneEventIds, playerLedgerRules, type PartyRule, type PlayerLedgerRules } from './playerLedgerRules';
+import { GAME_NUMBERS } from '../sceneModule/numbers';
 import { logEventOnce } from '../diagnostics/log';
 import { debugLog } from '../diagnostics/debugLog';
 
@@ -41,13 +44,19 @@ function deriveRoster(runtime: unknown, rules: PlayerLedgerRules): Set<string> {
   const receipts = rt.pathReceipts && typeof rt.pathReceipts === 'object' ? rt.pathReceipts : {};
   const applies = (rule: PartyRule): boolean => rule.whenReceiptId === undefined || Boolean(receipts[rule.whenReceiptId]);
   const applied: string[] = [];
+  const cap = GAME_NUMBERS.story.party.maxSize;
+  let waiting: string[] = [];
+  const remove = (id: string): void => { roster.delete(id); waiting = waiting.filter(w => w !== id); };
+  const fill = (): void => { while (roster.size < cap && waiting.length) roster.add(waiting.shift()!); };
   for (const eventId of orderedDoneEventIds(runtime)) {
-    for (const rule of leaves) if (rule.eventId === eventId && applies(rule)) { roster.delete(rule.characterId); applied.push(`leave ${rule.characterId}@${eventId}`); }
-    for (const rule of joins) if (rule.eventId === eventId && applies(rule)) { roster.add(rule.characterId); applied.push(`join ${rule.characterId}@${eventId}`); }
+    for (const rule of leaves) if (rule.eventId === eventId && applies(rule)) { remove(rule.characterId); applied.push(`leave ${rule.characterId}@${eventId}`); }
+    for (const rule of joins) if (rule.eventId === eventId && applies(rule)) { if (!roster.has(rule.characterId) && !waiting.includes(rule.characterId)) waiting.push(rule.characterId); applied.push(`join ${rule.characterId}@${eventId}`); }
+    fill();
   }
-  const departed = (Array.isArray(rt.departedCast) ? rt.departedCast : []).map(d => typeof d === 'string' ? d : d?.id).filter(id => id && roster.has(id)) as string[];
-  for (const id of departed) roster.delete(id);
-  debugLog('identity', `[在队账] 开局关=${stageId} 名单=${opened.join('、') || '无'} 应用 ${applied.join('、') || '无'} 去掉已离场 ${departed.join('、') || '无'} → ${[...roster].join('、') || '无'}`);
+  const departed = (Array.isArray(rt.departedCast) ? rt.departedCast : []).map(d => typeof d === 'string' ? d : d?.id).filter(id => id && (roster.has(id) || waiting.includes(id))) as string[];
+  for (const id of departed) remove(id);
+  fill();
+  debugLog('identity', `[在队账] 开局关=${stageId} 名单=${opened.join('、') || '无'} 应用 ${applied.join('、') || '无'} 去掉已离场 ${departed.join('、') || '无'} 上限=${cap} 候补=${waiting.join('、') || '无'} → ${[...roster].join('、') || '无'}`);
   return roster;
 }
 

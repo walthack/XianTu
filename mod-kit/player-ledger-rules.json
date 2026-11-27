@@ -16,7 +16,9 @@
     }
   ],
   "itemGroups": [],
-  "partyJoins": [],
+  "partyJoins": [
+    { "eventId": "lcq.event.s12_10_rescue_xiao", "characterId": "liuchao.character.xiao_yao_yi" }
+  ],
   "partyLeaves": [],
   "partyOpenings": [],
   "progressTicks": [],
