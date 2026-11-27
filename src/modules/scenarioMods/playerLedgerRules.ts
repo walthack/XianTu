@@ -337,6 +337,7 @@ function validateParty(rules: PlayerLedgerRules, refs: PlayerLedgerRefs, eventId
     if (seenStages.has(opening?.stageId)) errors.push(`${where}同一关只能有一份开局名单`);
     seenStages.add(opening?.stageId);
     if (!Array.isArray(opening?.characterIds)) { errors.push(`${where}characterIds 须为数组`); continue; }
+    if (opening.characterIds.length > GAME_NUMBERS.story.party.maxSize) errors.push(`${where}人数超过队伍上限 story.party.maxSize（${GAME_NUMBERS.story.party.maxSize}）`);
     for (const characterId of opening.characterIds) checkCharacter(where, characterId);
   }
 }
