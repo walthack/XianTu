@@ -196,6 +196,18 @@
                 "数量": 1,
                 "描述": "谢艺伤重辞世后留下的骨灰。只在死亡线生成一次，生还线不得出现。",
                 "已装备": false
+              },
+              "lyl.item.np025": {
+                "物品ID": "lyl.item.np025",
+                "名称": "岳鹏举钥匙",
+                "类型": "其他",
+                "品质": {
+                  "quality": "珍",
+                  "grade": 4
+                },
+                "数量": 1,
+                "描述": "程宗扬持有岳鹏举留下的钥匙，指向太泉熊谷一四七五。",
+                "已装备": false
               }
             },
             "货币": {
@@ -24854,6 +24866,16 @@
                   "actionId": "accept_entrustment",
                   "outcome": "success",
                   "settledAtTurn": 25
+                },
+                {
+                  "transferId": "lyl.event.linan_arrive_fengbo.inventory.yue_key",
+                  "itemId": "lyl.item.np025",
+                  "itemName": "岳鹏举钥匙",
+                  "quantity": 1,
+                  "sourceEventId": "lyl.event.linan_arrive_fengbo",
+                  "actionId": "stop_at_fengbo_pavilion",
+                  "outcome": "success",
+                  "settledAtTurn": 3
                 }
               ],
               "reconciledRegistryVersion": "cr-2026-11-10-a94abd4b23e399dc",

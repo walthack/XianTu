@@ -196,6 +196,18 @@
                 "数量": 1,
                 "描述": "谢艺伤重辞世后留下的骨灰。只在死亡线生成一次，生还线不得出现。",
                 "已装备": false
+              },
+              "lyl.item.np025": {
+                "物品ID": "lyl.item.np025",
+                "名称": "岳鹏举钥匙",
+                "类型": "其他",
+                "品质": {
+                  "quality": "珍",
+                  "grade": 4
+                },
+                "数量": 1,
+                "描述": "程宗扬持有岳鹏举留下的钥匙，指向太泉熊谷一四七五。",
+                "已装备": false
               }
             },
             "货币": {
@@ -17486,6 +17498,52 @@
                     "liuchao.character.cheng_zongyang"
                   ],
                   "objective": "在苍澜镇采购装备物资",
+                  "narrativeVariants": [
+                    {
+                      "when": [
+                        {
+                          "path": "item.lyl.item.np025.held",
+                          "operator": "eq",
+                          "value": true
+                        },
+                        {
+                          "path": "party.liuchao.character.xiao_yao_yi",
+                          "operator": "eq",
+                          "value": true
+                        }
+                      ],
+                      "name": "抵达苍澜镇",
+                      "description": "程宗扬一行抵达苍澜镇，昂贵物价与异常环境提示太泉风险。萧遥逸带伤同行，程宗扬此来是为他取赤阳圣果治伤；身上带着岳鹏举留下的钥匙，指向太泉熊谷。",
+                      "axisBeat": "程宗扬一行抵达苍澜镇，物价高昂，程宗扬购买衣物兵器。萧遥逸带伤同行，此来为他取赤阳圣果；程宗扬带着岳鹏举留下的钥匙。",
+                      "objective": "在苍澜镇采购装备物资"
+                    },
+                    {
+                      "when": [
+                        {
+                          "path": "item.lyl.item.np025.held",
+                          "operator": "eq",
+                          "value": true
+                        }
+                      ],
+                      "name": "抵达苍澜镇",
+                      "description": "程宗扬一行抵达苍澜镇，昂贵物价与异常环境提示太泉风险。程宗扬身上带着岳鹏举留下的钥匙，此来是循着它去找太泉熊谷。",
+                      "axisBeat": "程宗扬一行抵达苍澜镇，物价高昂，程宗扬购买衣物兵器。程宗扬带着岳鹏举留下的钥匙，此来是找熊谷。",
+                      "objective": "在苍澜镇采购装备物资"
+                    },
+                    {
+                      "when": [
+                        {
+                          "path": "party.liuchao.character.xiao_yao_yi",
+                          "operator": "eq",
+                          "value": true
+                        }
+                      ],
+                      "name": "抵达苍澜镇",
+                      "description": "程宗扬一行抵达苍澜镇，昂贵物价与异常环境提示太泉风险。萧遥逸带伤同行，程宗扬听说赤阳圣果能治他的伤，手里却没有进古阵的路径，只能先在镇上打听。",
+                      "axisBeat": "程宗扬一行抵达苍澜镇，物价高昂，程宗扬购买衣物兵器。萧遥逸带伤同行，程宗扬听说赤阳圣果能治伤，先在镇上打听进阵的路。",
+                      "objective": "在苍澜镇采购装备物资"
+                    }
+                  ],
                   "playerCompletionContract": {
                     "kind": "objective_action",
                     "settleOn": [
@@ -19008,6 +19066,16 @@
                   "actionId": "accept_entrustment",
                   "outcome": "success",
                   "settledAtTurn": 25
+                },
+                {
+                  "transferId": "lyl.event.linan_arrive_fengbo.inventory.yue_key",
+                  "itemId": "lyl.item.np025",
+                  "itemName": "岳鹏举钥匙",
+                  "quantity": 1,
+                  "sourceEventId": "lyl.event.linan_arrive_fengbo",
+                  "actionId": "stop_at_fengbo_pavilion",
+                  "outcome": "success",
+                  "settledAtTurn": 3
                 }
               ],
               "reconciledRegistryVersion": "cr-2026-11-10-a94abd4b23e399dc",

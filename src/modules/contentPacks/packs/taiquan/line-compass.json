@@ -39,6 +39,17 @@
                   "value": true
                 }
               ]
+            },
+            {
+              "id": "xionggu_key",
+              "labelKey": "lineCompass.taiquan.key.xionggu_key",
+              "when": [
+                {
+                  "path": "item.lyl.item.np025.held",
+                  "operator": "eq",
+                  "value": true
+                }
+              ]
             }
           ],
           "hintKey": "lineCompass.taiquan.step.tq_entry_fruit",
@@ -61,6 +72,17 @@
               "when": [
                 {
                   "path": "party.liuchao.character.xiao_yao_yi",
+                  "operator": "eq",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "xionggu_key",
+              "labelKey": "lineCompass.taiquan.key.xionggu_key",
+              "when": [
+                {
+                  "path": "item.lyl.item.np025.held",
                   "operator": "eq",
                   "value": true
                 }

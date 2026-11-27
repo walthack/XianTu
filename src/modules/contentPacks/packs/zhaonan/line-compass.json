@@ -126,9 +126,14 @@
               "path": "party.liuchao.character.ning_yu",
               "operator": "eq",
               "value": true
+            },
+            {
+              "path": "done.lcq.event.s04_05",
+              "operator": "eq",
+              "value": true
             }
           ],
-          "note": "条件必经，凝羽在队时走"
+          "note": "条件必经，凝羽在队时走；前一拍 s04_05 过了才轮到（2026-11-28 在队名单填表后这一步开始生效，补上时机）"
         },
         {
           "id": "nh_baiyi_enter",

@@ -16,6 +16,7 @@ const loaded = (async () => {
 
 const NING_YU = 'liuchao.character.ning_yu';
 const XIAO = 'liuchao.character.xiao_yao_yi';
+const XIAO_ZI = 'liuchao.character.xiao_zi';
 const ALLY = 'test.character.ally';
 const OTHER = 'test.character.other';
 const PROLOGUE = 'lcq.stage_01';
@@ -40,14 +41,23 @@ async function withRules(rulesTable, fn) {
   try { return await fn(); } finally { rules.setPlayerLedgerRulesForTest(undefined); }
 }
 
-test('仓库规则表：只有萧遥逸一条入队（救下后随队，用户 2026-11-28 06:43 定），离队与开局名单仍为空', async () => {
+test('仓库规则表：凝羽、小紫、萧遥逸按现有时点入队离队（总策划 2026-11-28 06:44 代定），开局名单仍为空', async () => {
   const { rules, party } = await loaded;
   const repo = rules.playerLedgerRules();
-  assert.deepEqual(repo.partyJoins, [{ eventId: 'lcq.event.s12_10_rescue_xiao', characterId: XIAO }]);
-  assert.deepEqual([repo.partyLeaves, repo.partyOpenings], [[], []]);
-  const S12 = 'lcq.stage_12_jiangzhou_counterwar';
-  assert.equal(party.isInParty(runtimeOf({ stageId: S12, doneIds: ['lcq.event.s12_09_x'], eventIds: ['lcq.event.s12_09_x'] }), XIAO), false, '没救下不在队');
-  assert.equal(party.isInParty(runtimeOf({ stageId: S12, doneIds: ['lcq.event.s12_10_rescue_xiao'] }), XIAO), true);
+  assert.deepEqual(repo.partyJoins, [
+    { eventId: 'lcq.event.sudaji_south_pact', characterId: NING_YU },
+    { eventId: 'lcq.event.xieyi_entrustment', characterId: XIAO_ZI },
+    { eventId: 'lcq.event.s12_10_rescue_xiao', characterId: XIAO },
+  ]);
+  assert.deepEqual(repo.partyLeaves, [{ eventId: 'lcq.event.shanghou_cures_ice_gu', characterId: NING_YU }]);
+  assert.deepEqual(repo.partyOpenings, []);
+  const roster = doneIds => [...party.partyRoster(runtimeOf({ doneIds }))];
+  assert.deepEqual(roster(['lcq.event.s02_06']), []);
+  assert.deepEqual(roster(['lcq.event.sudaji_south_pact']), [NING_YU]);
+  assert.deepEqual(roster(['lcq.event.sudaji_south_pact', 'lcq.event.xieyi_entrustment']), [NING_YU, XIAO_ZI]);
+  assert.deepEqual(roster(['lcq.event.sudaji_south_pact', 'lcq.event.xieyi_entrustment', 'lcq.event.shanghou_cures_ice_gu']), [XIAO_ZI], '凝羽留村疗伤后不在队，归队时点未定');
+  assert.deepEqual(roster(['lcq.event.sudaji_south_pact', 'lcq.event.xieyi_entrustment', 'lcq.event.shanghou_cures_ice_gu', 'lcq.event.s12_10_rescue_xiao']), [XIAO_ZI, XIAO]);
+  assert.deepEqual(roster(['lcq.event.s12_10_rescue_xiao']), [XIAO], '从中途开局、没走南荒：只有救下的萧遥逸');
 });
 
 test('队伍上限 story.party.maxSize＝3：队满后入队的排候补读成不在队，有人离队或离场后按入队先后补上', async () => {

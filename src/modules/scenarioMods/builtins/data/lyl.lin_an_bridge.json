@@ -5409,7 +5409,18 @@
               },
               "requiresPreparation": [
                 "qiantang_gate_entered"
-              ]
+              ],
+              "outcomeEffects": {
+                "success": {
+                  "inventoryTransfers": [
+                    {
+                      "transferId": "lyl.event.linan_arrive_fengbo.inventory.yue_key",
+                      "itemId": "lyl.item.np025",
+                      "quantity": 1
+                    }
+                  ]
+                }
+              }
             }
           ]
         }

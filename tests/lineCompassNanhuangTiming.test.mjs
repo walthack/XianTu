@@ -61,10 +61,11 @@ test('完成到 s03b_05、焦点 s03b_06：走主线指南针，不走兜底句'
   assert.notEqual(card.step, returnTo('lcq.event.s03b_snake_flower_bridge_06'));
 });
 
-test('12 步：前一拍未完成时，不显示该步的「回到{地点}看看」', () => {
+test('13 步：前一拍未完成时，不显示该步的「回到{地点}看看」', () => {
   // 前一步的事件已完成（那一步算过），本步 when 的前一拍都没完成。缺 when 时会选出本步并走兜底句。
   const cases = [
     ['nh_le_mingzhu_join', 'lcq.event.s04_03', 'lcq.event.s04_01'],
+    ['nh_ningyu_wound', 'lcq.event.s04_06', 'lcq.event.s04_03'], // 凝羽在队（南荒之约起）后这一步才生效
     ['nh_f04_yaren', 'lcq.event.s04b_lingfei_baiyi_crisis_02', 'lcq.event.s04_07'],
     ['nh_lingfei_mirror', 'lcq.event.s04b_lingfei_baiyi_crisis_05', 'lcq.event.s04b_lingfei_baiyi_crisis_02'],
     ['nh_f05_trap', 'lcq.event.s04b_lingfei_baiyi_crisis_10', 'lcq.event.s04b_lingfei_baiyi_crisis_05'],
