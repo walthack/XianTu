@@ -1,0 +1,187 @@
+[
+ {
+  "kind": "source",
+  "generator": "formalNewSave",
+  "nonEngineProgress": [],
+  "note": "正式（非隔离试玩）新档沿正式关链用真实动作推进；固定宿主时钟和随机种子，不固定游戏时钟。"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "focus": "lcq.event.s01_01"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "focus": "lcq.event.s01_02"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "focus": "lcq.event.s01_03"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "focus": "lcq.event.s01_04"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "focus": "lcq.event.s01_06"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "focus": "lcq.event.s01_05"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "focus": "lcq.event.s01_05"
+ },
+ {
+  "kind": "stage",
+  "stage": "lcq.stage_01",
+  "focus": null
+ },
+ {
+  "kind": "opportunity:s02_01",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_01"
+ },
+ {
+  "kind": "opportunity:s02_01",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_01"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_03"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_02"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_02"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_02"
+ },
+ {
+  "kind": "local:s02_04",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_04"
+ },
+ {
+  "kind": "local:s02_04",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_04"
+ },
+ {
+  "kind": "local:s02_04",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_04"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_05"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_06"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.ningyu_enters_gamble"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.ningyu_enters_gamble"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.sudaji_south_pact"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.sudaji_south_pact"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.gamble_bond_signed"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.gamble_bond_signed"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.charge_sudaji_fee"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.charge_sudaji_fee"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.free_ajiman"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.free_ajiman"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.baihu_shangguan_escape"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.wuerlang_joins"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.wuerlang_joins"
+ },
+ {
+  "kind": "checkpoint",
+  "line": "nanhuang",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.iron_bridge_ambush",
+  "location": "nh.iron_bridge",
+  "year": 224,
+  "completed": 13,
+  "closedLines": 0,
+  "party": [
+   "liuchao.character.ning_yu"
+  ],
+  "eventId": "lcq.event.iron_bridge_ambush",
+  "eventName": "铁索桥伏击",
+  "actions": [
+   "stabilize_wuerlang_on_route"
+  ],
+  "nonEngineProgress": []
+ }
+]

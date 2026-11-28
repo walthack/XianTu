@@ -1,0 +1,795 @@
+[
+ {
+  "kind": "source",
+  "generator": "formalNewSave",
+  "nonEngineProgress": [],
+  "note": "正式（非隔离试玩）新档沿正式关链用真实动作推进；固定宿主时钟和随机种子，不固定游戏时钟。"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "focus": "lcq.event.s01_01"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "focus": "lcq.event.s01_02"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "focus": "lcq.event.s01_03"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "focus": "lcq.event.s01_04"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "focus": "lcq.event.s01_06"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "focus": "lcq.event.s01_05"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "focus": "lcq.event.s01_05"
+ },
+ {
+  "kind": "stage",
+  "stage": "lcq.stage_01",
+  "focus": null
+ },
+ {
+  "kind": "opportunity:s02_01",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_01"
+ },
+ {
+  "kind": "opportunity:s02_01",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_01"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_03"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_02"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_02"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_02"
+ },
+ {
+  "kind": "local:s02_04",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_04"
+ },
+ {
+  "kind": "local:s02_04",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_04"
+ },
+ {
+  "kind": "local:s02_04",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_04"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_05"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.s02_06"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.ningyu_enters_gamble"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.ningyu_enters_gamble"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.sudaji_south_pact"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.sudaji_south_pact"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.gamble_bond_signed"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.gamble_bond_signed"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.charge_sudaji_fee"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.charge_sudaji_fee"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.free_ajiman"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.free_ajiman"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.baihu_shangguan_escape"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.wuerlang_joins"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.wuerlang_joins"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.iron_bridge_ambush"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.iron_bridge_ambush"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.ningyu_regicide_offer"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.ningyu_regicide_offer"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.zixi_taiyi_intercept"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.zixi_taiyi_intercept"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.rainforest_black_shoal"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.rainforest_black_shoal"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.silent_sheyi_village"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.silent_sheyi_village"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "focus": "lcq.event.silent_sheyi_village"
+ },
+ {
+  "kind": "stage",
+  "stage": "lcq.stage_02",
+  "focus": null
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "focus": "lcq.event.s03b_snake_flower_bridge_01"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "focus": "lcq.event.s03b_snake_flower_bridge_02"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "focus": "lcq.event.s03b_snake_flower_bridge_03"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "focus": "lcq.event.s03b_snake_flower_bridge_04"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "focus": "lcq.event.s03b_snake_flower_bridge_05"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "focus": "lcq.event.s03b_snake_flower_bridge_06"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "focus": "lcq.event.s03b_snake_flower_bridge_07"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "focus": "lcq.event.s03b_wanwu_night"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "focus": "lcq.event.s03b_wanwu_night"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "focus": "lcq.event.s03b_yinzhu_xiongerpu"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "focus": "lcq.event.s03b_yinzhu_xiongerpu"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "focus": "lcq.event.s03b_yinzhu_xiongerpu"
+ },
+ {
+  "kind": "stage",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "focus": null
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "focus": "lcq.event.s04_02"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "focus": "lcq.event.s04_03"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "focus": "lcq.event.s04_01"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "focus": "lcq.event.s04_04"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "focus": "lcq.event.s04_05"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "focus": "lcq.event.s04_05"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "focus": "lcq.event.s04_05"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "focus": "lcq.event.s04_06"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "focus": "lcq.event.s04_07"
+ },
+ {
+  "kind": "stage",
+  "stage": "lcq.stage_04",
+  "focus": null
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_01"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_02"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_03"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_04"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_05"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_06"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_07"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_08"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_09"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_10"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_11"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_12"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_xi_furen_trade_route"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_xi_furen_trade_route"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_13"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_14"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_14"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_15"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_16"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.xieyi_biling_war"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.xieyi_biling_war"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_17"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.xiaozi_first_appears"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_18"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.s04b_lingfei_baiyi_crisis_19"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.haishen_hall_merfolk"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.pull_harpoon_lemingzhu"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.pull_harpoon_lemingzhu"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.regroup_caravan_envoy"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.regroup_caravan_envoy"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.weapon_deal_with_geluo"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.weapon_deal_with_geluo"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.spot_dong_informant"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.spot_dong_informant"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.biling_bay_stance"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.ruins_ghost_warriors"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.ruins_ghost_warriors"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.wuerlang_slays_dagu"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.yiyang_repels_yinsha"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.huamiao_coop_boundary"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.guiwangdong_coop_pact"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.guiwangdong_coop_pact"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.enter_dong_with_migu"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": "lcq.event.enter_dong_with_migu"
+ },
+ {
+  "kind": "stage",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "focus": null
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.blank_letter_and_dagu"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.blank_letter_and_dagu"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.geluo_summons_biji"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.geluo_summons_biji"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.escape_cave_mechanism"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.escape_cave_mechanism"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.hongmiao_controlled"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.hongmiao_controlled"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_01_binu_reveals_xiaozi"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_02_xiaozi_exposed"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_03_saan_secret_path"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_04_enter_ghost_palace"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_05a_meet_ghost_king"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_05b_ideology_duel_and_defeat"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_06_breakout_and_reunion"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_07_xiaozi_trap"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_08a_rescue_suli"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_08b_altar_corpse_fight_and_danchen"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_09_temporary_pact_with_xiaozi"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_09_temporary_pact_with_xiaozi"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.ghost_king_swallowed"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.ghost_king_swallowed"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.slay_dragon"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.xieyi_entrustment"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.xiaozi_kills_mother"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.xiaozi_kills_mother"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.tribes_pledge"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_ice_gu_detour"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_ice_gu_detour"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_wuer_suli_depart"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_wuer_suli_depart"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.shanghou_revealed"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.shanghou_revealed"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.shanghou_revealed"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_shanghou_reads_letter"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_shanghou_reads_letter"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_yeao_palm_ningyu_stays"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.s05b_yeao_palm_ningyu_stays"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.shanghou_cures_ice_gu"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "focus": "lcq.event.shanghou_cures_ice_gu"
+ },
+ {
+  "kind": "stage",
+  "stage": "lcq.stage_05b",
+  "focus": null
+ },
+ {
+  "kind": "checkpoint",
+  "line": "jin",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "focus": "lcq.event.s07_00a_shanghou_trading_house",
+  "location": "liuchao.location.biyu_village",
+  "year": 224,
+  "completed": 0,
+  "closedLines": 1,
+  "party": [],
+  "eventId": "lcq.event.s07_00a_shanghou_trading_house",
+  "eventName": "殇侯交代商号",
+  "actions": [
+   "hear_shanghou_trading_house"
+  ],
+  "nonEngineProgress": []
+ }
+]
