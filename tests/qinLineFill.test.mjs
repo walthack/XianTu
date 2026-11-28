@@ -71,7 +71,7 @@ test('秦：Q15 使用真实 party 读取；有入队规则时出现、离队后
         if (eventId === id('xiaoling_villa')) {
           const rt = save.世界.状态.剧本模组;
           assert.equal(rt.activeEventIds.includes(id('ningyu_coldtrace')), present);
-          assert.equal(resolveLedgerPath('party.liuchao.character.ning_yu', { ...rt, departedCast: ['liuchao.character.ning_yu'] }).value, false);
+          assert.equal(resolveLedgerPath('party.liuchao.character.ning_yu', { ...rt, sceneLedger: { actors: { 'liuchao.character.ning_yu': { status: 'dead' } } } }).value, false);
           if (present) save = complete(save, id('ningyu_coldtrace'));
         }
         save = complete(save, eventId);

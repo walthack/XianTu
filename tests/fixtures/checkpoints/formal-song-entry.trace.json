@@ -1014,7 +1014,9 @@
   "year": 224,
   "completed": 8,
   "closedLines": 1,
-  "party": [],
+  "party": [
+   "liuchao.character.xiao_zi"
+  ],
   "eventId": "lcq.event.s09_07_feiniao_infiltration",
   "eventName": "飞鸟潜伏",
   "actions": [

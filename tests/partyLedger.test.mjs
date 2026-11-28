@@ -1,5 +1,5 @@
 // 在队账 T7（身份账补充设计稿 2026-10-26 §3 / §3.8；总策划已审 Q4）：party.<characterId> 以显式在队账为准——
-// 开局关在队名单 → 按编年史完成顺序应用离队/入队（whenReceiptId 区分玩家选择，同一事件先离后入）→ 去掉 departedCast。
+// 开局关在队名单 → 按编年史完成顺序应用离队/入队（whenReceiptId 区分玩家选择，同一事件先离后入）→ 去掉场景账里记为死亡的人（不读 departedCast）。
 // 不加存档字段；启发式同行名单不参与。规则均为测试夹具（setPlayerLedgerRulesForTest / 显式入参），仓库规则表首版为空。
 import assert from 'node:assert/strict';
 import test from 'node:test';
@@ -24,13 +24,14 @@ const LATER = 'lcq.stage_03';
 const table = (patch = {}) => ({ version: 1, identityGrants: [], identityRevokes: [], lineOutcomes: [], itemGroups: [], partyJoins: [], partyLeaves: [], partyOpenings: [], ...patch });
 const entry = (stageId, eventId, sequence) => ({ id: `chronicle.${stageId}.${eventId}`, type: 'event', stageId, title: '', sequence });
 /** 编年史按给定顺序完成 doneIds；夹具事件挂进本关 events，orderedDoneEventIds 才认 */
-const runtimeOf = ({ stageId = PROLOGUE, doneIds = [], eventIds = doneIds, receipts = [], departedCast, modId = stageId } = {}) => ({
+const runtimeOf = ({ stageId = PROLOGUE, doneIds = [], eventIds = doneIds, receipts = [], departedCast, dead, modId = stageId } = {}) => ({
   modId,
   events: eventIds.map(id => ({ id })),
   chronicle: doneIds.map((id, i) => entry(stageId, id, i + 1)),
   completedEventIds: [],
   pathReceipts: Object.fromEntries(receipts.map(receiptId => [receiptId, { receiptId }])),
   ...(departedCast ? { departedCast } : {}),
+  ...(dead ? { sceneLedger: { actors: Object.fromEntries(dead.map(id => [id, { status: 'dead' }])) } } : {}),
   flags: {},
 });
 const inParty = (characterId) => ({ path: `party.${characterId}`, operator: 'eq', value: true });
@@ -77,7 +78,7 @@ test('队伍上限 story.party.maxSize＝3：队满后入队的排候补读成�
   assert.deepEqual(roster([...joins, 'test.event.leave_b']), [A, C, D], '空出一位，先入队的候补补上');
   assert.deepEqual(roster([...joins, 'test.event.leave_d']), [A, B, C], '候补自己离队，不占位');
   assert.deepEqual(roster([...joins, 'test.event.leave_d', 'test.event.leave_b']), [A, C, E]);
-  assert.deepEqual(roster(joins, { departedCast: [A, { id: D }] }), [B, C, E], '离场的在队者空出位置，离场的候补不补');
+  assert.deepEqual(roster(joins, { dead: [A, D] }), [B, C, E], '死亡的在队者空出位置，死亡的候补不补');
   await withRules(rulesTable, () => {
     const runtime = runtimeOf({ doneIds: joins });
     assert.equal(ledger.evaluateLedgerCondition(inParty(C), runtime), true);
@@ -147,11 +148,13 @@ test('whenReceiptId 不满足时离队规则不生效（选留队）', async () 
   assert.equal(party.partyRoster(runtimeOf({ doneIds: [], receipts: [LEAVE] }), rulesTable).has(ALLY), true, '事件没完成时回执不单独生效');
 });
 
-test('departedCast 内的角色不在队', async () => {
+test('场景账里记为死亡的角色不在队；只在 departedCast 里（暂时不在场）的仍在队', async () => {
   const { party } = await loaded;
   const rulesTable = table({ partyOpenings: [{ stageId: PROLOGUE, characterIds: [ALLY, OTHER] }], partyJoins: [{ eventId: 'test.event.join', characterId: NING_YU }] });
-  const runtime = runtimeOf({ doneIds: ['test.event.join'], departedCast: [ALLY, { id: NING_YU }] });
-  assert.deepEqual([...party.partyRoster(runtime, rulesTable)], [OTHER], '死亡或永久离场后入队规则也救不回');
+  const runtime = runtimeOf({ doneIds: ['test.event.join'], dead: [ALLY, NING_YU] });
+  assert.deepEqual([...party.partyRoster(runtime, rulesTable)], [OTHER], '死亡后入队规则也救不回');
+  const away = runtimeOf({ doneIds: ['test.event.join'], departedCast: [ALLY, { id: NING_YU }] });
+  assert.deepEqual([...party.partyRoster(away, rulesTable)], [ALLY, OTHER, NING_YU], 'departedCast 混着暂时不在场的人，不拿它剔人');
 });
 
 test('七线全排列下最终在队情况只由最后一次相关事件决定', async () => {

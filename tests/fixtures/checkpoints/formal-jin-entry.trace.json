@@ -784,7 +784,9 @@
   "year": 224,
   "completed": 0,
   "closedLines": 1,
-  "party": [],
+  "party": [
+   "liuchao.character.xiao_zi"
+  ],
   "eventId": "lcq.event.s07_00a_shanghou_trading_house",
   "eventName": "殇侯交代商号",
   "actions": [
