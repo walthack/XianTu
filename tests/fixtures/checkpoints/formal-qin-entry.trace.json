@@ -1719,7 +1719,8 @@
   "completed": 1,
   "closedLines": 3,
   "party": [
-   "liuchao.character.xiao_yao_yi"
+   "liuchao.character.xiao_yao_yi",
+   "liuchao.character.xiao_zi"
   ],
   "eventId": "liuchao.event.qin_enter_xianyang",
   "eventName": "入咸阳",

@@ -133,9 +133,10 @@ test('party 不满足时节点不激活，在队后激活', async () => {
     const check = condition => evaluateScenarioCondition(condition, save, rt(save));
     assert.equal(check(party), true);
     assert.equal(check({ ...party, operator: 'neq' }), false);
-    rt(save).departedCast = [NING_YU];
-    assert.equal(check(party), false, 'departedCast 内不在队');
-    rt(save).departedCast = [];
+    const actors = (rt(save).sceneLedger ||= { receipts: [], actors: {}, injuries: {}, names: {}, worldFacts: [] }).actors;
+    actors[NING_YU] = { status: 'dead', eventId: 'test', actionId: 'test' };
+    assert.equal(check(party), false, '场景账记为死亡：不在队');
+    delete actors[NING_YU];
     save = advance(save);
     assert.equal(rt(save).activeEventIds.includes(EVENT), true, '在队后解锁');
   } finally {

@@ -1,7 +1,9 @@
 /**
  * 在队账（身份账补充设计稿 2026-10-26 §3；总策划已审 Q4）：party.<characterId> 的唯一数据源。
  * - 显式在队账＝开局关在队名单（partyOpenings）→ 按编年史完成顺序逐个事件应用离队/入队（partyLeaves / partyJoins，
- *   whenReceiptId 用路径回执区分玩家选择，如凝羽离队/留队；同一事件先离后入）→ 去掉 runtime.departedCast（死亡或永久离场）。
+ *   whenReceiptId 用路径回执区分玩家选择，如凝羽离队/留队；同一事件先离后入）→ 去掉场景账里记为死亡的人（sceneLedger.actors 的 status＝dead）。
+ *   不读 runtime.departedCast：那份名单切关时会把只是暂时不在场的人也记进去（小紫、凝羽都在里面），拿它剔人会把还在队的人剔掉。
+ *   没记进场景账的死亡或永久离场，要在规则表里写离队规则。
  * - 不加存档字段：每次读取从编年史推导（orderedDoneEventIds），任何先后顺序都得到确定结果；规则只读 mod-kit/player-ledger-rules.json，首版为空。
  * - 启发式同行名单（travelLedger 的 currentTravelCompanions、locationLoot 的 presentCompanionIds）只用于演出，这里不读。
  * - 人数上限（用户 2026-11-28 定，story.party.maxSize，不算主角）：队满时新入队的人排进候补，有人离队或离场后按入队先后补上；
@@ -17,7 +19,7 @@ interface PartyRuntime {
   modId?: string;
   chronicle?: Array<{ stageId?: string; sequence?: number }>;
   pathReceipts?: Record<string, unknown>;
-  departedCast?: Array<string | { id?: string }>;
+  sceneLedger?: { actors?: Record<string, { status?: string } | undefined> };
 }
 
 /** 开局关：编年史 sequence 最小且带 stageId 的那条；没有编年史时取当前 modId（兼顾序幕开局与各试玩入口开局）。 */
@@ -53,10 +55,11 @@ function deriveRoster(runtime: unknown, rules: PlayerLedgerRules): Set<string> {
     for (const rule of joins) if (rule.eventId === eventId && applies(rule)) { if (!roster.has(rule.characterId) && !waiting.includes(rule.characterId)) waiting.push(rule.characterId); applied.push(`join ${rule.characterId}@${eventId}`); }
     fill();
   }
-  const departed = (Array.isArray(rt.departedCast) ? rt.departedCast : []).map(d => typeof d === 'string' ? d : d?.id).filter(id => id && (roster.has(id) || waiting.includes(id))) as string[];
-  for (const id of departed) remove(id);
+  const actors = rt.sceneLedger?.actors && typeof rt.sceneLedger.actors === 'object' ? rt.sceneLedger.actors : {};
+  const dead = [...roster, ...waiting].filter(id => actors[id]?.status === 'dead');
+  for (const id of dead) remove(id);
   fill();
-  debugLog('identity', `[在队账] 开局关=${stageId} 名单=${opened.join('、') || '无'} 应用 ${applied.join('、') || '无'} 去掉已离场 ${departed.join('、') || '无'} 上限=${cap} 候补=${waiting.join('、') || '无'} → ${[...roster].join('、') || '无'}`);
+  debugLog('identity', `[在队账] 开局关=${stageId} 名单=${opened.join('、') || '无'} 应用 ${applied.join('、') || '无'} 去掉已死亡 ${dead.join('、') || '无'} 上限=${cap} 候补=${waiting.join('、') || '无'} → ${[...roster].join('、') || '无'}`);
   return roster;
 }
 

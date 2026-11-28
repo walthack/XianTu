@@ -203,7 +203,8 @@ test('party 读取 eq/neq：显式在队账，不在队为 false', async () => {
     assert.equal(evaluateLedgerCondition(eq, runtime), true, '开局关取编年史首条 stageId');
     assert.equal(evaluateLedgerCondition(neq, runtime), false);
     assert.equal(evaluateLedgerCondition(eq, { ...runtime, completedEventIds: [E3] }), false, '离队事件完成后不在队');
-    assert.equal(evaluateLedgerCondition(eq, { ...runtime, departedCast: [NING_YU] }), false, 'departedCast 不在队');
+    assert.equal(evaluateLedgerCondition(eq, { ...runtime, sceneLedger: { actors: { [NING_YU]: { status: 'dead' } } } }), false, '场景账记为死亡：不在队');
+    assert.equal(evaluateLedgerCondition(eq, { ...runtime, departedCast: [NING_YU] }), true, '只在 departedCast 里（暂时不在场）：仍在队');
     // 只有 eq / neq；不传 runtime 不命中
     assert.equal(evaluateLedgerCondition({ path: `party.${NING_YU}`, operator: 'exists' }, runtime), false);
     assert.equal(evaluateLedgerCondition(eq), false);

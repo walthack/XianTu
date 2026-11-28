@@ -228,7 +228,7 @@ function readPath(parsed: ParsedLedgerPath, runtime: unknown, save?: unknown): u
       return parsed.field === 'from' ? receipt?.sourceEventId : receipt !== undefined;
     }
     case 'party':
-      // 显式在队账（开局名单 → 编年史顺序入/离队 → 去掉 departedCast）；不在队为 false
+      // 显式在队账（开局名单 → 编年史顺序入/离队 → 去掉场景账里记为死亡的人）；不在队为 false
       return isInParty(runtime, parsed.id);
     case 'deadline':
       // 锁存（due / cleared）优先，否则按编年史现算；未起算为 undefined
